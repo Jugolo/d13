@@ -1,0 +1,276 @@
+/* -- D13 CSS -------------------------------------------------------------------*/
+
+body {
+	font-size: 10pt;
+	font-weight: normal;
+	font-family: 'Droid Sans';
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+ 	text-align: center;
+ 	background: #fff;
+}
+
+img {
+ border: 0px;
+}
+
+/* -- Framework7 Overwrite Styling -----------------------------------------------------*/
+
+.page ,.page-content ,.views ,.view-main ,.login-screen-content ,.statusbar ,.statusbar-overlay { 
+    overflow: hidden;
+}
+
+.navbar, .toolbar, .subnavbar, .buttons-row, .item-content, .navbar-inner {
+	font-size: 10pt;
+	background: transparent;
+}
+
+.navbar:before, .subnavar:before, .navbar:after, .subnavbar:after {
+	border-style:none;
+	text-decoration: none;
+	border-width: 0;
+	display:none;
+}
+
+.subnavbar {
+	font-size: 9pt;
+}
+
+.page-content {
+	text-align: center;
+	padding: 0 auto;
+}
+
+.row {
+	padding-top: 4%;
+	margin: auto;
+}
+
+.card {
+	width: 97%;
+	height: 97%;
+	border-radius: 10px;
+	text-align: center;
+	margin: auto;
+}
+
+.card-shadow {
+	-webkit-filter: drop-shadow(2px 2px 2px #222);
+    filter: drop-shadow(2px 2px 2px #222);
+}
+
+.popup {
+	overflow: hidden;
+	border-radius: 10px;
+	padding: 2%;
+	width: 75%;
+	height: 75%;
+	 -webkit-filter: drop-shadow(2px 2px 2px #222);
+    filter: drop-shadow(2px 2px 2px #222);
+}
+
+.popover {
+	overflow: hidden;
+	padding: 2%;
+	border-radius: 10px;
+    -webkit-filter: drop-shadow(2px 2px 2px #222);
+    filter: drop-shadow(2px 2px 2px #222);
+}
+
+.swiper-wrapper, .swiper-container, .swiper-slide {
+	width: 100%;
+	height: 98%;
+}
+
+.swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: none;
+  border:1px solid #aaa;
+  border-radius: 0 0 0 0;
+  opacity:1;
+  cursor: pointer;
+}
+.swiper-pagination-bullet-active {
+  background: #007aff;
+  border-color: #007aff;
+}  
+
+.badge{
+	background-color: #000;
+	background-color: hsla(0, 0%, 0%, 0.5);
+}
+
+.size-16 { font-size: 16px }
+.size-24 { font-size: 24px }
+
+/* -- PURE Overwrite Styling -----------------------------------------------------------*/
+
+.pure-form {
+	width: 100%;
+	height: 100%;
+	display: inline;
+}
+
+.pure-input {
+	min-widt: 25%;
+	max-width: 33%;
+}
+
+.pure-gray 		{ background: #8e8e93; }
+.pure-white 	{ background: #ffffff; }
+.pure-black 	{ background: #000000; }
+.pure-lightblue { background: #5ac8fa; }
+.pure-yellow 	{ background: #ffcc00; }
+.pure-orange 	{ background: #ff9500; }
+.pure-pink 		{ background: #ff2d55; }
+.pure-blue 		{ background: #007aff; }
+.pure-green 	{ background: #4cd964; }
+.pure-red 		{ background: #ff3b30; }
+
+/* -- D13 CSS --------------------------------------------------------------------------*/
+
+.d13-image {
+	max-width: 100%;
+	height: auto;
+	border: 0;
+	vertical-align: middle;
+}
+
+.d13-module-inner {
+	min-width: 33%;
+    width: 66%;
+    height: auto;
+}
+
+.d13-node {
+ width: 100%;
+ height: 100%;
+ background-repeat: repeat;
+ text-align: center;
+ position: relative;
+ padding-top: 1%;
+ margin: auto;
+}
+
+.d13-module
+{
+	width: 100%;
+ 	height: auto;
+ 	padding: 1%;
+ 	background-repeat: no-repeat;
+}
+
+img.d13-resource
+{
+	width: 24px;
+	height: auto;
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+img.d13-item
+{
+	min-width: 40px;
+ 	max-width: 80px;
+ 	height: auto;
+ 	border: 0px;
+ 	margin: 0px;
+	padding: 0px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+p.d13-italic {
+	font-style: italic;
+}
+
+p.d13-bold {
+	font-weight: bold;
+}
+
+.d13-queue{
+	position: absolute;
+	background-color: #000;
+	background-color: hsla(0, 0%, 100%, 0.9);
+	padding: 5px;
+	margin: 5px;
+	border-radius: 5px;
+	width: 225px;
+	z-index:1000;
+	font-size:9pt;
+	top: 6%;
+}
+
+.queue-1 {
+	left: 16px;
+}
+
+.queue-2 {
+	left: 25%;
+}
+
+.queue-3 {
+	right: 25%;
+}
+
+.queue-4 {
+	right: 16px;
+}
+
+
+div.cell
+{
+white-space: nowrap;
+ display: inline-block;
+ padding: 2px;
+ vertical-align: middle;
+ text-align:left;
+}
+
+img.resource
+{
+ max-height: 30px;
+ border: 0px;
+ vertical-align: middle;
+}
+img.item
+{
+ max-height: 72px;
+ border: 0px;
+ vertical-align: middle;
+}
+
+div.sector
+   {
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    width: 5px;
+    height: 5px;
+    border: 1px solid transparent;
+    padding: 0;
+   }
+
+div.sector:hover
+{
+	border: 1px solid black;
+}
+
+/* ---CSS3 Animations --------------------------------------------------------------*/
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 3s infinite linear;
+}
+
+/* -----------------------------------------------------------------*/

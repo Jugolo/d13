@@ -1,0 +1,75 @@
+<div class="swiper-slide">
+	
+	<div class="card">
+		<div class="card-header">
+			{{tvar_techName}}
+			<a class="close-popup" href="#"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
+		</div>
+  
+	<div class="card-content">
+    <div class="card-content-inner">
+	
+	<div class="row">
+    	
+			<div class="col-25">
+				<img src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/technologies/{{tvar_nodeFaction}}/{{tvar_tid}}.png" width="80">
+				<p class="d13-italic">{{tvar_techDescription}}</p>
+			</div>
+			
+			<div class="col-75">
+				
+				<div class="list-block">
+					<ul>
+						
+						<li class="item-content">
+							<div class="item-media"><i class="f7-icons size-16">bookmark</i></div>
+							<div class="item-inner">
+							<div class="item-title">{{tvar_ui_level}}</div>
+							<div class="item-after"><span class="badge">{{tvar_techTier}} / {{tvar_techMaxTier}}</span></div>
+							</div>
+						</li>
+						
+						<li class="item-content">
+							<div class="item-media"><i class="f7-icons size-16">time</i></div>
+							<div class="item-inner">
+							<div class="item-title">{{tvar_ui_duration}}</div>
+							<div class="item-after"><span class="badge">{{tvar_techDuration}}</span></div>
+							</div>
+						</li>
+
+						<li class="item-content">
+							<div class="item-media">{{tvar_requirementsIcon}}</div>
+							<div class="item-inner">
+							<div class="item-title">{{tvar_ui_requirements}}:</div>
+							<div class="item-after">{{tvar_requirementsData}}</div>
+							</div>
+						</li>
+				
+						<li class="item-content">
+							<div class="item-media">{{tvar_costIcon}}</div>
+							<div class="item-inner">
+							<div class="item-title">{{tvar_ui_cost}}:</div>
+							<div class="item-after">{{tvar_costData}}</div>
+							</div>
+						</li>
+						
+						<li class="item-content">
+							<div class="item-inner">
+							<div class="item-input">{{tvar_linkData}}</div>
+							</div>
+						</li>
+
+					</ul>
+				</div>
+			
+			</div>
+			
+	</div>
+	
+	
+	</div>
+	</div>
+
+	</div>
+	
+</div>
