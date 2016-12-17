@@ -1,0 +1,58 @@
+d13 - open-source strategy browser game engine
+==========================================================================================
+
+News, Updates & Latest version available at Sourceforge:
+
+https://sourceforge.net/projects/d13/
+
+Please report bugs and request features using the Sourceforge ticket system:
+
+https://sourceforge.net/p/d13/tickets/
+
+CREDITS
+------------------------------------------------------------------------------------------
+2008-2013 Andrei Busuioc (Devman)
+2015-2016 Tobias Strunz (Fhizban)
+
+INSTALL
+------------------------------------------------------------------------------------------
+Hosting Requirements: http web server, mysql database system (mysqli capable 5.1/5.5), php (5.6/7.0).
+Before using this code make sure you have the latest versions of the above mentioned software requirements.
+
+Installation steps:
+1. create a database in mysql;
+2. import the "install/d13_install.sql" file in the database you just created.
+3. edit the database connection data in the "d13/core/d13_config.inc.php" file;
+4. rename the d13_config.inc.php file by removing CHANGEME in its name.
+5. go to the install page in your browser "http://localhost/d13/install/install.php"
+6. add the admin account and map data to the database;
+- optionally, you can edit the map you'll be using by changing the "install/grid.png" image;
+- each pixel represents one map sector;
+- blue (RGB: 0 0 255) is for water, green (RGB: 0 255 0) is for land;
+7. delete the "install" folder;
+8. further customization is done by editing the files in the "data" folder.
+9. even more customization is possible by duplicating the "default" directory in
+"templates" and editing the images and template files within.
+
+End User Requirements: Up to date browser with HTML5 / CSS3 capability.
+
+LICENSE
+------------------------------------------------------------------------------------------
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not
+claim that you wrote the original software. If you use this software
+in a product an acknowledgment of the original author in the product documentation is required.
+
+2. Altered source versions must be plainly marked as such, and must not be
+misrepresented as being the original software.
+
+3. This notice may not be removed or altered from any source distribution.
+
