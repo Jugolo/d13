@@ -2,8 +2,8 @@
 	
 	<div class="card">
 		<div class="card-header">
-			{{tvar_componentName}}
-			<a class="close-popup" href="#"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
+			<div class="d13-heading">{{tvar_componentName}}</div>
+			<a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 		</div>
   
 	<div class="card-content">
@@ -23,7 +23,7 @@
 					<ul>
 						
 						<li class="item-content">
-							<div class="item-media"><i class="f7-icons size-16">bookmark</i></div>
+							<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_compResource}}.png" title="{{tvar_compResourceName}}"></div>
 							<div class="item-inner">
 							<div class="item-title">{{tvar_ui_storage}}</div>
 							<div class="item-after"><span class="badge">{{tvar_compValue}}</span></div>
@@ -31,7 +31,7 @@
 						</li>
 						
 						<li class="item-content">
-							<div class="item-media"><i class="f7-icons size-16">time</i></div>
+							<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
 							<div class="item-inner">
 							<div class="item-title">{{tvar_ui_duration}}</div>
 							<div class="item-after"><span class="badge">{{tvar_duration}}</span></div>

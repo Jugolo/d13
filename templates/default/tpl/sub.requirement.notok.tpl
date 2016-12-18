@@ -1,0 +1,1 @@
+<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png">

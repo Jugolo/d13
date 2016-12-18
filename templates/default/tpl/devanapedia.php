@@ -27,7 +27,7 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
 {
  echo '<div style="border-bottom: 1px solid black; padding-bottom: 5px; padding-top: 5px;"><div class="cell">{{tvar_ui_storage}}:</div>';
  foreach ($game['factions'][$_GET['faction']]['storage'] as $key=>$storage)
-  echo '<div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$key.'.png" title="{{tvar_gl_resources'][$key]['name}}"></div><div class="cell">'.$storage.'</div>';
+  echo '<div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$key.'.png" title="{{tvar_gl_resources'][$key]['name}}"></div><div class="cell">'.$storage.'</div>';
  echo '</div>';
  if ($_GET['action']=='list')
   switch ($_GET['view'])
@@ -37,13 +37,13 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
     {
      $costData='';
      foreach ($technology['cost'] as $key=>$cost)
-      $costData.='<div class="cell">'.($cost['level']*$game['users']['cost']['train']).'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
+      $costData.='<div class="cell">'.($cost['level']*$game['users']['cost']['train']).'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
      if (!count($technology['requirements'])) $requirementsData=$ui['none'];
      else
      {
       $requirementsData='';
       foreach ($technology['requirements'] as $key=>$requirement)
-       $requirementsData.='<div class="cell">'.$requirement['level'].'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
+       $requirementsData.='<div class="cell">'.$requirement['level'].'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
      }
      echo '
       <div style="padding: 5px; border-bottom: 1px solid black; text-align: left;">
@@ -65,31 +65,31 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
     {
      $costData='';
      foreach ($module['cost'] as $key=>$cost)
-      $costData.='<div class="cell">'.($cost['level']*$game['users']['cost']['train']).'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
+      $costData.='<div class="cell">'.($cost['level']*$game['users']['cost']['train']).'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
      if (!count($module['requirements'])) $requirementsData=$ui['none'];
      else
      {
       $requirementsData='';
       foreach ($module['requirements'] as $key=>$requirement)
-       $requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
+       $requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
      }
      $outputData='';
      switch ($module['type'])
      {
       case 'harvest':
-       $outputData='<img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$module['outputResource'].'.png" title="{{tvar_gl_resources'][$module['outputResource']]['name}}">';
+       $outputData='<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$module['outputResource'].'.png" title="{{tvar_gl_resources'][$module['outputResource']]['name}}">';
       break;
       case 'research':
        foreach ($module['technologies'] as $technology)
-        $outputData.='<img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/technologies/'.$_GET['faction'].'/'.$technology.'.png" title="{{tvar_gl_technologies'][$_GET['faction']][$technology]['name}}">';
+        $outputData.='<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/technologies/'.$_GET['faction'].'/'.$technology.'.png" title="{{tvar_gl_technologies'][$_GET['faction']][$technology]['name}}">';
       break;
       case 'craft':
        foreach ($module['components'] as $component)
-        $outputData.='<img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/components/'.$_GET['faction'].'/'.$component.'.png" title="{{tvar_gl_components'][$_GET['faction']][$component]['name}}">';
+        $outputData.='<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/components/'.$_GET['faction'].'/'.$component.'.png" title="{{tvar_gl_components'][$_GET['faction']][$component]['name}}">';
       break;
       case 'train':
        foreach ($module['units'] as $unit)
-        $outputData.='<img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/units/'.$_GET['faction'].'/'.$unit.'.png" title="{{tvar_gl_units'][$_GET['faction']][$unit]['name}}">';
+        $outputData.='<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/units/'.$_GET['faction'].'/'.$unit.'.png" title="{{tvar_gl_units'][$_GET['faction']][$unit]['name}}">';
       break;
       default:
        $outputData=$ui['none'];
@@ -104,7 +104,7 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
         <div>
          <div class="inline">
           <div class="cell">{{tvar_ui_input}}: </div>
-          <div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$module['inputResource'].'.png" title="{{tvar_gl_resources'][$module['inputResource']]['name}}"></div>
+          <div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$module['inputResource'].'.png" title="{{tvar_gl_resources'][$module['inputResource']]['name}}"></div>
          </div>
         </div>
         <div>
@@ -164,13 +164,13 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
     {
      $costData='';
      foreach ($component['cost'] as $key=>$cost)
-      $costData.='<div class="cell">'.($cost['value']*$game['users']['cost']['train']).'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
+      $costData.='<div class="cell">'.($cost['value']*$game['users']['cost']['train']).'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
      if (!count($component['requirements'])) $requirementsData=$ui['none'];
      else
      {
       $requirementsData='';
       foreach ($component['requirements'] as $key=>$requirement)
-       $requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
+       $requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
      }
      echo '
       <div style="padding: 5px; border-bottom: 1px solid black; text-align: left;">
@@ -179,7 +179,7 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
         <div><div class="cell" style="font-weight: bold;"><a class="external" href="devanapedia.php?action=get&view=components&faction='.$_GET['faction'].'&id='.$cid.'">{{tvar_gl_components'][$_GET['faction']][$cid]['name}}</a></div></div>
         <div><div class="cell">{{tvar_gl_components'][$_GET['faction']][$cid]['description}}</div></div>
         <div><div class="inline"><div class="cell">{{tvar_ui_duration}}: </div><div class="cell">'.($component['duration']*$game['users']['speed']['craft']).' {{tvar_ui_minutes}}</div></div></div>
-        <div><div class="inline"><div class="cell">{{tvar_ui_storage}}: </div><div class="cell">'.$component['storage'].'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$component['storageResource'].'.png" title="{{tvar_gl_resources'][$component['storageResource']]['name}}"></div></div></div>
+        <div><div class="inline"><div class="cell">{{tvar_ui_storage}}: </div><div class="cell">'.$component['storage'].'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$component['storageResource'].'.png" title="{{tvar_gl_resources'][$component['storageResource']]['name}}"></div></div></div>
         <div><div class="inline"><div class="cell">{{tvar_ui_cost}}: </div><div class="cell">{{tvar_costData}}</div></div></div>
         <div><div class="inline"><div class="cell">{{tvar_ui_requirements}}: </div><div class="cell">'{{tvar_requirementsData}}</div></div></div>
        </div>
@@ -192,13 +192,13 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
     {
      $costData='';
      foreach ($unit['cost'] as $key=>$cost)
-      $costData.='<div class="cell">'.($cost['value']*$game['users']['cost']['train']).'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
+      $costData.='<div class="cell">'.($cost['value']*$game['users']['cost']['train']).'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
      if (!count($unit['requirements'])) $requirementsData=$ui['none'];
      else
      {
       $requirementsData='';
       foreach ($unit['requirements'] as $key=>$requirement)
-       $requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
+       $requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
      }
      echo '
       <div style="padding: 5px; border-bottom: 1px solid black; text-align: left;">
@@ -210,7 +210,7 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
         <div><div class="inline"><div class="cell">{{tvar_ui_hp}}: '.$unit['hp'].', {{tvar_ui_damage}}: '.$unit['damage'].', {{tvar_ui_armor}}: '.$unit['armor'].'</div></div></div>
         <div><div class="inline"><div class="cell">{{tvar_ui_speed}}: '.$unit['speed'].'</div></div></div>
         <div><div class="inline"><div class="cell">{{tvar_ui_duration}}: </div><div class="cell">'.($unit['duration']*$game['users']['speed']['train']).' {{tvar_ui_minutes}}</div></div></div>
-        <div><div class="inline"><div class="cell">{{tvar_ui_upkeep}}: </div><div class="cell">'.$unit['upkeep'].'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$unit['upkeepResource'].'.png" title="{{tvar_gl_resources'][$unit['upkeepResource']]['name}}"></div></div></div>
+        <div><div class="inline"><div class="cell">{{tvar_ui_upkeep}}: </div><div class="cell">'.$unit['upkeep'].'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$unit['upkeepResource'].'.png" title="{{tvar_gl_resources'][$unit['upkeepResource']]['name}}"></div></div></div>
         <div><div class="inline"><div class="cell">{{tvar_ui_cost}}: </div><div class="cell">{{tvar_costData}}</div></div></div>
         <div><div class="inline"><div class="cell">{{tvar_ui_requirements}}: </div><div class="cell">'{{tvar_requirementsData}}</div></div></div>
        </div>
@@ -239,13 +239,13 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
     $tid=$_GET['id'];
     $costData='';
     foreach ($technology['cost'] as $key=>$cost)
-     $costData.='<div class="cell">'.($cost['level']*$game['users']['cost']['train']).'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
+     $costData.='<div class="cell">'.($cost['level']*$game['users']['cost']['train']).'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
     if (!count($technology['requirements'])) $requirementsData=$ui['none'];
     else
     {
      $requirementsData='';
      foreach ($technology['requirements'] as $key=>$requirement)
-      $requirementsData.='<div class="cell">'.$requirement['level'].'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
+      $requirementsData.='<div class="cell">'.$requirement['level'].'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
     }
     echo '
      <div style="padding: 5px; border-bottom: 1px solid black; text-align: left;">
@@ -266,13 +266,13 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
     $mid=$_GET['id'];
     $costData='';
     foreach ($module['cost'] as $key=>$cost)
-     $costData.='<div class="cell">'.($cost['value']*$game['users']['cost']['train']).'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
+     $costData.='<div class="cell">'.($cost['value']*$game['users']['cost']['train']).'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
     if (!count($module['requirements'])) $requirementsData=$ui['none'];
     else
     {
      $requirementsData='';
      foreach ($module['requirements'] as $key=>$requirement)
-      $requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
+      $requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
     }
     echo '
      <div style="padding: 5px; border-bottom: 1px solid black; text-align: left;">
@@ -283,7 +283,7 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
        <div>
         <div class="inline">
          <div class="cell">{{tvar_ui_input}}: </div>
-         <div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$module['inputResource'].'.png" title="{{tvar_gl_resources'][$module['inputResource']]['name}}"></div>
+         <div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$module['inputResource'].'.png" title="{{tvar_gl_resources'][$module['inputResource']]['name}}"></div>
         </div>
        </div>
        <div>
@@ -338,13 +338,13 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
     $cid=$_GET['id'];
     $costData='';
     foreach ($component['cost'] as $key=>$cost)
-     $costData.='<div class="cell">'.($cost['value']*$game['users']['cost']['train']).'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
+     $costData.='<div class="cell">'.($cost['value']*$game['users']['cost']['train']).'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
     if (!count($component['requirements'])) $requirementsData=$ui['none'];
     else
     {
      $requirementsData='';
      foreach ($component['requirements'] as $key=>$requirement)
-      $requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
+      $requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
     }
     echo '
      <div style="padding: 5px; border-bottom: 1px solid black; text-align: left;">
@@ -353,7 +353,7 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
        <div><div class="cell" style="font-weight: bold;">{{tvar_gl_components'][$_GET['faction']][$cid]['name}}</div></div>
        <div><div class="cell">{{tvar_gl_components'][$_GET['faction']][$cid]['description}}</div></div>
        <div><div class="inline"><div class="cell">{{tvar_ui_duration}}: </div><div class="cell">'.($component['duration']*$game['users']['speed']['craft']).' {{tvar_ui_minutes}}</div></div></div>
-       <div><div class="inline"><div class="cell">{{tvar_ui_storage}}: </div><div class="cell">'.$component['storage'].'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$component['storageResource'].'.png" title="{{tvar_gl_resources'][$component['storageResource']]['name}}"></div></div></div>
+       <div><div class="inline"><div class="cell">{{tvar_ui_storage}}: </div><div class="cell">'.$component['storage'].'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$component['storageResource'].'.png" title="{{tvar_gl_resources'][$component['storageResource']]['name}}"></div></div></div>
        <div><div class="inline"><div class="cell">{{tvar_ui_cost}}: </div><div class="cell">{{tvar_costData}}</div></div></div>
        <div><div class="inline"><div class="cell">{{tvar_ui_requirements}}: </div><div class="cell">'{{tvar_requirementsData}}</div></div></div>
       </div>
@@ -365,13 +365,13 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
     $uid=$_GET['id'];
     $costData='';
     foreach ($unit['cost'] as $key=>$cost)
-     $costData.='<div class="cell">'.($cost['value']*$game['users']['cost']['train']).'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
+     $costData.='<div class="cell">'.($cost['value']*$game['users']['cost']['train']).'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$cost['resource'].'.png" title="{{tvar_gl_resources'][$cost['resource']]['name}}"></div>';
     if (!count($unit['requirements'])) $requirementsData=$ui['none'];
     else
     {
      $requirementsData='';
      foreach ($unit['requirements'] as $key=>$requirement)
-      $requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
+      $requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$requirement['type'].'/'.$_GET['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$_GET['faction']][$requirement['id']]['name'].'"></div>';
     }
     echo '
      <div style="padding: 5px; border-bottom: 1px solid black; text-align: left;">
@@ -381,7 +381,7 @@ if (isset($_GET['action'], $_GET['view'], $_GET['faction']))
        <div><div class="cell">{{tvar_gl_units'][$_GET['faction']][$uid]['description}}</div></div>
        <div><div class="inline"><div class="cell">{{tvar_ui_hp}}: '.$unit['hp'].', {{tvar_ui_damage}}: '.$unit['damage'].', {{tvar_ui_armor}}: '.$unit['armor'].'</div></div></div>
        <div><div class="inline"><div class="cell">{{tvar_ui_duration}}: </div><div class="cell">'.($unit['duration']*$game['users']['speed']['train']).' {{tvar_ui_minutes}}</div></div></div>
-       <div><div class="inline"><div class="cell">{{tvar_ui_upkeep}}: </div><div class="cell">'.$unit['upkeep'].'</div><div class="cell"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$unit['upkeepResource'].'.png" title="{{tvar_gl_resources'][$unit['upkeepResource']]['name}}"></div></div></div>
+       <div><div class="inline"><div class="cell">{{tvar_ui_upkeep}}: </div><div class="cell">'.$unit['upkeep'].'</div><div class="cell"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/'.$unit['upkeepResource'].'.png" title="{{tvar_gl_resources'][$unit['upkeepResource']]['name}}"></div></div></div>
        <div><div class="inline"><div class="cell">{{tvar_ui_cost}}: </div><div class="cell">{{tvar_costData}}</div></div></div>
        <div><div class="inline"><div class="cell">{{tvar_ui_requirements}}: </div><div class="cell">'{{tvar_requirementsData}}</div></div></div>
       </div>

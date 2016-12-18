@@ -117,14 +117,14 @@ if (isset($node->modules[$_GET['slotId']])) {
 		 $tvars['tvar_outputData'] 				= $outputData;
 		 
 		 if ($check_requirements['ok']) {
-		 	$tvars['tvar_requirementsIcon']		= '<i class="f7-icons size-22 color-green">check</i>';
+		 	$tvars['tvar_requirementsIcon']		= $d13->tpl->get("sub.requirement.ok"); #'<i class="f7-icons size-22 color-green">check</i>';
 		 } else {
-		 	$tvars['tvar_requirementsIcon']		= '<i class="f7-icons size-22 color-red">close</i>';
+		 	$tvars['tvar_requirementsIcon']		= $d13->tpl->get("sub.requirement.notok"); #'<i class="f7-icons size-22 color-red">close</i>';
 		 }
 		 if ($check_cost['ok']) {
-			$tvars['tvar_costIcon']		= '<i class="f7-icons size-22 color-green">check</i>';
+			$tvars['tvar_costIcon']		= $d13->tpl->get("sub.requirement.ok"); #'<i class="f7-icons size-22 color-green">check</i>';
 		 } else {
-		 	$tvars['tvar_costIcon']		= '<i class="f7-icons size-22 color-red">close</i>';
+		 	$tvars['tvar_costIcon']		= $d13->tpl->get("sub.requirement.notok"); #'<i class="f7-icons size-22 color-red">close</i>';
 		 }
 		
 		 $tvars['tvar_moduleName'] 				= $gl["modules"][$node->data['faction']][$mid]["name"];

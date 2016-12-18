@@ -4,7 +4,7 @@
 
   <div class="card-header">
   	{{tvar_ui_combat}}
-  	<a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
+  	<a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
   </div>
   
   <div class="card-content">

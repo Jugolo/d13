@@ -193,6 +193,11 @@ p.d13-bold {
 	font-weight: bold;
 }
 
+.d13-heading {
+	font-variant: small-caps;
+	text-align: center;
+}
+
 .d13-queue{
 	position: absolute;
 	background-color: #000;

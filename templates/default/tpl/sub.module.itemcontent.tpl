@@ -1,5 +1,5 @@
 <li class="item-content">
-	<div class="item-media"><i class="f7-icons size-16">bolt</i></div>
+	<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/flag.png"></div>
 	<div class="item-inner">
 	<div class="item-title label">{{tvar_Label}}</div>
 	<div class="item-after"><a class="external button" href="{{tvar_Link}}">{{tvar_LinkLabel}}</a></div>

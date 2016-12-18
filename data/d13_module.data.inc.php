@@ -254,18 +254,24 @@ $game['modules']=array(
   
   // ALLIANCE HOUSE
   13=>array('active'=>true, 'priority'=>-1, 'type'=>'alliance', 'inputResource'=>3, 'storedResource'=>2, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
-   'cost'=>array(
-    0=>array('resource'=>0, 'value'=>300),
-    1=>array('resource'=>1, 'value'=>700),
-    2=>array('resource'=>2, 'value'=>500)
-   ),
-   'requirements'=>array(
-    0=>array('active'=>true, 'type'=>'modules', 'id'=>0, 'level'=>1),
-    1=>array('active'=>true, 'type'=>'modules', 'id'=>1, 'level'=>1),
-    2=>array('active'=>true, 'type'=>'modules', 'id'=>2, 'level'=>1),
-    3=>array('active'=>true, 'type'=>'technologies', 'id'=>4, 'level'=>1)
-   ),
-   'options'=>array(),
+	'cost'=>array(
+		0=>array('resource'=>0, 'value'=>300),
+		1=>array('resource'=>1, 'value'=>700),
+		2=>array('resource'=>2, 'value'=>500)
+	),
+	'requirements'=>array(
+		0=>array('active'=>true, 'type'=>'modules', 'id'=>0, 'level'=>1),
+    	1=>array('active'=>true, 'type'=>'modules', 'id'=>1, 'level'=>1),
+    	2=>array('active'=>true, 'type'=>'modules', 'id'=>2, 'level'=>1),
+    	3=>array('active'=>true, 'type'=>'technologies', 'id'=>4, 'level'=>1)
+	),
+	'options'=>array(
+		'allianceGet'=>true,
+		'allianceEdit'=>true,
+		'allianceRemove'=>true,
+		'allianceInvite'=>true,
+		'allianceWar'=>true
+	),
 	'upgrades'=>array()
   ),
     

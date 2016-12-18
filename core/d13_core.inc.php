@@ -57,9 +57,9 @@ if (!isset($_SESSION[CONST_PREFIX.'User']['id'])) {
 }
 		
 //- - - - - READ LANGUAGE FILES
-include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/ui.php");
-include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/gl.php");
-include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/bw.php");
+include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/d13_userinterface.locale.inc.php");
+include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/d13_gamelang.locale.inc.php");
+include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/d13_blockwords.locale.inc.php");
 
 //- - - - - INCLUDE TEMPLATE DEFINITIONS
 include(CONST_INCLUDE_PATH."templates/".$_SESSION[CONST_PREFIX.'User']['template']."/template.php");

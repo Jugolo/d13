@@ -55,7 +55,56 @@ function sub_module_alliance($node, $module, $mid, $sid, $message) {
 	$tvars['tvar_nodeID'] 				= $node->data['id'];
 	$tvars['tvar_slotID'] 				= $_GET['slotId'];
 	$tvars['tvar_demolishLink'] 		= $demolishData;
-
+	$tvars['tvar_moduleStorage'] 		= $module['ratio']*$node->modules[$sid]['input'];
+	$tvars['tvar_moduleStorageRes']		= $module['storedResource'];
+	$tvars['tvar_moduleStorageResName']	= $gl["resources"][$module['storedResource']]["name"];
+	
+	$tvars['tvar_moduleItemContent'] = "";
+	
+	//- - - - Option: Alliance List
+	if ($module['options']['allianceGet']) {
+		$tvars['tvar_Label']				= misc::getlang("get") . ' ' . misc::getlang("alliance");
+		$tvars['tvar_Link']					= '?p=alliance&action=get&nodeId='.$node->data['id'];
+		$tvars['tvar_LinkLabel']			= misc::getlang("get") . ' ' . misc::getlang("alliance");
+		$tvars['tvar_moduleItemContent']	.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+	}
+	
+	//- - - - Option: Alliance Edit
+	if ($module['options']['allianceEdit']) {
+		$tvars['tvar_Label']				= misc::getlang("edit") . ' ' . misc::getlang("alliance");
+		$tvars['tvar_Link']					= '?p=alliance&action=add&nodeId='.$node->data['id'];
+		$tvars['tvar_LinkLabel']			= misc::getlang("edit") . ' ' . misc::getlang("alliance");
+		$tvars['tvar_moduleItemContent']	.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+	}
+	
+	//- - - - Option: Alliance Remove
+	if ($module['options']['allianceRemove']) {
+		$tvars['tvar_Label']				= misc::getlang("remove") . ' ' . misc::getlang("alliance");
+		$tvars['tvar_Link']					= '?p=alliance&action=remove&nodeId='.$node->data['id'];
+		$tvars['tvar_LinkLabel']			= misc::getlang("remove") . ' ' . misc::getlang("alliance");
+		$tvars['tvar_moduleItemContent']	.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+	}
+	
+	//- - - - Option: Alliance Invite
+	if ($module['options']['allianceInvite']) {
+		$tvars['tvar_Label']				= misc::getlang("invite") . ' ' . misc::getlang("members");
+		$tvars['tvar_Link']					= '?p=alliance&action=addInvitation&nodeId='.$node->data['id'];
+		$tvars['tvar_LinkLabel']			= misc::getlang("invite") . ' ' . misc::getlang("members");
+		$tvars['tvar_moduleItemContent']	.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+	}
+	
+	//- - - - Option: Alliance Go to War
+	if ($module['options']['allianceWar']) {
+		$tvars['tvar_Label']				= misc::getlang("warDeclaration");
+		$tvars['tvar_Link']					= '?p=alliance&action=addWar&nodeId='.$node->data['id'];
+		$tvars['tvar_LinkLabel']			= misc::getlang("warDeclaration");
+		$tvars['tvar_moduleItemContent']	.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+	}
+	
+	//- - - - Option: 
+	//- - - - Option: 
+	//- - - - Option: 
+	
 	$page = "module.get.alliance";
 	$d13->tpl->render_page($page, $tvars);
 	break;
