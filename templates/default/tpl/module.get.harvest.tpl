@@ -45,7 +45,7 @@
 				</li>
 				
 				<li class="item-content">
-					<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleOutput}}.png" title="{{tvar_moduleOutputName}}"></div>
+					<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleOutput0}}.png" title="{{tvar_moduleOutputName0}}"></div>
 					<div class="item-inner">
 					<div class="item-title label">{{tvar_ui_production}}</div>
 					<div class="item-after"><span class="badge">{{tvar_moduleProduction}} {{tvar_ui_perHour}}</span></div>

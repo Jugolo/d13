@@ -14,7 +14,7 @@ CREDITS
 2008-2013 Andrei Busuioc (Devman)
 2015-2016 Tobias Strunz (Fhizban)
 
-VERSION NOTES
+VERSION NOTES - RELEASE CANDIDATE 0
 ------------------------------------------------------------------------------------------
 This is an early release of the d13 open source engine. Please be aware of the following
 facts:
@@ -27,6 +27,6 @@ facts:
 
 - It is NOT recommended to start a full-fledged project based on d13 now, as there will
 be more changes to the sourcecode in the near future. I recommend to wait until the
-project matures into the first stable release version.
+project matures into the first stable release version (Release Candidate 1).
 
 ------------------------------------------------------------------------------------------

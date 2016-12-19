@@ -45,7 +45,7 @@
 				</li>
 				
 				<li class="item-content">
-					<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleStorageRes}}.png" title="{{tvar_moduleStorageResName}}"></div>
+					<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleStorageRes0}}.png" title="{{tvar_moduleStorageResName0}}"></div>
 					<div class="item-inner">
 					<div class="item-title label">{{tvar_ui_storage}}</div>
 					<div class="item-after"><span class="badge">{{tvar_moduleStorage}}</span></div>

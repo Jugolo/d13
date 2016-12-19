@@ -2,6 +2,12 @@
 
 function set_maximum (id, value) {
     document.getElementById(id).value = value;
+    document.getElementById(id).max = value;
+}
+
+function change_maximum (id, value, form, formvalue) {
+    set_maximum(id, value);
+    document.getElementById(form).action= formvalue;
 }
 
 function moreLess(divContentID, aMoreLessID)

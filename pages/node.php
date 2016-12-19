@@ -308,7 +308,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 					$action='remove';
 		  		}
 		  		$remaining=$item['start']+$item['duration']*60-time();
-		  		$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/modules/'.$node->data['faction'].'/'.$item['module'].'.png"> '.misc::getlang($action).' '.$gl["modules"][$node->data['faction']][$item['module']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['slot'].'">['.implode(':', misc::sToHMS($remaining)).']</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['slot'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div><div class="cell"><a class="external" href="index.php?p=module&action=cancel&nodeId='.$node->data['id'].'&slotId='.$item['slot'].'"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
+		  		$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/modules/'.$node->data['faction'].'/'.$item['module'].'.png"> '.misc::getlang($action).' '.$gl["modules"][$node->data['faction']][$item['module']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['slot'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['slot'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div><div class="cell"><a class="external" href="index.php?p=module&action=cancel&nodeId='.$node->data['id'].'&slotId='.$item['slot'].'"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
 		 	}
 		 	$tvars['tvar_getHTMLBuild'] = $d13->tpl->parse($d13->tpl->get("sub.queue"), $tvars);
 		}
@@ -327,14 +327,56 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 		 	 foreach ($node->queue['research'] as $item) {
 				$action='research';
 		  		$remaining=$item['start']+$item['duration']*60-time();
-		  		$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/technologies/'.$node->data['faction'].'/'.$item['technology'].'.png"> '.misc::getlang($action).' '.$gl["technologies"][$node->data['faction']][$item['technology']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['technology'].'">['.implode(':', misc::sToHMS($remaining)).']</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['technology'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div>';
+		  		$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/technologies/'.$node->data['faction'].'/'.$item['technology'].'.png"> '.misc::getlang($action).' '.$gl["technologies"][$node->data['faction']][$item['technology']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['technology'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['technology'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div>';
 		 	}
 		 	$tvars['tvar_getHTMLResearch'] = $d13->tpl->parse($d13->tpl->get("sub.queue"), $tvars);
 		}
 		
 		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Craft Queue of all Sectors
+		$tvars['tvar_winClass'] 	= '';
+		$tvars['tvar_winTitle'] 	= '';
+		$tvars['tvar_winContent'] 	= '';
+		$tvars['tvar_getHTMLCraft'] = '';
+		if (count($node->queue['craft'])) {
+			$queue++;
+			$tvars['tvar_winId'] = $queue;
+			$tvars['tvar_winClass'] = 'd13-queue queue-'.$queue;
+			$tvars['tvar_winTitle'] = misc::getlang("active").' '.misc::getlang("craft");
+			$tvars['tvar_winContent'] = '';
+		 	 foreach ($node->queue['craft'] as $item) {
+				if ($node->modules[$item['component']]['module']==-1) {
+					$action='add';
+		  		} else {
+					$action='remove';
+		  		}
+		  		$remaining=$item['start']+$item['duration']*60-time();
+		  		$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/components/'.$node->data['faction'].'/'.$item['component'].'.png"> '.misc::getlang($action).' '.$gl["components"][$node->data['faction']][$item['component']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['component'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['component'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div>';
+		 	}
+		 	$tvars['tvar_getHTMLCraft'] = $d13->tpl->parse($d13->tpl->get("sub.queue"), $tvars);
+		}
 		
 		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Train Queue of all Sectors
+		$tvars['tvar_winClass'] 	= '';
+		$tvars['tvar_winTitle'] 	= '';
+		$tvars['tvar_winContent'] 	= '';
+		$tvars['tvar_getHTMLTrain'] = '';
+		if (count($node->queue['train'])) {
+			$queue++;
+			$tvars['tvar_winId'] = $queue;
+			$tvars['tvar_winClass'] = 'd13-queue queue-'.$queue;
+			$tvars['tvar_winTitle'] = misc::getlang("active").' '.misc::getlang("train");
+			$tvars['tvar_winContent'] = '';
+		 	 foreach ($node->queue['train'] as $item) {
+				if ($node->modules[$item['unit']]['module']==-1) {
+					$action='add';
+		  		} else {
+					$action='remove';
+		  		}
+		  		$remaining=$item['start']+$item['duration']*60-time();
+		  		$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/units/'.$node->data['faction'].'/'.$item['unit'].'.png"> '.misc::getlang($action).' '.$gl["units"][$node->data['faction']][$item['unit']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['unit'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['unit'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div>';
+		 	}
+		 	$tvars['tvar_getHTMLTrain'] = $d13->tpl->parse($d13->tpl->get("sub.queue"), $tvars);
+		}
 		
 		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Buff Queue of all Sectors
 		

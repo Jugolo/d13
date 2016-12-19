@@ -22,10 +22,7 @@ class node {
 	//----------------------------------------------------------------------------------------
 	public function get($idType, $id) {
 		global $d13;
-		
-		
-		
-		
+
 		$result = $d13->db->query('select * from nodes where '.$idType.'="'.$id.'"');
 		$this->data = $d13->db->fetch($result);
 		if (isset($this->data['id'])) {
@@ -226,35 +223,56 @@ class node {
  }
  
   	//----------------------------------------------------------------------------------------
-	// 
+	// getResources
 	//----------------------------------------------------------------------------------------
-
- public function getResources()
- {
-  global $d13, $game;
-  $this->resources=array();
-  $this->storage=$game['factions'][$this->data['faction']]['storage'];
-  $this->production=array();
-  foreach ($game['resources'] as $key=>$resource)
-   $this->production[$key]=0;
-  $result=$d13->db->query('select * from resources where node="'.$this->data['id'].'" order by id asc');
-  for ($i=0; $row=$d13->db->fetch($result); $i++) $this->resources[$i]=$row;
-  if ($this->modules)
-   foreach ($this->modules as $module)
-    if ($module['module']>-1)
-     switch ($game['modules'][$this->data['faction']][$module['module']]['type'])
-     {
-      case 'storage':
-       $this->storage[$game['modules'][$this->data['faction']][$module['module']]['storedResource']]+=$game['modules'][$this->data['faction']][$module['module']]['ratio']*$module['input'];
-      break;
-      case 'command':
-       $this->production[$game['modules'][$this->data['faction']][$module['module']]['outputResource']]+=$game['modules'][$this->data['faction']][$module['module']]['ratio']*$module['input'];
-      break;
-      case 'harvest':
-       $this->production[$game['modules'][$this->data['faction']][$module['module']]['outputResource']]+=$game['modules'][$this->data['faction']][$module['module']]['ratio']*$module['input'];
-      break;
-     }
- }
+	public function getResources() {
+	
+		global $d13, $game;
+		
+		$this->resources	= array();
+		$this->storage		= $game['factions'][$this->data['faction']]['storage'];
+		$this->production	= array();
+		
+		foreach ($game['resources'] as $key=>$resource) {
+			$this->production[$key]=0;
+			$result=$d13->db->query('select * from resources where node="'.$this->data['id'].'" order by id asc');
+			for ($i=0; $row=$d13->db->fetch($result); $i++) {
+				$this->resources[$i]=$row;
+			}
+		}
+			
+		if ($this->modules) {
+			foreach ($this->modules as $module) {
+				if ($module['module']>-1) {
+					switch ($game['modules'][$this->data['faction']][$module['module']]['type']) {
+		
+						case 'storage':
+							foreach ($game['modules'][$this->data['faction']][$module['module']]['storedResource'] as $res) {
+								$this->storage[$res] += $game['modules'][$this->data['faction']][$module['module']]['ratio'] * $game['factors']['storage'] * $module['input'];
+							}	
+							break;
+		
+						case 'command':
+							foreach ($game['modules'][$this->data['faction']][$module['module']]['storedResource'] as $res) {
+								$this->storage[$res] += $game['modules'][$this->data['faction']][$module['module']]['ratio'] * $game['factors']['storage'] * $module['input'];
+							}
+							foreach ($game['modules'][$this->data['faction']][$module['module']]['outputResource'] as $res) {
+								$this->production[$res] += $game['modules'][$this->data['faction']][$module['module']]['ratio'] * $game['factors']['production'] * $module['input'];
+							}
+							break;
+		
+						case 'harvest':
+							foreach ($game['modules'][$this->data['faction']][$module['module']]['outputResource'] as $res) {
+								$this->production[$res] += $game['modules'][$this->data['faction']][$module['module']]['ratio'] * $game['factors']['production'] * $module['input'];
+							}
+							break;
+		
+					}
+				}
+			}
+		}
+	}
+	
    	//----------------------------------------------------------------------------------------
 	// 
 	//----------------------------------------------------------------------------------------

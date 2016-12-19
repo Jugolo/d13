@@ -65,9 +65,9 @@
 						<li class="item-content">
 							<div class="item-inner">
 								
-								<form class="pure-form" method="post" action="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">
+								<form class="pure-form" method="post" id="componentForm" action="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">
 									
-									<select class="pure-input">
+									<select class="pure-input" onChange="change_maximum('quantity{{tvar_cid}}',{{tvar_compValue}}, 'componentForm', this.value)">
 										<option value="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">{{tvar_ui_craft}}</option>
 										<option value="?p=module&action=removeComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">{{tvar_ui_remove}}</option>
 									</select>

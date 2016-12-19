@@ -21,7 +21,7 @@ $game['users']=array(
  'maxNodes'				=>1,														// max nodes per user
  'maxModules'			=>15,														// max modules per sector
  'maxSectors'			=>3,														// max sectors per node
- 'idle'					=>60,														// max idle time [days] before auto-deletion
+ 'idle'					=>5,														// max idle time [days] before auto-deletion
  'passwordResetIdle'	=>15,														// time between allowed password resets
  'preferences'			=>array('allianceReports'=>1,'combatReports'=>1, 'tradeReports'=>1),
  'speed'				=>array('research'=>1, 'build'=>1, 'craft'=>1, 'train'=>1, 'trade'=>1, 'combat'=>1),	//speed mofifiers
@@ -38,6 +38,14 @@ $game['options']=array(
 	'moduleUpgrade'=>true,								// true = allowed to upgrade own modules
 	'unitAttackOnly'=>true,								// true = units are only allowed to attack, not defend
 	'defensiveModuleDamage'=>true,						// true = defensive modules take damage in form of reduced workers
+);
+
+//----------------------------------------------------------------------------------------
+// FACTORS
+//----------------------------------------------------------------------------------------
+$game['factors']=array(
+	'storage'=>10,										// ratio * factor * input = total storage capacity per module
+	'production'=>1										// ratio * factor * input = total production capacity per module
 );
 
 //----------------------------------------------------------------------------------------
@@ -61,12 +69,12 @@ $game['navigation'] = array(
 //----------------------------------------------------------------------------------------
 
 $game['resources']=array(
- 0=>array('type'=>'dynamic', 	'visible'=>1),		//type=>'dynamic'
- 1=>array('type'=>'dynamic', 	'visible'=>1),		//type=>'dynamic'
- 2=>array('type'=>'dynamic', 	'visible'=>1),		//type=>'dynamic'
- 3=>array('type'=>'dynamic', 	'visible'=>1),		//type=>'static'
- 4=>array('type'=>'dynamic', 	'visible'=>1),		//type=>'static'
- 5=>array('type'=>'dynamic', 	'visible'=>1)		//type=>'static'
+ 0=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>true),		//Gold 			- type=>'dynamic'
+ 1=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>true),		//Wood 			- type=>'dynamic'
+ 2=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>true),		//Iron 			- type=>'dynamic'
+ 3=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>false),		//Workers 		- type=>'static'
+ 4=>array('type'=>'static', 	'visible'=>true, 'carryable'=>false),		//Storage Space - type=>'static'
+ 5=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>false)		//Food 			- type=>'static'
 );
 
 //----------------------------------------------------------------------------------------
@@ -82,7 +90,7 @@ $game['factions']=array(
    		'set'		=>array(0=>array('resource'=>0, 'value'=>100)),
    		'alliance'	=>array(0=>array('resource'=>0, 'value'=>2000)),
    		'combat'	=>array(0=>array('resource'=>0, 'value'=>500))),
-   		'storage'	=>array(0=>5000, 1=>5000, 2=>5000, 3=>100, 4=>100, 5=>200)),
+   		'storage'	=>array(0=>5000, 1=>5000, 2=>5000, 3=>100, 4=>150, 5=>200)),
 		
  1=>array(
  	'active'=>false,
@@ -91,7 +99,7 @@ $game['factions']=array(
    		'set'		=>array(0=>array('resource'=>0, 'value'=>100)),
    		'alliance'	=>array(0=>array('resource'=>0, 'value'=>2000)),
    		'combat'	=>array(0=>array('resource'=>0, 'value'=>500))),
-   		'storage'	=>array(0=>6000, 1=>6000, 2=>6000, 3=>100, 4=>80, 5=>150)),
+   		'storage'	=>array(0=>6000, 1=>6000, 2=>6000, 3=>100, 4=>150, 5=>150)),
 		
  2=>array(
  	'active'=>false,
@@ -132,10 +140,7 @@ $game['classes']=array(
 //----------------------------------------------------------------------------------------
 $game['stats'] = array(
 	'hp', 'damage', 'armor', 'speed'
-	);
-
-
-
+);
 
 //----------------------------------------------------------------------------------------
 // 

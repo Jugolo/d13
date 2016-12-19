@@ -48,7 +48,7 @@ function sub_module_alliance($node, $module, $mid, $sid, $message) {
 	$tvars['tvar_moduleName'] 			= $gl["modules"][$node->data['faction']][$mid]["name"];
 	#$tvars['tvar_moduleOutput']		= $module['outputResource'];
 	#$tvars['tvar_moduleOutputName']	= $gl["resources"][$module['outputResource']]["name"];
-	$tvars['tvar_moduleProduction'] 	= $module['ratio']*$node->modules[$sid]['input'];
+	$tvars['tvar_moduleProduction'] 	= $module['ratio']*$game['factors']['production']*$node->modules[$sid]['input'];
 	$tvars['tvar_moduleRatio'] 			= $module['ratio'];
 	$tvars['tvar_moduleSlotInput'] 		= $node->modules[$sid]['input'];
 	$tvars['tvar_nodeFaction'] 			= $node->data['faction'];
@@ -56,8 +56,14 @@ function sub_module_alliance($node, $module, $mid, $sid, $message) {
 	$tvars['tvar_slotID'] 				= $_GET['slotId'];
 	$tvars['tvar_demolishLink'] 		= $demolishData;
 	$tvars['tvar_moduleStorage'] 		= $module['ratio']*$node->modules[$sid]['input'];
-	$tvars['tvar_moduleStorageRes']		= $module['storedResource'];
-	$tvars['tvar_moduleStorageResName']	= $gl["resources"][$module['storedResource']]["name"];
+
+	$i=0;
+	foreach ($module['storedResource'] as $res) {
+		$tvars['tvar_moduleStorageRes'.$i]		= $res;
+		$tvars['tvar_moduleStorageResName'.$i]	= $gl["resources"][$res]["name"];
+		$i++;
+	}
+
 	
 	$tvars['tvar_moduleItemContent'] = "";
 	

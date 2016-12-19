@@ -4,9 +4,11 @@
 </script>
   
 <div class="d13-node" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/nodeBackground.png);">
- {{tvar_getHTMLCombat}}
+{{tvar_getHTMLCombat}}
 {{tvar_getHTMLBuild}}
 {{tvar_getHTMLResearch}}
+{{tvar_getHTMLCraft}}
+{{tvar_getHTMLTrain}}
    <div class="swiper-container">
 		<div class="swiper-wrapper">
 			 {{tvar_getHTMLSectors}}

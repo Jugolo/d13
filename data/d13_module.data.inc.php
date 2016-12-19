@@ -70,7 +70,8 @@ $game['modules']=array(
 
  0=>array(
  
-  0=>array('active'=>true, 'priority'=>-1, 'type'=>'harvest', 'inputResource'=>3, 'outputResource'=>0, 'ratio'=>7, 'maxInput'=>30, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  0=>array('active'=>true, 'priority'=>-1, 'type'=>'harvest', 'inputResource'=>3, 'ratio'=>7, 'maxInput'=>30, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+   'outputResource'=>array(0),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>100),
     1=>array('resource'=>1, 'value'=>300),
@@ -81,7 +82,8 @@ $game['modules']=array(
 	'upgrades'=>array()
   ),
   
-  1=>array('active'=>true, 'priority'=>-1, 'type'=>'harvest', 'inputResource'=>3, 'outputResource'=>1, 'ratio'=>10, 'maxInput'=>30, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  1=>array('active'=>true, 'priority'=>-1, 'type'=>'harvest', 'inputResource'=>3, 'ratio'=>10, 'maxInput'=>30, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+   'outputResource'=>array(1),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>100),
     1=>array('resource'=>1, 'value'=>300),
@@ -92,7 +94,8 @@ $game['modules']=array(
 	'upgrades'=>array()
   ),
   
-  2=>array('active'=>true, 'priority'=>-1, 'type'=>'harvest', 'inputResource'=>3, 'outputResource'=>2, 'ratio'=>6, 'maxInput'=>30, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  2=>array('active'=>true, 'priority'=>-1, 'type'=>'harvest', 'inputResource'=>3, 'ratio'=>6, 'maxInput'=>30, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+   'outputResource'=>array(2),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>300),
     1=>array('resource'=>1, 'value'=>300),
@@ -206,7 +209,8 @@ $game['modules']=array(
    'options'=>array(),
 	'upgrades'=>array()
   ),
-  10=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'storedResource'=>0, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  10=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+   'storedResource'=>array(0),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>300),
     1=>array('resource'=>1, 'value'=>700),
@@ -221,7 +225,8 @@ $game['modules']=array(
    'options'=>array(),
 	'upgrades'=>array()
   ),
-  11=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'storedResource'=>1, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  11=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+   'storedResource'=>array(1),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>300),
     1=>array('resource'=>1, 'value'=>700),
@@ -236,7 +241,8 @@ $game['modules']=array(
    'options'=>array(),
 	'upgrades'=>array()
   ),
-  12=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'storedResource'=>2, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  12=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+   'storedResource'=>array(2),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>300),
     1=>array('resource'=>1, 'value'=>700),
@@ -253,7 +259,8 @@ $game['modules']=array(
   ),
   
   // ALLIANCE HOUSE
-  13=>array('active'=>true, 'priority'=>-1, 'type'=>'alliance', 'inputResource'=>3, 'storedResource'=>2, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
+  13=>array('active'=>true, 'priority'=>-1, 'type'=>'alliance', 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
+	'storedResource'=>array(0,1,2),
 	'cost'=>array(
 		0=>array('resource'=>0, 'value'=>300),
 		1=>array('resource'=>1, 'value'=>700),
@@ -276,7 +283,9 @@ $game['modules']=array(
   ),
     
   // TOWNHALL
-  14=>array('active'=>true, 'priority'=>-1, 'type'=>'command', 'inputResource'=>3, 'outputResource'=>3, 'ratio'=>0.1, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
+  14=>array('active'=>true, 'priority'=>-1, 'type'=>'command', 'inputResource'=>3, 'ratio'=>0.1, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
+	'outputResource'=>array(0,1,2,3),
+	'storedResource'=>array(0,1,2),
 	'cost'=>array(
 		0=>array('resource'=>0, 'value'=>300),
 		1=>array('resource'=>1, 'value'=>700),
@@ -308,7 +317,8 @@ $game['modules']=array(
   ),
   
   // FARM
-  16=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'storedResource'=>5, 'ratio'=>0.25, 'maxInput'=>20, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  16=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'ratio'=>0.25, 'maxInput'=>20, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+   'storedResource'=>array(5),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>150),
     1=>array('resource'=>1, 'value'=>350),

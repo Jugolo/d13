@@ -47,11 +47,7 @@ function sub_module_defense($node, $module, $mid, $sid, $message) {
 	$tvars['tvar_moduleInputName']		= $gl["resources"][$module['inputResource']]["name"];
 	$tvars['tvar_moduleMaxInput'] 		= $module['maxInput'];
 	$tvars['tvar_moduleName'] 			= $gl["modules"][$node->data['faction']][$mid]["name"];
-	#$tvars['tvar_moduleRatio'] 			= $module['ratio'];
 	$tvars['tvar_moduleSlotInput'] 		= $node->modules[$sid]['input'];
-	#$tvars['tvar_moduleStorage'] 		= $module['ratio']*$node->modules[$sid]['input'];
-	#$tvars['tvar_moduleStorageRes']		= $module['storedResource'];
-	#$tvars['tvar_moduleStorageResName']	= $gl["resources"][$module['storedResource']]["name"];
 	$tvars['tvar_nodeFaction'] 			= $node->data['faction'];
 	$tvars['tvar_nodeID'] 				= $node->data['id'];
 	$tvars['tvar_slotID'] 				= $_GET['slotId'];

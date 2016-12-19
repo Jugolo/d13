@@ -49,12 +49,18 @@ function sub_module_storage($node, $module, $mid, $sid, $message) {
 	$tvars['tvar_moduleName'] 			= $gl["modules"][$node->data['faction']][$mid]["name"];
 	$tvars['tvar_moduleRatio'] 			= $module['ratio'];
 	$tvars['tvar_moduleSlotInput'] 		= $node->modules[$sid]['input'];
-	$tvars['tvar_moduleStorage'] 		= $module['ratio']*$node->modules[$sid]['input'];
-	$tvars['tvar_moduleStorageRes']		= $module['storedResource'];
-	$tvars['tvar_moduleStorageResName']	= $gl["resources"][$module['storedResource']]["name"];
+	$tvars['tvar_moduleStorage'] 		= $module['ratio']*$game['factors']['storage']*$node->modules[$sid]['input'];
 	$tvars['tvar_nodeFaction'] 			= $node->data['faction'];
 	$tvars['tvar_nodeID'] 				= $node->data['id'];
 	$tvars['tvar_slotID'] 				= $_GET['slotId'];
+
+	$i=0;
+	foreach ($module['storedResource'] as $res) {
+		$tvars['tvar_moduleStorageRes'.$i]		= $res;
+		$tvars['tvar_moduleStorageResName'.$i]	= $gl["resources"][$res]["name"];
+		$i++;
+	}
+	
 
 	$page = "module.get.storage";
 	$d13->tpl->render_page($page, $tvars);

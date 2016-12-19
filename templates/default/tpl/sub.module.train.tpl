@@ -91,9 +91,9 @@
 						<li class="item-content">
 							<div class="item-inner">
 							
-								<form class="pure-form" method="post" action="?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}" id="unitForm_{{tvar_uid}}">
+								<form class="pure-form" method="post" id="trainForm" action="?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}" id="unitForm_{{tvar_uid}}">
 								
-									<select class="pure-input">
+									<select class="pure-input" onChange="change_maximum('quantity{{tvar_cid}}',{{tvar_compValue}}, 'trainForm', this.value)">
 	 									<option value="index.php?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}">{{tvar_ui_train}}</option>
 	 								 	<option value="index.php?p=module&action=removeUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}">{{tvar_ui_remove}}</option>
 	 								 </select>
