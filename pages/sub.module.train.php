@@ -71,16 +71,43 @@ function sub_module_train($node, $module, $mid, $sid, $message) {
 	$demolishData='';
 	if ($game['options']['moduleDemolish']) {
 		if ($node->modules[$sid]['input'] <= 0) {
-			#$demolishData .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
+			$demolishData .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
 			$demolishData .= '<a class="external button" href="?p=module&action=remove&nodeId='.$node->data['id'].'&slotId='.$_GET['slotId'].'">'.misc::getlang("removeModule").'</a>';
-			#$demolishData .= '</p>';
+			$demolishData .= '</p>';
 		} else {
-			#$demolishData .= '<p class="buttons-row theme-gray>';
+			$demolishData .= '<p class="buttons-row theme-gray>';
 			$demolishData .= '<a class="button" href="#">'.misc::getlang("removeModule").'</a>';
-			#$demolishData .= '</p>';
+			$demolishData .= '</p>';
 		}
 	}
 	
+	//- - - - - Check Inventory
+	$inventoryData = '';
+	$tvars['tvar_sub_popuplist'] = '';
+	
+	if ($module['options']['inventoryList']) {
+		//- - - - - Popover if Inventory filled
+		foreach ($node->units as $uid=>$unit) {
+			if (in_array($uid, $game['modules'][$node->data['faction']][$mid]['units'])) {
+				if ($unit['value'] > 0) {
+					$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/units/'.$node->data['faction'].'/'.$uid.'.png" title="'.$gl['units'][$node->data['faction']][$uid]['name'].'">';
+					$tvars['tvar_listLabel'] 		= $gl['units'][$node->data['faction']][$uid]['name'];
+					$tvars['tvar_listAmount'] 		= $unit['value'];
+					$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
+				}
+			}
+		}
+		$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.list"), $tvars));
+	
+		$inventoryData .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
+		$inventoryData .= '<a href="#" class="button active open-popup" data-popup=".popup-list">'.misc::getlang("inventory").'</a>';
+		$inventoryData .= '</p>';
+	} else {
+		$inventoryData .= '<p class="buttons-row theme-gray">';
+		$inventoryData .= '<a href="#" class="button active">'.misc::getlang("inventory").'</a>';
+		$inventoryData .= '</p>';
+	}
+		
 	// - - - Setup Popup
 	$tvars['tvar_sub_popupswiper'] = "";
 
@@ -134,10 +161,10 @@ function sub_module_train($node, $module, $mid, $sid, $message) {
 			$upgradeData = array();
 			$upgradeData = $unit->getUpgrades();
 
-			$tvars['tvar_unitHPPlus'] 				= "[+".$upgradeData['hp']."]";
-			$tvars['tvar_unitDamagePlus'] 			= "[+". $upgradeData['damage']."]";
-			$tvars['tvar_unitArmorPlus'] 			= "[+". $upgradeData['armor']."]";
-			$tvars['tvar_unitSpeedPlus'] 			= "[+".$upgradeData['speed']."]";
+			$tvars['tvar_unitHPPlus'] 				= "[+". $upgradeData['hp'] . "]";
+			$tvars['tvar_unitDamagePlus'] 			= "[+". $upgradeData['damage'] . "]";
+			$tvars['tvar_unitArmorPlus'] 			= "[+". $upgradeData['armor'] . "]";
+			$tvars['tvar_unitSpeedPlus'] 			= "[+". $upgradeData['speed'] . "]";
 			
 			//- - - - - Setup Template Data
 			$tvars['tvar_costData'] 				= $costData;
@@ -158,6 +185,7 @@ function sub_module_train($node, $module, $mid, $sid, $message) {
 			$tvars['tvar_unitUpkeep'] 				= $unit->data['upkeep'];
 			$tvars['tvar_unitUpkeepResource'] 		= $unit->data['upkeepResource'];
 			$tvars['tvar_unitUpkeepResourceName']	= $gl['resources'][$unit->data['upkeepResource']]['name'];
+			$tvars['tvar_inventoryLink'] 			= $inventoryData;
 			$tvars['tvar_demolishLink'] 			= $demolishData;
 			$tvars['tvar_sub_popupswiper'] 			.= $d13->tpl->render_subpage("sub.module.train", $tvars);
 				

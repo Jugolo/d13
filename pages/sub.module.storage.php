@@ -39,6 +39,32 @@ function sub_module_storage($node, $module, $mid, $sid, $message) {
 		}
 	}
 	
+	//- - - - - Check Inventory
+	$inventoryData = '';
+	$tvars['tvar_sub_popuplist'] = '';
+	
+	if ($module['options']['inventoryList']) {
+		//- - - - - Popover if Inventory filled
+		foreach ($node->resources as $uid=>$unit) {
+			if ($unit['value'] > 0) {
+					$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$uid.'.png" title="'.$gl['resources'][$uid]['name'].'">';
+					$tvars['tvar_listLabel'] 		= $gl['resources'][$uid]['name'];
+					$tvars['tvar_listAmount'] 		= floor($unit['value']);
+					$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
+			}
+		}
+		$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.list"), $tvars));
+	
+		$inventoryData .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
+		$inventoryData .= '<a href="#" class="button active open-popup" data-popup=".popup-list">'.misc::getlang("inventory").'</a>';
+		$inventoryData .= '</p>';
+	} else {
+		$inventoryData .= '<p class="buttons-row theme-gray">';
+		$inventoryData .= '<a href="#" class="button active">'.misc::getlang("inventory").'</a>';
+		$inventoryData .= '</p>';
+	}
+	
+	$tvars['tvar_inventoryLink'] 		= $inventoryData;
 	$tvars['tvar_demolishLink'] 		= $demolishData;
 	$tvars['tvar_mid'] 					= $mid;
 	$tvars['tvar_moduleDescription']	= $gl["modules"][$node->data['faction']][$mid]["description"];

@@ -181,6 +181,7 @@ $ui['max']='max';
 $ui['activities']='activities';
 $ui['projects']='projects';
 $ui['notifications']='notifications';
+$ui['inventory']='inventory';
 $ui['launch']='launch';
 $ui['raid']='raid';
 

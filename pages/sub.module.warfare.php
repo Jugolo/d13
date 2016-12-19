@@ -38,7 +38,12 @@ function sub_module_warfare($node, $module, $mid, $sid, $message) {
 			$demolishData .= '</p>';
 		}
 	}
+	
+		//- - - - - Check Inventory
+	$inventoryData = '';
 
+
+	$tvars['tvar_inventoryLink'] 		= $inventoryData;
 	$tvars['tvar_demolishLink'] 		= $demolishData;
 	$tvars['tvar_mid'] 					= $mid;
 	$tvars['tvar_moduleDescription']	= $gl["modules"][$node->data['faction']][$mid]["description"];

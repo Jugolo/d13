@@ -54,7 +54,34 @@ function sub_module_craft($node, $module, $mid, $sid, $message) {
 			$demolishData .= '</p>';
 		}
 	}
-			
+
+//- - - - - Check Inventory
+	$inventoryData = '';
+	$tvars['tvar_sub_popuplist'] = '';
+	
+	if ($module['options']['inventoryList']) {
+		//- - - - - Popover if Inventory filled
+		foreach ($node->components as $uid=>$unit) {
+			if (in_array($uid, $game['modules'][$node->data['faction']][$mid]['components'])) {
+				if ($unit['value'] > 0) {
+					$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/components/'.$node->data['faction'].'/'.$uid.'.png" title="'.$gl['components'][$node->data['faction']][$uid]['name'].'">';
+					$tvars['tvar_listLabel'] 		= $gl['components'][$node->data['faction']][$uid]['name'];
+					$tvars['tvar_listAmount'] 		= $unit['value'];
+					$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
+				}
+			}
+		}
+		$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.list"), $tvars));
+	
+		$inventoryData .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
+		$inventoryData .= '<a href="#" class="button active open-popup" data-popup=".popup-list">'.misc::getlang("inventory").'</a>';
+		$inventoryData .= '</p>';
+	} else {
+		$inventoryData .= '<p class="buttons-row theme-gray">';
+		$inventoryData .= '<a href="#" class="button active">'.misc::getlang("inventory").'</a>';
+		$inventoryData .= '</p>';
+	}
+				
 	// - - - Queue
 	if (count($node->queue['craft'])) {
 		$html = '';
@@ -133,6 +160,7 @@ function sub_module_craft($node, $module, $mid, $sid, $message) {
 		 		$tvars['tvar_costIcon']		= '<i class="f7-icons size-22 color-red">close</i>';
 		 	}
 			
+			$tvars['tvar_inventoryLink'] 		= $inventoryData;
 			$tvars['tvar_costData'] 			= $costData;
 			$tvars['tvar_requirementsData'] 	= $requirementsData;
 			$tvars['tvar_disableData'] 			= $disableData;

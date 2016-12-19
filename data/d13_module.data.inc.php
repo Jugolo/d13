@@ -78,7 +78,9 @@ $game['modules']=array(
     2=>array('resource'=>2, 'value'=>200)
    ),
 	'requirements'=>array(),
-	'options'=>array(),
+	'options'=>array(
+		'inventoryList'=>true
+	),
 	'upgrades'=>array()
   ),
   
@@ -90,7 +92,9 @@ $game['modules']=array(
     2=>array('resource'=>2, 'value'=>200)
    ),
 	'requirements'=>array(),
-	'options'=>array(),
+	'options'=>array(
+		'inventoryList'=>true
+	),
 	'upgrades'=>array()
   ),
   
@@ -101,8 +105,10 @@ $game['modules']=array(
     1=>array('resource'=>1, 'value'=>300),
     2=>array('resource'=>2, 'value'=>100)
    ),
-   'requirements'=>array(),
-   'options'=>array(),
+	'requirements'=>array(),
+	'options'=>array(
+		'inventoryList'=>true
+	),
 	'upgrades'=>array()
   ),
   
@@ -118,9 +124,11 @@ $game['modules']=array(
     2=>array('active'=>true, 'type'=>'modules', 'id'=>2, 'level'=>1),
     3=>array('active'=>true, 'type'=>'technologies', 'id'=>0, 'level'=>1)
    ),
-   'options'=>array(),
+	'options'=>array(
+		'inventoryList'=>true
+	),
 	'upgrades'=>array(),
-   'components'=>array(0, 1, 2)
+	'components'=>array(0, 1, 2)
   ),
   
   4=>array('active'=>true, 'priority'=>-1, 'type'=>'craft', 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
@@ -135,9 +143,11 @@ $game['modules']=array(
     2=>array('active'=>true, 'type'=>'modules', 'id'=>2, 'level'=>1),
     3=>array('active'=>true, 'type'=>'technologies', 'id'=>0, 'level'=>1)
    ),
-   'options'=>array(),
+   'options'=>array(
+		'inventoryList'=>true
+   ),
 	'upgrades'=>array(),
-   'components'=>array(3, 4, 5, 6, 7)
+	'components'=>array(3, 4, 5, 6, 7)
   ),
   
   5=>array('active'=>true, 'priority'=>-1, 'type'=>'train', 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
@@ -151,7 +161,9 @@ $game['modules']=array(
     1=>array('active'=>true, 'type'=>'modules', 'id'=>4, 'level'=>1),
     2=>array('active'=>true, 'type'=>'technologies', 'id'=>1, 'level'=>1)
    ),
-   'options'=>array(),
+   'options'=>array(
+		'inventoryList'=>true
+   ),
 	'upgrades'=>array(),
    'units'=>array(0, 1, 2, 3, 4, 5, 6, 10, 17, 18)
   ),
@@ -166,7 +178,9 @@ $game['modules']=array(
     0=>array('active'=>true, 'type'=>'modules', 'id'=>5, 'level'=>1),
     1=>array('active'=>true, 'type'=>'technologies', 'id'=>3, 'level'=>1)
    ),
-   'options'=>array(),
+   'options'=>array(
+		'inventoryList'=>true
+   ),
 	'upgrades'=>array(),
    'units'=>array(7, 8, 9)
   ),
@@ -180,7 +194,9 @@ $game['modules']=array(
    'requirements'=>array(
     0=>array('active'=>true, 'type'=>'technologies', 'id'=>4, 'level'=>1)
    ),
-   'options'=>array(),
+   'options'=>array(
+		'inventoryList'=>true
+   ),
 	'upgrades'=>array(),
    'units'=>array(11, 12, 13, 14, 15, 16)
   ),
@@ -192,7 +208,9 @@ $game['modules']=array(
     2=>array('resource'=>2, 'value'=>700)
    ),
    'requirements'=>array(),
-   'options'=>array(),
+   'options'=>array(
+		'inventoryList'=>true
+   ),
 	'upgrades'=>array(),
    'technologies'=>array(0, 1, 2, 3, 4)
   ),
@@ -222,7 +240,9 @@ $game['modules']=array(
     2=>array('active'=>true, 'type'=>'modules', 'id'=>2, 'level'=>1),
     3=>array('active'=>true, 'type'=>'technologies', 'id'=>4, 'level'=>1)
    ),
-   'options'=>array(),
+   'options'=>array(
+		'inventoryList'=>true
+   ),
 	'upgrades'=>array()
   ),
   11=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
@@ -238,7 +258,9 @@ $game['modules']=array(
     2=>array('active'=>true, 'type'=>'modules', 'id'=>2, 'level'=>1),
     3=>array('active'=>true, 'type'=>'technologies', 'id'=>4, 'level'=>1)
    ),
-   'options'=>array(),
+   'options'=>array(
+		'inventoryList'=>true
+   ),
 	'upgrades'=>array()
   ),
   12=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
@@ -254,7 +276,9 @@ $game['modules']=array(
     2=>array('active'=>true, 'type'=>'modules', 'id'=>2, 'level'=>1),
     3=>array('active'=>true, 'type'=>'technologies', 'id'=>4, 'level'=>1)
    ),
-   'options'=>array(),
+   'options'=>array(
+		'inventoryList'=>true
+   ),
 	'upgrades'=>array()
   ),
   

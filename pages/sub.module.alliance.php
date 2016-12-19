@@ -39,6 +39,9 @@ function sub_module_alliance($node, $module, $mid, $sid, $message) {
 		}
 	}
 	
+	//- - - - - Check Inventory
+	$inventoryData = '';
+	
 	$tvars['tvar_mid'] 					= $mid;
 	$tvars['tvar_moduleDescription']	= $gl["modules"][$node->data['faction']][$mid]["description"];
 	$tvars['tvar_moduleInput']			= $module['inputResource'];
@@ -46,14 +49,13 @@ function sub_module_alliance($node, $module, $mid, $sid, $message) {
 	$tvars['tvar_moduleInputLimit'] 	= floor(min($module['maxInput'], $node->resources[$module['inputResource']]["value"]+$node->modules[$sid]['input']));
 	$tvars['tvar_moduleMaxInput'] 		= $module['maxInput'];
 	$tvars['tvar_moduleName'] 			= $gl["modules"][$node->data['faction']][$mid]["name"];
-	#$tvars['tvar_moduleOutput']		= $module['outputResource'];
-	#$tvars['tvar_moduleOutputName']	= $gl["resources"][$module['outputResource']]["name"];
 	$tvars['tvar_moduleProduction'] 	= $module['ratio']*$game['factors']['production']*$node->modules[$sid]['input'];
 	$tvars['tvar_moduleRatio'] 			= $module['ratio'];
 	$tvars['tvar_moduleSlotInput'] 		= $node->modules[$sid]['input'];
 	$tvars['tvar_nodeFaction'] 			= $node->data['faction'];
 	$tvars['tvar_nodeID'] 				= $node->data['id'];
 	$tvars['tvar_slotID'] 				= $_GET['slotId'];
+	$tvars['tvar_inventoryLink'] 		= $inventoryData;
 	$tvars['tvar_demolishLink'] 		= $demolishData;
 	$tvars['tvar_moduleStorage'] 		= $module['ratio']*$node->modules[$sid]['input'];
 

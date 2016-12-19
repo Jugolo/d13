@@ -63,6 +63,47 @@ function sub_module_research($node, $module, $mid, $sid, $message) {
 	}
 	$tvars['tvar_queue'] = $html;
 	
+	//- - - - - Check Demolish
+			$demolishData='';
+			if ($game['options']['moduleDemolish']) {
+				if ($node->modules[$sid]['input'] <= 0) {
+					$demolishData .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
+					$demolishData .= '<a class="external button" href="?p=module&action=remove&nodeId='.$node->data['id'].'&slotId='.$_GET['slotId'].'">'.misc::getlang("removeModule").'</a>';
+					$demolishData .= '</p>';
+				} else {
+					$demolishData .= '<p class="buttons-row theme-gray>';
+					$demolishData .= '<a class="button" href="#">'.misc::getlang("removeModule").'</a>';
+					$demolishData .= '</p>';
+				}
+			}
+			
+	//- - - - - Check Inventory
+	$inventoryData = '';
+	$tvars['tvar_sub_popuplist'] = '';
+
+	if ($module['options']['inventoryList']) {
+		//- - - - - Popover if Inventory filled
+		foreach ($game['technologies'][$node->data['faction']] as $uid=>$unit) {
+			if ($unit['active'] && in_array($uid, $game['modules'][$node->data['faction']][$mid]['technologies'])) {
+				if ($node->technologies[$uid]['level'] > 0) {
+					$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/technologies/'.$node->data['faction'].'/'.$uid.'.png" title="'.$gl['technologies'][$node->data['faction']][$uid]['name'].'">';
+					$tvars['tvar_listLabel'] 		= $gl['technologies'][$node->data['faction']][$uid]['name'];
+					$tvars['tvar_listAmount'] 		= $node->technologies[$uid]['level'];
+					$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
+				}
+			}
+		}
+		$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.list"), $tvars));
+
+		$inventoryData .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
+		$inventoryData .= '<a href="#" class="button active open-popup" data-popup=".popup-list">'.misc::getlang("inventory").'</a>';
+		$inventoryData .= '</p>';
+	} else {
+		$inventoryData .= '<p class="buttons-row theme-gray">';
+		$inventoryData .= '<a href="#" class="button active">'.misc::getlang("inventory").'</a>';
+		$inventoryData .= '</p>';
+	}
+	
 	// - - - Research Popup
 	$tvars['tvar_sub_popupswiper'] = "";
 	
@@ -81,20 +122,6 @@ function sub_module_research($node, $module, $mid, $sid, $message) {
 				$requirementsData='';
 				foreach ($technology['requirements'] as $key=>$requirement) {
 					$requirementsData.='<div class="cell"><a class="tooltip-left" data-tooltip="'.$gl[$requirement['type']][$node->data['faction']][$requirement['id']]['name'].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/'.$requirement['type'].'/'.$node->data['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$node->data['faction']][$requirement['id']]['name'].'"></a></div><div class="cell">'.$requirement['level'].'</div>';
-				}
-			}
-			
-			//- - - - - Check Demolish
-			$demolishData='';
-			if ($game['options']['moduleDemolish']) {
-				if ($node->modules[$sid]['input'] <= 0) {
-					$demolishData .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-					$demolishData .= '<a class="external button" href="?p=module&action=remove&nodeId='.$node->data['id'].'&slotId='.$_GET['slotId'].'">'.misc::getlang("removeModule").'</a>';
-					$demolishData .= '</p>';
-				} else {
-					$demolishData .= '<p class="buttons-row theme-gray>';
-					$demolishData .= '<a class="button" href="#">'.misc::getlang("removeModule").'</a>';
-					$demolishData .= '</p>';
 				}
 			}
 			
@@ -127,6 +154,7 @@ function sub_module_research($node, $module, $mid, $sid, $message) {
 		 		$tvars['tvar_costIcon']		= '<i class="f7-icons size-22 color-red">close</i>';
 		 	}
 			
+			$tvars['tvar_inventoryLink'] 	= $inventoryData;
 			$tvars['tvar_linkData'] 		= $linkData;
 			$tvars['tvar_costData'] 		= $costData;
 			$tvars['tvar_requirementsData'] = $requirementsData;
@@ -137,7 +165,7 @@ function sub_module_research($node, $module, $mid, $sid, $message) {
 			$tvars['tvar_techMaxTier'] 		= $technology['maxLevel'];
 			$tvars['tvar_techDuration'] 	= misc::time_format((($technology['duration']-$technology['duration']*$totalIR)*$game['users']['speed']['research'])*60);
 			$tvars['tvar_sub_popupswiper'] .= $d13->tpl->render_subpage("sub.module.research", $tvars);
-			$tvars['tvar_demolishLink'] 		= $demolishData;
+			$tvars['tvar_demolishLink'] 	= $demolishData;
 			
 		}
 	}
