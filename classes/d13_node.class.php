@@ -84,7 +84,7 @@ class node {
   		if ($sector['type']==1) {
    			if ($node->get('name', $this->data['name'])=='noNode') {
     			$nodes=node::getList($userId);
-    			if (count($nodes)< $game['users']['maxNodes']) {
+    			if (count($nodes) <  $game['users']['maxNodes']) {
 					$ok=1;
 					$this->data['id']=misc::newId('nodes');
 					$d13->db->query('insert into nodes (id, faction, user, name, focus, lastCheck) values ("'.$this->data['id'].'", "'.$this->data['faction'].'", "'.$this->data['user'].'", "'.$this->data['name'].'", "hp", now())');
@@ -575,7 +575,7 @@ class node {
         $lastBuild=count($this->queue['build'])-1;
         if ($lastBuild>-1) $start=strftime('%Y-%m-%d %H:%M:%S', $this->queue['build'][$lastBuild]['start']+floor($this->queue['build'][$lastBuild]['duration']*60));
         else $start=strftime('%Y-%m-%d %H:%M:%S', time());
-        $d13->db->query('insert into build (node, slot, module, start, duration) values ("'.$this->data['id'].'", "'.$slotId.'", "'.$moduleId.'", "'.$start.'", "'.($game['modules'][$this->data['faction']][$moduleId]['duration']*$game['users']['speed']['build']).'")');
+        $d13->db->query('insert into build (node, slot, module, start, duration, action) values ("'.$this->data['id'].'", "'.$slotId.'", "'.$moduleId.'", "'.$start.'", "'.($game['modules'][$this->data['faction']][$moduleId]['duration']*$game['users']['speed']['build']).'", "build")');
         if ($d13->db->affected_rows()==-1) $ok=0;
         if ($ok) $status='done';
         else $status='error';
@@ -592,6 +592,7 @@ class node {
   else $status='noSlot';
   return $status;
  }
+ 
  //----------------------------------------------------------------------------------------
 // 
 //----------------------------------------------------------------------------------------
@@ -613,7 +614,7 @@ class node {
      if ($lastBuild>-1) $start=strftime('%Y-%m-%d %H:%M:%S', $this->queue['build'][$lastBuild]['start']+floor($this->queue['build'][$lastBuild]['duration']*60));
      else $start=strftime('%Y-%m-%d %H:%M:%S', time());
      $ok=1;
-     $d13->db->query('insert into build (node, slot, module, start, duration) values ("'.$this->data['id'].'", "'.$slotId.'", "'.$module['module'].'", "'.$start.'", "'.($game['modules'][$this->data['faction']][$module['module']]['removeDuration']*$game['users']['speed']['build']).'")');
+     $d13->db->query('insert into build (node, slot, module, start, duration, action) values ("'.$this->data['id'].'", "'.$slotId.'", "'.$module['module'].'", "'.$start.'", "'.($game['modules'][$this->data['faction']][$module['module']]['removeDuration']*$game['users']['speed']['build']).'", "remove")');
      if ($d13->db->affected_rows()==-1) $ok=0;
      if ($ok) $status='done';
      else $status='error';
@@ -624,7 +625,81 @@ class node {
   else $status='noSlot';
   return $status;
  }
- //----------------------------------------------------------------------------------------
+ 
+ 
+ 
+//----------------------------------------------------------------------------------------
+// upgradeModule
+//----------------------------------------------------------------------------------------
+ public function upgradeModule($slotId, $moduleId) {
+  
+  global $d13, $game;
+  
+  $result = $d13->db->query('select * from modules where node="'.$this->data['id'].'" and slot="'.$slotId.'"');
+  $module = $d13->db->fetch($result);
+  
+  if (isset($module['module']))
+   if ($module['module'] > -1)
+   {
+    $result=$d13->db->query('select count(*) as count from modules where node="'.$this->data['id'].'" and module="'.$moduleId.'"');
+    $row=$d13->db->fetch($result);
+
+     $result=$d13->db->query('select count(*) as count from build where node="'.$this->data['id'].'" and slot="'.$slotId.'"');
+     $row=$d13->db->fetch($result);
+     if (!$row['count'])
+     {
+      $this->getModules();
+      $this->getResources();
+      $this->getTechnologies();
+      $this->getComponents();
+      $module['requirementsData']=$this->checkRequirements($game['modules'][$this->data['faction']][$moduleId]['requirements']);
+      if ($module['requirementsData']['ok'])
+      {
+       $module['costData']=$this->checkCost($game['modules'][$this->data['faction']][$moduleId]['cost'], 'build');
+       if ($module['costData']['ok'])
+       {
+        $ok=1;
+        foreach ($game['modules'][$this->data['faction']][$moduleId]['cost'] as $cost)
+        {
+         $this->resources[$cost['resource']]['value']-=$cost['value']*$game['users']['cost']['build'];
+         $d13->db->query('update resources set value="'.$this->resources[$cost['resource']]['value'].'" where node="'.$this->data['id'].'" and id="'.$cost['resource'].'"');
+         if ($d13->db->affected_rows()==-1) $ok=0;
+        }
+        foreach ($game['modules'][$this->data['faction']][$moduleId]['requirements'] as $requirement)
+         if ($requirement['type']=='components')
+         {
+          $storageResource=$game['components'][$this->data['faction']][$requirement['id']]['storageResource'];
+          $this->resources[$storageResource]['value']+=$game['components'][$this->data['faction']][$requirement['id']]['storage']*$requirement['value'];
+          $d13->db->query('update resources set value="'.$this->resources[$storageResource]['value'].'" where node="'.$this->data['id'].'" and id="'.$storageResource.'"');
+          if ($d13->db->affected_rows()==-1) $ok=0;
+          $this->components[$requirement['id']]['value']-=$requirement['value'];
+          $d13->db->query('update components set value="'.$this->components[$requirement['id']]['value'].'" where node="'.$this->data['id'].'" and id="'.$requirement['id'].'"');
+          if ($d13->db->affected_rows()==-1) $ok=0;
+         }
+        $this->getQueue('build');
+        $lastBuild=count($this->queue['build'])-1;
+        if ($lastBuild>-1) $start=strftime('%Y-%m-%d %H:%M:%S', $this->queue['build'][$lastBuild]['start']+floor($this->queue['build'][$lastBuild]['duration']*60));
+        else $start=strftime('%Y-%m-%d %H:%M:%S', time());
+        $d13->db->query('insert into build (node, slot, module, start, duration, action) values ("'.$this->data['id'].'", "'.$slotId.'", "'.$moduleId.'", "'.$start.'", "'.($game['modules'][$this->data['faction']][$moduleId]['duration']*$game['users']['speed']['build']).'", "upgrade")');
+        if ($d13->db->affected_rows()==-1) $ok=0;
+        if ($ok) $status='done';
+        else $status='error';
+       }
+       else $status='notEnoughResources';
+      }
+      else $status='requirementsNotMet';
+     }
+     else $status='slotBusy';
+    
+    
+   }
+   else $status='notEmptySlot';
+  else $status='noSlot';
+  echo $status;
+  return $status;
+ }
+ 
+//----------------------------------------------------------------------------------------
 // 
 //----------------------------------------------------------------------------------------
 
@@ -1199,71 +1274,88 @@ class node {
   else $d13->db->query('rollback');
  }
  
- //----------------------------------------------------------------------------------------
-// 
 //----------------------------------------------------------------------------------------
- public function checkBuild($time)
- {
-  global $d13, $game;
-  $d13->db->query('start transaction');
-  $this->getModules();
-  $this->getResources();
-  $this->getComponents();
-  $this->getQueue('build');
-  $ok=1;
-  foreach ($this->queue['build'] as $entry)
-  {
-   $entry['end']=$entry['start']+floor($entry['duration']*60);
-   if ($entry['end']<=$time)
-   {
-    if ($this->modules[$entry['slot']]['module']==-1)//build module
-    {
-     $this->modules[$entry['slot']]['module']=$entry['module'];
-     $d13->db->query('update modules set module="'.$entry['module'].'" where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
-     if ($d13->db->affected_rows()==-1) $ok=0;
-    }
-    else//remove module
-    {
-     foreach ($game['modules'][$this->data['faction']][$entry['module']]['cost'] as $cost)
-     {
-      $this->resources[$cost['resource']]['value']+=$cost['value']*$game['users']['cost']['build']*$game['modules'][$this->data['faction']][$entry['module']]['salvage'];
-      $d13->db->query('update resources set value="'.$this->resources[$cost['resource']]['value'].'" where node="'.$this->data['id'].'" and id="'.$cost['resource'].'"');
-      if ($d13->db->affected_rows()==-1) $ok=0;
-     }
-     foreach ($game['modules'][$this->data['faction']][$entry['module']]['requirements'] as $requirement)
-      if ($requirement['type']=='components')
-      {
-       $storageResource=$game['components'][$this->data['faction']][$requirement['id']]['storageResource'];
-       $storage=$game['components'][$this->data['faction']][$requirement['id']]['storage']*$requirement['value'];
-       if ($this->resources[$storageResource]['value']-$storage>=0)
-       {
-        $this->resources[$storageResource]['value']-=$storage;
-        $d13->db->query('update resources set value="'.$this->resources[$storageResource]['value'].'" where node="'.$this->data['id'].'" and id="'.$storageResource.'"');
-        if ($d13->db->affected_rows()==-1) $ok=0;
-        $this->components[$requirement['id']]['value']+=$requirement['value'];
-        $d13->db->query('update components set value="'.$this->components[$requirement['id']]['value'].'" where node="'.$this->data['id'].'" and id="'.$requirement['id'].'"');
-        if ($d13->db->affected_rows()==-1) $ok=0;
-       }
-      }
-     if ($this->modules[$entry['slot']]['input']>0)
-     {
-      $inputResource=$game['modules'][$this->data['faction']][$entry['module']]['inputResource'];
-      $this->resources[$inputResource]['value']+=$this->modules[$entry['slot']]['input'];
-      $d13->db->query('update resources set value="'.$this->resources[$inputResource]['value'].'" where node="'.$this->data['id'].'" and id="'.$inputResource.'"');
-      if ($d13->db->affected_rows()==-1) $ok=0;
-     }
-     $this->modules[$entry['slot']]['module']=-1;
-     $this->checkModuleDependencies($entry['module'], $entry['slot']);
-     $d13->db->query('update modules set module="-1", input="0" where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
-     if ($d13->db->affected_rows()==-1) $ok=0;
-    }
-    $d13->db->query('delete from build where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
-    if ($d13->db->affected_rows()==-1) $ok=0;
-   }
-  }
-  if ($ok) $d13->db->query('commit');
-  else $d13->db->query('rollback');
+// checkBuild
+//----------------------------------------------------------------------------------------
+	public function checkBuild($time) {
+
+		global $d13, $game;
+
+		$d13->db->query('start transaction');
+		$this->getModules();
+		$this->getResources();
+		$this->getComponents();
+		$this->getQueue('build');
+		$ok=1;
+  
+		foreach ($this->queue['build'] as $entry) {
+   			$entry['end'] = $entry['start'] + floor($entry['duration'] * 60);
+   			if ($entry['end'] <= $time) {
+
+				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BUILD
+				if ($entry['action'] == 'build' && $this->modules[$entry['slot']]['module'] == -1) {
+					$this->modules[$entry['slot']]['module']=$entry['module'];
+					$d13->db->query('update modules set module="'.$entry['module'].'" where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
+					if ($d13->db->affected_rows()==-1) $ok=0;
+				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - UPGRADE
+				} else if ($entry['action'] == 'upgrade' && $this->modules[$entry['slot']]['module'] > -1) {
+					$this->modules[$entry['slot']]['module']=$entry['module'];
+					$d13->db->query('update modules set module="'.$entry['module'].'", level=level+1 where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
+					if ($d13->db->affected_rows()==-1) $ok=0;
+				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - REMOVE
+				} else if ($entry['action'] == 'remove') {
+			
+					foreach ($game['modules'][$this->data['faction']][$entry['module']]['cost'] as $cost) {
+						$this->resources[$cost['resource']]['value']+=$cost['value'] * $game['users']['cost']['build'] * $game['modules'][$this->data['faction']][$entry['module']]['salvage'];
+						$d13->db->query('update resources set value="'.$this->resources[$cost['resource']]['value'].'" where node="'.$this->data['id'].'" and id="'.$cost['resource'].'"');
+						if ($d13->db->affected_rows()==-1) $ok=0;
+					}
+	 
+					foreach ($game['modules'][$this->data['faction']][$entry['module']]['requirements'] as $requirement) {
+						if ($requirement['type']=='components') {
+					
+							$storageResource=$game['components'][$this->data['faction']][$requirement['id']]['storageResource'];
+							$storage=$game['components'][$this->data['faction']][$requirement['id']]['storage']*$requirement['value'];
+						
+							if ($this->resources[$storageResource]['value'] - $storage>=0) {
+								$this->resources[$storageResource]['value'] -= $storage;
+								$d13->db->query('update resources set value="'.$this->resources[$storageResource]['value'].'" where node="'.$this->data['id'].'" and id="'.$storageResource.'"');
+								if ($d13->db->affected_rows()==-1) $ok=0;
+								$this->components[$requirement['id']]['value'] += $requirement['value'];
+								$d13->db->query('update components set value="'.$this->components[$requirement['id']]['value'].'" where node="'.$this->data['id'].'" and id="'.$requirement['id'].'"');
+								if ($d13->db->affected_rows()==-1) $ok=0;
+							}
+						}
+		 
+						if ($this->modules[$entry['slot']]['input'] > 0) {
+							$inputResource=$game['modules'][$this->data['faction']][$entry['module']]['inputResource'];
+							$this->resources[$inputResource]['value']+=$this->modules[$entry['slot']]['input'];
+							$d13->db->query('update resources set value="'.$this->resources[$inputResource]['value'].'" where node="'.$this->data['id'].'" and id="'.$inputResource.'"');
+							if ($d13->db->affected_rows()==-1) $ok=0;
+						}
+				
+						$this->modules[$entry['slot']]['module']=-1;
+						$this->checkModuleDependencies($entry['module'], $entry['slot']);
+						$d13->db->query('update modules set module="-1", input="0" where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
+						if ($d13->db->affected_rows()==-1) $ok=0;
+					}
+				
+				}
+				
+				$d13->db->query('delete from build where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
+				if ($d13->db->affected_rows()==-1) $ok=0;
+				
+   			
+  		}
+  
+		if ($ok) {
+  			$d13->db->query('commit');
+		} else {
+			$d13->db->query('rollback');
+		}
  }
+
+	}
  //----------------------------------------------------------------------------------------
 // 
 //----------------------------------------------------------------------------------------

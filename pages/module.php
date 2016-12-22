@@ -104,7 +104,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
      case 'upgrade':
       if ($flags['upgrade'])
       {
-       if (isset($_GET['moduleId']))
+       if (isset($_GET['slotId']) && isset($_GET['moduleId']))
        {
         $status=$node->upgradeModule($_GET['slotId'], $_GET['moduleId']);
         if ($status=='done') header('Location: index.php?p=node&action=get&nodeId='.$node->data['id']);

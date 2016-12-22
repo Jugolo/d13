@@ -135,7 +135,8 @@ class d13_module {
 		$this->data['image']					= $this->data['moduleId'];
 		$this->data['totalIR'] 					= $this->data['ratio'];
 		$this->data['inputLimit'] 				= floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'] + $this->node->modules[$this->data['slotId']]['input']));
-
+		$this->data['level'] 					= $this->node->modules[$slotId]['level'];
+		
 		if (isset($this->data['outputResource'])) {
 			$this->data['moduleProduction'] 	= $this->data['ratio'] * $game['factors']['production'] * $this->node->modules[$slotId]['input'];
 			$i=0;
@@ -233,6 +234,7 @@ class d13_module {
 		$tvars['tvar_nodeFaction'] 			= $this->node->data['faction'];
 		$tvars['tvar_nodeID'] 				= $this->node->data['id'];
 		$tvars['tvar_slotID'] 				= $this->data['slotId'];
+		$tvars['tvar_moduleLevel'] 			= $this->data['level'];
 		
 		if (isset($this->data['storedResource'])) {
 			$i=0;
@@ -271,7 +273,7 @@ class d13_module {
 		if ($game['options']['moduleDemolish']) {
 			if ($this->node->modules[$this->data['slotId']]['input'] <= 0) {
 				$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-				$html .= '<a class="external button" href="?p=module&action=remove&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'">'.misc::getlang("removeModule").'</a>';
+				$html .= '<a class="external button" href="?p=module&action=remove&nodeId='.$this->node->data['id'].'&slotId='.$this->data['slotId'].'">'.misc::getlang("removeModule").'</a>';
 				$html .= '</p>';
 			} else {
 				$html .= '<p class="buttons-row theme-gray>';
@@ -298,7 +300,7 @@ class d13_module {
 		if ($game['options']['moduleUpgrade']) {
 			if ($this->node->modules[$this->data['slotId']]['level'] < $this->data['maxLevel'] && $this->data['maxLevel'] > 1) {
 				$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-				$html .= '<a class="external button" href="?p=module&action=upgrade&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'">'.misc::getlang("upgrade").'</a>';
+				$html .= '<a class="external button" href="?p=module&action=upgrade&nodeId='.$this->node->data['id'].'&moduleId='.$this->data['moduleId'].'&slotId='.$this->data['slotId'].'">'.misc::getlang("upgrade").'</a>';
 				$html .= '</p>';
 			} else {
 				$html .= '<p class="buttons-row theme-gray">';

@@ -128,7 +128,7 @@ $game['modules']=array(
 	'options'=>array(
 		'inventoryList'=>true
 	),
-	'upgrades'=>array(),
+	'upgrades'=>array(103),
 	'components'=>array(0, 1, 2)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Weapon Shop
@@ -147,7 +147,7 @@ $game['modules']=array(
    'options'=>array(
 		'inventoryList'=>true
    ),
-	'upgrades'=>array(),
+	'upgrades'=>array(104),
 	'components'=>array(3, 4, 5, 6, 7)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Barracks
@@ -165,7 +165,7 @@ $game['modules']=array(
    'options'=>array(
 		'inventoryList'=>true
    ),
-	'upgrades'=>array(),
+	'upgrades'=>array(105),
    'units'=>array(0, 1, 2, 3, 4, 5, 6, 10, 17, 18)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Stables
@@ -182,7 +182,7 @@ $game['modules']=array(
    'options'=>array(
 		'inventoryList'=>true
    ),
-	'upgrades'=>array(),
+	'upgrades'=>array(106),
    'units'=>array(7, 8, 9)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Mercenary Tent
@@ -198,7 +198,7 @@ $game['modules']=array(
    'options'=>array(
 		'inventoryList'=>true
    ),
-	'upgrades'=>array(),
+	'upgrades'=>array(107),
    'units'=>array(11, 12, 13, 14, 15, 16)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Laboratory
@@ -212,7 +212,7 @@ $game['modules']=array(
    'options'=>array(
 		'inventoryList'=>true
    ),
-	'upgrades'=>array(),
+	'upgrades'=>array(108),
    'technologies'=>array(0, 1, 2, 3, 4)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Marketplace
@@ -226,7 +226,7 @@ $game['modules']=array(
     0=>array('active'=>true, 'type'=>'technologies', 'id'=>4, 'level'=>1)
    ),
    'options'=>array(),
-	'upgrades'=>array()
+	'upgrades'=>array(109)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Gold Storage
   10=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
@@ -245,7 +245,7 @@ $game['modules']=array(
    'options'=>array(
 		'inventoryList'=>true
    ),
-	'upgrades'=>array()
+	'upgrades'=>array(110)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Lumber Storage
   11=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
@@ -264,7 +264,7 @@ $game['modules']=array(
    'options'=>array(
 		'inventoryList'=>true
    ),
-	'upgrades'=>array()
+	'upgrades'=>array(111)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Iron Storage
   12=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
@@ -283,7 +283,7 @@ $game['modules']=array(
    'options'=>array(
 		'inventoryList'=>true
    ),
-	'upgrades'=>array()
+	'upgrades'=>array(112)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Guild House
   13=>array('active'=>true, 'priority'=>-1, 'type'=>'alliance', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
@@ -306,7 +306,7 @@ $game['modules']=array(
 		'allianceInvite'=>true,
 		'allianceWar'=>true
 	),
-	'upgrades'=>array()
+	'upgrades'=>array(113)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Townhall
   14=>array('active'=>true, 'priority'=>-1, 'type'=>'command', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.1, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
@@ -318,7 +318,7 @@ $game['modules']=array(
 		2=>array('resource'=>2, 'value'=>500)
 	),
 	'requirements'=>array(),
-	'upgrades'=>array(),
+	'upgrades'=>array(114),
 	'options'=>array(
 		'inventoryList'=>true,
 		'nodeMove'=>true,
@@ -339,7 +339,7 @@ $game['modules']=array(
     2=>array('active'=>true, 'type'=>'modules', 'id'=>2, 'level'=>1)
    ),
    'options'=>array(),
-	'upgrades'=>array(103)
+	'upgrades'=>array(115)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Farm
   16=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.25, 'maxInput'=>20, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
@@ -353,7 +353,7 @@ $game['modules']=array(
    0=>array('active'=>true, 'type'=>'modules', 'id'=>14, 'level'=>1),
    ),
    'options'=>array(),
-	'upgrades'=>array()
+	'upgrades'=>array(116)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - War Academy
   17=>array('active'=>true, 'priority'=>-1, 'type'=>'research', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>2,
@@ -366,7 +366,7 @@ $game['modules']=array(
    'options'=>array(
    	'inventoryList'=>true
    ),
-	'upgrades'=>array(),
+	'upgrades'=>array(117),
    'technologies'=>array(100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Wargate
@@ -379,7 +379,7 @@ $game['modules']=array(
 	'requirements'=>array(
 		0=>array('active'=>true, 'type'=>'modules', 'id'=>14, 'level'=>2)
 	),
-	'upgrades'=>array(),
+	'upgrades'=>array(118),
 	'options'=>array(
 		'combatRaid'=>true
 	

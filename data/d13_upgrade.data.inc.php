@@ -224,7 +224,6 @@ $d13_upgrades = array(
 	98=>array('active'=>false, 'type'=>'unit', 'id'=>-1, 'stats'=>array()),
 	99=>array('active'=>false, 'type'=>'unit', 'id'=>-1, 'stats'=>array()),
 
-
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GOLD MINE UPGRADE
 	100=>array('active'=>true, 'type'=>'module', 'id'=>0, 
 		'stats'=>array(
@@ -245,21 +244,119 @@ $d13_upgrades = array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
-
-
-
-
-
-
-
-
-
-	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ARCHER TOWER UPGRADE
-	103=>array('active'=>true, 'type'=>'module', 'id'=>16, 
+	
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ARMOR SMITH UPGRADE
+	103=>array('active'=>true, 'type'=>'module', 'id'=>3, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WEAPON SHOP UPGRADE
+	104=>array('active'=>true, 'type'=>'module', 'id'=>4, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BARRACKS UPGRADE
+	105=>array('active'=>true, 'type'=>'module', 'id'=>5, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+	
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - STABLES UPGRADE
+	106=>array('active'=>true, 'type'=>'module', 'id'=>6, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MERCENARY TENT UPGRADE
+	107=>array('active'=>true, 'type'=>'module', 'id'=>7, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - LABORATORY UPGRADE
+	108=>array('active'=>true, 'type'=>'module', 'id'=>8, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),	
+	
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MARKETPLACE UPGRADE
+	109=>array('active'=>true, 'type'=>'module', 'id'=>9, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),	
+	
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GOLD STORAGE UPGRADE
+	110=>array('active'=>true, 'type'=>'module', 'id'=>10, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - LUMBER STORAGE UPGRADE
+	111=>array('active'=>true, 'type'=>'module', 'id'=>11, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - IRON STORAGE UPGRADE
+	112=>array('active'=>true, 'type'=>'module', 'id'=>12, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GUILDHOUSE UPGRADE
+	113=>array('active'=>true, 'type'=>'module', 'id'=>13, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - TOWNHALL UPGRADE
+	114=>array('active'=>true, 'type'=>'module', 'id'=>14, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ARCHER TOWER UPGRADE
+	115=>array('active'=>true, 'type'=>'module', 'id'=>15, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - FARM UPGRADE
+	116=>array('active'=>true, 'type'=>'module', 'id'=>16, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WAR ACADEMY UPGRADE
+	117=>array('active'=>true, 'type'=>'module', 'id'=>17, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WARGATE UPGRADE
+	118=>array('active'=>true, 'type'=>'module', 'id'=>18, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
 	
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Add new upgrades here
 		

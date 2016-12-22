@@ -106,36 +106,38 @@ function fetch(link, vars)
   xmlHttp.send(null);
  }
 }
+
 function timedJump(objectId, url)
 {
 	object=document.getElementById(objectId);
 	var time=(object.innerHTML).split(":");
- var done=0;
-	if (time[2]>0) time[2]--;
+ 	var done=0;
+	if (time[2] > 0) time[2]--;
 	else
 	{
 		time[2]=59;
-		if (time[1]>0) time[1]--;
+		if (time[1] > 0) time[1]--;
 		else
 		{
 			time[1]=59;
-			if (time[0]>0) time[0]--;
+			if (time[0] > 0) time[0]--;
 			else
-   {
-    clearTimeout(timerIds[objectId]);
-    window.location.href=url;
-    done=1;
-   }
+   			{
+    			clearTimeout(timerIds[objectId]);
+   				window.location.href=url;
+   				done=1;
+   			}
 		}
 	}
 	if (!done)
 	{
-  if (String(time[1]).length==1) time[1]="0"+String(time[1]);
-  if (String(time[2]).length==1) time[2]="0"+String(time[2]);
+  	if (String(time[1]).length==1) time[1]="0"+String(time[1]);
+  	if (String(time[2]).length==1) time[2]="0"+String(time[2]);
 		object.innerHTML=time[0]+":"+time[1]+":"+time[2];
 		timerIds[objectId]=setTimeout("timedJump('"+objectId+"', '"+url+"')", 1000);
 	}
 }
+
 function isset(variable)
 {
  if ((typeof(variable)!="undefined")&&(variable!==null)) return true;

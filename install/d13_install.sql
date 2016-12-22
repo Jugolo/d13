@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `build` (
   `node` int(10) unsigned NOT NULL,
   `slot` int(10) unsigned NOT NULL,
   `module` int(10) unsigned NOT NULL,
+  `action` varchar(16) COLLATE utf8_bin NOT NULL,
   `start` datetime NOT NULL,
   `duration` float unsigned NOT NULL,
   PRIMARY KEY (`node`,`slot`),
@@ -164,7 +165,8 @@ INSERT INTO `flags` (`name`, `value`) VALUES
 ('register', '1'),
 ('research', '1'),
 ('trade', '1'),
-('train', '1');
+('train', '1'),
+('upgrade', '1');
 
 -- --------------------------------------------------------
 
