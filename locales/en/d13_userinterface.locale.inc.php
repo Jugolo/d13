@@ -182,6 +182,7 @@ $ui['activities']='activities';
 $ui['projects']='projects';
 $ui['notifications']='notifications';
 $ui['inventory']='inventory';
+$ui['upgrade']='upgrade';
 $ui['launch']='launch';
 $ui['raid']='raid';
 

@@ -17,7 +17,7 @@
 // sub_module_list
 //----------------------------------------------------------------------------------------
 
-function sub_module_list($node, $module, $message) {
+function sub_module_list($node, $module_data, $message) {
 
 global $d13, $ui, $gl, $game;
 
@@ -28,15 +28,15 @@ $tvars['tvar_sub_list'] = "";
 
 if (isset($node->modules[$_GET['slotId']])) {
 
-	foreach ($game['modules'][$node->data['faction']] as $mid=>$module) {
+	foreach ($game['modules'][$node->data['faction']] as $mid=>$module_data) {
 
 		//- - - - - Check Permissions
 		$linkData='';
 		$check_requirements = NULL;
 		$check_cost = NULL;
 		
- 		$check_requirements = $node->checkRequirements($module['requirements']);
-        $check_cost 		= $node->checkCost($module['cost'], 'build');
+ 		$check_requirements = $node->checkRequirements($module_data['requirements']);
+        $check_cost 		= $node->checkCost($module_data['cost'], 'build');
       	
         if ($check_requirements['ok'] && $check_cost['ok'] && ($node->getModuleCount($_GET['slotId'], $mid) < $game['modules'][$node->data['faction']][$mid]['maxInstances'])) {
         	$linkData .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
@@ -50,16 +50,16 @@ if (isset($node->modules[$_GET['slotId']])) {
         
 		 //- - - - - Cost List
 		 $costData='';
-		 foreach ($module['cost'] as $key=>$cost) {
+		 foreach ($module_data['cost'] as $key=>$cost) {
 			$costData.='<div class="cell"><a class="tooltip-left" data-tooltip="'.$gl["resources"][$cost['resource']]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$cost['resource'].'.png" title="'.$gl["resources"][$cost['resource']]["name"].'"></a></div><div class="cell">'.($cost['value']*$game['users']['cost']['train']).'</div>';
 		 }
 		 
 		 //- - - - - Requirements List
-		 if (!count($module['requirements'])) {
+		 if (!count($module_data['requirements'])) {
 			$requirementsData=$ui['none'];
 		 } else {
 			$requirementsData='';
-			foreach ($module['requirements'] as $key=>$requirement) {
+			foreach ($module_data['requirements'] as $key=>$requirement) {
 				if (isset($requirement['level'])) {
 						$value = $requirement['level'];
 					} else {
@@ -71,31 +71,31 @@ if (isset($node->modules[$_GET['slotId']])) {
 		 
 		 //- - - - - 
 		 $outputData='';
-		 switch ($module['type']) {
+		 switch ($module_data['type']) {
 			  case 'harvest':
-				$outputData='<a class="tooltip-left" data-tooltip="'.$gl["resources"][$module['outputResource']]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$module['outputResource'].'.png" title="'.$gl["resources"][$module['outputResource']]["name"].'"></a>';
+				$outputData='<a class="tooltip-left" data-tooltip="'.$gl["resources"][$module_data['outputResource']]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$module_data['outputResource'].'.png" title="'.$gl["resources"][$module_data['outputResource']]["name"].'"></a>';
 				break;
 
 			  case 'research':
-				foreach ($module['technologies'] as $technology) {
+				foreach ($module_data['technologies'] as $technology) {
 					$outputData.='<a class="tooltip-left" data-tooltip="'.$gl["technologies"][$node->data['faction']][$technology]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/technologies/'.$node->data['faction'].'/'.$technology.'.png" title="'.$gl["technologies"][$node->data['faction']][$technology]["name"].'"></a>';
 				}
 				break;
 
 			  case 'craft':
-				foreach ($module['components'] as $component) {
+				foreach ($module_data['components'] as $component) {
 					$outputData.='<a class="tooltip-left" data-tooltip="'.$gl["components"][$node->data['faction']][$component]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/components/'.$node->data['faction'].'/'.$component.'.png" title="'.$gl["components"][$node->data['faction']][$component]["name"].'"></a>';
 				}
 				break;
 
 			  case 'train':
-				foreach ($module['units'] as $unit) {
+				foreach ($module_data['units'] as $unit) {
 					$outputData.='<a class="tooltip-left" data-tooltip="'.$gl["units"][$node->data['faction']][$unit]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/units/'.$node->data['faction'].'/'.$unit.'.png" title="'.$gl["units"][$node->data['faction']][$unit]["name"].'"></a>';
 				}
 				break;
 				
 			case 'command':
-				$outputData='<a class="tooltip-left" data-tooltip="'.$gl["resources"][$module['outputResource']]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$module['outputResource'].'.png" title="'.$gl["resources"][$module['outputResource']]["name"].'"></a>';
+				$outputData='<a class="tooltip-left" data-tooltip="'.$gl["resources"][$module_data['outputResource']]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$module_data['outputResource'].'.png" title="'.$gl["resources"][$module_data['outputResource']]["name"].'"></a>';
 				break;	
 				
 			case 'warfare':
@@ -129,14 +129,14 @@ if (isset($node->modules[$_GET['slotId']])) {
 		
 		 $tvars['tvar_moduleName'] 				= $gl["modules"][$node->data['faction']][$mid]["name"];
 		 $tvars['tvar_moduleDescription'] 		= $gl["modules"][$node->data['faction']][$mid]["description"];
-		 $tvars['tvar_moduleInputResName']		= $gl["resources"][$module['inputResource']]["name"];
-		 $tvars['tvar_moduleInputResource'] 	= $module['inputResource'];
-		 $tvars['tvar_moduleRatio'] 			= $module['ratio'];
-		 $tvars['tvar_moduleMaxInput'] 			= $module['maxInput'];
-		 $tvars['tvar_moduleMaxInstances'] 		= $module['maxInstances'];
-		 $tvars['tvar_moduleDuration'] 			= $module['duration']*$game['users']['speed']['build'];
-		 $tvars['tvar_moduleSalvage'] 			= $module['salvage'];
-		 $tvars['tvar_moduleRemoveDuration'] 	= $module['removeDuration']*$game['users']['speed']['build'];
+		 $tvars['tvar_moduleInputResName']		= $gl["resources"][$module_data['inputResource']]["name"];
+		 $tvars['tvar_moduleInputResource'] 	= $module_data['inputResource'];
+		 $tvars['tvar_moduleRatio'] 			= $module_data['ratio'];
+		 $tvars['tvar_moduleMaxInput'] 			= $module_data['maxInput'];
+		 $tvars['tvar_moduleMaxInstances'] 		= $module_data['maxInstances'];
+		 $tvars['tvar_moduleDuration'] 			= $module_data['duration']*$game['users']['speed']['build'];
+		 $tvars['tvar_moduleSalvage'] 			= $module_data['salvage'];
+		 $tvars['tvar_moduleRemoveDuration'] 	= $module_data['removeDuration']*$game['users']['speed']['build'];
 
 		 $tvars['tvar_nodeID'] 					= $node->data['id'];
 		 $tvars['tvar_nodeFaction'] 			= $node->data['faction'];

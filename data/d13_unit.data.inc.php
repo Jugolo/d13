@@ -49,6 +49,7 @@ $game['units']=array(
 //----------------------------------------------------------------------------------------
 
 0=>array(
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Spearman
   0=>array('active'=>true, 'priority'=>0, 'type'=>'unit', 'class'=>'spearman', 'hp'=>300, 'damage'=>100, 'armor'=>50, 'speed'=>100, 'duration'=>1, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>20),
@@ -62,6 +63,7 @@ $game['units']=array(
    ),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Pikeman
   1=>array('active'=>true, 'priority'=>1, 'type'=>'unit', 'class'=>'spearman', 'hp'=>300, 'damage'=>110, 'armor'=>70, 'speed'=>80, 'duration'=>1, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>30),
@@ -74,6 +76,7 @@ $game['units']=array(
    ),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Fencer
   2=>array('active'=>true, 'priority'=>2, 'type'=>'unit', 'class'=>'duelist', 'hp'=>250, 'damage'=>150, 'armor'=>30, 'speed'=>150, 'duration'=>1, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>20),
@@ -86,6 +89,7 @@ $game['units']=array(
    ),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Swordman
   3=>array('active'=>true, 'priority'=>3, 'type'=>'unit', 'class'=>'swordsman', 'hp'=>300, 'damage'=>120, 'armor'=>100, 'speed'=>70, 'duration'=>1, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>30),
@@ -99,6 +103,7 @@ $game['units']=array(
    ),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Knight
   4=>array('active'=>true, 'priority'=>4, 'type'=>'unit', 'class'=>'swordsman', 'hp'=>350, 'damage'=>130, 'armor'=>120, 'speed'=>50, 'duration'=>2, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>50),
@@ -113,6 +118,7 @@ $game['units']=array(
    ),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Bowman
   5=>array('active'=>true, 'priority'=>5, 'type'=>'unit', 'class'=>'archer', 'hp'=>250, 'damage'=>300, 'armor'=>30, 'speed'=>150, 'duration'=>1, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>30),
@@ -125,6 +131,7 @@ $game['units']=array(
    ),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Longbowman
   6=>array('active'=>true, 'priority'=>6, 'type'=>'unit', 'class'=>'archer', 'hp'=>250, 'damage'=>400, 'armor'=>70, 'speed'=>100, 'duration'=>2, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>30),
@@ -138,6 +145,7 @@ $game['units']=array(
    ),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Mounted Spearman
   7=>array('active'=>true, 'priority'=>7, 'type'=>'unit', 'class'=>'cavalry', 'hp'=>600, 'damage'=>140, 'armor'=>100, 'speed'=>250, 'duration'=>2, 'upkeepResource'=>5, 'upkeep'=>2, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>100),
@@ -151,6 +159,7 @@ $game['units']=array(
    ),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Mounted Swordman
   8=>array('active'=>true, 'priority'=>8, 'type'=>'unit', 'class'=>'cavalry', 'hp'=>600, 'damage'=>130, 'armor'=>120, 'speed'=>250, 'duration'=>2, 'upkeepResource'=>5, 'upkeep'=>2, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>110),
@@ -164,6 +173,7 @@ $game['units']=array(
    ),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Mounted Knight
   9=>array('active'=>true, 'priority'=>9, 'type'=>'unit', 'class'=>'cavalry', 'hp'=>700, 'damage'=>140, 'armor'=>150, 'speed'=>220, 'duration'=>3, 'upkeepResource'=>5, 'upkeep'=>2, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>130),
@@ -178,6 +188,7 @@ $game['units']=array(
    ),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Spy
   10=>array('active'=>true, 'priority'=>10, 'type'=>'hero', 'class'=>'duelist', 'hp'=>250, 'damage'=>100, 'armor'=>30, 'speed'=>170, 'duration'=>1, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>50),
@@ -191,6 +202,7 @@ $game['units']=array(
    ),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Militia
   11=>array('active'=>true, 'priority'=>11, 'type'=>'unit', 'class'=>'spearman', 'hp'=>200, 'damage'=>50, 'armor'=>10, 'speed'=>100, 'duration'=>0.5, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>70),
@@ -200,6 +212,7 @@ $game['units']=array(
    'requirements'=>array(),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Thug
   12=>array('active'=>true, 'priority'=>12, 'type'=>'hero', 'class'=>'duelist', 'hp'=>250, 'damage'=>80, 'armor'=>20, 'speed'=>110, 'duration'=>1, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>100),
@@ -209,6 +222,7 @@ $game['units']=array(
    'requirements'=>array(),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Bandit
   13=>array('active'=>true, 'priority'=>13, 'type'=>'hero', 'class'=>'duelist', 'hp'=>350, 'damage'=>120, 'armor'=>50, 'speed'=>100, 'duration'=>1, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>120),
@@ -218,6 +232,7 @@ $game['units']=array(
    'requirements'=>array(),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Militia Bowman
   14=>array('active'=>true, 'priority'=>14, 'type'=>'unit', 'class'=>'archer', 'hp'=>250, 'damage'=>150, 'armor'=>20, 'speed'=>140, 'duration'=>1, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>100),
@@ -227,6 +242,7 @@ $game['units']=array(
    'requirements'=>array(),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Ranger
   15=>array('active'=>true, 'priority'=>15, 'type'=>'unit', 'class'=>'archer', 'hp'=>300, 'damage'=>200, 'armor'=>50, 'speed'=>150, 'duration'=>1, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>130),
@@ -236,6 +252,7 @@ $game['units']=array(
    'requirements'=>array(),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Thief
   16=>array('active'=>true, 'priority'=>16, 'type'=>'unit', 'class'=>'duelist', 'hp'=>250, 'damage'=>70, 'armor'=>20, 'speed'=>170, 'duration'=>1, 'upkeepResource'=>5, 'upkeep'=>1, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>110),
@@ -245,6 +262,7 @@ $game['units']=array(
    'requirements'=>array(),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Archer Tower
   17=>array('active'=>true, 'priority'=>-1, 'type'=>'unit', 'class'=>'static', 'hp'=>1500, 'damage'=>500, 'armor'=>100, 'speed'=>00, 'duration'=>10, 'upkeepResource'=>5, 'upkeep'=>5, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>500),
@@ -254,6 +272,7 @@ $game['units']=array(
    'requirements'=>array(0=>array('active'=>true, 'priority'=>-1, 'type'=>'technologies', 'id'=>2, 'level'=>1)),
    'upgrades'=>array()
   ),
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Wall
   18=>array('active'=>true, 'priority'=>-1, 'type'=>'unit', 'class'=>'static', 'hp'=>3000, 'damage'=>100, 'armor'=>500, 'speed'=>00, 'duration'=>10, 'upkeepResource'=>5, 'upkeep'=>5, 'salvage'=>0.5, 'removeDuration'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>500),
@@ -263,6 +282,8 @@ $game['units']=array(
    'requirements'=>array(0=>array('active'=>true, 'priority'=>-1, 'type'=>'technologies', 'id'=>2, 'level'=>1)),
    'upgrades'=>array()
   )
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Add new units here
+  
  ),
 
 //----------------------------------------------------------------------------------------

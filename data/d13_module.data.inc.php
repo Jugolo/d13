@@ -70,7 +70,8 @@ $game['modules']=array(
 
  0=>array(
  
-  0=>array('active'=>true, 'priority'=>-1, 'type'=>'harvest', 'inputResource'=>3, 'ratio'=>7, 'maxInput'=>30, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Gold Mine
+  0=>array('active'=>true, 'priority'=>-1, 'type'=>'harvest', 'maxLevel'=>3, 'inputResource'=>3, 'ratio'=>7, 'maxInput'=>30, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'outputResource'=>array(0),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>100),
@@ -81,10 +82,10 @@ $game['modules']=array(
 	'options'=>array(
 		'inventoryList'=>true
 	),
-	'upgrades'=>array()
+	'upgrades'=>array(100)
   ),
-  
-  1=>array('active'=>true, 'priority'=>-1, 'type'=>'harvest', 'inputResource'=>3, 'ratio'=>10, 'maxInput'=>30, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Lumber Mill
+  1=>array('active'=>true, 'priority'=>-1, 'type'=>'harvest', 'maxLevel'=>3, 'inputResource'=>3, 'ratio'=>10, 'maxInput'=>30, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'outputResource'=>array(1),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>100),
@@ -95,10 +96,10 @@ $game['modules']=array(
 	'options'=>array(
 		'inventoryList'=>true
 	),
-	'upgrades'=>array()
+	'upgrades'=>array(101)
   ),
-  
-  2=>array('active'=>true, 'priority'=>-1, 'type'=>'harvest', 'inputResource'=>3, 'ratio'=>6, 'maxInput'=>30, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Iron Mine
+  2=>array('active'=>true, 'priority'=>-1, 'type'=>'harvest', 'maxLevel'=>3, 'inputResource'=>3, 'ratio'=>6, 'maxInput'=>30, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'outputResource'=>array(2),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>300),
@@ -109,10 +110,10 @@ $game['modules']=array(
 	'options'=>array(
 		'inventoryList'=>true
 	),
-	'upgrades'=>array()
+	'upgrades'=>array(102)
   ),
-  
-  3=>array('active'=>true, 'priority'=>-1, 'type'=>'craft', 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Armor Smith
+  3=>array('active'=>true, 'priority'=>-1, 'type'=>'craft', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>300),
     1=>array('resource'=>1, 'value'=>700),
@@ -130,8 +131,8 @@ $game['modules']=array(
 	'upgrades'=>array(),
 	'components'=>array(0, 1, 2)
   ),
-  
-  4=>array('active'=>true, 'priority'=>-1, 'type'=>'craft', 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Weapon Shop
+  4=>array('active'=>true, 'priority'=>-1, 'type'=>'craft', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>300),
     1=>array('resource'=>1, 'value'=>700),
@@ -149,8 +150,8 @@ $game['modules']=array(
 	'upgrades'=>array(),
 	'components'=>array(3, 4, 5, 6, 7)
   ),
-  
-  5=>array('active'=>true, 'priority'=>-1, 'type'=>'train', 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Barracks
+  5=>array('active'=>true, 'priority'=>-1, 'type'=>'train', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>400),
     1=>array('resource'=>1, 'value'=>900),
@@ -167,8 +168,8 @@ $game['modules']=array(
 	'upgrades'=>array(),
    'units'=>array(0, 1, 2, 3, 4, 5, 6, 10, 17, 18)
   ),
-  
-  6=>array('active'=>true, 'priority'=>-1, 'type'=>'train', 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Stables
+  6=>array('active'=>true, 'priority'=>-1, 'type'=>'train', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>300),
     1=>array('resource'=>1, 'value'=>700),
@@ -184,8 +185,8 @@ $game['modules']=array(
 	'upgrades'=>array(),
    'units'=>array(7, 8, 9)
   ),
-  
-  7=>array('active'=>true, 'priority'=>-1, 'type'=>'train', 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Mercenary Tent
+  7=>array('active'=>true, 'priority'=>-1, 'type'=>'train', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>1000),
     1=>array('resource'=>1, 'value'=>2000),
@@ -200,8 +201,8 @@ $game['modules']=array(
 	'upgrades'=>array(),
    'units'=>array(11, 12, 13, 14, 15, 16)
   ),
-  
-  8=>array('active'=>true, 'priority'=>-1, 'type'=>'research', 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Laboratory
+  8=>array('active'=>true, 'priority'=>-1, 'type'=>'research', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>500),
     1=>array('resource'=>1, 'value'=>800),
@@ -214,8 +215,8 @@ $game['modules']=array(
 	'upgrades'=>array(),
    'technologies'=>array(0, 1, 2, 3, 4)
   ),
-  
-  9=>array('active'=>true, 'priority'=>-1, 'type'=>'trade', 'inputResource'=>3, 'ratio'=>0.1, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Marketplace
+  9=>array('active'=>true, 'priority'=>-1, 'type'=>'trade', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.1, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>600),
     1=>array('resource'=>1, 'value'=>600),
@@ -227,7 +228,8 @@ $game['modules']=array(
    'options'=>array(),
 	'upgrades'=>array()
   ),
-  10=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Gold Storage
+  10=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'storedResource'=>array(0),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>300),
@@ -245,7 +247,8 @@ $game['modules']=array(
    ),
 	'upgrades'=>array()
   ),
-  11=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Lumber Storage
+  11=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'storedResource'=>array(1),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>300),
@@ -263,7 +266,8 @@ $game['modules']=array(
    ),
 	'upgrades'=>array()
   ),
-  12=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Iron Storage
+  12=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'storedResource'=>array(2),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>300),
@@ -281,9 +285,8 @@ $game['modules']=array(
    ),
 	'upgrades'=>array()
   ),
-  
-  // ALLIANCE HOUSE
-  13=>array('active'=>true, 'priority'=>-1, 'type'=>'alliance', 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Guild House
+  13=>array('active'=>true, 'priority'=>-1, 'type'=>'alliance', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>100, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
 	'storedResource'=>array(0,1,2),
 	'cost'=>array(
 		0=>array('resource'=>0, 'value'=>300),
@@ -305,9 +308,8 @@ $game['modules']=array(
 	),
 	'upgrades'=>array()
   ),
-    
-  // TOWNHALL
-  14=>array('active'=>true, 'priority'=>-1, 'type'=>'command', 'inputResource'=>3, 'ratio'=>0.1, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Townhall
+  14=>array('active'=>true, 'priority'=>-1, 'type'=>'command', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.1, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
 	'outputResource'=>array(0,1,2,3),
 	'storedResource'=>array(0,1,2),
 	'cost'=>array(
@@ -318,14 +320,14 @@ $game['modules']=array(
 	'requirements'=>array(),
 	'upgrades'=>array(),
 	'options'=>array(
+		'inventoryList'=>true,
 		'nodeMove'=>true,
 		'nodeRemove'=>true,
 		'nodeEdit'=>true
 	)
   ),
-  
-  // ARCHER TOWER
-  15=>array('active'=>true, 'priority'=>-1, 'type'=>'defense', 'inputResource'=>3, 'ratio'=>0, 'maxInput'=>5, 'unitId'=>17, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3, 'unitId'=>17,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Archer Tower
+  15=>array('active'=>true, 'priority'=>-1, 'type'=>'defense', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0, 'maxInput'=>5, 'unitId'=>17, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3, 'unitId'=>17,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>200),
     1=>array('resource'=>1, 'value'=>600),
@@ -337,11 +339,10 @@ $game['modules']=array(
     2=>array('active'=>true, 'type'=>'modules', 'id'=>2, 'level'=>1)
    ),
    'options'=>array(),
-	'upgrades'=>array(100)
+	'upgrades'=>array(103)
   ),
-  
-  // FARM
-  16=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'inputResource'=>3, 'ratio'=>0.25, 'maxInput'=>20, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Farm
+  16=>array('active'=>true, 'priority'=>-1, 'type'=>'storage', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.25, 'maxInput'=>20, 'duration'=>1, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3,
    'storedResource'=>array(5),
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>150),
@@ -354,22 +355,22 @@ $game['modules']=array(
    'options'=>array(),
 	'upgrades'=>array()
   ),
-  
-  // WAR ACADEMY
-  17=>array('active'=>true, 'priority'=>-1, 'type'=>'research', 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>2,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - War Academy
+  17=>array('active'=>true, 'priority'=>-1, 'type'=>'research', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.05, 'maxInput'=>10, 'duration'=>10, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>2,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>800),
     1=>array('resource'=>1, 'value'=>200),
     2=>array('resource'=>2, 'value'=>600)
    ),
    'requirements'=>array(),
-   'options'=>array(),
+   'options'=>array(
+   	'inventoryList'=>true
+   ),
 	'upgrades'=>array(),
    'technologies'=>array(100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116)
   ),
-  
-  // WARGATE
-  18=>array('active'=>true, 'priority'=>-1, 'type'=>'warfare', 'inputResource'=>0, 'ratio'=>0, 'maxInput'=>0, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Wargate
+  18=>array('active'=>true, 'priority'=>-1, 'type'=>'warfare', 'maxLevel'=>1, 'inputResource'=>0, 'ratio'=>0, 'maxInput'=>0, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
 	'cost'=>array(
 		0=>array('resource'=>0, 'value'=>300),
 		1=>array('resource'=>1, 'value'=>700),
@@ -384,7 +385,7 @@ $game['modules']=array(
 	
 	)
   ),
-  
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Add new modules here
   
   
  ),

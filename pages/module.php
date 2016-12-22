@@ -99,7 +99,21 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
       }
       else $message=misc::getlang("featureDisabled");
      break;
-     
+ 
+ 		//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+     case 'upgrade':
+      if ($flags['upgrade'])
+      {
+       if (isset($_GET['moduleId']))
+       {
+        $status=$node->upgradeModule($_GET['slotId'], $_GET['moduleId']);
+        if ($status=='done') header('Location: index.php?p=node&action=get&nodeId='.$node->data['id']);
+        else $message=$ui[$status];
+       }
+      }
+      else $message=misc::getlang("featureDisabled");
+     break;
+
 		//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
      case 'remove':
       if ($flags['build'])
@@ -236,8 +250,8 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
 	switch ($_GET['action']) {
 		// - - - - 
 		case 'get':
-			include("sub.module.get.php");
-			sub_module_get($node, $module, $mid, $sid, $message);
+			$module = d13_module_factory::create($mid, $sid, $module['type'], $node);
+			$d13->tpl->render_page($module->getTemplate(), $module->getTemplateVariables());
 			break;
 		
   		//- - - - - 

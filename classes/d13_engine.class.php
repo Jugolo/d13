@@ -15,7 +15,7 @@
 
 class d13 {
 
-	public $db, $tpl, $flags, $session, $controller, $profile;
+	public $db, $tpl, $flags, $session, $controller, $data, $profile;
 	
 	public function __construct() {
 		$this->db 			= new d13_db();

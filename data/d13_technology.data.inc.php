@@ -35,7 +35,7 @@ $game['technologies']=array(
 
 0=>array(
 
-	//METALLURGY
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - METALLURGY
 	0=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>500),
@@ -45,7 +45,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array()
 		),
-	//MILITARY TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MILITARY TRAINING
 	1=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>500),
@@ -57,7 +57,7 @@ $game['technologies']=array(
 		),
 		'upgrades'=>array()
 		),
-	//ADVANCED MILITARY TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ADVANCED MILITARY TRAINING
 	2=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>1,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>700),
@@ -69,7 +69,7 @@ $game['technologies']=array(
 		),
 		'upgrades'=>array()
 		),
-	//HORSE BREEDING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - HORSE BREEDING
 	3=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>1,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>700),
@@ -79,7 +79,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array()
 		),
-	//CURRENCY
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CURRENCY
 	4=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>1,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>200),
@@ -91,7 +91,8 @@ $game['technologies']=array(
 		),
 		'upgrades'=>array()
 		),
-
+		
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Padding for future technologies
 	5=>array('active'=>false, 'priority'=>-1, 'duration'=>0, 'maxLevel'=>0, 'cost'=>array(), 'requirements'=>array(), 'upgrades'=>array()),
 	6=>array('active'=>false, 'priority'=>-1, 'duration'=>0, 'maxLevel'=>0, 'cost'=>array(), 'requirements'=>array(), 'upgrades'=>array()),
 	7=>array('active'=>false, 'priority'=>-1, 'duration'=>0, 'maxLevel'=>0, 'cost'=>array(), 'requirements'=>array(), 'upgrades'=>array()),
@@ -188,7 +189,7 @@ $game['technologies']=array(
 	98=>array('active'=>false, 'priority'=>-1, 'duration'=>0, 'maxLevel'=>0, 'cost'=>array(), 'requirements'=>array(), 'upgrades'=>array()),
 	99=>array('active'=>false, 'priority'=>-1, 'duration'=>0, 'maxLevel'=>0, 'cost'=>array(), 'requirements'=>array(), 'upgrades'=>array()),
 	
-	//SPEARMAN TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - SPEARMAN TRAINING
 	100=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -198,7 +199,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(0)
 		),
-	//PIKEMAN TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PIKEMAN TRAINING
 	101=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -208,7 +209,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(1)
 		),
-	//FENCER TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - FENCER TRAINING
 	102=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -218,7 +219,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(2)
 		),
-	//SWORDSMAN TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - SWORDSMAN TRAINING
 	103=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -228,7 +229,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(3)
 		),
-	//KINGHT TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - KINGHT TRAINING
 	104=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -238,7 +239,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(4)
 		),
-	//BOWMAN TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BOWMAN TRAINING
 	105=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -248,7 +249,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(5)
 		),
-	//LONGBOWMAN TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - LONGBOWMAN TRAINING
 	106=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -258,7 +259,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(6)
 		),
-	//MOUNTED SPEARMAN TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MOUNTED SPEARMAN TRAINING
 	107=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -268,7 +269,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(7)
 		),
-	//MOUNTED SWORDSMAN TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MOUNTED SWORDSMAN TRAINING
 	108=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -278,7 +279,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(8)
 		),
-	//MOUNTED KNIGHT TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MOUNTED KNIGHT TRAINING
 	109=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -288,7 +289,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(9)
 		),
-	//SPY TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - SPY TRAINING
 	110=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -298,7 +299,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(10)
 		),
-	//MILITIA TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MILITIA TRAINING
 	111=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -308,7 +309,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(11)
 		),
-	//THUG TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - THUG TRAINING
 	112=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -318,7 +319,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(12)
 		),
-	//BANDIT TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BANDIT TRAINING
 	113=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -328,7 +329,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(13)
 		),
-	//MILITIA BOWMAN TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MILITIA BOWMAN TRAINING
 	114=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -338,7 +339,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(14)
 		),
-	//RANGER TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - RANGER TRAINING
 	115=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -348,7 +349,7 @@ $game['technologies']=array(
 		'requirements'=>array(),
 		'upgrades'=>array(15)
 		),
-	//THIEF TRAINING
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - THIEF TRAINING
 	116=>array('active'=>true, 'priority'=>-1, 'duration'=>15, 'maxLevel'=>3,
 		'cost'=>array(
 			0=>array('resource'=>0, 'value'=>100),
@@ -357,8 +358,9 @@ $game['technologies']=array(
 		),
 		'requirements'=>array(),
 		'upgrades'=>array(16)
-		),
-		
+	),
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Add new technologies here
+	
 	),
 
 //----------------------------------------------------------------------------------------

@@ -27,13 +27,7 @@
 		
 		stat:	all, hp, armor, damage, speed
 		
-	
-		
 */
-
-
-
-#$game['upgrades']=array(
 
 $d13_upgrades = array(
 
@@ -42,109 +36,110 @@ $d13_upgrades = array(
 //----------------------------------------------------------------------------------------
 
 0=>array(
-	//SPEARMAN UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - SPEARMAN UPGRADE
 	0=>array('active'=>true, 'type'=>'unit', 'id'=>0, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 		),
-	//PIKEMAN UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PIKEMAN UPGRADE
 	1=>array('active'=>true, 'type'=>'unit', 'id'=>1, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//FENCER UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - FENCER UPGRADE
 	2=>array('active'=>true, 'type'=>'unit', 'id'=>2, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//SWORDSMAN UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - SWORDSMAN UPGRADE
 	3=>array('active'=>true, 'type'=>'unit', 'id'=>3, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//KINGHT UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - KINGHT UPGRADE
 	4=>array('active'=>true, 'type'=>'unit', 'id'=>4, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//BOWMAN UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BOWMAN UPGRADE
 	5=>array('active'=>true, 'type'=>'unit', 'id'=>5, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//LONGBOWMAN UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - LONGBOWMAN UPGRADE
 	6=>array('active'=>true, 'type'=>'unit', 'id'=>6, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//MOUNTED SPEARMAN UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MOUNTED SPEARMAN UPGRADE
 	7=>array('active'=>true, 'type'=>'unit', 'id'=>7, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//MOUNTED SWORDSMAN UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MOUNTED SWORDSMAN UPGRADE
 	8=>array('active'=>true, 'type'=>'unit', 'id'=>8, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//MOUNTED KNIGHT UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MOUNTED KNIGHT UPGRADE
 	9=>array('active'=>true, 'type'=>'unit', 'id'=>9, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//SPY UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - SPY UPGRADE
 	10=>array('active'=>true, 'type'=>'unit', 'id'=>10, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//MILITIA UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MILITIA UPGRADE
 	11=>array('active'=>true, 'type'=>'unit', 'id'=>11,
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//THUG UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - THUG UPGRADE
 	12=>array('active'=>true, 'type'=>'unit', 'id'=>12, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//BANDIT UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BANDIT UPGRADE
 	13=>array('active'=>true, 'type'=>'unit', 'id'=>13, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//MILITIA BOWMAN UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MILITIA BOWMAN UPGRADE
 	14=>array('active'=>true, 'type'=>'unit', 'id'=>14, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//RANGER UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - RANGER UPGRADE
 	15=>array('active'=>true, 'type'=>'unit', 'id'=>15, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		),
 		),
-	//THIEF UPGRADE
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - THIEF UPGRADE
 	16=>array('active'=>true, 'type'=>'unit', 'id'=>16, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 		),
-	
+		
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Padding for future unit upgrades
 	17=>array('active'=>false, 'type'=>'unit', 'id'=>-1, 'stats'=>array()),
 	18=>array('active'=>false, 'type'=>'unit', 'id'=>-1, 'stats'=>array()),
 	19=>array('active'=>false, 'type'=>'unit', 'id'=>-1, 'stats'=>array()),
@@ -229,13 +224,44 @@ $d13_upgrades = array(
 	98=>array('active'=>false, 'type'=>'unit', 'id'=>-1, 'stats'=>array()),
 	99=>array('active'=>false, 'type'=>'unit', 'id'=>-1, 'stats'=>array()),
 
-	//ARCHER TOWER UPGRADE
-	100=>array('active'=>true, 'type'=>'module', 'id'=>16, 
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GOLD MINE UPGRADE
+	100=>array('active'=>true, 'type'=>'module', 'id'=>0, 
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
-		),
+	),
 
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - LUMBER MILL UPGRADE
+	101=>array('active'=>true, 'type'=>'module', 'id'=>1, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - IRON MINE UPGRADE
+	102=>array('active'=>true, 'type'=>'module', 'id'=>2, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+
+
+
+
+
+
+
+
+
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ARCHER TOWER UPGRADE
+	103=>array('active'=>true, 'type'=>'module', 'id'=>16, 
+		'stats'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		)
+	),
+	
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Add new upgrades here
 		
 	)
 	
