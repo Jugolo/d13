@@ -56,11 +56,11 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
         $status=$alliance->set($node->data['id']);
         $message=$ui[$status];
        }
-       else $message=misc::getlang("accessDenied");
+       else $message=$d13->data->getUI("accessDenied");
       else $message=$ui[$status];
      }
-     else $message=misc::getlang("accessDenied");
-    else $message=misc::getlang("insufficientData");
+     else $message=$d13->data->getUI("accessDenied");
+    else $message=$d13->data->getUI("insufficientData");
   break;
   case 'add':
    if ($status=='noAlliance')
@@ -90,14 +90,14 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
          }
          $message=$ui[$status];
         }
-        else $message=misc::getlang("accessDenied");
+        else $message=$d13->data->getUI("accessDenied");
        else $message=$ui[$status];
       }
-      else $message=misc::getlang("insufficientData");
+      else $message=$d13->data->getUI("insufficientData");
     }
-    else $message=misc::getlang("noNode");
+    else $message=$d13->data->getUI("noNode");
    }
-   else $message=misc::getlang("allianceSet");
+   else $message=$d13->data->getUI("allianceSet");
   break;
   case 'remove':
    if ((isset($_GET['go']))&&($_GET['go']))
@@ -114,10 +114,10 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
        }
        else $message=$ui[$status];
       }
-      else $message=misc::getlang("accessDenied");
+      else $message=$d13->data->getUI("accessDenied");
      else $message=$ui[$status];
     }
-    else $message=misc::getlang("insufficientData");
+    else $message=$d13->data->getUI("insufficientData");
   break;
   case 'addInvitation':
    if (isset($_POST['name']))
@@ -137,19 +137,19 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
           $msg=new message();
           $msg->data['sender']=$_SESSION[CONST_PREFIX.'User']['name'];
           $msg->data['recipient']=$user->data['name'];
-          $msg->data['subject']=misc::getlang("allianceInvitation");
-          $msg->data['body']='<a class=\"link\" href=\"index.php?p=alliance&action=acceptInvitation&alliance='.$alliance->data['id'].'&user='.$user->data['id'].'\">'.misc::getlang("accept").'</a> '.$alliance->data['name'].' '.misc::getlang("alliance");
+          $msg->data['subject']=$d13->data->getUI("allianceInvitation");
+          $msg->data['body']='<a class=\"link\" href=\"index.php?p=alliance&action=acceptInvitation&alliance='.$alliance->data['id'].'&user='.$user->data['id'].'\">'.$d13->data->getUI("accept").'</a> '.$alliance->data['name'].' '.$d13->data->getUI("alliance");
           $msg->data['viewed']=0;
           $status=$msg->add();
          }
         }
-        $message=misc::getlang($status);
+        $message=$d13->data->getUI($status);
        }
-       else $message=misc::getlang("noUser");
+       else $message=$d13->data->getUI("noUser");
       }
-      else $message=misc::getlang("accessDenied");
-     else $message=misc::getlang("noAlliance");
-    else $message=misc::getlang("insufficientData");
+      else $message=$d13->data->getUI("accessDenied");
+     else $message=$d13->data->getUI("noAlliance");
+    else $message=$d13->data->getUI("insufficientData");
   break;
   case 'removeInvitation':
    if (isset($_GET['alliance'], $_GET['user']))
@@ -162,10 +162,10 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
       if ($status=='done') header('Location: alliance.php?action=get');
       else $message=$ui[$status];
      }
-     else $message=misc::getlang("accessDenied");
-    else $message=misc::getlang("noAlliance");
+     else $message=$d13->data->getUI("accessDenied");
+    else $message=$d13->data->getUI("noAlliance");
    }
-   else $message=misc::getlang("insufficientData");
+   else $message=$d13->data->getUI("insufficientData");
   break;
   case 'acceptInvitation':
    if (isset($_GET['alliance'], $_GET['user']))
@@ -175,8 +175,8 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
      if ($status=='done') $_SESSION[CONST_PREFIX.'User']['alliance']=$_GET['alliance'];
      $message=$ui[$status];
     }
-    else $message=misc::getlang("accessDenied");
-   else $message=misc::getlang("insufficientData");
+    else $message=$d13->data->getUI("accessDenied");
+   else $message=$d13->data->getUI("insufficientData");
   break;
   case 'removeMember':
    if ($status=='done')
@@ -191,9 +191,9 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
       }
       $message=$ui[$status];
      }
-     else $message=misc::getlang("accessDenied");
-    else $message=misc::getlang("insufficientData");
-   else $message=misc::getlang("noAlliance");
+     else $message=$d13->data->getUI("accessDenied");
+    else $message=$d13->data->getUI("insufficientData");
+   else $message=$d13->data->getUI("noAlliance");
   break;
   case 'addWar':
    if (isset($_POST['name']))
@@ -217,23 +217,23 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
             $msg=new message();
             $msg->data['sender']=$_SESSION[CONST_PREFIX.'User']['name'];
             $msg->data['recipient']=$user->data['name'];
-            $msg->data['subject']=misc::getlang("warDeclaration");
-            $msg->data['body']=misc::getlang("sender").': '.$alliance->data['name'].' '.misc::getlang("alliance");
+            $msg->data['subject']=$d13->data->getUI("warDeclaration");
+            $msg->data['body']=$d13->data->getUI("sender").': '.$alliance->data['name'].' '.$d13->data->getUI("alliance");
             $msg->data['viewed']=0;
             $status=$msg->add();
             if ($status=='done') header('Location: alliance.php?action=get');
            }
           }
-          else $message=misc::getlang("noUser");
+          else $message=$d13->data->getUI("noUser");
          }
          $message=$ui[$status];
         }
-        else $message=misc::getlang("accessDenied");
-       else $message=misc::getlang("noAlliance");
+        else $message=$d13->data->getUI("accessDenied");
+       else $message=$d13->data->getUI("noAlliance");
       }
-      else $message=misc::getlang("accessDenied");
-     else $message=misc::getlang("noAlliance");
-    else $message=misc::getlang("insufficientData");
+      else $message=$d13->data->getUI("accessDenied");
+     else $message=$d13->data->getUI("noAlliance");
+    else $message=$d13->data->getUI("insufficientData");
   break;
   case 'proposePeace':
    if (isset($_GET['recipient']))
@@ -247,11 +247,11 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
        if ($status=='done') header('Location: alliance.php?action=get');
        $message=$ui[$status];
       }
-      else $message=misc::getlang("noAlliance");
+      else $message=$d13->data->getUI("noAlliance");
      }
-     else $message=misc::getlang("accessDenied");
-    else $message=misc::getlang("noAlliance");
-   else $message=misc::getlang("insufficientData");
+     else $message=$d13->data->getUI("accessDenied");
+    else $message=$d13->data->getUI("noAlliance");
+   else $message=$d13->data->getUI("insufficientData");
   break;
   case 'removePeace':
    if (isset($_GET['recipient']))
@@ -265,11 +265,11 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
        if ($status=='done') header('Location: alliance.php?action=get');
        else $message=$ui[$status];
       }
-      else $message=misc::getlang("noAlliance");
+      else $message=$d13->data->getUI("noAlliance");
      }
-     else $message=misc::getlang("accessDenied");
-    else $message=misc::getlang("noAlliance");
-   else $message=misc::getlang("insufficientData");
+     else $message=$d13->data->getUI("accessDenied");
+    else $message=$d13->data->getUI("noAlliance");
+   else $message=$d13->data->getUI("insufficientData");
   break;
   case 'acceptPeace':
    if (isset($_GET['sender'], $_GET['recipient']))
@@ -291,26 +291,26 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
           $msg=new message();
           $msg->data['sender']=$_SESSION[CONST_PREFIX.'User']['name'];
           $msg->data['recipient']=$user->data['name'];
-          $msg->data['subject']=misc::getlang("peaceAccepted");
-          $msg->data['body']=misc::getlang("sender").': '.$alliance->data['name'].' '.misc::getlang("alliance");
+          $msg->data['subject']=$d13->data->getUI("peaceAccepted");
+          $msg->data['body']=$d13->data->getUI("sender").': '.$alliance->data['name'].' '.$d13->data->getUI("alliance");
           $msg->data['viewed']=0;
           $status=$msg->add();
           if ($status=='done') header('Location: alliance.php?action=get');
          }
         }
-        else $message=misc::getlang("noUser");
+        else $message=$d13->data->getUI("noUser");
        }
        $message=$ui[$status];
       }
-      else $message=misc::getlang("noAlliance");
+      else $message=$d13->data->getUI("noAlliance");
      }
-     else $message=misc::getlang("accessDenied");
-    else $message=misc::getlang("noAlliance");
-   else $message=misc::getlang("insufficientData");
+     else $message=$d13->data->getUI("accessDenied");
+    else $message=$d13->data->getUI("noAlliance");
+   else $message=$d13->data->getUI("insufficientData");
   break;
  }
 }
-else $message=misc::getlang("accessDenied");
+else $message=$d13->data->getUI("accessDenied");
 if ((isset($status))&&($status=='error')) $d13->db->query('rollback');
 else $d13->db->query('commit');
 
@@ -328,8 +328,8 @@ $tvars['tvar_allianceSet'] 		= "";
 $tvars['tvar_allianceRemove'] 	= "";
 
  if ($alliance->data['user'] == $_SESSION[CONST_PREFIX.'User']['id']) {
-    $tvars['tvar_allianceSet'] 		= '<a class="external" href="index.php?p=alliance&action=set">'.misc::getlang("set").'</a>';
-    $tvars['tvar_allianceRemove'] 	= '<a class="external" href="index.php?p=alliance&action=remove">'.misc::getlang("remove").'</a>';
+    $tvars['tvar_allianceSet'] 		= '<a class="external" href="index.php?p=alliance&action=set">'.$d13->data->getUI("set").'</a>';
+    $tvars['tvar_allianceRemove'] 	= '<a class="external" href="index.php?p=alliance&action=remove">'.$d13->data->getUI("remove").'</a>';
  }
 
 $tvars['tvar_tpl_allianceMenu'] 	= $d13->tpl->parse($d13->tpl->get("alliance.menu"), $tvars);

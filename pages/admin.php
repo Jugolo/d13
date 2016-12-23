@@ -34,7 +34,7 @@ if ((isset($_SESSION[CONST_PREFIX.'User']['level']))&&($_SESSION[CONST_PREFIX.'U
   {
    case 'vars':
     if ($_SESSION[CONST_PREFIX.'User']['password']==sha1($_POST['password'])) $message=$ui[flags::set($_POST['name'], $_POST['value'])];
-    else $message=misc::getlang("wrongPassword");
+    else $message=$d13->data->getUI("wrongPassword");
    break;
    case 'bans':
     $user=new user();
@@ -50,17 +50,17 @@ if ((isset($_SESSION[CONST_PREFIX.'User']['level']))&&($_SESSION[CONST_PREFIX.'U
       else $message=$ui[user::remove($user->data['id'])];
      }
      else $message=$ui[$status];
-    else $message=misc::getlang("wrongPassword");
+    else $message=$d13->data->getUI("wrongPassword");
    break;
    case 'accounts':
     if ($_SESSION[CONST_PREFIX.'User']['password']==sha1($_POST['password']))
      if ($_POST['maxIdleTime']>0)
      {
       $output=user::removeInactive($_POST['maxIdleTime']);
-      $message=$output['found'].' '.misc::getlang("accountsFound").', '.$output['removed'].' '.misc::getlang("removed");
+      $message=$output['found'].' '.$d13->data->getUI("accountsFound").', '.$output['removed'].' '.$d13->data->getUI("removed");
      }
-     else $message=misc::getlang("insufficientData");
-    else $message=misc::getlang("wrongPassword");
+     else $message=$d13->data->getUI("insufficientData");
+    else $message=$d13->data->getUI("wrongPassword");
    break;
    case 'username':
     if ($_SESSION[CONST_PREFIX.'User']['password']==sha1($_POST['password']))
@@ -69,11 +69,11 @@ if ((isset($_SESSION[CONST_PREFIX.'User']['level']))&&($_SESSION[CONST_PREFIX.'U
       $user=new user();
       $status=$user->get('name', $_POST['name']);
       if ($status=='done')
-       $message='<div>'.$user->data['name'].'</div><div><div class="cell">'.misc::getlang("ip").': </div><div class="cell">'.$user->data['ip'].'</div></div><div><div class="cell">'.misc::getlang("email").': </div><div class="cell">'.$user->data['email'].'</div></div>';
+       $message='<div>'.$user->data['name'].'</div><div><div class="cell">'.$d13->data->getUI("ip").': </div><div class="cell">'.$user->data['ip'].'</div></div><div><div class="cell">'.$d13->data->getUI("email").': </div><div class="cell">'.$user->data['email'].'</div></div>';
       else $message=$ui[$status];
      }
-     else $message=misc::getlang("insufficientData");
-    else $message=misc::getlang("wrongPassword");
+     else $message=$d13->data->getUI("insufficientData");
+    else $message=$d13->data->getUI("wrongPassword");
    break;
    case 'blacklist':
     if (isset($_GET['blacklistAction'], $_POST['type'], $_POST['value']))
@@ -88,8 +88,8 @@ if ((isset($_SESSION[CONST_PREFIX.'User']['level']))&&($_SESSION[CONST_PREFIX.'U
          $message=$ui[blacklist::remove($_POST['type'], $value)];
        break;
       }
-     else $message=misc::getlang("wrongPassword");
-    else $message=misc::getlang("insufficientData");
+     else $message=$d13->data->getUI("wrongPassword");
+    else $message=$d13->data->getUI("insufficientData");
    break;
   }
  }

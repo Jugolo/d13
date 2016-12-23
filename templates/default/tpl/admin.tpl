@@ -16,7 +16,7 @@
     </div>
    </div>
    <div id="vars">
-    <form method="post" action="?action=vars">
+    <form method="post" action="?p=admin&action=vars">
      <div><div class="cell">{{tvar_ui_name}}</div><div class="cell"><select class="dropdown" name="name" id="varName" onChange="selectFlag()">{{tvar_flagNames}}</select></div></div>
      <div><div class="cell">{{tvar_ui_value}}</div><div class="cell"><input class="textbox" type="text" name="value" id="varValue" maxlength="64" value="{{tvar_flagsValue}}"></div></div>
      <div><div class="cell">{{tvar_ui_password}}</div><div class="cell"><input class="textbox" type="password" name="password"></div></div>
@@ -24,7 +24,7 @@
     </form>
    </div>
    <div id="bans">
-    <form method="post" action="?action=bans">
+    <form method="post" action="?p=admin&action=bans">
      <div><div class="cell">{{tvar_ui_name}}</div><div class="cell"><input type="text" class="textbox" name="name"></div></div>
      <div><div class="cell">{{tvar_ui_level}}</div><div class="cell"><input class="textbox numeric" type="text" name="level" maxlength="2" size="1"></div></div>
      <div><div class="cell">{{tvar_ui_password}}</div><div class="cell"><input class="textbox" type="password" name="password"></div></div>
@@ -32,14 +32,14 @@
     </form>
    </div>
    <div id="accounts">
-    <form method="post" action="?action=accounts">
+    <form method="post" action="?p=admin&action=accounts">
      <div><div class="cell">{{tvar_ui_maxIdleTime}}</div><div class="cell"><input class="textbox numeric" type="text" name="maxIdleTime" size="1"></div></div>
      <div><div class="cell">{{tvar_ui_password}}</div><div class="cell"><input class="textbox" type="password" name="password"></div></div>
      <div><div class="cell"><input class="button" type="submit" value="{{tvar_ui_remove}}"></div></div>
     </form>
    </div>
    <div id="username">
-    <form method="post" action="?action=username">
+    <form method="post" action="?p=admin&action=username">
      <div><div class="cell">{{tvar_ui_username}}</div><div class="cell"><input class="textbox" type="text" name="name"></div></div>
      <div><div class="cell">{{tvar_ui_password}}</div><div class="cell"><input class="textbox" type="password" name="password"></div></div>
      <div><div class="cell"><input class="button" type="submit" value="{{tvar_ui_get}}"></div></div>
@@ -47,13 +47,13 @@
    </div>
    <div id="blacklist">
     {{tvar_ui_action}} <select class="dropdown" id="blacklistAction" onChange="selectBlacklistAction()"><option value="add">{{tvar_ui_add}}</option><option value="remove">{{tvar_ui_remove}}</option></select>
-    <form method="post" action="?action=blacklist&blacklistAction=add" id="blacklistAdd">
+    <form method="post" action="?p=admin&action=blacklist&blacklistAction=add" id="blacklistAdd">
      <div><div class="cell">{{tvar_ui_type}}</div><div class="cell"><select class="dropdown" name="type" id="blacklist_add_type"><option value="ip">{{tvar_ui_ip}}</option><option value="email">{{tvar_ui_email}}</option></select></div></div>
      <div><div class="cell">{{tvar_ui_value}}</div><div class="cell"><input class="textbox" type="text" name="value"></div></div>
      <div><div class="cell">{{tvar_ui_password}}</div><div class="cell"><input class="textbox" type="password" name="password"></div></div>
      <div><div class="cell"><input class="button" type="submit" value="{{tvar_ui_add}}"></div></div>
     </form>
-    <form method="post" action="?action=blacklist&blacklistAction=remove" id="blacklistRemove">
+    <form method="post" action="?p=admin&action=blacklist&blacklistAction=remove" id="blacklistRemove">
      <div><div class="cell">{{tvar_ui_type}}</div><div class="cell"><select class="dropdown" name="type" id="blacklist_remove_type" onChange="selectBlacklistRemoveType()"><option value="ip">{{tvar_ui_ip}}</option><option value="email">{{tvar_ui_email}}</option></select></div></div>
      <div><div class="cell">{{tvar_ui_list}}</div><div class="cell"><select class="dropdown" name="value[]" id="ipList" multiple="true" style="height: 200px;">{{tvar_flagsIP}}</select><select class="dropdown" name="value[]" id="emailList" multiple="true" style="height: 200px;">{{tvar_flagsEmail}}</select></div></div>
      <div><div class="cell">{{tvar_ui_password}}</div><div class="cell"><input class="textbox" type="password" name="password"></div></div>

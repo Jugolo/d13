@@ -64,7 +64,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
          					$pass = true;
          				} else {
          					$pass = false;
-         					$message=misc::getlang("noWar");
+         					$message=$d13->data->getUI("noWar");
          				}
          			}
          			
@@ -88,17 +88,17 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
 					}
 
        			} else {
-        			$message=misc::getlang("noUser");
+        			$message=$d13->data->getUI("noUser");
         		}
     		} else {
-      				$message=misc::getlang("noNode");
+      				$message=$d13->data->getUI("noNode");
       			}
     	
     	
     	
     		}
     	} else {
-			$message=misc::getlang("featureDisabled");
+			$message=$d13->data->getUI("featureDisabled");
    		}
    		break;
    
@@ -114,18 +114,18 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
        if ($status=='done') header('Location: node.php?action=get&nodeId='.$node->data['id']);
        else $message=$ui[$status];
       }
-      else $message=misc::getlang("accessDenied");
-     else $message=misc::getlang("noCombat");
+      else $message=$d13->data->getUI("accessDenied");
+     else $message=$d13->data->getUI("noCombat");
     }
    break;
    
   }
   
 	} else {
-		$message=misc::getlang("noNode");
+		$message=$d13->data->getUI("noNode");
 	}
 } else {
-	$message=misc::getlang("insufficientData");
+	$message=$d13->data->getUI("insufficientData");
 }
 
 if ((isset($status))&&($status=='error')) {

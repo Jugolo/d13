@@ -97,7 +97,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
         else $message=$ui[$status];
        }
       }
-      else $message=misc::getlang("featureDisabled");
+      else $message=$d13->data->getUI("featureDisabled");
      break;
  
  		//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -111,7 +111,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
         else $message=$ui[$status];
        }
       }
-      else $message=misc::getlang("featureDisabled");
+      else $message=$d13->data->getUI("featureDisabled");
      break;
 
 		//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -122,7 +122,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
        if ($status=='done') header('Location: index.php?p=node&action=get&nodeId='.$node->data['id']);
        else $message=$ui[$status];
       }
-      else $message=misc::getlang("featureDisabled");
+      else $message=$d13->data->getUI("featureDisabled");
      break;
      
 		//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -147,7 +147,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
         else $message=$ui[$status];
        }
       }
-      else $message=misc::getlang("featureDisabled");
+      else $message=$d13->data->getUI("featureDisabled");
      break;
      
      case 'cancelTechnology':
@@ -171,7 +171,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
         }
         else header('Location: index.php?p=module&action=get&nodeId='.$node->data['id'].'&slotId='.$_GET['slotId']);
       }
-      else $message=misc::getlang("featureDisabled");
+      else $message=$d13->data->getUI("featureDisabled");
      break;
      
      case 'removeComponent':
@@ -184,7 +184,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
         else $message=$ui[$status];
        }
       }
-      else $message=misc::getlang("featureDisabled");
+      else $message=$d13->data->getUI("featureDisabled");
      break;
      
      case 'cancelComponent':
@@ -208,7 +208,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
         }
         else header('Location: index.php?p=module&action=get&nodeId='.$node->data['id'].'&slotId='.$_GET['slotId']);
       }
-      else $message=misc::getlang("featureDisabled");
+      else $message=$d13->data->getUI("featureDisabled");
      break;
      
      case 'removeUnit':
@@ -221,7 +221,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
         else $message=$ui[$status];
        }
       }
-      else $message=misc::getlang("featureDisabled");
+      else $message=$d13->data->getUI("featureDisabled");
      break;
      
      case 'cancelUnit':
@@ -233,12 +233,12 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
       }
      break;
     }
-   else $message=misc::getlang("noSlot");
-  else $message=misc::getlang("noSlot");
+   else $message=$d13->data->getUI("noSlot");
+  else $message=$d13->data->getUI("noSlot");
  }
  else $message=$ui[$status];
 }
-else $message=misc::getlang("accessDenied");
+else $message=$d13->data->getUI("accessDenied");
 if ((isset($status))&&($status=='error')) $d13->db->query('rollback');
 else $d13->db->query('commit');
 

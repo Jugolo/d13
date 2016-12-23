@@ -327,7 +327,7 @@ $game['modules']=array(
 	)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Archer Tower
-  15=>array('active'=>true, 'priority'=>-1, 'type'=>'defense', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0, 'maxInput'=>5, 'unitId'=>17, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3, 'unitId'=>17,
+  15=>array('active'=>true, 'priority'=>-1, 'type'=>'defense', 'maxLevel'=>3, 'inputResource'=>3, 'ratio'=>0, 'maxInput'=>5, 'unitId'=>17, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>3, 'unitId'=>17,
    'cost'=>array(
     0=>array('resource'=>0, 'value'=>200),
     1=>array('resource'=>1, 'value'=>600),

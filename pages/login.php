@@ -70,10 +70,10 @@ if (isset($_GET['action']))
         }
         header('Location: index.php?p=node&action=list');
        }
-       else $message=misc::getlang("inactive");
-      else $message=misc::getlang("wrongPassword");
-     else $message=misc::getlang("loginDisabled");
-    else $message=misc::getlang($status);
+       else $message=$d13->data->getUI("inactive");
+      else $message=$d13->data->getUI("wrongPassword");
+     else $message=$d13->data->getUI("loginDisabled");
+    else $message=$d13->data->getUI($status);
    }
   break;
   
@@ -96,11 +96,11 @@ if (isset($_GET['action']))
         $_SESSION[CONST_PREFIX.'User']=$user->data;
         header('Location: index.php');
        }
-       else $message=misc::getlang("accessDenied");
-      else $message=misc::getlang("wrongPassword");
-     else $message=misc::getlang($status);
+       else $message=$d13->data->getUI("accessDenied");
+      else $message=$d13->data->getUI("wrongPassword");
+     else $message=$d13->data->getUI($status);
     }
-    else $message=misc::getlang($status);
+    else $message=$d13->data->getUI($status);
    }
   break;
  }

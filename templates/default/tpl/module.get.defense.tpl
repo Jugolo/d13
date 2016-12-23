@@ -7,7 +7,7 @@
 	<div class="card card-shadow">
 
 		<div class="card-header">
-			<div class="d13-heading">{{tvar_moduleName}} (Level: {{tvar_moduleLevel}})</div>
+			<div class="d13-heading">{{tvar_moduleName}} (Level: {{tvar_moduleLevel}}/{{tvar_moduleMaxLevel}})</div>
 			<a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 		</div>
 
@@ -22,6 +22,7 @@
 				</div>
 				<p class="d13-italic">{{tvar_moduleDescription}}</p>
 				{{tvar_linkData}}
+				{{tvar_upgradeCost}}
 			</div>
 		
 			<div class="col-60">
@@ -39,7 +40,28 @@
 			
 				<li class="item-content">
 					<div class="item-inner">
-					<div class="item-after">--combat stats go here--</div>
+					<div class="item-after">{{tvar_ui_type}}: {{tvar_unitType}}</div>
+					</div>
+					<div class="item-inner">
+					<div class="item-after">{{tvar_ui_class}}: {{tvar_unitClass}}</div>
+					</div>
+				</li>
+				
+				<li class="item-content">
+					<div class="item-inner">
+					<div class="item-after">{{tvar_ui_hp}}: {{tvar_unitHP}} {{tvar_unitHPPlus}}</div>
+					</div>
+					<div class="item-inner">
+					<div class="item-after">{{tvar_ui_damage}}: {{tvar_unitDamage}} {{tvar_unitDamagePlus}}</div>
+					</div>
+				</li>
+				
+				<li class="item-content">
+					<div class="item-inner">
+					<div class="item-after">{{tvar_ui_armor}}: {{tvar_unitArmor}} {{tvar_unitArmorPlus}}</div>
+					</div>
+					<div class="item-inner">
+					<div class="item-after">{{tvar_ui_speed}}: {{tvar_unitSpeed}} {{tvar_unitSpeedPlus}}</div>
 					</div>
 				</li>
 			

@@ -16,37 +16,22 @@
 class misc
 {
 
-	//----------------------------------------------------------------------------------------
-	// getlang
-	// 3.0
-	// @ A simple wrapper to get the right language string, this might change in the future.
-	//----------------------------------------------------------------------------------------
-	public static function getlang($constant)
-	{	
-		global $ui;
-		if (!empty($constant) && isset($ui[$constant])) {
-			return $ui[$constant];
-		} else {
-			return "--empty ui lang--";
-		}
-	}
+// 	//----------------------------------------------------------------------------------------
+// 	// getlang
+// 	// 3.0
+// 	// @ A simple wrapper to get the right language string, this might change in the future.
+// 	//----------------------------------------------------------------------------------------
+// 	public static function getlang($constant)
+// 	{	
+// 		global $ui;
+// 		if (!empty($constant) && isset($ui[$constant])) {
+// 			return $ui[$constant];
+// 		} else {
+// 			return "--empty ui lang--";
+// 		}
+// 	}
 	
-	//----------------------------------------------------------------------------------------
-	// blockword
-	// 3.0
-	// @ A simple wrapper to get the right language string, this might change in the future.
-	//----------------------------------------------------------------------------------------
-	public static function blockword($string) {	
-	
-		global $bw;
-		
-		foreach ($bw as $blockword) {
-   			if (stristr($blockword, $string) !== false) {
-    			return true;
-    		}
-		}
-		return false;
-	}	
+
 	
 	//----------------------------------------------------------------------------------------
 	// time_format
@@ -100,6 +85,9 @@ class misc
   return $data;
  }
  
+ 	//----------------------------------------------------------------------------------------
+	// 
+	//----------------------------------------------------------------------------------------
  public static function showMessage($message)
  {
   return '<div class="container" style="cursor: pointer;" onClick="this.style.display=\'none\'"><div class="message">'.$message.'</div></div>';
@@ -122,6 +110,10 @@ class misc
    else return 1;
   }
  }
+ 
+ 	//----------------------------------------------------------------------------------------
+	// 
+	//----------------------------------------------------------------------------------------
  public static function sToHMS($seconds)
  {
   $h=floor($seconds/3600);
@@ -129,6 +121,10 @@ class misc
   $s=$seconds%3600%60;
   return array($h, $m, $s);
  }
+ 
+ 	//----------------------------------------------------------------------------------------
+	// 
+	//----------------------------------------------------------------------------------------
  public static function microTime()
  {
   list($usec, $sec)=explode(" ", microtime());

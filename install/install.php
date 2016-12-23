@@ -73,12 +73,12 @@ if (isset($_POST['email'], $_POST['name'], $_POST['password'], $_POST['rePasswor
       }
      $d13->db->query('insert into grid (x, y, type, id) values '.implode(', ', $query));
      $user->add();
-     $message=misc::getlang("installed");
+     $message=$d13->data->getUI("installed");
     }
-    else $message=misc::getlang("nameTaken");
-  else $message=misc::getlang("rePassNotMatch");
+    else $message=$d13->data->getUI("nameTaken");
+  else $message=$d13->data->getUI("rePassNotMatch");
  }
- else $message=misc::getlang("insufficientData");
+ else $message=$d13->data->getUI("insufficientData");
 }
 
 //----------------------------------------------------------------------------------------

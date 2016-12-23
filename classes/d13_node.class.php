@@ -144,9 +144,8 @@ class node {
 	//----------------------------------------------------------------------------------------
 	public static function remove($id) {
 	
-	global $d13;
+		global $d13, $game;
 	
-	if ($game['options']['nodeMove']) {
 		$node=new node();
 		if ($node->get('id', $id)=='done') {
 			$ok=1;
@@ -179,9 +178,7 @@ class node {
 			}
 			else $status='noNode';
 			return $status;
-		} else {
-			return 'error';
-		}
+		
 	}
  
   	//----------------------------------------------------------------------------------------
@@ -695,7 +692,6 @@ class node {
    }
    else $status='notEmptySlot';
   else $status='noSlot';
-  echo $status;
   return $status;
  }
  
@@ -1604,14 +1600,14 @@ public function checkCombat($time) {
 					
 					//- - - - - send reports
 					if ($data['output']['attacker']['winner']) {
-						$attackerOutcome=misc::getlang("won");
+						$attackerOutcome=$d13->data->getUI("won");
 					} else {
-						$attackerOutcome=misc::getlang("lost");
+						$attackerOutcome=$d13->data->getUI("lost");
 					}
 					if ($data['output']['defender']['winner']) {
-						$defenderOutcome=misc::getlang("won");
+						$defenderOutcome=$d13->data->getUI("won");
 					} else {
-						$defenderOutcome=misc::getlang("lost");
+						$defenderOutcome=$d13->data->getUI("lost");
 					}
 					
 					//- - - - - Assemble Report (TODO port to template file)
@@ -1661,7 +1657,7 @@ public function checkCombat($time) {
 						$msg=new message();
 						$msg->data['sender']=$attackerUser->data['name'];
 						$msg->data['recipient']=$attackerUser->data['name'];
-						$msg->data['subject'] = misc::getlang("combatReport") .' - '.$$nodes['defender']->data['name'];
+						$msg->data['subject'] = $d13->data->getUI("combatReport") .' - '.$$nodes['defender']->data['name'];
 						$msg->data['body']=$msgBody;
 						$msg->data['viewed']=0;
 						$msg->add();
@@ -1676,7 +1672,7 @@ public function checkCombat($time) {
 							$msg=new message();
 							$msg->data['sender']=$defenderUser->data['name'];
 							$msg->data['recipient']=$defenderUser->data['name'];
-							$msg->data['subject']=misc::getlang("combatReport").' - '.$$nodes['defender']->data['name'];
+							$msg->data['subject']=$d13->data->getUI("combatReport").' - '.$$nodes['defender']->data['name'];
 							$msg->data['body']=$msgBody;
 							$msg->data['viewed']=0;
 							$msg->add();

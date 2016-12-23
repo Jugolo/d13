@@ -34,7 +34,7 @@ if ($flags['register']) {
   
 		if (!empty($_POST['email']) && !empty($_POST['name']) && !empty($_POST['password'])) {
 			$user=new user();
-			if (!misc::blockword($_POST['name'])) {
+			if (!$d13->data->getBW($_POST['name'])) {
 				
 					if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
 						$user->data['name']=$_POST['name'];
@@ -53,7 +53,7 @@ if ($flags['register']) {
 						$user->data['locale']		= CONST_DEFAULT_LOCALE;
 						$status = $user->add();
 						
-						$message = misc::getlang($status);
+						$message = $d13->data->getUI($status);
 
 						if ($flags['activation']) {
 							if ($status=='done') {
@@ -61,13 +61,13 @@ if ($flags['register']) {
 								$user->get('name', $user->data['name']);
 								$code=rand(1000000000, 9999999999);
 								$link=CONST_SERVER_PATH.'activate.php?user='.$user->data['name'].'&code='.$code;
-								$body=CONST_GAME_TITLE.' '.misc::getlang("accountActivationLink").': <a href="'.$link.'" target="_blank">'.$link.'</a>';
+								$body=CONST_GAME_TITLE.' '.$d13->data->getUI("accountActivationLink").': <a href="'.$link.'" target="_blank">'.$link.'</a>';
 								$activation=new d13_activation();
 								$activation->data['user']=$user->data['id'];
 								$activation->data['code']=$code;
 								$status=$activation->add();
 								if ($status=='done') {
-									$status=email(CONST_GAME_TITLE, $user->data['email'], CONST_GAME_TITLE.' '.misc::getlang("registration"), $body);
+									$status=email(CONST_GAME_TITLE, $user->data['email'], CONST_GAME_TITLE.' '.$d13->data->getUI("registration"), $body);
 								}
 								
 							}
@@ -78,19 +78,19 @@ if ($flags['register']) {
 						}
 	
 					} else {
-						$message=misc::getlang("invalidEmail");
+						$message=$d13->data->getUI("invalidEmail");
 					}
 				
 			} else {
-				$message=misc::getlang("invalidName");
+				$message=$d13->data->getUI("invalidName");
 			}
 		} else {
-			$message=misc::getlang("insufficientData");
+			$message=$d13->data->getUI("insufficientData");
 		}
 	}
 	
 } else {
-	$message=misc::getlang("registrationDisabled");
+	$message=$d13->data->getUI("registrationDisabled");
 }
 
 if ((isset($status)) && ($status=='error')) {

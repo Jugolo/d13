@@ -15,7 +15,7 @@
 
 class d13_unit {
 
-	public $unitId, $data, $node, $checkRequirements, $checkCost;
+	public $data, $node, $checkRequirements, $checkCost;
 	
 	//----------------------------------------------------------------------------------------
 	// construct
@@ -23,9 +23,9 @@ class d13_unit {
 	// 
 	//----------------------------------------------------------------------------------------
 	public function __construct($unitId, $node) {
-		$this->unitId 	= $unitId;
+		
 		$this->setNode($node);
-		$this->setStats();
+		$this->setStats($unitId);
 		$this->checkUpgrades();
 	}
 	
@@ -44,12 +44,14 @@ class d13_unit {
 	// @ 
 	// 
 	//----------------------------------------------------------------------------------------
-	public function setStats() { 
+	public function setStats($unitId) { 
 		
 		global $gl, $game;
 		
 		$this->data = array();
 		$this->data 				= $game['units'][$this->node->data['faction']][$this->unitId];
+		$this->data['type']			= 'unit';
+		$this->data['unitId'] 		= $unitId;
 		$this->data['name']			= $gl["units"][$this->node->data['faction']][$this->unitId]["name"];
 		$this->data['description']	= $gl["units"][$this->node->data['faction']][$this->unitId]["description"];
 		
@@ -140,21 +142,41 @@ class d13_unit {
 	// @ 
 	// 
 	//----------------------------------------------------------------------------------------
-	public function getCost() { 
+	public function getCost($upgrade=false) { 
 		
 		global $game, $ui, $gl;
 		
 		$cost_array = array();
+		
 		foreach ($this->data['cost'] as $key=>$cost) {
 			$tmp_array = array();
-			$tmp_array['cost'] = $cost['value'] * $game['users']['cost']['train'];
-			$tmp_array['name'] = $gl['resources'][$cost['resource']]['name'];
-			$tmp_array['icon'] = $cost['resource'].'.png';
+			$tmp_array['resource']	= $cost['resource'];
+			$tmp_array['value'] 	= $cost['value'] * $game['users']['cost']['build'];
+			$tmp_array['name'] 		= $gl['resources'][$cost['resource']]['name'];
+			$tmp_array['icon'] 		= $cost['resource'].'.png';
+			$tmp_array['factor']	= 1;
+			
+			if ($upgrade) {
+				foreach ($this->data['cost_upgrade'] as $key=>$upcost) {
+					$tmp2_array = array();
+					$tmp2_array['resource']	= $upcost['resource'];
+					$tmp2_array['value'] 	= $upcost['value'] * $game['users']['cost']['build'];
+					$tmp2_array['name'] 	= $gl['resources'][$upcost['resource']]['name'];
+					$tmp2_array['icon'] 	= $upcost['resource'].'.png';
+					$tmp2_array['factor'] 	= $upcost['factor'];
+					
+					if ($tmp_array['resource'] == $tmp2_array['resource']) {
+						$tmp_array['value'] = $tmp_array['value'] + floor($tmp2_array['value'] * $tmp2_array['factor'] * $this->data['level']);
+					}
+
+				}
+			}
 			$cost_array[] = $tmp_array;
+			
 		}
+
 		return $cost_array;
 	}
-
 	//----------------------------------------------------------------------------------------
 	// getStats
 	// @ 
@@ -197,64 +219,62 @@ class d13_unit {
 		
 		global $d13, $game, $d13_upgrades;
 		
-		//- - - - - - - - - - - - - - - Component Upgrades
+		//- - - - - - - - - - - - - - - COST & ATTRIBUTES
+		foreach ($d13_upgrades[$this->node->data['faction']] as $upgrade) {
+			if ($upgrade['type'] == $this->data['type'] && $upgrade['id'] == $this->data['unitId']) {
+				
+				//- - - - - - - - - - - - - - - COST
+				if (isset($upgrade['cost'])) {
+					$this->data['cost_upgrade'] = $upgrade['cost'];
+				}
+				//- - - - - - - - - - - - - - - ATTRIBUTES
+				if (isset($upgrade['attributes'])) {
+					$this->data['attributes_upgrade'] = $upgrade['attributes'];
+				}
+			}
+		}
+
+		//- - - - - - - - - - - - - - - STATS Component Upgrades
 		$unit_comp = array();
 		foreach ($this->data['requirements'] as $requirement) {
 			if ($requirement['type'] == 'components' && $requirement['active']) {
 				$unit_comp[] = array('id'=>$requirement['id'], 'amount'=>$requirement['value']);
 			}
 		}
-
+		
+		//- - - - - - - - - - - - - - - STATS Technology Upgrades	
 		$unit_upgrades = array();
 		foreach ($this->node->technologies as $technology) {
 			if ($technology['level'] > 0) {
 				foreach ($unit_comp as $component) {
 					if ($component['id'] == $technology['id']) {
-						$unit_upgrades[] = array('id'=>$technology['id'], 'level'=>$technology['level']*$component['amount'], 'upgrades'=>$game['technologies'][$this->node->data['faction']][$technology['id']]['upgrades']);
+						$unit_upgrades[] = array('id'=>$technology['id'], 'level'=>$technology['level'] * $component['amount'], 'upgrades'=>$game['technologies'][$this->node->data['faction']][$technology['id']]['upgrades']);
 					}
 				}
-				//- - - - - - - - - - - - - - - Technology Upgrades	
+				//- - - - - - - - - - - - - - - STATS Technology Upgrades	
 				$unit_upgrades[] = array('id'=>$technology['id'], 'level'=>$technology['level'], 'upgrades'=>$game['technologies'][$this->node->data['faction']][$technology['id']]['upgrades']);
 			}
 		}
 		
+		//- - - - - - - - - - - - - - - STATS Apply Upgrades
 		foreach ($unit_upgrades as $technology) {
 			foreach ($technology['upgrades'] as $upgrade) {
-				if ($d13_upgrades[$this->node->data['faction']][$upgrade]['id'] == $this->unitId && $d13_upgrades[$this->node->data['faction']][$upgrade]['type'] == 'unit') {
-				
+				if ($d13_upgrades[$this->node->data['faction']][$upgrade]['id'] == $this->unitId) {
 					foreach ($d13_upgrades[$this->node->data['faction']][$upgrade]['stats'] as $stats) {
 				
-						switch ($stats['stat']) {
-		
-							case 'all':
-								foreach ($game['stats'] as $stat) {
-									$this->data['upgrade_'.$stat] = floor(misc::percentage($stats['value']*$technology['level'], $this->data[$stat]));
-								}
-								break;
-				
-							case 'hp':
-								$this->data['upgrade_hp'] = floor(misc::percentage($stats['value']*$technology['level'], $this->data['hp']));
-								break;
-		
-							case 'damage':
-								$this->data['upgrade_damage'] = floor(misc::percentage($stats['value']*$technology['level'], $this->data['damage']));
-								break;
-				
-							case 'armor':
-								$this->data['upgrade_armor'] = floor(misc::percentage($stats['value']*$technology['level'], $this->data['armor']));
-								break;
-				
-							case 'speed':
-								$this->data['upgrade_speed'] = floor(misc::percentage($stats['value']*$technology['level'], $this->data['speed']));
-								break;
-		
+						if ($stats['stat'] == 'all') {
+							foreach ($game['stats'] as $stat) {
+								$this->data['upgrade_'.$stat] = floor(misc::percentage($stats['value'] * $technology['level'], $this->data[$stat]));
+							}
+						} else {
+							$this->data['upgrade_'.$stats['stat']] = floor(misc::percentage($stats['value'] * $technology['level'], $this->data[$stats['stat']]));
 						}
-					
+
 					}
-			
 				}
 			}
 		}
+		
 		
 	}
 

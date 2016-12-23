@@ -24,8 +24,8 @@ $game['users']=array(
  'idle'					=>5,														// max idle time [days] before auto-deletion
  'passwordResetIdle'	=>15,														// time between allowed password resets
  'preferences'			=>array('allianceReports'=>1,'combatReports'=>1, 'tradeReports'=>1),
- 'speed'				=>array('research'=>1, 'build'=>1, 'craft'=>1, 'train'=>1, 'trade'=>1, 'combat'=>1),	//speed mofifiers
- 'cost'					=>array('research'=>1, 'build'=>1, 'craft'=>1, 'train'=>1, 'trade'=>1, 'combat'=>1, 'set'=>1, 'move'=>1, 'alliance'=>1)//cost modifiers
+ 'speed'				=>array('research'=>1, 'build'=>1, 'craft'=>1, 'train'=>1, 'trade'=>1, 'combat'=>1),										//speed mofifiers
+ 'cost'					=>array('research'=>1, 'build'=>1, 'craft'=>1, 'train'=>1, 'trade'=>1, 'combat'=>1, 'set'=>1, 'move'=>1, 'alliance'=>1)		//cost modifiers
 );
 
 //----------------------------------------------------------------------------------------
@@ -73,8 +73,8 @@ $game['resources']=array(
  1=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>true),		//Wood 			- type=>'dynamic'
  2=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>true),		//Iron 			- type=>'dynamic'
  3=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>false),		//Workers 		- type=>'static'
- 4=>array('type'=>'static', 	'visible'=>true, 'carryable'=>false),		//Storage Space - type=>'static'
- 5=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>false)		//Food 			- type=>'static'
+ 4=>array('type'=>'static',		'visible'=>true, 'carryable'=>false),		//Storage Space - type=>'static'
+ 5=>array('type'=>'dynamic',	'visible'=>true, 'carryable'=>false)		//Food 			- type=>'static'
 );
 
 //----------------------------------------------------------------------------------------
@@ -112,13 +112,13 @@ $game['factions']=array(
 );
 
 //----------------------------------------------------------------------------------------
-// UNIT TYPES (unit limit, 0 = no limit)
+// OBJECT TYPES (unit limit, 0 = no limit)
 //----------------------------------------------------------------------------------------
 
 $game['types']=array(
- 'hero'=>array('limit'=>1),
- 'unit'=>array('limit'=>99999),
- 'component'=>array('limit'=>99999)
+ 'hero'			=>array('limit'=>1),
+ 'unit'			=>array('limit'=>99999),
+ 'component'	=>array('limit'=>99999)
 );
 
 //----------------------------------------------------------------------------------------
@@ -126,12 +126,12 @@ $game['types']=array(
 //----------------------------------------------------------------------------------------
 
 $game['classes']=array(
- 'spearman'=>array('duelist'=>0.5, 'archer'=>0.5),
- 'swordsman'=>array('duelist'=>0.5, 'archer'=>-0.5),
- 'duelist'=>array('archer'=>0.5, 'cavalry'=>0.5),
- 'archer'=>array('cavalry'=>0.5, 'duelist'=>0.5),
- 'cavalry'=>array('spearman'=>0.5),
- 'static'=>array('archer'=>-0.5)
+ 'spearman'		=>array('duelist'=>0.5, 'archer'=>0.5),
+ 'swordsman'	=>array('duelist'=>0.5, 'archer'=>-0.5),
+ 'duelist'		=>array('archer'=>0.5, 'cavalry'=>0.5),
+ 'archer'		=>array('cavalry'=>0.5, 'duelist'=>0.5),
+ 'cavalry'		=>array('spearman'=>0.5),
+ 'static'		=>array('archer'=>-0.5)
 );
 
 //----------------------------------------------------------------------------------------

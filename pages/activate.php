@@ -36,7 +36,7 @@ if (isset($_GET['user'], $_GET['code']))
   }
   else $message=$ui[$status];
  }
- else $message=misc::getlang("insufficientData");
+ else $message=$d13->data->getUI("insufficientData");
 }
 if ((isset($status))&&($status=='error')) $d13->db->query('rollback');
 else $d13->db->query('commit');

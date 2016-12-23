@@ -20,6 +20,14 @@
 		type
 		id
 		stats
+				combat related stats
+				
+		cost
+				cost increase per level (NextLevel * Factor)+Bonus
+				
+		attributes
+		
+				non-combat related attributes (like production/storage ratio)
 		
 	Unit upgrades and Module upgrades for Defensive modules:
 		
@@ -225,134 +233,232 @@ $d13_upgrades = array(
 	99=>array('active'=>false, 'type'=>'unit', 'id'=>-1, 'stats'=>array()),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GOLD MINE UPGRADE
-	100=>array('active'=>true, 'type'=>'module', 'id'=>0, 
-		'stats'=>array(
+	100=>array('active'=>true, 'type'=>'harvest', 'id'=>0, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>150),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>350),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>250)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - LUMBER MILL UPGRADE
-	101=>array('active'=>true, 'type'=>'module', 'id'=>1, 
-		'stats'=>array(
+	101=>array('active'=>true, 'type'=>'harvest', 'id'=>1, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - IRON MINE UPGRADE
-	102=>array('active'=>true, 'type'=>'module', 'id'=>2, 
-		'stats'=>array(
+	102=>array('active'=>true, 'type'=>'harvest', 'id'=>2, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 	
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ARMOR SMITH UPGRADE
-	103=>array('active'=>true, 'type'=>'module', 'id'=>3, 
-		'stats'=>array(
+	103=>array('active'=>true, 'type'=>'craft', 'id'=>3, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WEAPON SHOP UPGRADE
-	104=>array('active'=>true, 'type'=>'module', 'id'=>4, 
-		'stats'=>array(
+	104=>array('active'=>true, 'type'=>'craft', 'id'=>4, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BARRACKS UPGRADE
-	105=>array('active'=>true, 'type'=>'module', 'id'=>5, 
-		'stats'=>array(
+	105=>array('active'=>true, 'type'=>'train', 'id'=>5, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 	
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - STABLES UPGRADE
-	106=>array('active'=>true, 'type'=>'module', 'id'=>6, 
-		'stats'=>array(
+	106=>array('active'=>true, 'type'=>'train', 'id'=>6, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MERCENARY TENT UPGRADE
-	107=>array('active'=>true, 'type'=>'module', 'id'=>7, 
-		'stats'=>array(
+	107=>array('active'=>true, 'type'=>'train', 'id'=>7, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - LABORATORY UPGRADE
-	108=>array('active'=>true, 'type'=>'module', 'id'=>8, 
-		'stats'=>array(
+	108=>array('active'=>true, 'type'=>'research', 'id'=>8, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),	
 	
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - MARKETPLACE UPGRADE
-	109=>array('active'=>true, 'type'=>'module', 'id'=>9, 
-		'stats'=>array(
+	109=>array('active'=>true, 'type'=>'trade', 'id'=>9, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),	
 	
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GOLD STORAGE UPGRADE
-	110=>array('active'=>true, 'type'=>'module', 'id'=>10, 
-		'stats'=>array(
+	110=>array('active'=>true, 'type'=>'storage', 'id'=>10, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - LUMBER STORAGE UPGRADE
-	111=>array('active'=>true, 'type'=>'module', 'id'=>11, 
-		'stats'=>array(
+	111=>array('active'=>true, 'type'=>'storage', 'id'=>11, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - IRON STORAGE UPGRADE
-	112=>array('active'=>true, 'type'=>'module', 'id'=>12, 
-		'stats'=>array(
+	112=>array('active'=>true, 'type'=>'storage', 'id'=>12, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GUILDHOUSE UPGRADE
-	113=>array('active'=>true, 'type'=>'module', 'id'=>13, 
-		'stats'=>array(
+	113=>array('active'=>true, 'type'=>'alliance', 'id'=>13, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - TOWNHALL UPGRADE
-	114=>array('active'=>true, 'type'=>'module', 'id'=>14, 
-		'stats'=>array(
+	114=>array('active'=>true, 'type'=>'command', 'id'=>14, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ARCHER TOWER UPGRADE
-	115=>array('active'=>true, 'type'=>'module', 'id'=>15, 
+	115=>array('active'=>true, 'type'=>'defense', 'id'=>15, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>125),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>325),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>225)
+   		),
+		'attributes'=>array(
+			0=>array('stat'=>'all', 'value'=>2)
+		),
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - FARM UPGRADE
-	116=>array('active'=>true, 'type'=>'module', 'id'=>16, 
-		'stats'=>array(
+	116=>array('active'=>true, 'type'=>'harvest', 'id'=>16, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WAR ACADEMY UPGRADE
-	117=>array('active'=>true, 'type'=>'module', 'id'=>17, 
-		'stats'=>array(
+	117=>array('active'=>true, 'type'=>'research', 'id'=>17, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),
 
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - WARGATE UPGRADE
-	118=>array('active'=>true, 'type'=>'module', 'id'=>18, 
-		'stats'=>array(
+	118=>array('active'=>true, 'type'=>'warfare', 'id'=>18, 
+		'cost'=>array(
+    		0=>array('resource'=>0, 'factor'=>1.5, 'value'=>100),
+    		1=>array('resource'=>1, 'factor'=>1.5, 'value'=>300),
+    		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
+   		),
+		'attributes'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
 		)
 	),

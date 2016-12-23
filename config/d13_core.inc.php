@@ -49,13 +49,6 @@ include(CONST_INCLUDE_PATH."data/d13_unit.data.inc.php");
 //- - - - - CREATE ENGINE
 $d13 = new d13();
 
-//- - - - - SETUP DUMMY USER (when not logged in)
-if (!isset($_SESSION[CONST_PREFIX.'User']['id'])) {
-	$_SESSION[CONST_PREFIX.'User']['color']		= CONST_DEFAULT_COLOR;
-	$_SESSION[CONST_PREFIX.'User']['template']	= CONST_DEFAULT_TEMPLATE;
-	$_SESSION[CONST_PREFIX.'User']['locale']	= CONST_DEFAULT_LOCALE;
-}
-		
 //- - - - - READ LANGUAGE FILES
 include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/d13_userinterface.locale.inc.php");
 include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/d13_gamelang.locale.inc.php");

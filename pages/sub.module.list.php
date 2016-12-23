@@ -40,11 +40,11 @@ if (isset($node->modules[$_GET['slotId']])) {
       	
         if ($check_requirements['ok'] && $check_cost['ok'] && ($node->getModuleCount($_GET['slotId'], $mid) < $game['modules'][$node->data['faction']][$mid]['maxInstances'])) {
         	$linkData .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-        	$linkData .= '<a class="external button button-big active" href="index.php?p=module&action=add&nodeId='.$node->data['id'].'&slotId='.$_GET['slotId'].'&moduleId='.$mid.'">'.misc::getlang("addModule").'</a>';
+        	$linkData .= '<a class="external button button-big active" href="index.php?p=module&action=add&nodeId='.$node->data['id'].'&slotId='.$_GET['slotId'].'&moduleId='.$mid.'">'.$d13->data->getUI("addModule").'</a>';
         	$linkData .= '</p>';
         } else {
         	$linkData .= '<p class="buttons-row">';
-        	$linkData .= '<a class="button button-big active color-gray" href="#">'.misc::getlang("addModule").'</a>';
+        	$linkData .= '<a class="button button-big active color-gray" href="#">'.$d13->data->getUI("addModule").'</a>';
         	$linkData .= '</p>';
         }
         
@@ -69,6 +69,7 @@ if (isset($node->modules[$_GET['slotId']])) {
 			}
 		 }
 		 
+
 		 //- - - - - 
 		 $outputData='';
 		 switch ($module_data['type']) {

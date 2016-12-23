@@ -19,7 +19,7 @@ header("Pragma: no-cache");
 date_default_timezone_set('Europe/Berlin');
 ob_start();
 
-require_once("core/d13_core.inc.php");
+require_once("config/d13_core.inc.php");
 
 $d13->controller->fork_page();
 

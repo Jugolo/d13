@@ -33,7 +33,7 @@ function sub_resources($node) {
 					if (floor($resource['value']) < $node->storage[$key]) {
 						$res .= ' (+'.$node->production[$key].$ui['perHour'].')';
 					} else {
-						$res .= ' ('.misc::getlang("full").')';
+						$res .= ' ('.$d13->data->getUI("full").')';
 					}
 				}
 				$res .= ' </span>&nbsp;';
