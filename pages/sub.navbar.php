@@ -28,12 +28,12 @@ function sub_navbar($node) {
 	
 	//- - - Place Profiler
 	if (CONST_FLAG_PROFILER) {
-		$html_right 	.= "<div class=\"color-gray\">[".$d13->profile->profile_get().' '. $d13->data->getUI("ms"). "]</div>&nbsp;";
+		$html_right 	.= "<div class=\"color-gray\">[".$d13->profile->profile_get().' '. $d13->data->ui->get("ms"). "]</div>&nbsp;";
 	}
 	
 	//- - - Place Admin Panel
 	if ((isset($_SESSION[CONST_PREFIX.'User']['level'])) && ($_SESSION[CONST_PREFIX.'User']['level'] >= 3)) {
-		$html_right 	.= "<a class=\"external\" href=\"".CONST_BASE_PATH."index.php?p=admin\">".$d13->data->getUI("adminPanel")."</a>";
+		$html_right 	.= "<a class=\"external\" href=\"".CONST_BASE_PATH."index.php?p=admin\">".$d13->data->ui->get("adminPanel")."</a>";
 	}
 	
 	//- - - Place all Navigation Options
@@ -42,7 +42,7 @@ function sub_navbar($node) {
 			if ( ($nav['login'] && isset($_SESSION[CONST_PREFIX.'User']['id'])) ||(!$nav['login'] && !isset($_SESSION[CONST_PREFIX.'User']['id'])) ) {
 				$pass = true;
 				$nodeId = 0;
-				$html = '<a class="tooltip-bottom link external" data-tooltip="'.$d13->data->getUI($nav['name']).'" href="index.php?p='.$nav['link'].'&nodeId='.$nodeId.'"><span><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/icon/'.$nav['icon'].'.png"></span></a>';
+				$html = '<a class="tooltip-bottom link external" data-tooltip="'.$d13->data->ui->get($nav['name']).'" href="index.php?p='.$nav['link'].'&nodeId='.$nodeId.'"><span><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/icon/'.$nav['icon'].'.png"></span></a>';
 				if ($nav['class'] == 'left') {
 					$html_left .= $html;
 				} else {

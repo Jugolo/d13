@@ -48,14 +48,14 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
       $user=new user();
       $status=$user->get('id', $msg->data['sender']);
       if ($status=='done') $msg->data['senderName']=$user->data['name'];
-      else $msg->data['senderName']=$d13->data->getUI("game");
+      else $msg->data['senderName']=$d13->data->ui->get("game");
       $msg->data['body']=str_replace("\r\n", "<br>", $msg->data['body']);
       $msg->data['body']=str_replace("\n", "<br>", $msg->data['body']);
      }
-     else $message=$d13->data->getUI("accessDenied");
+     else $message=$d13->data->ui->get("accessDenied");
     else $message=$ui[$status];
    }
-   else $message=$d13->data->getUI("insufficientData");
+   else $message=$d13->data->ui->get("insufficientData");
   break;
   
   	// - - - - - - - - - 
@@ -72,7 +72,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
 	}
    
 	if (isset($_POST['recipient'], $_POST['subject'], $_POST['body'])) {
-    	if ($_POST['recipient']!='' && $_POST['subject']!='' && $_POST['body']!='' && !$d13->data->getBW($_POST['body']) && !$d13->data->getBW($_POST['subject'])) {
+    	if ($_POST['recipient']!='' && $_POST['subject']!='' && $_POST['body']!='' && !$d13->data->bw->get($_POST['body']) && !$d13->data->bw->get($_POST['subject'])) {
 			$msg=new message();
    		 	$msg->data['sender']=$_SESSION[CONST_PREFIX.'User']['name'];
    		 	$msg->data['recipient']=$_POST['recipient'];
@@ -81,10 +81,10 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
    		 	$msg->data['viewed']=0;
     		$message=$ui[$msg->add()];
     	} else {
-    		$message=$d13->data->getUI("insufficientData");
+    		$message=$d13->data->ui->get("insufficientData");
   		}
   	} else {
-    	$message=$d13->data->getUI("insufficientData");
+    	$message=$d13->data->ui->get("insufficientData");
   	}
   break;
   
@@ -101,16 +101,16 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
       if ($status=='done') header('location: ?p=message&action=list');
       else $message=$ui[$status];
      }
-     else $message=$d13->data->getUI("accessDenied");
+     else $message=$d13->data->ui->get("accessDenied");
     }
-    else $message=$d13->data->getUI("noMessage");
+    else $message=$d13->data->ui->get("noMessage");
    }
    else if (isset($_POST['messageId']))
    {
     foreach ($_POST['messageId'] as $id) message::remove($id);
     header('location: ?p=message&action=list');
    }
-   else $message=$d13->data->getUI("insufficientData");
+   else $message=$d13->data->ui->get("insufficientData");
   break;
   case 'removeAll':
    $status=message::removeAll($_SESSION[CONST_PREFIX.'User']['id']);
@@ -126,7 +126,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
   break;
  }
 }
-else $message=$d13->data->getUI("accessDenied");
+else $message=$d13->data->ui->get("accessDenied");
 if ((isset($status))&&($status=='error')) $d13->db->query('rollback');
 else $d13->db->query('commit');
 
@@ -179,7 +179,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 		 	$tvars['tvar_controls'] = "";
 		  
 			if (count($messages['messages'])) {
-				$removeAll=' | <a class="external" href="?p=message&action=removeAll">'.$d13->data->getUI("removeAll").'</a>';
+				$removeAll=' | <a class="external" href="?p=message&action=removeAll">'.$d13->data->ui->get("removeAll").'</a>';
 			} else { 
 				$removeAll='';
 			}
@@ -196,7 +196,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 			}
 
 			if (count($messages['messages'])) {
-				$tvars['tvar_remove'] ='<a class="external" href="javascript: document.getElementById(\'messageList\').submit()">'.$d13->data->getUI("remove").'</a>';
+				$tvars['tvar_remove'] ='<a class="external" href="javascript: document.getElementById(\'messageList\').submit()">'.$d13->data->ui->get("remove").'</a>';
 			}
 		
 			if ($pageCount > 1) {
@@ -204,19 +204,19 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 				$next='';
 				if (isset($_GET['page'])) {
 					if ($_GET['page']) {
-						$previous='<a class="external" href="?p=message&action=list&page='.($_GET['page']-1).'">'.$d13->data->getUI("previous").'</a>';
+						$previous='<a class="external" href="?p=message&action=list&page='.($_GET['page']-1).'">'.$d13->data->ui->get("previous").'</a>';
 					}
 				} else if (!isset($_GET['page'])) {
 						if ($pageCount) {
-							$next='<a class="external" href="?p=message&action=list&page=1">'.$d13->data->getUI("next").'</a>';
+							$next='<a class="external" href="?p=message&action=list&page=1">'.$d13->data->ui->get("next").'</a>';
 						}
 				}
 				
 				if (isset($_GET['page']) && $pageCount-$_GET['page']-1) {
-					$next='<a class="external" href="?p=message&action=list&page='.($_GET['page']+1).'">'.$d13->data->getUI("next").'</a>';
+					$next='<a class="external" href="?p=message&action=list&page='.($_GET['page']+1).'">'.$d13->data->ui->get("next").'</a>';
 				}
 				
-				$tvars['tvar_controls'] .= $d13->data->getUI("tvar_ui_page").$previous.' <select class="dropdown" id="page" onChange="window.location.href=\'index.php?p=message&action=list&page=\'+this.value">';
+				$tvars['tvar_controls'] .= $d13->data->ui->get("tvar_ui_page").$previous.' <select class="dropdown" id="page" onChange="window.location.href=\'index.php?p=message&action=list&page=\'+this.value">';
 				for ($i=0; $i<$pageCount; $i++) {
 					$tvars['tvar_controls'] .= '<option value="'.$i.'">'.$i.'</option>';
 				}

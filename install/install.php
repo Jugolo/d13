@@ -15,7 +15,7 @@
 
 global $d13;
 
-require_once("../core/d13_core.inc.php");
+require_once("../config/d13_core.inc.php");
 
 $action = "";
 
@@ -28,12 +28,13 @@ chdir("../");
 if (isset($_POST['email'], $_POST['name'], $_POST['password'], $_POST['rePassword']))
 {
 
+/*
  foreach ($_POST as $key=>$value)
  {
   if ($_POST['name']==$_POST[$key]) $value=preg_replace('/[^a-zA-Z0-9]/', '', $value);
   $_POST[$key]=misc::clean($value);
  }
- 
+ */
  if ((($_POST['email']!=''))&&($_POST['name']!='')&&(($_POST['password']!='')))
  {
   $user=new user(); $user->get('name', $_POST['name']);
@@ -73,12 +74,12 @@ if (isset($_POST['email'], $_POST['name'], $_POST['password'], $_POST['rePasswor
       }
      $d13->db->query('insert into grid (x, y, type, id) values '.implode(', ', $query));
      $user->add();
-     $message=$d13->data->getUI("installed");
+     $message=$d13->data->ui->get("installed");
     }
-    else $message=$d13->data->getUI("nameTaken");
-  else $message=$d13->data->getUI("rePassNotMatch");
+    else $message=$d13->data->ui->get("nameTaken");
+  else $message=$d13->data->ui->get("rePassNotMatch");
  }
- else $message=$d13->data->getUI("insufficientData");
+ else $message=$d13->data->ui->get("insufficientData");
 }
 
 //----------------------------------------------------------------------------------------

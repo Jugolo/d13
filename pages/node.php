@@ -51,13 +51,13 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 						$buildQueue[$item['slot']]=1;
 					}
 				} else {
-					$message=$d13->data->getUI("accessDenied");
+					$message=$d13->data->ui->get("accessDenied");
 				}
 			} else {
-				$message=$d13->data->getUI($status);
+				$message=$d13->data->ui->get($status);
 			}
 		} else {
-			$message=$d13->data->getUI("insufficientData");
+			$message=$d13->data->ui->get("insufficientData");
 		}
 		break;
   
@@ -83,14 +83,14 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
          $node->data['name']=$oldName;
          $node->data['focus']=$oldFocus;
         }
-        $message=$d13->data->getUI($status);
+        $message=$d13->data->ui->get($status);
        }
-       else $message=$d13->data->getUI("accessDenied");
-      else $message=$d13->data->getUI("invalidFocus");
+       else $message=$d13->data->ui->get("accessDenied");
+      else $message=$d13->data->ui->get("invalidFocus");
     }
-    else $message=$d13->data->getUI($status);
+    else $message=$d13->data->ui->get($status);
    }
-   else $message=$d13->data->getUI("accessDenied");
+   else $message=$d13->data->ui->get("accessDenied");
   break;
   
   //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = ADD NEW NODE
@@ -103,12 +103,12 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 			$node->data['name']=$_POST['name'];
 			$node->location['x']=$_POST['x'];
 			$node->location['y']=$_POST['y'];
-			$message=$d13->data->getUI($node->add($_SESSION[CONST_PREFIX.'User']['id']));
+			$message=$d13->data->ui->get($node->add($_SESSION[CONST_PREFIX.'User']['id']));
 		} else {
-			$message=$d13->data->getUI("insufficientData");
+			$message=$d13->data->ui->get("insufficientData");
 		}
 	} else {
-		$message=$d13->data->getUI("insufficientData");
+		$message=$d13->data->ui->get("insufficientData");
 	}
 	break;
 
@@ -125,10 +125,10 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 			$node->data['name']=$_SESSION[CONST_PREFIX.'User']['name'].' '.rand(1,9999); //TODO
 			$node->location['x']=$coord['x'];
 			$node->location['y']=$coord['y'];
-			$message=$d13->data->getUI($node->add($_SESSION[CONST_PREFIX.'User']['id']));
+			$message=$d13->data->ui->get($node->add($_SESSION[CONST_PREFIX.'User']['id']));
 			header('Location: ?p=node&action=list');
 		} else {
-			$message=$d13->data->getUI("insufficientData");
+			$message=$d13->data->ui->get("insufficientData");
 		}
 	}
 	break;
@@ -146,13 +146,13 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
       {
        $status=node::remove($_GET['nodeId']);
        if ($status=='done') header('location: node.php?action=list');
-       else $message=$d13->data->getUI($status);
+       else $message=$d13->data->ui->get($status);
       }
-      else $message=$d13->data->getUI("accessDenied");
+      else $message=$d13->data->ui->get("accessDenied");
     }
-    else $message=$d13->data->getUI($status);
+    else $message=$d13->data->ui->get($status);
    }
-   else $message=$d13->data->getUI("insufficientData");
+   else $message=$d13->data->ui->get("insufficientData");
   break;
   
   //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = MOVE NODE
@@ -166,13 +166,13 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
      if (isset($_POST['x'], $_POST['y']))
       if ($node->data['user']==$_SESSION[CONST_PREFIX.'User']['id'])
        if ($game['factions'][$node->data['faction']]['costs']['move'][0]['resource']>-1)
-        $message=$d13->data->getUI($node->move($_POST['x'], $_POST['y']));
-       else $message=$d13->data->getUI("nodeMoveDisabled");
-      else $message=$d13->data->getUI("accessDenied");
+        $message=$d13->data->ui->get($node->move($_POST['x'], $_POST['y']));
+       else $message=$d13->data->ui->get("nodeMoveDisabled");
+      else $message=$d13->data->ui->get("accessDenied");
     }
-    else $message=$d13->data->getUI($status);
+    else $message=$d13->data->ui->get($status);
    }
-   else $message=$d13->data->getUI("insufficientData");
+   else $message=$d13->data->ui->get("insufficientData");
   break;
   
   //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = LIST NODE
@@ -183,7 +183,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
  }
 
 } else {
-	$message=$d13->data->getUI("accessDenied");
+	$message=$d13->data->ui->get("accessDenied");
 }
 if ((isset($status))&&($status=='error')) {
 	$d13->db->query('rollback');
@@ -228,9 +228,11 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 			$s=5;
 			$tvars['tvar_getHTMLNode'] = "";
 			foreach ($node->modules as $module) {
-			
+
 				if ($module['slot'] >= $offset_start && $module['slot'] <= $offset_end) {
-				
+					
+					$the_module = d13_module_factory::create($module['module'], $module['slot'], $d13->data->modules->get($node->data['faction'],$module['module'],'type'), $node);
+					
 					if ($i==$s) {
 						$tvars['tvar_getHTMLNode'] .= '</div>';
 						$i=0;
@@ -240,20 +242,15 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 					}
 
 					if ($buildQueue[$module['slot']]) {
-						
-						$tvars['tvar_moduleAction']	= "cancel";
-						$tvars['tvar_moduleSlot'] 	= $module['slot'];
+						$tvars['tvar_moduleLink']	= "";
 						$tvars['tvar_moduleImage'] 	= "pending.png";
 						$tvars['tvar_moduleClass']	= '<img class="spinner resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/icon/gear.png">';
-						$tvars['tvar_moduleLabel'] 	= $d13->data->getUI("underConstruction");
+						$tvars['tvar_moduleLabel'] 	= $d13->data->ui->get("underConstruction");
 						$tvars['tvar_getHTMLNode'] .= $d13->tpl->render_subpage("sub.node.module", $tvars);
-
-					 
 					 } else if ($module['module']>-1) {
+						$tvars['tvar_moduleLink']	= "index.php?p=module&action=get&nodeId=".$node->data['id']."&slotId=".$module['slot'];
 						
-						$tvars['tvar_moduleAction']	= "get";
-						$tvars['tvar_moduleSlot'] 	= $module['slot'];
-						$tvars['tvar_moduleImage'] 	= $module['module'].".png";
+						$tvars['tvar_moduleImage'] 	= $the_module->data['image'];
 						if (($module['input'] <= 0 && $game['modules'][$node->data['faction']][$module['module']]['maxInput'] > 0) || ($game['modules'][$node->data['faction']][$module['module']]['type'] == 'defense' && $module['input'] < $game['modules'][$node->data['faction']][$module['module']]['maxInput'])) {
 							$tvars['tvar_moduleClass']	= '<img class="animated bounce resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/icon/exclamation.png">';
 						} else {
@@ -262,12 +259,10 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 						$tvars['tvar_moduleLabel'] 	= $gl["modules"][$node->data['faction']][$module['module']]["name"] . " [L".$module['level']."]";
 						$tvars['tvar_getHTMLNode'] .= $d13->tpl->render_subpage("sub.node.module", $tvars);
 					 } else {
-						
-						$tvars['tvar_moduleAction']	= "list";
-						$tvars['tvar_moduleSlot'] 	= $module['slot'];
+						$tvars['tvar_moduleLink']	= "index.php?p=module&action=list&nodeId=".$node->data['id']."&slotId=".$module['slot'];
 						$tvars['tvar_moduleImage'] 	= "empty.png";
 						$tvars['tvar_moduleClass']	= "";
-						$tvars['tvar_moduleLabel'] 	= $d13->data->getUI("emptySlot");
+						$tvars['tvar_moduleLabel'] 	= $d13->data->ui->get("emptySlot");
 						$tvars['tvar_getHTMLNode'] .= $d13->tpl->render_subpage("sub.node.module", $tvars);
 					 }
 					 
@@ -305,7 +300,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 			$queue++;
 			$tvars['tvar_winId'] = $queue;
 			$tvars['tvar_winClass'] = 'd13-queue queue-'.$queue;
-			$tvars['tvar_winTitle'] = $d13->data->getUI("active").' '.$d13->data->getUI("add");
+			$tvars['tvar_winTitle'] = $d13->data->ui->get("active").' '.$d13->data->ui->get("add");
 			$tvars['tvar_winContent'] = '';
 		 	foreach ($node->queue['build'] as $item) {
 		 		if ($item['action'] == 'build') {
@@ -315,9 +310,12 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 		 		} else if ($item['action'] == 'remove') {
 		 			$action='remove';
 		 		}
+		 		$images = array();
+				$images = $d13->data->modules->get($node->data['faction'],$item['module'],'images');
+				$image = $images[0]['image'];
 		  		$remaining=$item['start']+$item['duration']*60-time();
 		  		if ($remaining > 0) {
-		  			$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/modules/'.$node->data['faction'].'/'.$item['module'].'.png"> '.$d13->data->getUI($action).' '.$gl["modules"][$node->data['faction']][$item['module']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['slot'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['slot'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div><div class="cell"><a class="external" href="index.php?p=module&action=cancel&nodeId='.$node->data['id'].'&slotId='.$item['slot'].'"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
+		  			$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/modules/'.$node->data['faction'].'/'.$image.'"> '.$d13->data->ui->get($action).' '.$gl["modules"][$node->data['faction']][$item['module']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['slot'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['slot'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div><div class="cell"><a class="external" href="index.php?p=module&action=cancel&nodeId='.$node->data['id'].'&slotId='.$item['slot'].'"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
 		 		}
 		 	}
 		 	$tvars['tvar_getHTMLBuild'] = $d13->tpl->parse($d13->tpl->get("sub.queue"), $tvars);
@@ -332,13 +330,13 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 			$queue++;
 			$tvars['tvar_winId'] = $queue;
 			$tvars['tvar_winClass'] = 'd13-queue queue-'.$queue;
-			$tvars['tvar_winTitle'] = $d13->data->getUI("active").' '.$d13->data->getUI("research");
+			$tvars['tvar_winTitle'] = $d13->data->ui->get("active").' '.$d13->data->ui->get("research");
 			$tvars['tvar_winContent'] = '';
 		 	 foreach ($node->queue['research'] as $item) {
 				$action='research';
 		  		$remaining=$item['start']+$item['duration']*60-time();
 		  		if ($remaining > 0) {
-		  		$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/technologies/'.$node->data['faction'].'/'.$item['technology'].'.png"> '.$d13->data->getUI($action).' '.$gl["technologies"][$node->data['faction']][$item['technology']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['technology'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['technology'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div>';
+		  		$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/technologies/'.$node->data['faction'].'/'.$item['technology'].'.png"> '.$d13->data->ui->get($action).' '.$gl["technologies"][$node->data['faction']][$item['technology']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['technology'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['technology'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div>';
 		 		}
 		 	}
 		 	$tvars['tvar_getHTMLResearch'] = $d13->tpl->parse($d13->tpl->get("sub.queue"), $tvars);
@@ -353,7 +351,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 			$queue++;
 			$tvars['tvar_winId'] = $queue;
 			$tvars['tvar_winClass'] = 'd13-queue queue-'.$queue;
-			$tvars['tvar_winTitle'] = $d13->data->getUI("active").' '.$d13->data->getUI("craft");
+			$tvars['tvar_winTitle'] = $d13->data->ui->get("active").' '.$d13->data->ui->get("craft");
 			$tvars['tvar_winContent'] = '';
 		 	 foreach ($node->queue['craft'] as $item) {
 				if ($node->modules[$item['component']]['module']==-1) {
@@ -364,7 +362,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 		  		if ($remaining > 0) {
 		  		$remaining=$item['start']+$item['duration']*60-time();
 		  		}
-		  		$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/components/'.$node->data['faction'].'/'.$item['component'].'.png"> '.$d13->data->getUI($action).' '.$gl["components"][$node->data['faction']][$item['component']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['component'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['component'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div>';
+		  		$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/components/'.$node->data['faction'].'/'.$item['component'].'.png"> '.$d13->data->ui->get($action).' '.$gl["components"][$node->data['faction']][$item['component']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['component'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['component'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div>';
 		 	}
 		 	$tvars['tvar_getHTMLCraft'] = $d13->tpl->parse($d13->tpl->get("sub.queue"), $tvars);
 		}
@@ -378,7 +376,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 			$queue++;
 			$tvars['tvar_winId'] = $queue;
 			$tvars['tvar_winClass'] = 'd13-queue queue-'.$queue;
-			$tvars['tvar_winTitle'] = $d13->data->getUI("active").' '.$d13->data->getUI("train");
+			$tvars['tvar_winTitle'] = $d13->data->ui->get("active").' '.$d13->data->ui->get("train");
 			$tvars['tvar_winContent'] = '';
 		 	 foreach ($node->queue['train'] as $item) {
 				if ($node->modules[$item['unit']]['module']==-1) {
@@ -389,7 +387,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 		  		if ($remaining > 0) {
 		  		$remaining=$item['start']+$item['duration']*60-time();
 		  		}
-		  		$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/units/'.$node->data['faction'].'/'.$item['unit'].'.png"> '.$d13->data->getUI($action).' '.$gl["units"][$node->data['faction']][$item['unit']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['unit'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['unit'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div>';
+		  		$tvars['tvar_winContent'] .= '<div class="cell"><img class="resource" src="'.CONST_DIRECTORY.'templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/units/'.$node->data['faction'].'/'.$item['unit'].'.png"> '.$d13->data->ui->get($action).' '.$gl["units"][$node->data['faction']][$item['unit']]["name"].'</div><div class="cell"><span id="build_'.$item['node'].'_'.$item['unit'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("build_'.$item['node'].'_'.$item['unit'].'", "index.php?p=node&action=get&nodeId='.$node->data['id'].'");</script></div>';
 		 	}
 		 	$tvars['tvar_getHTMLTrain'] = $d13->tpl->parse($d13->tpl->get("sub.queue"), $tvars);
 		}
@@ -405,7 +403,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 			$queue++;
 			$tvars['tvar_winId'] = $queue;
 			$tvars['tvar_winClass'] = 'd13-queue queue-'.$queue;
-			$tvars['tvar_winTitle'] = $d13->data->getUI("active").' '.$d13->data->getUI("combat");
+			$tvars['tvar_winTitle'] = $d13->data->ui->get("active").' '.$d13->data->ui->get("combat");
 			$tvars['tvar_winContent'] = '';
 		 	foreach ($node->queue['combat'] as $item) {
 		 		$action='';
@@ -428,7 +426,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 					$status = $otherNode->get('id', $item['sender']);
 		  		}
 				if ($status == 'done') {
-					$tvars['tvar_winContent'] .= '<div><div class="cell">'.$d13->data->getUI($action).' '.$d13->data->getUI("combat").'</div><div class="cell">"'.$otherNode->data['name'].'"</div><div class="cell"><span id="combat_'.$item['id'].'">['.implode(':', misc::sToHMS($remaining)).']</span><script type="text/javascript">timedJump("combat_'.$item['id'].'", "?p=node&action=get&nodeId='.$node->data['id'].'");</script></div>'.$cancel.'</div>';
+					$tvars['tvar_winContent'] .= '<div><div class="cell">'.$d13->data->ui->get($action).' '.$d13->data->ui->get("combat").'</div><div class="cell">"'.$otherNode->data['name'].'"</div><div class="cell"><span id="combat_'.$item['id'].'">['.implode(':', misc::sToHMS($remaining)).']</span><script type="text/javascript">timedJump("combat_'.$item['id'].'", "?p=node&action=get&nodeId='.$node->data['id'].'");</script></div>'.$cancel.'</div>';
 				}
 		 	}
 		 	$tvars['tvar_getHTMLCombat'] = $d13->tpl->parse($d13->tpl->get("sub.queue"), $tvars);

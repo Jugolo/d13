@@ -75,7 +75,7 @@ switch ($_GET['action']) {
 			$user->data['template']=$_SESSION[CONST_PREFIX.'User']['template']=$_POST['template'];
 			$message=$ui[$user->set()];
 		} else {
-			$message=$d13->data->getUI("wrongPassword");
+			$message=$d13->data->ui->get("wrongPassword");
 		}
 	break;
 	
@@ -83,14 +83,14 @@ switch ($_GET['action']) {
 	case 'preferences':
 		if ($_SESSION[CONST_PREFIX.'User']['password']==sha1($_POST['password']))
 	 		$message=$ui[$user->setPreference($_POST['name'], $_POST['value'])];
-		else $message=$d13->data->getUI("wrongPassword");
+		else $message=$d13->data->ui->get("wrongPassword");
 		break;
 		
 	//- - - - - 
 	case 'blocklist':
 		if ($_SESSION[CONST_PREFIX.'User']['password']==sha1($_POST['password']))
 		$message=$ui[$user->setBlocklist($_POST['name'])];
-		else $message=$d13->data->getUI("wrongPassword");
+		else $message=$d13->data->ui->get("wrongPassword");
 		break;
 		
 	//- - - - - 
@@ -101,8 +101,8 @@ switch ($_GET['action']) {
 		  $user->data['password']=$_SESSION[CONST_PREFIX.'User']['password']=sha1($_POST['newPassword']);
 		  $message=$ui[$user->set()];
 		 }
-		 else $message=$d13->data->getUI("rePassNotMatch");
-		else $message=$d13->data->getUI("wrongPassword");
+		 else $message=$d13->data->ui->get("rePassNotMatch");
+		else $message=$d13->data->ui->get("wrongPassword");
 		break;
 		
 	//- - - - - 
@@ -113,7 +113,7 @@ switch ($_GET['action']) {
 		 if ($status=='done') header('Location: index.php?p=logout');
 		 else $message=$ui[$status];
 		}
-		else $message=$d13->data->getUI("wrongPassword");
+		else $message=$d13->data->ui->get("wrongPassword");
 		break;
 	}
 }

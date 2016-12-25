@@ -22,7 +22,7 @@
 					<ul>
 						
 						<li class="item-content">
-							<div class="item-media"><i class="f7-icons size-16">bookmark</i></div>
+							<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cart.png" title=""></div>
 							<div class="item-inner">
 							<div class="item-title">{{tvar_ui_level}}</div>
 							<div class="item-after"><span class="badge">{{tvar_techTier}} / {{tvar_techMaxTier}}</span></div>

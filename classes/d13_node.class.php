@@ -93,32 +93,32 @@ class node {
 					if ($d13->db->affected_rows()==-1) $ok=0;
 					
 					$query=array();
-					$nr=count($game['resources']);
+					$nr = $d13->data->resources->getcount();
 					for ($i=0; $i<$nr; $i++) $query[$i]='("'.$this->data['id'].'", "'.$i.'", "'.$game['factions'][$this->data['faction']]['storage'][$i].'")';
 					$d13->db->query('insert into resources (node, id, value) values '.implode(', ', $query));
 					if ($d13->db->affected_rows()==-1) $ok=0;
 					
 					$query=array();
-					$nr=count($game['technologies'][$this->data['faction']]);
+					$nr = $d13->data->technologies->getcount();
 					for ($i=0; $i<$nr; $i++) $query[$i]='("'.$this->data['id'].'", "'.$i.'", "0")';
 					$d13->db->query('insert into technologies (node, id, level) values '.implode(', ', $query));
 					if ($d13->db->affected_rows()==-1) $ok=0;
 					
 					$query=array();
 					for ($i=0; $i < $game['users']['maxModules'] * $game['users']['maxSectors']; $i++) {
-						$query[$i]='("'.$this->data['id'].'", "'.$i.'", "-1", "0", "1")';
+						$query[$i]='("'.$this->data['id'].'", "'.$i.'", "-1", "0", "0")';
 					}
 					$d13->db->query('insert into modules (node, slot, module, input, level) values '.implode(', ', $query));
 					if ($d13->db->affected_rows()==-1) $ok=0;
 					
 					$query=array();
-					$nr=count($game['components'][$this->data['faction']]);
+					$nr = $d13->data->components->getcount();
 					for ($i=0; $i<$nr; $i++) $query[$i]='("'.$this->data['id'].'", "'.$i.'", "0")';
 					$d13->db->query('insert into components (node, id, value) values '.implode(', ', $query));
 					if ($d13->db->affected_rows()==-1) $ok=0;
 					
 					$query=array();
-					$nr=count($game['units'][$this->data['faction']]);
+					$nr = $d13->data->units->getcount();
 					for ($i=0; $i<$nr; $i++) $query[$i]='("'.$this->data['id'].'", "'.$i.'", "0", "1")';
 					$d13->db->query('insert into units (node, id, value, level) values '.implode(', ', $query));
 					if ($d13->db->affected_rows()==-1) $ok=0;
@@ -224,47 +224,39 @@ class node {
 	//----------------------------------------------------------------------------------------
 	public function getResources() {
 	
-		global $d13, $game;
+		global $d13;
 		
 		$this->resources	= array();
-		$this->storage		= $game['factions'][$this->data['faction']]['storage'];
 		$this->production	= array();
+		$this->storage		= $d13->data->general->get('factions', $this->data['faction'], 'storage');
 		
-		foreach ($game['resources'] as $key=>$resource) {
-			$this->production[$key]=0;
-			$result=$d13->db->query('select * from resources where node="'.$this->data['id'].'" order by id asc');
-			for ($i=0; $row=$d13->db->fetch($result); $i++) {
-				$this->resources[$i]=$row;
-			}
+		$tmp_resources = array();
+		$result = $d13->db->query('select * from resources where node="'.$this->data['id'].'" order by id asc');
+		for ($i=0; $row=$d13->db->fetch($result); $i++) {
+				$tmp_resources[$i] = $row;
+		}
+			
+		foreach ($d13->data->resources as $resource) {
+			$this->production[$resource['id']] = 0;
+			$this->resources[$resource['id']] = $tmp_resources[$resource['id']];
 		}
 			
 		if ($this->modules) {
 			foreach ($this->modules as $module) {
-				if ($module['module']>-1) {
-					switch ($game['modules'][$this->data['faction']][$module['module']]['type']) {
-		
-						case 'storage':
-							foreach ($game['modules'][$this->data['faction']][$module['module']]['storedResource'] as $res) {
-								$this->storage[$res] += $game['modules'][$this->data['faction']][$module['module']]['ratio'] * $game['factors']['storage'] * $module['input'];
-							}	
-							break;
-		
-						case 'command':
-							foreach ($game['modules'][$this->data['faction']][$module['module']]['storedResource'] as $res) {
-								$this->storage[$res] += $game['modules'][$this->data['faction']][$module['module']]['ratio'] * $game['factors']['storage'] * $module['input'];
-							}
-							foreach ($game['modules'][$this->data['faction']][$module['module']]['outputResource'] as $res) {
-								$this->production[$res] += $game['modules'][$this->data['faction']][$module['module']]['ratio'] * $game['factors']['production'] * $module['input'];
-							}
-							break;
-		
-						case 'harvest':
-							foreach ($game['modules'][$this->data['faction']][$module['module']]['outputResource'] as $res) {
-								$this->production[$res] += $game['modules'][$this->data['faction']][$module['module']]['ratio'] * $game['factors']['production'] * $module['input'];
-							}
-							break;
-		
+				if ($module['module'] >- 1) {
+					
+					if ($d13->data->modules->get($this->data['faction'], $module['module'], 'storedResource')) {
+						foreach ($d13->data->modules->get($this->data['faction'], $module['module'], 'storedResource') as $res) {
+							$this->storage[$res] += $d13->data->modules->get($this->data['faction'], $module['module'], 'ratio') * $d13->data->general->get('factors','storage') * $module['input'];
+						}
+					}			
+				
+					if ($d13->data->modules->get($this->data['faction'], $module['module'], 'outputResource')) {
+						foreach ($d13->data->modules->get($this->data['faction'], $module['module'], 'outputResource') as $res) {
+							$this->production[$res] += $d13->data->modules->get($this->data['faction'], $module['module'], 'ratio') * $d13->data->general->get('factors','production') * $module['input'];
+						}
 					}
+		
 				}
 			}
 		}
@@ -1217,32 +1209,44 @@ class node {
   return $status;
  }
  
- //----------------------------------------------------------------------------------------
-// 
 //----------------------------------------------------------------------------------------
- public function checkResources($time)
- {
-  global $d13, $game;
-  $d13->db->query('start transaction');
-  $this->getModules();
-  $this->getResources();
-  $elapsed=($time-strtotime($this->data['lastCheck']))/3600;
-  $ok=1;
-  foreach ($game['resources'] as $key=>$resource)
-   if ($resource['type']=='dynamic')
-   {
-    $this->resources[$key]['value']+=$this->production[$key]*$elapsed;
-    if ($this->storage[$key])
-     if ($this->resources[$key]['value']>$this->storage[$key])
-      $this->resources[$key]['value']=$this->storage[$key];
-    $d13->db->query('update resources set value="'.$this->resources[$key]['value'].'" where node="'.$this->data['id'].'" and id="'.$key.'"');
-    if ($d13->db->affected_rows()==-1) $ok=0;
-    $d13->db->query('update nodes set lastCheck="'.strftime('%Y-%m-%d %H:%M:%S', $time).'" where id="'.$this->data['id'].'"');
-    if ($d13->db->affected_rows()==-1) $ok=0;
-   }
-  if ($ok) $d13->db->query('commit');
-  else $d13->db->query('rollback');
- }
+// checkResources
+//----------------------------------------------------------------------------------------
+public function checkResources($time) {
+ 
+	global $d13, $game;
+  
+	$d13->db->query('start transaction');
+	$this->getModules();
+	$this->getResources();
+	$elapsed = ($time-strtotime($this->data['lastCheck']))/3600;
+	$ok=1;
+  
+	foreach ($d13->data->resources as $resource) {
+		if ($resource['type']=='dynamic') {
+			$this->resources[$resource['id']]['value'] += $this->production[$resource['id']] * $elapsed; #value
+			if ($this->storage[$resource['id']]) {
+     			if ($this->resources[$resource['id']]['value'] > $this->storage[$resource['id']]) { #value
+      				$this->resources[$resource['id']]['value'] = $this->storage[$resource['id']]; #value
+    			}
+    			$d13->db->query('update resources set value="'.$this->resources[$resource['id']]['value'].'" where node="'.$this->data['id'].'" and id="'.$resource['id'].'"');
+    			if ($d13->db->affected_rows()==-1) {
+    				$ok=0;
+    			}
+    			$d13->db->query('update nodes set lastCheck="'.strftime('%Y-%m-%d %H:%M:%S', $time).'" where id="'.$this->data['id'].'"');
+    			if ($d13->db->affected_rows()==-1) {
+    				$ok=0;
+				}
+			}
+		}
+	}
+	
+	if ($ok) {
+		$d13->db->query('commit');
+	} else {
+		$d13->db->query('rollback');
+	}
+}
  
 //----------------------------------------------------------------------------------------
 // 
@@ -1291,7 +1295,7 @@ class node {
 				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BUILD
 				if ($entry['action'] == 'build' && $this->modules[$entry['slot']]['module'] == -1) {
 					$this->modules[$entry['slot']]['module']=$entry['module'];
-					$d13->db->query('update modules set module="'.$entry['module'].'" where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
+					$d13->db->query('update modules set module="'.$entry['module'].'", level=1 where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
 					if ($d13->db->affected_rows()==-1) $ok=0;
 				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - UPGRADE
 				} else if ($entry['action'] == 'upgrade' && $this->modules[$entry['slot']]['module'] > -1) {
@@ -1600,14 +1604,14 @@ public function checkCombat($time) {
 					
 					//- - - - - send reports
 					if ($data['output']['attacker']['winner']) {
-						$attackerOutcome=$d13->data->getUI("won");
+						$attackerOutcome=$d13->data->ui->get("won");
 					} else {
-						$attackerOutcome=$d13->data->getUI("lost");
+						$attackerOutcome=$d13->data->ui->get("lost");
 					}
 					if ($data['output']['defender']['winner']) {
-						$defenderOutcome=$d13->data->getUI("won");
+						$defenderOutcome=$d13->data->ui->get("won");
 					} else {
-						$defenderOutcome=$d13->data->getUI("lost");
+						$defenderOutcome=$d13->data->ui->get("lost");
 					}
 					
 					//- - - - - Assemble Report (TODO port to template file)
@@ -1657,7 +1661,7 @@ public function checkCombat($time) {
 						$msg=new message();
 						$msg->data['sender']=$attackerUser->data['name'];
 						$msg->data['recipient']=$attackerUser->data['name'];
-						$msg->data['subject'] = $d13->data->getUI("combatReport") .' - '.$$nodes['defender']->data['name'];
+						$msg->data['subject'] = $d13->data->ui->get("combatReport") .' - '.$$nodes['defender']->data['name'];
 						$msg->data['body']=$msgBody;
 						$msg->data['viewed']=0;
 						$msg->add();
@@ -1672,7 +1676,7 @@ public function checkCombat($time) {
 							$msg=new message();
 							$msg->data['sender']=$defenderUser->data['name'];
 							$msg->data['recipient']=$defenderUser->data['name'];
-							$msg->data['subject']=$d13->data->getUI("combatReport").' - '.$$nodes['defender']->data['name'];
+							$msg->data['subject']=$d13->data->ui->get("combatReport").' - '.$$nodes['defender']->data['name'];
 							$msg->data['body']=$msgBody;
 							$msg->data['viewed']=0;
 							$msg->add();
@@ -1790,7 +1794,7 @@ public function checkCombat($time) {
 		
 		$data=array('ok'=>1, 'cost'=>$cost);
 		foreach ($data['cost'] as $key=>$cost) {
-			if ($this->resources[$cost['resource']]['value']<$cost['value']*$quantity*$game['users']['cost'][$costType]) {
+			if ($this->resources[$cost['resource']]['value'] < $cost['value']*$quantity*$game['users']['cost'][$costType]) {
 				$data['cost'][$key]['ok'] = 0;
 				$data['ok'] = 0;
 			} else {

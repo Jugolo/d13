@@ -49,14 +49,16 @@ class d13_unit {
 		global $gl, $game;
 		
 		$this->data = array();
-		$this->data 				= $game['units'][$this->node->data['faction']][$this->unitId];
+		
+		
+		$this->data 				= $game['units'][$this->node->data['faction']][$unitId];
 		$this->data['type']			= 'unit';
 		$this->data['unitId'] 		= $unitId;
-		$this->data['name']			= $gl["units"][$this->node->data['faction']][$this->unitId]["name"];
-		$this->data['description']	= $gl["units"][$this->node->data['faction']][$this->unitId]["description"];
+		$this->data['name']			= $gl["units"][$this->node->data['faction']][$this->data['unitId']]["name"];
+		$this->data['description']	= $gl["units"][$this->node->data['faction']][$this->data['unitId']]["description"];
 		
 		foreach ($game['stats'] as $stat) {
-			$this->data[$stat]		= $game['units'][$this->node->data['faction']][$this->unitId][$stat];
+			$this->data[$stat]		= $game['units'][$this->node->data['faction']][$this->data['unitId']][$stat];
 			$this->data['upgrade_'.$stat] = 0;
 		}
 			
@@ -73,8 +75,8 @@ class d13_unit {
 		
 		$costLimit 		= $this->node->checkCostMax($this->data['cost'], 'train');
 		$reqLimit 		= $this->node->checkRequirementsMax($this->data['requirements']);
-		$upkeepLimit	= floor($this->node->resources[$game['units'][$this->node->data['faction']][$this->unitId]['upkeepResource']]['value'] / $game['units'][$this->node->data['faction']][$this->unitId]['upkeep']);
-		$unitLimit 		= abs($this->node->units[$this->unitId]['value'] - $game['types'][$this->data['type']]['limit']);
+		$upkeepLimit	= floor($this->node->resources[$game['units'][$this->node->data['faction']][$this->data['unitId']]['upkeepResource']]['value'] / $game['units'][$this->node->data['faction']][$this->data['unitId']]['upkeep']);
+		$unitLimit 		= abs($this->node->units[$this->data['unitId']]['value'] - $game['types'][$this->data['type']]['limit']);
 		$limitData 		= min($costLimit, $reqLimit, $upkeepLimit, $unitLimit);
 		
 		return $limitData;
@@ -259,7 +261,7 @@ class d13_unit {
 		//- - - - - - - - - - - - - - - STATS Apply Upgrades
 		foreach ($unit_upgrades as $technology) {
 			foreach ($technology['upgrades'] as $upgrade) {
-				if ($d13_upgrades[$this->node->data['faction']][$upgrade]['id'] == $this->unitId) {
+				if ($d13_upgrades[$this->node->data['faction']][$upgrade]['id'] == $this->data['unitId']) {
 					foreach ($d13_upgrades[$this->node->data['faction']][$upgrade]['stats'] as $stats) {
 				
 						if ($stats['stat'] == 'all') {

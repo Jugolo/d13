@@ -39,7 +39,8 @@ include(CONST_INCLUDE_PATH."classes/d13_data.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_module.class.php");
 
 //- - - - - INCLUDE GAME DATA
-include(CONST_INCLUDE_PATH."data/d13_basic.data.inc.php");
+include(CONST_INCLUDE_PATH."data/d13_general.data.inc.php");
+#include(CONST_INCLUDE_PATH."data/d13_resource.data.inc.php");
 include(CONST_INCLUDE_PATH."data/d13_component.data.inc.php");
 include(CONST_INCLUDE_PATH."data/d13_module.data.inc.php");
 include(CONST_INCLUDE_PATH."data/d13_technology.data.inc.php");

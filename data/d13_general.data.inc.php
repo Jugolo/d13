@@ -65,19 +65,6 @@ $game['navigation'] = array(
 );
 
 //----------------------------------------------------------------------------------------
-// RESOURCES
-//----------------------------------------------------------------------------------------
-
-$game['resources']=array(
- 0=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>true),		//Gold 			- type=>'dynamic'
- 1=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>true),		//Wood 			- type=>'dynamic'
- 2=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>true),		//Iron 			- type=>'dynamic'
- 3=>array('type'=>'dynamic', 	'visible'=>true, 'carryable'=>false),		//Workers 		- type=>'static'
- 4=>array('type'=>'static',		'visible'=>true, 'carryable'=>false),		//Storage Space - type=>'static'
- 5=>array('type'=>'dynamic',	'visible'=>true, 'carryable'=>false)		//Food 			- type=>'static'
-);
-
-//----------------------------------------------------------------------------------------
 // FACTIONS
 //----------------------------------------------------------------------------------------
 

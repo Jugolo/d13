@@ -8,7 +8,7 @@
 
 <link rel="stylesheet" type="text/css" href="{{tvar_global_directory}}plugins/framework7/css/framework7.ios.min.css">
 <link rel="stylesheet" type="text/css" href="{{tvar_global_directory}}plugins/framework7/css/framework7.ios.colors.min.css">
-<link rel="stylesheet" type="text/css" href="{{tvar_global_directory}}plugins/framework7/css/framework7-icons.css">
+
 <link rel="stylesheet" type="text/css" href="{{tvar_global_directory}}plugins/pure/forms-nr-min.css">
 <link rel="stylesheet" type="text/css" href="{{tvar_global_directory}}plugins/pure/buttons-min.css">
 

@@ -29,7 +29,7 @@ class d13_modulit {
 		$this->input	= $input;
 		
 		$this->setNode($node);
-		$this->setStats();
+		$this->setStats($moduleId, $level, $input, $unitId);
 		$this->checkUpgrades();
 		
 	}
@@ -49,13 +49,17 @@ class d13_modulit {
 	// @ 
 	// 
 	//----------------------------------------------------------------------------------------
-	public function setStats() { 
+	public function setStats($moduleId, $level, $input, $unitId) { 
 		
 		global $gl, $game;
 		
 		$this->data					= array();
-		$this->data['type']			= 'module';
 		$this->data 				= $game['units'][$this->node->data['faction']][$this->unitId];
+		$this->data['type']			= 'defense';
+		$this->data['moduleId']		= $moduleId;
+		$this->data['unitId']		= $unitId;
+		$this->data['level']		= $level;
+		$this->data['input']		= $input;
 		$this->data['name']			= $gl["units"][$this->node->data['faction']][$this->unitId]["name"];
 		$this->data['description']	= $gl["units"][$this->node->data['faction']][$this->unitId]["description"];
 		
@@ -247,9 +251,11 @@ class d13_modulit {
 		
 		global $d13, $game, $d13_upgrades;
 		
+		$unit_upgrades = array();
+		
 		//- - - - - - - - - - - - - - - COST & ATTRIBUTES
 		foreach ($d13_upgrades[$this->node->data['faction']] as $upgrade) {
-			if ($upgrade['type'] == $this->data['type'] && $upgrade['id'] == $this->unitId) {
+			if ($upgrade['type'] == $this->data['type'] && $upgrade['id'] == $this->data['moduleId']) {
 				
 				//- - - - - - - - - - - - - - - COST
 				if (isset($upgrade['cost'])) {
@@ -259,6 +265,12 @@ class d13_modulit {
 				if (isset($upgrade['attributes'])) {
 					$this->data['attributes_upgrade'] = $upgrade['attributes'];
 				}
+				
+				//- - - - - - - - - - - - - - - STATS by level
+				if (isset($upgrade['stats']) && $this->data['level'] > 1) {
+					$unit_upgrades[] = array('id'=>$upgrade['id'], 'level'=>$this->data['level'], 'upgrades'=>array($upgrade['id']));
+				}
+				
 			}
 		}
 		
@@ -271,7 +283,7 @@ class d13_modulit {
 		}
 		
 		//- - - - - - - - - - - - - - - STATS Technology Upgrades	
-		$unit_upgrades = array();
+		
 		foreach ($this->node->technologies as $technology) {
 			if ($technology['level'] > 0) {
 				foreach ($unit_comp as $component) {
@@ -285,9 +297,10 @@ class d13_modulit {
 		}
 		
 		//- - - - - - - - - - - - - - - STATS Apply Upgrades
+		
 		foreach ($unit_upgrades as $technology) {
 			foreach ($technology['upgrades'] as $upgrade) {
-				if ($d13_upgrades[$this->node->data['faction']][$upgrade]['id'] == $this->unitId) {
+				if ($d13_upgrades[$this->node->data['faction']][$upgrade]['id'] == $this->data['moduleId']) {
 					foreach ($d13_upgrades[$this->node->data['faction']][$upgrade]['stats'] as $stats) {
 				
 						if ($stats['stat'] == 'all') {

@@ -19,14 +19,12 @@ function moreLess(divContentID, aMoreLessID)
 	if(divCont.style.overflow == 'hidden')
 	{
 		divCont.style.overflow = 'visible';
-		divCont.style.height = 'auto';
-		aMoreLess.innerHTML = '<i class="f7-icons size-16">up</i>';			
+		divCont.style.height = 'auto';	
 	}
 	else
 	{
 		divCont.style.overflow = 'hidden';
 		divCont.style.height = '0px';
-		aMoreLess.innerHTML = '<i class="f7-icons size-16">down</i>';
 	}
 }
 

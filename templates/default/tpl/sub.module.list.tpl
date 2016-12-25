@@ -15,7 +15,7 @@
 			
 				<div class="col-40">
 					<div class="d13-module" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
-					<img class="d13-module-inner" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_mid}}.png">
+					<img class="d13-module-inner" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_moduleImage}}">
 					</div>
 					<p class="d13-italic">{{tvar_moduleDescription}}</p>
 					{{tvar_linkData}}
@@ -27,10 +27,10 @@
 					<ul>
 				
 					<li class="item-content">
-						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInputResource}}.png" title="{{tvar_moduleInputResName}}"></div>
+						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_input}}</div>
-						<div class="item-after"><span class="badge">{{tvar_moduleInputResName}}</span></div>
+						<div class="item-after"><span class="badge">{{tvar_moduleInputName}}</span></div>
 						</div>
 					</li>
 				
@@ -43,7 +43,7 @@
 					</li>
 				
 					<li class="item-content">
-						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInputResource}}.png" title="{{tvar_moduleInputResName}}"></div>
+						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_maxInput}}</div>
 						<div class="item-after"><span class="badge">{{tvar_moduleMaxInput}}</span></div>

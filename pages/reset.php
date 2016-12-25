@@ -34,16 +34,16 @@ if (isset($_POST['name'], $_POST['email'])) {
 			$newPass=rand(1000000000, 9999999999);
 			$status=$user->resetPassword($_POST['email'], $newPass);
 			include(CONST_INCLUDE_PATH.'api/email.api.php');
-			$body=CONST_GAME_TITLE.' '.$d13->data->getUI("newPassword").': '.$newPass;
+			$body=CONST_GAME_TITLE.' '.$d13->data->ui->get("newPassword").': '.$newPass;
 			if ($status=='done') {
-				$status=email(CONST_EMAIL, CONST_GAME_TITLE, $user->data['email'], CONST_GAME_TITLE.' '.$d13->data->getUI("resetPassword"), $body);
+				$status=email(CONST_EMAIL, CONST_GAME_TITLE, $user->data['email'], CONST_GAME_TITLE.' '.$d13->data->ui->get("resetPassword"), $body);
 				$message=$ui[$status];
 			}
 		} else {
 			$message=$ui[$status];
 		}
 	} else {
-		$message=$d13->data->getUI("insufficientData");
+		$message=$d13->data->ui->get("insufficientData");
 	}
 }
 

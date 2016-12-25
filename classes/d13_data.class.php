@@ -13,9 +13,16 @@
 //
 //========================================================================================
 
+//----------------------------------------------------------------------------------------
+// d13_data
+// @ 
+// 
+//----------------------------------------------------------------------------------------
 class d13_data {
 
-	private $data, $lang = array();
+	public $data, $lang = array();
+	public $resources, $modules, $technologies, $units, $upgrades, $components, $general;
+	public $bw, $gl, $ui;
 	
 	//----------------------------------------------------------------------------------------
 	// construct
@@ -24,9 +31,10 @@ class d13_data {
 	//----------------------------------------------------------------------------------------
 	public function __construct() {
 		
-		global $game, $bw, $ui, $gl, $d13_upgrades;
+		global $game, $bw, $ui, $gl, $d13_resources, $d13_upgrades;
 		
-		include(CONST_INCLUDE_PATH."data/d13_basic.data.inc.php");
+		include(CONST_INCLUDE_PATH."data/d13_general.data.inc.php");
+		include(CONST_INCLUDE_PATH."data/d13_resource.data.inc.php");
 		include(CONST_INCLUDE_PATH."data/d13_component.data.inc.php");
 		include(CONST_INCLUDE_PATH."data/d13_module.data.inc.php");
 		include(CONST_INCLUDE_PATH."data/d13_technology.data.inc.php");
@@ -37,11 +45,36 @@ class d13_data {
 		include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/d13_gamelang.locale.inc.php");
 		include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/d13_blockwords.locale.inc.php");
 
+		$this->general 		= new d13_collection($game);
+		$this->upgrades 	= new d13_collection($d13_upgrades);
+		$this->resources 	= new d13_collection($this->record_sort($d13_resources, "priority"));
+		
+		$tmp_modules = array();
+		foreach ($game['modules'] as $faction) {
+			$tmp_modules[] = $this->record_sort($faction, "priority");
+		}
+		$this->modules 		= new d13_collection($tmp_modules);
+		
+		$tmp_components = array();
+		foreach ($game['components'] as $faction) {
+			$tmp_components[] = $this->record_sort($faction, "priority");
+		}
+		$this->components 	= new d13_collection($tmp_components);
+		
+		$tmp_technologies = array();
+		foreach ($game['technologies'] as $faction) {
+			$tmp_technologies[] = $this->record_sort($faction, "priority");
+		}
+		$this->technologies = new d13_collection($tmp_technologies);
+
+		$this->bw = new d13_collection($bw);
+		$this->gl = new d13_collection($gl);
+		$this->ui = new d13_collection($ui);
+		
+		/* -----------------------obsolete */
 		$this->data = array();
 		$this->lang = array();
 		
-		#$this->data[''] = $game[''];
-		#$this->data[''] =  $game[''];
 		$this->data['components'] 		= $game['components'];
 		$this->data['modules'] 			= $game['modules'];
 		$this->data['technologies'] 	= $game['technologies'];
@@ -50,60 +83,93 @@ class d13_data {
 		$this->lang['bw'] 				= $bw;
 		$this->lang['gl'] 				= $gl;
 		$this->lang['ui'] 				= $ui;
-
-	}
-	
-	
-	//----------------------------------------------------------------------------------------
-	// getData
-	// 
-	// @ A simple wrapper to get the right data, this might change in the future.
-	//----------------------------------------------------------------------------------------
-	public function getData($constant) {
+		/* -----------------------end obsolete */
 		
 	}
 	
 	//----------------------------------------------------------------------------------------
-	// getGL
+	// record_sort
 	// 
-	// @ A simple wrapper to get the right language string, this might change in the future.
+	// @
 	//----------------------------------------------------------------------------------------
-	public function getGL($constant) {
-		if (!empty($constant) && isset($this->lang['gl'][$constant])) {
-			return $this->lang['gl'][$constant];
-		} else {
-			return "ERROR: empty gl lang";
+	private function record_sort($records, $field, $reverse=false) {
+		$hash = array();
+		foreach($records as $key => $record) {
+			$hash[$record[$field].$key] = $record;
 		}
+		($reverse)? krsort($hash) : ksort($hash);
+		$records = array();
+		foreach($hash as $record) {
+			$records []= $record;
+		}
+		return $records;
 	}
-	
-	//----------------------------------------------------------------------------------------
-	// getUI
-	// 
-	// @ A simple wrapper to get the right language string, this might change in the future.
-	//----------------------------------------------------------------------------------------
-	public function getUI($constant) {	
-		if (!empty($constant) && isset($this->lang['ui'][$constant])) {
-			return $this->lang['ui'][$constant];
+
+}
+
+//----------------------------------------------------------------------------------------
+// d13_collection
+// @ 
+// 
+//----------------------------------------------------------------------------------------
+class d13_collection implements IteratorAggregate {
+
+    private $collection = array();
+    
+    public function __construct($data) {
+    	$this->add($data);
+    }
+    
+    private function add($data) {
+        $this->collection = $data;
+    }
+ 
+    public function getIterator() {
+        return new ArrayIterator($this->collection);
+    }
+    
+    public function getbyid($field, $id, $dimension=NULL) {
+		if ($dimension) {
+			$array = $this->collection[$dimension];
 		} else {
-			return "ERROR: empty ui lang";
+			$array = $this->collection;
 		}
-	}
-	
-	//----------------------------------------------------------------------------------------
-	// getBW
-	// 
-	// @ A simple wrapper to get the right language string, this might change in the future.
-	//----------------------------------------------------------------------------------------
-	public function getBW($string) {	
-		foreach ($this->lang['bw'] as $blockword) {
-   			if (stristr($blockword, $string) !== false) {
-    			return true;
-    		}
+		
+		foreach ($array as $entry) {
+			if ($entry['id'] == $id) {
+				if (isset($entry[$field])) {
+					return $entry[$field];
+				} else {
+					return NULL;
+				}
+			}
 		}
-		return false;
-	}	
-
-
+ 	}
+ 	
+ 	public function getcount() {
+ 		return count($this->collection);
+ 	}
+ 	
+    public function get($key1, $key2=NULL, $key3=NULL) {
+    	if (empty($key3) && empty($key2)) {
+    		if (isset($this->collection[$key1])){
+            	return $this->collection[$key1];
+        	}
+        	return NULL;
+    	} else if (empty($key3)) {
+    		if (isset($this->collection[$key1][$key2])){
+            	return $this->collection[$key1][$key2];
+        	}
+        	return NULL;
+    	} else {
+    		if (isset($this->collection[$key1][$key2][$key3])){
+            	return $this->collection[$key1][$key2][$key3];
+        	}
+        	return NULL;
+    	}
+    	return NULL;
+    }
+    
 }
 
 //=====================================================================================EOF

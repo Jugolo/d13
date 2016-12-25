@@ -19,24 +19,30 @@
 
 function sub_resources($node) {
 
-	global $d13, $gl, $ui, $game;
+	global $d13;
 	
-	$res = '';
+	$tvars = array();
+	$tvars['tvar_resEntry'] 	= '';
 	
 	if (isset($node) && isset($node->resources)) {
 		foreach ($node->resources as $key=>$resource) {
-			if ($game['resources'][$key]['visible']) {
-				$res .= '<span class="badge">';
-				$res .= '<a class="tooltip-bottom" data-tooltip="'.$gl["resources"][$key]["name"].'"><img class="d13-resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$key.'.png" title="'.$gl["resources"][$key]["name"].'"></a>';
-				$res .= floor($resource['value']).'/'.$node->storage[$key];
-				if ($node->production[$key]) {
-					if (floor($resource['value']) < $node->storage[$key]) {
-						$res .= ' (+'.$node->production[$key].$ui['perHour'].')';
+			if ($d13->data->resources->get($key,'active') && $d13->data->resources->get($key,'visible')) {
+				
+				$tvars['tvar_resName'] 			= $d13->data->gl->get('resources', $resource['id'], 'name');
+				$tvars['tvar_resImage'] 		= $d13->data->resources->getbyid('image', $resource['id']);
+				$tvars['tvar_resValue']			= floor($resource['value']) . '/' . $node->storage[$resource['id']];
+				$tvars['tvar_resProduction'] 	= '';
+				
+				if ($node->production[$resource['id']]) {
+					if (floor($resource['value']) < $node->storage[$resource['id']]) {
+						$tvars['tvar_resProduction'] = ' [+' . $node->production[$resource['id']] . $d13->data->ui->get('perHour') . ']';
 					} else {
-						$res .= ' ('.$d13->data->getUI("full").')';
+						$tvars['tvar_resProduction'] = ' [' . $d13->data->ui->get("full") .']';
 					}
 				}
-				$res .= ' </span>&nbsp;';
+				
+				$tvars['tvar_resEntry'] 		.= $d13->tpl->render_subpage("sub.resource.entry",$tvars);
+
 			}
 		}
 	}
@@ -45,8 +51,7 @@ function sub_resources($node) {
 	// Setup Template Variables
 	//----------------------------------------------------------------------------------------
 
-	$tvars = array();
-	$tvars['tvar_nodeResources'] 	= $res;
+	$tvars['tvar_nodeResources'] 	= $tvars['tvar_resEntry'];
 
 	//----------------------------------------------------------------------------------------
 	// Parse & Render Template

@@ -25,11 +25,11 @@ class d13 {
 		$this->session		= new d13_session();
 		
 		//- - - - - SETUP DUMMY USER (when not logged in)
-if (!isset($_SESSION[CONST_PREFIX.'User']['id'])) {
-	$_SESSION[CONST_PREFIX.'User']['color']		= CONST_DEFAULT_COLOR;
-	$_SESSION[CONST_PREFIX.'User']['template']	= CONST_DEFAULT_TEMPLATE;
-	$_SESSION[CONST_PREFIX.'User']['locale']	= CONST_DEFAULT_LOCALE;
-}
+		if (!isset($_SESSION[CONST_PREFIX.'User']['id'])) {
+			$_SESSION[CONST_PREFIX.'User']['color']		= CONST_DEFAULT_COLOR;
+			$_SESSION[CONST_PREFIX.'User']['template']	= CONST_DEFAULT_TEMPLATE;
+			$_SESSION[CONST_PREFIX.'User']['locale']	= CONST_DEFAULT_LOCALE;
+		}
 
 		$this->data			= new d13_data();
 		

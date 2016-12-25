@@ -64,7 +64,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
          					$pass = true;
          				} else {
          					$pass = false;
-         					$message=$d13->data->getUI("noWar");
+         					$message=$d13->data->ui->get("noWar");
          				}
          			}
          			
@@ -88,17 +88,17 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
 					}
 
        			} else {
-        			$message=$d13->data->getUI("noUser");
+        			$message=$d13->data->ui->get("noUser");
         		}
     		} else {
-      				$message=$d13->data->getUI("noNode");
+      				$message=$d13->data->ui->get("noNode");
       			}
     	
     	
     	
     		}
     	} else {
-			$message=$d13->data->getUI("featureDisabled");
+			$message=$d13->data->ui->get("featureDisabled");
    		}
    		break;
    
@@ -114,18 +114,18 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
        if ($status=='done') header('Location: node.php?action=get&nodeId='.$node->data['id']);
        else $message=$ui[$status];
       }
-      else $message=$d13->data->getUI("accessDenied");
-     else $message=$d13->data->getUI("noCombat");
+      else $message=$d13->data->ui->get("accessDenied");
+     else $message=$d13->data->ui->get("noCombat");
     }
    break;
    
   }
   
 	} else {
-		$message=$d13->data->getUI("noNode");
+		$message=$d13->data->ui->get("noNode");
 	}
 } else {
-	$message=$d13->data->getUI("insufficientData");
+	$message=$d13->data->ui->get("insufficientData");
 }
 
 if ((isset($status))&&($status=='error')) {

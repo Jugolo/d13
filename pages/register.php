@@ -26,15 +26,15 @@ $flags=$d13->flags->get('name');
 
 if ($flags['register']) {
 	if (isset($_POST['email'], $_POST['name'], $_POST['password'])) {
- 		
+ 		/*
 		foreach ($_POST as $key=>$value) {
 			if ($key=='name') $value=preg_replace('/[^a-zA-Z0-9]/', '', $value);
 			$_POST[$key]=misc::clean($value);
 		}
-  
+  */
 		if (!empty($_POST['email']) && !empty($_POST['name']) && !empty($_POST['password'])) {
 			$user=new user();
-			if (!$d13->data->getBW($_POST['name'])) {
+			if (!$d13->data->bw->get($_POST['name'])) {
 				
 					if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
 						$user->data['name']=$_POST['name'];
@@ -53,7 +53,7 @@ if ($flags['register']) {
 						$user->data['locale']		= CONST_DEFAULT_LOCALE;
 						$status = $user->add();
 						
-						$message = $d13->data->getUI($status);
+						$message = $d13->data->ui->get($status);
 
 						if ($flags['activation']) {
 							if ($status=='done') {
@@ -61,13 +61,13 @@ if ($flags['register']) {
 								$user->get('name', $user->data['name']);
 								$code=rand(1000000000, 9999999999);
 								$link=CONST_SERVER_PATH.'activate.php?user='.$user->data['name'].'&code='.$code;
-								$body=CONST_GAME_TITLE.' '.$d13->data->getUI("accountActivationLink").': <a href="'.$link.'" target="_blank">'.$link.'</a>';
+								$body=CONST_GAME_TITLE.' '.$d13->data->ui->get("accountActivationLink").': <a href="'.$link.'" target="_blank">'.$link.'</a>';
 								$activation=new d13_activation();
 								$activation->data['user']=$user->data['id'];
 								$activation->data['code']=$code;
 								$status=$activation->add();
 								if ($status=='done') {
-									$status=email(CONST_GAME_TITLE, $user->data['email'], CONST_GAME_TITLE.' '.$d13->data->getUI("registration"), $body);
+									$status=email(CONST_GAME_TITLE, $user->data['email'], CONST_GAME_TITLE.' '.$d13->data->ui->get("registration"), $body);
 								}
 								
 							}
@@ -78,19 +78,19 @@ if ($flags['register']) {
 						}
 	
 					} else {
-						$message=$d13->data->getUI("invalidEmail");
+						$message=$d13->data->ui->get("invalidEmail");
 					}
 				
 			} else {
-				$message=$d13->data->getUI("invalidName");
+				$message=$d13->data->ui->get("invalidName");
 			}
 		} else {
-			$message=$d13->data->getUI("insufficientData");
+			$message=$d13->data->ui->get("insufficientData");
 		}
 	}
 	
 } else {
-	$message=$d13->data->getUI("registrationDisabled");
+	$message=$d13->data->ui->get("registrationDisabled");
 }
 
 if ((isset($status)) && ($status=='error')) {
