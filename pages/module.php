@@ -33,7 +33,6 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
 	$mid=$node->modules[$_GET['slotId']]['module'];
 	$sid=$node->modules[$_GET['slotId']]['slot'];
 
-
  if ($status=='done')
  {
   $node->checkAll(time());
@@ -41,8 +40,8 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
   if ($node->data['user']==$_SESSION[CONST_PREFIX.'User']['id'])
    if (isset($node->modules[$_GET['slotId']]))
     
-    switch ($_GET['action'])
-    {
+    switch ($_GET['action']) {
+    
 		//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		case 'get':
 		$mid=$node->modules[$_GET['slotId']]['module'];
@@ -73,18 +72,17 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
 		}
 		break;
      
-		//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-     case 'set':
-      if (isset($_POST['input']))
-      {
-      
-      	$sid = $_GET['slotId'];
-       $node->modules[$_GET['slotId']]['input']=$_POST['input'];
-       $status=$node->setModule($_GET['slotId']);
-       if ($status=='done') header('Location: index.php?p=module&action=get&nodeId='.$node->data['id'].'&slotId='.$_GET['slotId']);
-       else $message=$ui[$status];
-      }
-     break;
+	//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+	case 'set':
+		if (isset($_POST['input'])) {
+			$status = $node->setModule($_GET['slotId'],$_POST['input']);
+			if ($status=='done') {
+				header('Location: index.php?p=module&action=get&nodeId='.$node->data['id'].'&slotId='.$_GET['slotId']);
+			} else {
+				$message=$ui[$status];
+			}
+		}
+		break;
      
 		//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
      case 'add':
@@ -233,14 +231,21 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
       }
      break;
     }
+    
    else $message=$d13->data->ui->get("noSlot");
   else $message=$d13->data->ui->get("noSlot");
- }
- else $message=$ui[$status];
+ } else {
+ $message=$ui[$status];
 }
-else $message=$d13->data->ui->get("accessDenied");
-if ((isset($status))&&($status=='error')) $d13->db->query('rollback');
-else $d13->db->query('commit');
+} else {
+	$message=$d13->data->ui->get("accessDenied");
+}
+
+if ((isset($status))&&($status=='error')) {
+	$d13->db->query('rollback');
+} else {
+	$d13->db->query('commit');
+}
 
 //----------------------------------------------------------------------------------------
 // Setup Template Variables
@@ -250,8 +255,8 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
 	switch ($_GET['action']) {
 		// - - - - 
 		case 'get':
-			$module = d13_module_factory::create($mid, $sid, $module['type'], $node);
-			$d13->tpl->render_page($module->getTemplate(), $module->getTemplateVariables());
+			$the_module = d13_module_factory::create($node->modules[$_GET['slotId']]['module'], $_GET['slotId'], $module['type'], $node);
+			$d13->tpl->render_page($the_module->getTemplate(), $the_module->getTemplateVariables());
 			break;
 		
   		//- - - - - 

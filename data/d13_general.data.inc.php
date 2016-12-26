@@ -72,30 +72,33 @@ $game['factions']=array(
  0=>array(
 	'active'=>true,
 	'costs'=>array(
-   		'move'		=>array(0=>array('resource'=>0, 'value'=>100)),
-   		'set'		=>array(0=>array('resource'=>0, 'value'=>100)),
+   		'move'		=>array(0=>array('resource'=>0, 'value'=>100 )),
+   		'set'		=>array(0=>array('resource'=>0, 'value'=>100 )),
    		'alliance'	=>array(0=>array('resource'=>0, 'value'=>2000)),
-   		'combat'	=>array(0=>array('resource'=>0, 'value'=>500))),
-   		'storage'	=>array(0=>5000, 1=>5000, 2=>5000, 3=>100, 4=>150, 5=>200)),
-		
+   		'combat'	=>array(0=>array('resource'=>0, 'value'=>500 ))
+   	)
+   		#'storage'	=>array(0=>5000, 1=>5000, 2=>5000, 3=>100, 4=>150, 5=>200)),
+	),
  1=>array(
  	'active'=>false,
 	'costs'=>array(
-   		'move'		=>array(0=>array('resource'=>0, 'value'=>100)),
-   		'set'		=>array(0=>array('resource'=>0, 'value'=>100)),
+   		'move'		=>array(0=>array('resource'=>0, 'value'=>100 )),
+   		'set'		=>array(0=>array('resource'=>0, 'value'=>100 )),
    		'alliance'	=>array(0=>array('resource'=>0, 'value'=>2000)),
-   		'combat'	=>array(0=>array('resource'=>0, 'value'=>500))),
-   		'storage'	=>array(0=>6000, 1=>6000, 2=>6000, 3=>100, 4=>150, 5=>150)),
-		
+   		'combat'	=>array(0=>array('resource'=>0, 'value'=>500 ))
+   	)
+   		#'storage'	=>array(0=>6000, 1=>6000, 2=>6000, 3=>100, 4=>150, 5=>150)),
+	),
  2=>array(
  	'active'=>false,
 	'costs'=>array(
-   		'move'		=>array(0=>array('resource'=>0, 'value'=>100)),
-   		'set'		=>array(0=>array('resource'=>0, 'value'=>100)),
+   		'move'		=>array(0=>array('resource'=>0, 'value'=>100 )),
+   		'set'		=>array(0=>array('resource'=>0, 'value'=>100 )),
    		'alliance'	=>array(0=>array('resource'=>0, 'value'=>2000)),
-   		'combat'	=>array(0=>array('resource'=>0, 'value'=>500))),
-   		'storage'	=>array(0=>4000, 1=>4000, 2=>4000, 3=>100, 4=>150, 5=>250)),
-		
+   		'combat'	=>array(0=>array('resource'=>0, 'value'=>500 ))
+   	)
+   		#'storage'	=>array(0=>4000, 1=>4000, 2=>4000, 3=>100, 4=>150, 5=>250)),
+	)	
 );
 
 //----------------------------------------------------------------------------------------

@@ -50,23 +50,29 @@ class d13_data {
 		$this->resources 	= new d13_collection($this->record_sort($d13_resources, "priority"));
 		
 		$tmp_modules = array();
-		foreach ($game['modules'] as $faction) {
-			$tmp_modules[] = $this->record_sort($faction, "priority");
+		foreach ($game['modules'] as $object) {
+			$tmp_modules[] = $this->record_sort($object, "priority");
 		}
 		$this->modules 		= new d13_collection($tmp_modules);
 		
 		$tmp_components = array();
-		foreach ($game['components'] as $faction) {
-			$tmp_components[] = $this->record_sort($faction, "priority");
+		foreach ($game['components'] as $object) {
+			$tmp_components[] = $this->record_sort($object, "priority");
 		}
 		$this->components 	= new d13_collection($tmp_components);
 		
 		$tmp_technologies = array();
-		foreach ($game['technologies'] as $faction) {
-			$tmp_technologies[] = $this->record_sort($faction, "priority");
+		foreach ($game['technologies'] as $object) {
+			$tmp_technologies[] = $this->record_sort($object, "priority");
 		}
 		$this->technologies = new d13_collection($tmp_technologies);
-
+		
+		$tmp_units = array();
+		foreach ($game['units'] as $object) {
+			$tmp_units[] = $this->record_sort($object, "priority");
+		}
+		$this->units = new d13_collection($tmp_units);
+		
 		$this->bw = new d13_collection($bw);
 		$this->gl = new d13_collection($gl);
 		$this->ui = new d13_collection($ui);
@@ -108,33 +114,28 @@ class d13_data {
 }
 
 //----------------------------------------------------------------------------------------
-// d13_collection
+// d13_data
 // @ 
 // 
 //----------------------------------------------------------------------------------------
 class d13_collection implements IteratorAggregate {
-
-    private $collection = array();
+	
+    private $data = array();
     
     public function __construct($data) {
-    	$this->add($data);
+    	$this->data = $data;
     }
-    
-    private function add($data) {
-        $this->collection = $data;
-    }
- 
+
     public function getIterator() {
-        return new ArrayIterator($this->collection);
+        return new ArrayIterator($this->data);
     }
     
-    public function getbyid($field, $id, $dimension=NULL) {
-		if ($dimension) {
-			$array = $this->collection[$dimension];
+    public function getbyid($field, $id, $dimension=-1) {
+		if ($dimension > -1) {
+			$array = $this->data[$dimension];
 		} else {
-			$array = $this->collection;
+			$array = $this->data;
 		}
-		
 		foreach ($array as $entry) {
 			if ($entry['id'] == $id) {
 				if (isset($entry[$field])) {
@@ -144,26 +145,56 @@ class d13_collection implements IteratorAggregate {
 				}
 			}
 		}
+		return  NULL;
  	}
- 	
- 	public function getcount() {
- 		return count($this->collection);
- 	}
- 	
-    public function get($key1, $key2=NULL, $key3=NULL) {
-    	if (empty($key3) && empty($key2)) {
-    		if (isset($this->collection[$key1])){
-            	return $this->collection[$key1];
+
+ 	//-- messy, refactor
+
+ 	public function getcount($key1=-1, $key2=-1, $key3=-1) {
+    	if ($key1==-1 && $key2==-1 && $key3==-1) {
+    		if (isset($this->data)){
+    			return count($this->data);
         	}
         	return NULL;
-    	} else if (empty($key3)) {
-    		if (isset($this->collection[$key1][$key2])){
-            	return $this->collection[$key1][$key2];
+    	} else if ($key2==-1 && $key3==-1) {
+    		if (isset($this->data[$key1])){
+            	return count($this->data[$key1]);
+        	}
+        	return NULL;
+    	} else if ($key3==-1) {
+    		if (isset($this->data[$key1][$key2])){
+            	return count($this->data[$key1][$key2]);
         	}
         	return NULL;
     	} else {
-    		if (isset($this->collection[$key1][$key2][$key3])){
-            	return $this->collection[$key1][$key2][$key3];
+    		if (isset($this->data[$key1][$key2][$key3])){
+            	return count($this->data[$key1][$key2][$key3]);
+        	}
+        	return NULL;
+    	}
+    	return NULL;
+    }
+    
+ 	//-- messy, refactor
+    public function get($key1, $key2=-1, $key3=-1, $key4=-1) {
+    	if ($key4==-1 && $key3==-1 && $key2==-1) {
+    		if (isset($this->data[$key1])){
+            	return $this->data[$key1];
+        	}
+        	return NULL;
+        } else if ($key4==-1 && $key3==-1) {
+    		if (isset($this->data[$key1][$key2])){
+            	return $this->data[$key1][$key2];
+        	}
+        	return NULL;
+    	} else if ($key4==-1) {
+    		if (isset($this->data[$key1][$key2][$key3])){
+            	return $this->data[$key1][$key2][$key3];
+        	}
+        	return NULL;
+    	} else {
+    		if (isset($this->data[$key1][$key2][$key3][$key4])){
+            	return $this->data[$key1][$key2][$key3][$key4];
         	}
         	return NULL;
     	}

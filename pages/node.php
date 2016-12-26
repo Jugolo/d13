@@ -71,7 +71,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
     {
      if ((isset($_POST['name'], $_POST['focus']))&&($_POST['name']))
       if (in_array($_POST['focus'], array('hp', 'armor', 'damage')))
-       if ($node->data['user']==$_SESSION[CONST_PREFIX.'User']['id'])
+       if ($node->checkOptions('nodeEdit') &&  $node->data['user']==$_SESSION[CONST_PREFIX.'User']['id'])
        {
         $oldName=$node->data['name'];
         $oldFocus=$node->data['focus'];
@@ -133,27 +133,33 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 	}
 	break;
 
-  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = REMOVE NODE
-  case 'remove':
-   if (isset($_GET['nodeId']))
-   {
-    $node=new node();
-    $status=$node->get('id', $_GET['nodeId']);
-    if ($status=='done')
-    {
-     if ((isset($_GET['go']))&&($_GET['go']))
-      if ($node->data['user']==$_SESSION[CONST_PREFIX.'User']['id'])
-      {
-       $status=node::remove($_GET['nodeId']);
-       if ($status=='done') header('location: node.php?action=list');
-       else $message=$d13->data->ui->get($status);
-      }
-      else $message=$d13->data->ui->get("accessDenied");
-    }
-    else $message=$d13->data->ui->get($status);
-   }
-   else $message=$d13->data->ui->get("insufficientData");
-  break;
+	//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = REMOVE NODE
+	case 'remove':
+		if (isset($_GET['nodeId'])) {
+		
+			$node=new node();
+			$status=$node->get('id', $_GET['nodeId']);
+			
+			if ($status=='done') {
+				if ((isset($_GET['go'])) && ($_GET['go'])) {
+					if ($node->checkOptions('nodeRemove') && $node->data['user'] == $_SESSION[CONST_PREFIX.'User']['id']) {
+						$status=node::remove($_GET['nodeId']);
+						if ($status=='done') {
+							header('location: node.php?action=list');
+						} else {
+							$message=$d13->data->ui->get($status);
+						}
+					} else {
+						$message=$d13->data->ui->get("accessDenied");
+					}
+				} else {
+					$message=$d13->data->ui->get($status);
+				}
+			} else {
+				$message=$d13->data->ui->get("insufficientData");
+			}
+		}
+  		break;
   
   //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = MOVE NODE
   case 'move':
@@ -164,7 +170,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
     if ($status=='done')
     {
      if (isset($_POST['x'], $_POST['y']))
-      if ($node->data['user']==$_SESSION[CONST_PREFIX.'User']['id'])
+      if ($node->checkOptions('nodeMove') && $node->data['user']==$_SESSION[CONST_PREFIX.'User']['id'])
        if ($game['factions'][$node->data['faction']]['costs']['move'][0]['resource']>-1)
         $message=$d13->data->ui->get($node->move($_POST['x'], $_POST['y']));
        else $message=$d13->data->ui->get("nodeMoveDisabled");
@@ -440,21 +446,22 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 	  
 	//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = SET NODE
 	case 'set':
-		if ($game['options']['nodeEdit']) {
 		if (isset($node->data['id'])) {
-			$costData='';
-			foreach ($game['factions'][$node->data['faction']]['costs']['set'] as $key=>$cost) {
-				$costData.='<div class="cell">'.$cost['value'].'</div><div class="cell"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$cost['resource'].'.png" title="'.$gl["resources"][$cost['resource']]["name"].'"></div>';
+			if ($node->checkOptions('nodeRemove')) {
+				$costData='';
+				foreach ($game['factions'][$node->data['faction']]['costs']['set'] as $key=>$cost) {
+					$costData.='<div class="cell">'.$cost['value'].'</div><div class="cell"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$cost['resource'].'.png" title="'.$gl["resources"][$cost['resource']]["name"].'"></div>';
+				}
+				$selectedFocus=array('hp'=>'', 'damage'=>'', 'armor'=>'');
+				$selectedFocus[$node->data['focus']]=' selected';
+				
+				$tvars['tvar_costData'] 		= $costData;
+				$tvars['tvar_selFocusHP'] 		= $selectedFocus['hp'];
+				$tvars['tvar_selFocusDamage'] 	= $selectedFocus['damage'];
+				$tvars['tvar_selFocusArmor'] 	= $selectedFocus['armor'];
+				
+				$page = "node.set";
 			}
-			$selectedFocus=array('hp'=>'', 'damage'=>'', 'armor'=>'');
-			$selectedFocus[$node->data['focus']]=' selected';
-			
-			$tvars['tvar_costData'] 		= $costData;
-			$tvars['tvar_selFocusHP'] 		= $selectedFocus['hp'];
-			$tvars['tvar_selFocusDamage'] 	= $selectedFocus['damage'];
-			$tvars['tvar_selFocusArmor'] 	= $selectedFocus['armor'];
-		}
-		$page = "node.set";
 		}
 		break;
 		
@@ -503,26 +510,26 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 		$page = "node.random";
 		break;
 	
-  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = REMOVE NODE
-  	case 'remove':
-  		if ($game['options']['nodeRemove']) {
-			if (isset($node->data['id'])) {
+	//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = REMOVE NODE
+	case 'remove':
+		if (isset($node->data['id'])) {
+			if ($node->checkOptions('nodeRemove')) {
 				$page = "node.remove";
 			}
 		}
 		break;
 		
   //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = MOVE NODE
-  	case 'move':
-  		if ($game['options']['nodeMove']) {
-			if (isset($node->data['id'])) {
+	case 'move':
+		if (isset($node->data['id'])) {
+			if ($node->checkOptions('nodeMove')) {
 				$costData='';
 				foreach ($game['factions'][$node->data['faction']]['costs']['move'] as $key=>$cost) {
 					$costData.='<div class="cell">'.$cost['value'].'</div><div class="cell"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$cost['resource'].'.png" title="'.$gl["resources"][$cost['resource']]["name"].'"></div>';
 				}
 				$tvars['tvar_costData'] = $costData;
+				$page = "node.move";
 			}
-			$page = "node.move";
 		}
 		break;
   

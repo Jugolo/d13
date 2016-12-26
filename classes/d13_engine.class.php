@@ -15,14 +15,15 @@
 
 class d13 {
 
-	public $db, $tpl, $flags, $session, $controller, $data, $profile;
+	public $db, $tpl, $flags, $session, $router, $data, $profile, $logger;
 	
 	public function __construct() {
 		$this->db 			= new d13_db();
 		$this->tpl			= new d13_tpl();
 		$this->flags 		= new d13_flags();
-		$this->controller 	= new d13_controller();
+		$this->router 	= new d13_router();
 		$this->session		= new d13_session();
+		$this->logger		= new d13_logger();
 		
 		//- - - - - SETUP DUMMY USER (when not logged in)
 		if (!isset($_SESSION[CONST_PREFIX.'User']['id'])) {

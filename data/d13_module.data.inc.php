@@ -342,16 +342,19 @@ $game['modules']=array(
     	3=>array('active'=>true, 'type'=>'technologies', 'id'=>4, 'level'=>1)
 	),
 	'options'=>array(
+		'allianceAdd'=>true,
 		'allianceGet'=>true,
 		'allianceEdit'=>true,
 		'allianceRemove'=>true,
 		'allianceInvite'=>true,
-		'allianceWar'=>true
+		'allianceWar'=>true,
+		'alliancePeace'=>true,
+		'allianceRemoveMember'=>true
 	),
 	'upgrades'=>array(113)
   ),
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Townhall
-  14=>array('id'=>14, 'active'=>true, 'priority'=>14, 'type'=>'command', 'maxLevel'=>1, 'inputResource'=>3, 'ratio'=>0.1, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
+  14=>array('id'=>14, 'active'=>true, 'priority'=>14, 'type'=>'command', 'maxLevel'=>2, 'inputResource'=>3, 'ratio'=>0.1, 'maxInput'=>10, 'duration'=>5, 'salvage'=>0.5, 'removeDuration'=>1, 'maxInstances'=>1,
 	'images'=>array(
 		0=>array('level'=>0, 'image'=>'module_townhall_0.png'),
 	),
@@ -440,6 +443,7 @@ $game['modules']=array(
 	),
 	'upgrades'=>array(118),
 	'options'=>array(
+		'combatCancel'=>true,
 		'combatRaid'=>true
 	)
   ),

@@ -240,7 +240,9 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>250)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'ratio', 'value'=>0.5),
+			1=>array('stat'=>'maxInput', 'value'=>1),
+			2=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -252,7 +254,9 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'ratio', 'value'=>0.5),
+			1=>array('stat'=>'maxInput', 'value'=>1),
+			2=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -264,7 +268,9 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'ratio', 'value'=>0.5),
+			1=>array('stat'=>'maxInput', 'value'=>1),
+			2=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 	
@@ -276,7 +282,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -288,7 +294,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -300,7 +306,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 	
@@ -312,7 +318,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -324,7 +330,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -336,7 +342,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),	
 	
@@ -348,7 +354,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),	
 	
@@ -360,7 +366,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -372,7 +378,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -384,7 +390,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -396,7 +402,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -408,7 +414,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -420,7 +426,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>225)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		),
 		'stats'=>array(
 			0=>array('stat'=>'all', 'value'=>2)
@@ -435,7 +441,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -447,7 +453,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 
@@ -459,7 +465,7 @@ $d13_upgrades = array(
     		2=>array('resource'=>2, 'factor'=>1.5, 'value'=>200)
    		),
 		'attributes'=>array(
-			0=>array('stat'=>'all', 'value'=>2)
+			0=>array('stat'=>'duration', 'value'=>0.5)
 		)
 	),
 

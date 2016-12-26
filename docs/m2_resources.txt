@@ -1,0 +1,98 @@
+d13 - open-source strategy browser game engine
+==========================================================================================
+
+News, Updates & Latest version available at Sourceforge:
+
+https://sourceforge.net/projects/d13/
+
+Please report bugs and request features using the Sourceforge ticket system:
+
+https://sourceforge.net/p/d13/tickets/
+
+CREDITS
+------------------------------------------------------------------------------------------
+2008-2013 Andrei Busuioc (Devman)
+2015-2016 Tobias Strunz (Fhizban)
+
+EDITING RESOURCES
+------------------------------------------------------------------------------------------
+
+Editing the resources available in your game is the easiest thing to do about editing game data. Locate the d13_resource.data.inc.php file inside your "data" directory and open it in the text editor of your choice.
+
+Array Entries
+All data files consist of a list of entries represented by a huge, multidimensional array.
+You should be acquainted to editing arrays in PHP and may not break the array structure.
+So keep an eye on all the commas, brackets and so on. As a word of warning: You should NOT
+add new entries while your game is active and running as it will break the game. Always
+create as many entries as you might need BEFORE opening up your gameworld. If required,
+you can add padded entries so you have some room to work with later. Finally, I would
+strongly recommend to limit yourself to an entry count in the lower hundreds per faction,
+per object type in the game (as a rule of thumb a maximum of about 200 units per faction,
+200 techs per faction, 200 buildings per faction and so on).
+
+Resource Structure
+The structure for the resource array is the game for each resource in the game and all
+fields must be present. If you forget a field, it will break your game.
+
+ID
+The unique ID of your resource represented as an Integer. This value is not visible to the
+player and is used to get the name and description of a resource from the language file.
+In addition, the ID acts as a unique identifier to locate the resource throughout the code.
+No duplicate entries.
+
+Image
+This is the file name + the suffix of an image inside your templates/images/resources directory.
+Image size should be at least 24 pix and is scaled down by the engine if you use larger images.
+PNGs are recommended but you can also use JPGs and/or GIFs - each one features drawbacks and
+advantages. Duplicate entries possible.
+
+Active
+A boolean value that must be stated using TRUE or FALSE. By using this fields value you can
+de-activate a resource and hide it from all players. This allows you to add padding to your
+resources list in order to expand it when you update your game. You can also remove resources
+that way for balancing reasons. Note that the resource is still there and affects everything
+related to the engine, it is just not visible to any player.
+
+Priority
+This field allows you to sort your resources displayed on the screen. Resources are shown
+in the town screen from left to right, beginning with lowest priority number to the highest.
+Other lists sort resources the same way. This is just an optical thing.
+
+Type
+A string value that can either be "dynamic" or "static". Dynamic resources act like currencies
+(gold, mana etc.) found in most games: Players can gain them, store a limited amount of them
+and spend them in order to buy something. Static resources on the other hand act like a 
+measure or gauge (like energy in oGame or the population limit in Warcraft): It cannot be
+increased or modified, neither does it get depleted. It is recommended to use mostly "dynamic"
+resources.
+
+Visible
+A boolean value that is either TRUE or FALSE. This only affects the resource list in the town
+view. If your game features many resources, you can hide some and show only the most important
+ones to the players. Note that if you set visible to false, the resource will still be visible
+in other lists (like the inventory of a building and so on). This is just an optical thing.
+
+Storage
+This is the basic storage capability of a players town. The value you enter here, is the maximum
+resource value a player can store without any additional building or technology. It is also the
+starting value for each resource. it has been decided to make all these storage values equal among
+all factions. You can vary them by creating storage buildings with different capabilities to make
+factions storage the various resources at different efficiency.
+
+Carryable (not implemented yet)
+A boolean value that is either TRUE or FALSE. When you raid an opponents town, your surviving
+troops will carry a certain amount of resources home. Only resources with carrayble set to true
+can be carried that way. This allows you to have some resources that can not be stolen from other
+players at all.
+
+Rarity (not implemented yet)
+A numeric integer value that represents the rarity of the resource. In the future you will be
+able to find random loot. The rarer a resource is, the more seldom it is found when acquiring
+random loot. To be explained later in detail.
+
+Using Resources the creative Way
+Get creative with resources! There is way more to do with this object type than just Gold, Mana,
+Deuterium (whatever). It should be noted that resources are also required in order to attack your
+opponents, move your town, create a new town (without conquering one), resources can furthermore
+be used as input for buildings and so on. Many games will only feature a handful of resources,
+but you can go crazy with them and create dozens if you desire.

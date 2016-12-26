@@ -24,103 +24,123 @@ $message = "";
 $d13->db->query('start transaction');
 
 if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId'])) {
+
 	$node=new node();
 	if ($node->get('id', $_GET['nodeId'])=='done') {
 	
-  	$flags=$d13->flags->get('name');
-  	$node->checkAll(time());
-  	switch ($_GET['action']) {
-  
-  	//- - - - - 
-	case 'add':
-		if ($flags['combat']) {
-			if (isset($_POST['name'], $_POST['attackerGroupUnitIds'], $_POST['attackerGroups'])) {
-     
-				foreach ($_POST as $key=>$value) {
-				if (!in_array($key, array('name', 'attackerGroupUnitIds', 'attackerGroups', 'attackerFocus'))) {
-					$_POST[$key]=misc::clean($value, 'numeric');
-				} else if (!in_array($key, array('name', 'attackerFocus'))) {
-					$nr = count($_POST[$key]);
-					for ($i=0; $i<$nr; $i++) {
-						$_POST[$key][$i] = misc::clean($_POST[$key][$i], 'numeric');
-					}
-				} else {
-					$_POST[$key]=misc::clean($value);
-       			}
-       		}
-       		
-      			$target=new node();
-      			if ($target->get('name', $_POST['name']) == 'done') {
-    			$targetUser=new user();
-       			if ($targetUser->get('id', $target->data['user']) == 'done') {
-
-					$pass = true;
-        			$alliance = new alliance();
-        			$targetAlliance = new alliance();
+  		$flags=$d13->flags->get('name');
+  		$node->checkAll(time());
 		
-					if (($targetAlliance->get('id', $targetUser->data['alliance'])=='done') && ($alliance->get('id', $_SESSION[CONST_PREFIX.'User']['alliance'])=='done')) {
-        				$war=$alliance->getWar($targetAlliance->data['id']);
-        				if (isset($war['type'])) {
-         					$pass = true;
-         				} else {
-         					$pass = false;
-         					$message=$d13->data->ui->get("noWar");
-         				}
-         			}
-         			
-         			if ($pass) {
-						$gotStatic = false;
-						$data = array();
-						$data['input']['attacker']['focus'] = $_POST['attackerFocus'];
-						$data['input']['attacker']['faction'] = $node->data['faction'];
-						foreach ($_POST['attackerGroupUnitIds'] as $key=>$unitId) {
-							$data['input']['attacker']['groups'][$key]=array('unitId'=>$unitId, 'quantity'=>$_POST['attackerGroups'][$key]);
-							if (!$game['units'][$node->data['faction']][$unitId]['speed']) {
-								$gotStatic=true;
+		switch ($_GET['action']) {
+  
+		//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+		case 'add':
+			if ($flags['combat']) {
+				if ($node->checkOptions('combatRaid')) {
+
+					if (isset($_POST['name'], $_POST['attackerGroupUnitIds'], $_POST['attackerGroups'])) {
+	 
+						foreach ($_POST as $key=>$value) {
+							if (!in_array($key, array('name', 'attackerGroupUnitIds', 'attackerGroups', 'attackerFocus'))) {
+								$_POST[$key]=misc::clean($value, 'numeric');
+							} else if (!in_array($key, array('name', 'attackerFocus'))) {
+								$nr = count($_POST[$key]);
+								for ($i=0; $i<$nr; $i++) {
+									$_POST[$key][$i] = misc::clean($_POST[$key][$i], 'numeric');
+								}
+							} else {
+								$_POST[$key]=misc::clean($value);
 							}
 						}
-						if (!$gotStatic) {
-							$status=$node->addCombat($target->data['id'], $data);
-						} else {
-							$status='cannotSendStatic';
-						}
-						$message=$ui[$status];
-					}
+			
+						$target=new node();
+						if ($target->get('name', $_POST['name']) == 'done') {
+						$targetUser=new user();
+						if ($targetUser->get('id', $target->data['user']) == 'done') {
 
-       			} else {
-        			$message=$d13->data->ui->get("noUser");
-        		}
-    		} else {
-      				$message=$d13->data->ui->get("noNode");
-      			}
-    	
-    	
-    	
-    		}
-    	} else {
-			$message=$d13->data->ui->get("featureDisabled");
-   		}
-   		break;
+							$pass = true;
+							$alliance = new alliance();
+							$targetAlliance = new alliance();
+		
+							if (($targetAlliance->get('id', $targetUser->data['alliance'])=='done') && ($alliance->get('id', $_SESSION[CONST_PREFIX.'User']['alliance'])=='done')) {
+								$war=$alliance->getWar($targetAlliance->data['id']);
+								if (isset($war['type'])) {
+									$pass = true;
+								} else {
+									$pass = false;
+									$message=$d13->data->ui->get("noWar");
+								}
+							}
+					
+							if ($pass) {
+								$gotStatic = false;
+								$data = array();
+								$data['input']['attacker']['focus'] = $_POST['attackerFocus'];
+								$data['input']['attacker']['faction'] = $node->data['faction'];
+								foreach ($_POST['attackerGroupUnitIds'] as $key=>$unitId) {
+									$data['input']['attacker']['groups'][$key]=array('unitId'=>$unitId, 'quantity'=>$_POST['attackerGroups'][$key]);
+									if (!$game['units'][$node->data['faction']][$unitId]['speed']) {
+										$gotStatic=true;
+									}
+								}
+								if (!$gotStatic) {
+									$status=$node->addCombat($target->data['id'], $data);
+								} else {
+									$status='cannotSendStatic';
+								}
+								$message=$ui[$status];
+							}
+
+						} else {
+							$message=$d13->data->ui->get("noUser");
+						}
+					} else {
+						$message=$d13->data->ui->get("noNode");
+					}
+		
+		
+		
+					}
+			
+				} else {
+					$message=$d13->data->ui->get("accessDenied");
+				}
+			} else {
+				$message=$d13->data->ui->get("featureDisabled");
+			}
+			break;
    
-   //- - - - - 
-   case 'cancel':
-    if (isset($_GET['combatId']))
-    {
-     $combat=node::getCombat($_GET['combatId']);
-     if (isset($combat['id']))
-      if ($combat['sender']==$node->data['id'])
-      {
-       $status=$node->cancelCombat($combat['id']);
-       if ($status=='done') header('Location: node.php?action=get&nodeId='.$node->data['id']);
-       else $message=$ui[$status];
-      }
-      else $message=$d13->data->ui->get("accessDenied");
-     else $message=$d13->data->ui->get("noCombat");
-    }
-   break;
-   
-  }
-  
+		//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+		case 'cancel':
+   		
+			if ($node->checkOptions('combatCancel')) {
+				if (isset($_GET['combatId'])) {
+					$combat=node::getCombat($_GET['combatId']);
+					if (isset($combat['id'])) {
+						if ($combat['sender']==$node->data['id']) {
+							$status=$node->cancelCombat($combat['id']);
+							if ($status=='done') {
+								header('Location: node.php?action=get&nodeId='.$node->data['id']);
+							} else {
+								$message=$ui[$status];
+							}
+						} else {
+							$message=$d13->data->ui->get("accessDenied");
+						}
+					} else {
+						$message=$d13->data->ui->get("noCombat");
+					}
+				} else {
+					$message=$d13->data->ui->get("noCombat");
+				}
+			} else {
+				$message=$d13->data->ui->get("accessDenied");
+			}
+			break;
+
+		//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+	  }
+  		
 	} else {
 		$message=$d13->data->ui->get("noNode");
 	}
@@ -128,7 +148,7 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'], $_GET['nodeId']
 	$message=$d13->data->ui->get("insufficientData");
 }
 
-if ((isset($status))&&($status=='error')) {
+if ((isset($status)) && ($status=='error')) {
 	$d13->db->query('rollback');
 } else {
 	$d13->db->query('commit');

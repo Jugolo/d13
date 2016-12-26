@@ -22,23 +22,40 @@ global $d13, $ui, $gl, $game;
 $message = NULL;
 
 $d13->db->query('start transaction');
-if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
-{
- foreach ($_POST as $key=>$value) $_POST[$key]=misc::clean($value);
- foreach ($_GET as $key=>$value) $_GET[$key]=misc::clean($value);
- $alliance=new alliance();
- $status=$alliance->get('id', $_SESSION[CONST_PREFIX.'User']['alliance']);
+
+if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
+
+	#foreach ($_POST as $key=>$value) $_POST[$key]=misc::clean($value);
+	#foreach ($_GET as $key=>$value) $_GET[$key]=misc::clean($value);
+ 
+	$node=new node();
+	$status=$node->get('id', $_GET['nodeId']);
+	
+	$alliance=new alliance();
+	$status=$alliance->get('id', $_SESSION[CONST_PREFIX.'User']['alliance']);
+ 
  switch ($_GET['action'])
  {
-  case 'get':
-   if ($_SESSION[CONST_PREFIX.'User']['alliance'])
-   {
-    if ($status=='done') $alliance->getAll();
-    else $message=$ui[$status];
-   }
-   else $invitations=alliance::getInvitations('user', $_SESSION[CONST_PREFIX.'User']['id']);
-  break;
+ 	//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+	case 'get':
+	if ($node->checkOptions('allianceGet')) {
+		if ($_SESSION[CONST_PREFIX.'User']['alliance']) {
+			if ($status=='done') {
+				$alliance->getAll();
+			} else {
+				$message=$ui[$status];
+			}
+		} else {
+			$invitations=alliance::getInvitations('user', $_SESSION[CONST_PREFIX.'User']['id']);
+		}
+	} else {
+		$message=$d13->data->ui->get("accessDenied");
+	}
+	break;
+  
+  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
   case 'set':
+  if ($node->checkOptions('allianceSet')) {
    $nodes=node::getList($_SESSION[CONST_PREFIX.'User']['id']);
    $nodeList='';
    foreach ($nodes as $node)
@@ -61,8 +78,14 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
      }
      else $message=$d13->data->ui->get("accessDenied");
     else $message=$d13->data->ui->get("insufficientData");
+    } else {
+    	$message=$d13->data->ui->get("accessDenied");
+    }
   break;
+  
+  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
   case 'add':
+  if ($node->checkOptions('allianceAdd')) {
    if ($status=='noAlliance')
    {
     $nodes=node::getList($_SESSION[CONST_PREFIX.'User']['id']);
@@ -98,8 +121,14 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
     else $message=$d13->data->ui->get("noNode");
    }
    else $message=$d13->data->ui->get("allianceSet");
+   } else {
+    	$message=$d13->data->ui->get("accessDenied");
+    }
   break;
+  
+  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
   case 'remove':
+  	if ($node->checkOptions('allianceRemove')) {
    if ((isset($_GET['go']))&&($_GET['go']))
     if ($_SESSION[CONST_PREFIX.'User']['alliance'])
     {
@@ -118,8 +147,14 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
      else $message=$ui[$status];
     }
     else $message=$d13->data->ui->get("insufficientData");
+    } else {
+    	$message=$d13->data->ui->get("accessDenied");
+    }
   break;
+  
+  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
   case 'addInvitation':
+  	if ($node->checkOptions('allianceInvite')) {
    if (isset($_POST['name']))
     if ($_POST['name']!='')
      if ($status=='done')
@@ -150,7 +185,12 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
       else $message=$d13->data->ui->get("accessDenied");
      else $message=$d13->data->ui->get("noAlliance");
     else $message=$d13->data->ui->get("insufficientData");
+    } else {
+    	$message=$d13->data->ui->get("accessDenied");
+    }
   break;
+  
+  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
   case 'removeInvitation':
    if (isset($_GET['alliance'], $_GET['user']))
    {
@@ -167,6 +207,8 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
    }
    else $message=$d13->data->ui->get("insufficientData");
   break;
+  
+  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
   case 'acceptInvitation':
    if (isset($_GET['alliance'], $_GET['user']))
     if ($_SESSION[CONST_PREFIX.'User']['id']==$_GET['user'])
@@ -178,7 +220,10 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
     else $message=$d13->data->ui->get("accessDenied");
    else $message=$d13->data->ui->get("insufficientData");
   break;
+  
+  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
   case 'removeMember':
+  	if ($node->checkOptions('allianceRemoveMember')) {
    if ($status=='done')
     if (isset($_GET['user']))
      if ((($alliance->data['user']==$_SESSION[CONST_PREFIX.'User']['id'])&&($_GET['user']!=$_SESSION[CONST_PREFIX.'User']['id']))||(($alliance->data['user']!=$_SESSION[CONST_PREFIX.'User']['id'])&&($_GET['user']==$_SESSION[CONST_PREFIX.'User']['id'])))
@@ -194,8 +239,14 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
      else $message=$d13->data->ui->get("accessDenied");
     else $message=$d13->data->ui->get("insufficientData");
    else $message=$d13->data->ui->get("noAlliance");
+   } else {
+    	$message=$d13->data->ui->get("accessDenied");
+    }
   break;
+  
+  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
   case 'addWar':
+  	if ($node->checkOptions('allianceWar')) {
    if (isset($_POST['name']))
     if ($_POST['name']!='')
      if ($status=='done')
@@ -234,8 +285,14 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
       else $message=$d13->data->ui->get("accessDenied");
      else $message=$d13->data->ui->get("noAlliance");
     else $message=$d13->data->ui->get("insufficientData");
+    } else {
+    	$message=$d13->data->ui->get("accessDenied");
+    }
   break;
+  
+  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
   case 'proposePeace':
+  	if ($node->checkOptions('alliancePeace')) {
    if (isset($_GET['recipient']))
     if ($status=='done')
      if ($alliance->data['user']==$_SESSION[CONST_PREFIX.'User']['id'])
@@ -252,7 +309,12 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
      else $message=$d13->data->ui->get("accessDenied");
     else $message=$d13->data->ui->get("noAlliance");
    else $message=$d13->data->ui->get("insufficientData");
+   } else {
+    	$message=$d13->data->ui->get("accessDenied");
+    }
   break;
+  
+  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
   case 'removePeace':
    if (isset($_GET['recipient']))
     if ($status=='done')
@@ -271,6 +333,8 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action']))
     else $message=$d13->data->ui->get("noAlliance");
    else $message=$d13->data->ui->get("insufficientData");
   break;
+  
+  //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
   case 'acceptPeace':
    if (isset($_GET['sender'], $_GET['recipient']))
     if ($status=='done')
@@ -339,10 +403,13 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 
  switch ($_GET['action'])
  {
-  case 'get':
-  		$html = "";
-	   if (isset($alliance->data['id']))
-	   {
+
+	//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = GET ALLIANCE
+	case 'get':
+		$html = "";
+		if ($node->checkOptions('allianceGet')) {
+			if (isset($alliance->data['id']))
+	   		{
 		if ($alliance->members)
 		{
 		 $html .= '<div class="section"> -> {{tvar_ui_members}}</div>';
@@ -388,8 +455,8 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 		  }
 		}
 	   }
-	   else
-	   {
+	   		else
+	   		{
 		$html .=  '<div class="section"><a class="external" href="index.php?p=alliance&action=add">{{tvar_ui_add}}</a></div>';
 		if ($invitations)
 		{
@@ -411,52 +478,73 @@ if (isset($_SESSION[CONST_PREFIX.'User']['id'], $_GET['action'])) {
 		 }
 		}
 	   }
-	   $tvars['tvar_allianceHTML'] = $html;
-	   $page = "alliance.get";
-	   break;
-  
-  case 'set':
-	   if (isset($alliance->data['id'])) {
-		$costData='';
-		foreach ($game['factions'][$node->data['faction']]['costs']['alliance'] as $key=>$cost) {
-		  $costData.='<div class="cell">'.$cost['value'].'</div><div class="cell"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$cost['resource'].'.png" title="'.$gl["resources"][$cost['resource']]["name"].'"></div>';
+	   		$tvars['tvar_allianceHTML'] = $html;
+	   		$page = "alliance.get";
 		}
-		$tvars['tvar_nodeList'] 	= $nodeList;
-		$tvars['tvar_costData'] 	= $costData;
-		$tvars['tvar_allianceName'] = $alliance->data['name'];
-		$tvars['tvar_nodeID'] 		= $node->data['id'];
-		$tvars['tvar_nodeName'] 	= $node->data['name'];
-	   }
-	   $page = "alliance.set";
-	   break;
-  
-  case 'add':
-	   if (isset($nodeList)) {
-		$costData='';
-		foreach ($game['factions'][$node->data['faction']]['costs']['alliance'] as $key=>$cost) {
-			$costData.='<div class="cell">'.$cost['value'].'</div><div class="cell"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$cost['resource'].'.png" title="'.$gl["resources"][$cost['resource']]["name"].'"></div>';
+		break;
+	   
+	//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = SET ALLIANCE
+	case 'set':
+		if (isset($alliance->data['id'])) {
+			if ($node->checkOptions('allianceSet')) {
+			
+				$costData='';
+				foreach ($game['factions'][$node->data['faction']]['costs']['alliance'] as $key=>$cost) {
+		  			$costData.='<div class="cell">'.$cost['value'].'</div><div class="cell"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$cost['resource'].'.png" title="'.$gl["resources"][$cost['resource']]["name"].'"></div>';
+				}
+				$tvars['tvar_nodeList'] 	= $nodeList;
+				$tvars['tvar_costData'] 	= $costData;
+				$tvars['tvar_allianceName'] = $alliance->data['name'];
+				$tvars['tvar_nodeID'] 		= $node->data['id'];
+				$tvars['tvar_nodeName'] 	= $node->data['name'];
+	   
+				$page = "alliance.set";
+				
+			}
 		}
-		$tvars['tvar_nodeList'] = $nodeList;
-		$tvars['tvar_costData'] = $costData;
-		$tvars['tvar_nodeID'] 	= $node->data['id'];
-		$tvars['tvar_nodeName'] = $node->data['name'];
-	   }
-	   $page = "alliance.add";
-	   break;
-  
-  case 'remove':
-		$page = "alliance.remove";
 		break;
-	 
-  case 'addInvitation':
-		$page = "alliance.addInvitation";
+	   
+	//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = CREATE ALLIANCE
+	case 'add':
+		if (isset($nodeList)) {
+			if ($node->checkOptions('allianceAdd')) {
+			
+				$costData='';
+				foreach ($game['factions'][$node->data['faction']]['costs']['alliance'] as $key=>$cost) {
+					$costData.='<div class="cell">'.$cost['value'].'</div><div class="cell"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$cost['resource'].'.png" title="'.$gl["resources"][$cost['resource']]["name"].'"></div>';
+				}
+				$tvars['tvar_nodeList'] = $nodeList;
+				$tvars['tvar_costData'] = $costData;
+				$tvars['tvar_nodeID'] 	= $node->data['id'];
+				$tvars['tvar_nodeName'] = $node->data['name'];
+		
+				$page = "alliance.add";
+			}
+		}
+		break;
+	   
+	//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = REMOVE ALLIANCE
+	case 'remove':
+		if ($node->checkOptions('allianceRemove')) {
+			$page = "alliance.remove";
+		}
+		break;
+		
+	//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = ADD ALLIANCE INVITE
+	case 'addInvitation':
+		if ($node->checkOptions('allianceInvite')) {
+			$page = "alliance.addInvitation";
+		}
+		break;
+		
+	//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = ADD ALLIANCE WAR
+	case 'addWar':
+		if ($node->checkOptions('allianceWar')) {
+			$page = "alliance.addWar";
+		}
 		break;
   
-  case 'addWar':
-		$page = "alliance.addWar";
-		break;
-  
- }
+	}
 
 }
 

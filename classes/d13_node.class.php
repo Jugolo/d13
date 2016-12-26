@@ -84,49 +84,63 @@ class node {
   		if ($sector['type']==1) {
    			if ($node->get('name', $this->data['name'])=='noNode') {
     			$nodes=node::getList($userId);
+    			
     			if (count($nodes) <  $game['users']['maxNodes']) {
+					
 					$ok=1;
 					$this->data['id']=misc::newId('nodes');
+					
 					$d13->db->query('insert into nodes (id, faction, user, name, focus, lastCheck) values ("'.$this->data['id'].'", "'.$this->data['faction'].'", "'.$this->data['user'].'", "'.$this->data['name'].'", "hp", now())');
 					if ($d13->db->affected_rows()==-1) $ok=0;
+					
 					$d13->db->query('update grid set type="2", id="'.$this->data['id'].'" where x="'.$this->location['x'].'" and y="'.$this->location['y'].'"');
 					if ($d13->db->affected_rows()==-1) $ok=0;
 					
 					$query=array();
 					$nr = $d13->data->resources->getcount();
-					for ($i=0; $i<$nr; $i++) $query[$i]='("'.$this->data['id'].'", "'.$i.'", "'.$game['factions'][$this->data['faction']]['storage'][$i].'")';
+					for ($i=0; $i<$nr; $i++) {
+						$query[$i] = '("'.$this->data['id'].'", "'.$d13->data->resources->get($i, 'id').'", "'.$d13->data->resources->get($i, 'storage').'")';
+					}
 					$d13->db->query('insert into resources (node, id, value) values '.implode(', ', $query));
 					if ($d13->db->affected_rows()==-1) $ok=0;
-					
+										
 					$query=array();
-					$nr = $d13->data->technologies->getcount();
-					for ($i=0; $i<$nr; $i++) $query[$i]='("'.$this->data['id'].'", "'.$i.'", "0")';
+					$nr = $d13->data->technologies->getcount($this->data['faction']);
+					for ($i=0; $i<$nr; $i++) {
+						$query[$i] = '("'.$this->data['id'].'", "'.$d13->data->technologies->get($this->data['faction'], $i, 'id').'", "0")';
+					}
 					$d13->db->query('insert into technologies (node, id, level) values '.implode(', ', $query));
 					if ($d13->db->affected_rows()==-1) $ok=0;
-					
+										
+					$query=array();
+					$nr = $d13->data->components->getcount($this->data['faction']);
+					for ($i=0; $i<$nr; $i++) {
+						$query[$i] = '("'.$this->data['id'].'", "'.$d13->data->components->get($this->data['faction'], $i, 'id').'", "0")';
+					}
+					$d13->db->query('insert into components (node, id, value) values '.implode(', ', $query));
+					if ($d13->db->affected_rows()==-1) $ok=0;
+										
+					$query=array();
+					$nr = $d13->data->units->getcount($this->data['faction']);
+					for ($i=0; $i<$nr; $i++) {
+						$query[$i] = '("'.$this->data['id'].'", "'.$d13->data->units->get($this->data['faction'], $i, 'id').'", "0", "1")';
+					}
+					$d13->db->query('insert into units (node, id, value, level) values '.implode(', ', $query));
+					if ($d13->db->affected_rows()==-1) $ok=0;
+										
 					$query=array();
 					for ($i=0; $i < $game['users']['maxModules'] * $game['users']['maxSectors']; $i++) {
-						$query[$i]='("'.$this->data['id'].'", "'.$i.'", "-1", "0", "0")';
+						$query[$i] = '("'.$this->data['id'].'", "'.$i.'", "-1", "0", "0")';
 					}
 					$d13->db->query('insert into modules (node, slot, module, input, level) values '.implode(', ', $query));
 					if ($d13->db->affected_rows()==-1) $ok=0;
-					
-					$query=array();
-					$nr = $d13->data->components->getcount();
-					for ($i=0; $i<$nr; $i++) $query[$i]='("'.$this->data['id'].'", "'.$i.'", "0")';
-					$d13->db->query('insert into components (node, id, value) values '.implode(', ', $query));
-					if ($d13->db->affected_rows()==-1) $ok=0;
-					
-					$query=array();
-					$nr = $d13->data->units->getcount();
-					for ($i=0; $i<$nr; $i++) $query[$i]='("'.$this->data['id'].'", "'.$i.'", "0", "1")';
-					$d13->db->query('insert into units (node, id, value, level) values '.implode(', ', $query));
-					if ($d13->db->affected_rows()==-1) $ok=0;
+								
 					if ($ok) {
 						$status="done";
 					} else {
 						$status='error';
 					}
+					$d13->logger->log($status); // DEBUG
 				} else {
 					$status='maxNodesReached';
 			   	}
@@ -228,7 +242,7 @@ class node {
 		
 		$this->resources	= array();
 		$this->production	= array();
-		$this->storage		= $d13->data->general->get('factions', $this->data['faction'], 'storage');
+		$this->storage		= array();
 		
 		$tmp_resources = array();
 		$result = $d13->db->query('select * from resources where node="'.$this->data['id'].'" order by id asc');
@@ -238,6 +252,7 @@ class node {
 			
 		foreach ($d13->data->resources as $resource) {
 			$this->production[$resource['id']] = 0;
+			$this->storage[$resource['id']] = $d13->data->resources->getbyid('storage', $resource['id']);
 			$this->resources[$resource['id']] = $tmp_resources[$resource['id']];
 		}
 			
@@ -245,15 +260,18 @@ class node {
 			foreach ($this->modules as $module) {
 				if ($module['module'] >- 1) {
 					
+					$the_module = d13_module_factory::create($module['module'], $module['slot'], $d13->data->modules->get($this->data['faction'], $module['module'], 'type'), $this);
+					
 					if ($d13->data->modules->get($this->data['faction'], $module['module'], 'storedResource')) {
 						foreach ($d13->data->modules->get($this->data['faction'], $module['module'], 'storedResource') as $res) {
-							$this->storage[$res] += $d13->data->modules->get($this->data['faction'], $module['module'], 'ratio') * $d13->data->general->get('factors','storage') * $module['input'];
+							
+							$this->storage[$res] += $the_module->data['ratio'] * $d13->data->general->get('factors','storage') * $module['input'];
 						}
 					}			
 				
 					if ($d13->data->modules->get($this->data['faction'], $module['module'], 'outputResource')) {
 						foreach ($d13->data->modules->get($this->data['faction'], $module['module'], 'outputResource') as $res) {
-							$this->production[$res] += $d13->data->modules->get($this->data['faction'], $module['module'], 'ratio') * $d13->data->general->get('factors','production') * $module['input'];
+							$this->production[$res] += $the_module->data['ratio'] * $d13->data->general->get('factors','production') * $module['input'];
 						}
 					}
 		
@@ -470,29 +488,32 @@ class node {
   else $status='noEntry';
   return $status;
  }
- //----------------------------------------------------------------------------------------
-// 
+ 
+//----------------------------------------------------------------------------------------
+// setModule
 //----------------------------------------------------------------------------------------
 
- public function setModule($slotId)
+ public function setModule($slotId, $input)
  {
   global $d13, $game;
   $this->getResources();
   $result=$d13->db->query('select * from modules where node="'.$this->data['id'].'" and slot="'.$slotId.'"');
   $module=$d13->db->fetch($result);
+   
   if (isset($module['module']))
    if ($module['module']>-1)
    {
-    $result=$d13->db->query('select * from resources where node="'.$this->data['id'].'" and id="'.$game['modules'][$this->data['faction']][$module['module']]['inputResource'].'"');
+	$the_module = d13_module_factory::create($module['module'], $slotId, $d13->data->modules->get($this->data['faction'],$module['module'],'type'), $this);
+    $result=$d13->db->query('select * from resources where node="'.$this->data['id'].'" and id="'.$the_module->data['inputResource'].'"');
     $resource=$d13->db->fetch($result);
     if ($resource['value']+$module['input']>=$this->modules[$slotId]['input'])
-     if ($this->modules[$slotId]['input']<=$game['modules'][$this->data['faction']][$module['module']]['maxInput'])
+     if ($this->modules[$slotId]['input'] <= $the_module->data['maxInput']) #$game['modules'][$this->data['faction']][$module['module']]['maxInput'])
      {
       $ok=1;
-      $this->resources[$resource['id']]['value']+=$module['input']-$this->modules[$slotId]['input'];
+      $this->resources[$resource['id']]['value']+=$module['input'] - $input;
       $d13->db->query('update resources set value="'.$this->resources[$resource['id']]['value'].'" where node="'.$this->data['id'].'" and id="'.$resource['id'].'"');
       if ($d13->db->affected_rows()==-1) $ok=0;
-      $d13->db->query('update modules set input="'.$this->modules[$slotId]['input'].'" where node="'.$this->data['id'].'" and slot="'.$slotId.'"');
+      $d13->db->query('update modules set input="'.$input.'" where node="'.$this->data['id'].'" and slot="'.$slotId.'"');
       if ($d13->db->affected_rows()==-1) $ok=0;
       $this->checkModuleDependencies($module['module'], $slotId, 1);
       if ($ok) $status='done';
@@ -506,6 +527,10 @@ class node {
   return $status;
  }
  
+//----------------------------------------------------------------------------------------
+// 
+//----------------------------------------------------------------------------------------
+
  public function getModuleCount($slotId, $moduleId) {
  	global $d13, $game;
     $result=$d13->db->query('select count(*) as count from modules where node="'.$this->data['id'].'" and module="'.$moduleId.'"');
@@ -1277,85 +1302,84 @@ public function checkResources($time) {
 //----------------------------------------------------------------------------------------
 // checkBuild
 //----------------------------------------------------------------------------------------
-	public function checkBuild($time) {
+public function checkBuild($time) {
 
-		global $d13, $game;
+	global $d13, $game;
 
-		$d13->db->query('start transaction');
-		$this->getModules();
-		$this->getResources();
-		$this->getComponents();
-		$this->getQueue('build');
-		$ok=1;
-  
-		foreach ($this->queue['build'] as $entry) {
-   			$entry['end'] = $entry['start'] + floor($entry['duration'] * 60);
-   			if ($entry['end'] <= $time) {
+	$d13->db->query('start transaction');
+	$this->getModules();
+	$this->getResources();
+	$this->getComponents();
+	$this->getQueue('build');
+	$ok=1;
 
-				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BUILD
-				if ($entry['action'] == 'build' && $this->modules[$entry['slot']]['module'] == -1) {
-					$this->modules[$entry['slot']]['module']=$entry['module'];
-					$d13->db->query('update modules set module="'.$entry['module'].'", level=1 where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
+	foreach ($this->queue['build'] as $entry) {
+		$entry['end'] = $entry['start'] + floor($entry['duration'] * 60);
+		if ($entry['end'] <= $time) {
+
+			//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BUILD
+			if ($entry['action'] == 'build' && $this->modules[$entry['slot']]['module'] == -1) {
+				$this->modules[$entry['slot']]['module']=$entry['module'];
+				$d13->db->query('update modules set module="'.$entry['module'].'", level=1 where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
+				if ($d13->db->affected_rows()==-1) $ok=0;
+			//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - UPGRADE
+			} else if ($entry['action'] == 'upgrade' && $this->modules[$entry['slot']]['module'] > -1) {
+				$this->modules[$entry['slot']]['module']=$entry['module'];
+				$d13->db->query('update modules set module="'.$entry['module'].'", level=level+1 where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
+				if ($d13->db->affected_rows()==-1) $ok=0;
+			//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - REMOVE
+			} else if ($entry['action'] == 'remove') {
+		
+				foreach ($game['modules'][$this->data['faction']][$entry['module']]['cost'] as $cost) {
+					$this->resources[$cost['resource']]['value']+=$cost['value'] * $game['users']['cost']['build'] * $game['modules'][$this->data['faction']][$entry['module']]['salvage'];
+					$d13->db->query('update resources set value="'.$this->resources[$cost['resource']]['value'].'" where node="'.$this->data['id'].'" and id="'.$cost['resource'].'"');
 					if ($d13->db->affected_rows()==-1) $ok=0;
-				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - UPGRADE
-				} else if ($entry['action'] == 'upgrade' && $this->modules[$entry['slot']]['module'] > -1) {
-					$this->modules[$entry['slot']]['module']=$entry['module'];
-					$d13->db->query('update modules set module="'.$entry['module'].'", level=level+1 where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
-					if ($d13->db->affected_rows()==-1) $ok=0;
-				//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - REMOVE
-				} else if ($entry['action'] == 'remove') {
-			
-					foreach ($game['modules'][$this->data['faction']][$entry['module']]['cost'] as $cost) {
-						$this->resources[$cost['resource']]['value']+=$cost['value'] * $game['users']['cost']['build'] * $game['modules'][$this->data['faction']][$entry['module']]['salvage'];
-						$d13->db->query('update resources set value="'.$this->resources[$cost['resource']]['value'].'" where node="'.$this->data['id'].'" and id="'.$cost['resource'].'"');
-						if ($d13->db->affected_rows()==-1) $ok=0;
-					}
-	 
-					foreach ($game['modules'][$this->data['faction']][$entry['module']]['requirements'] as $requirement) {
-						if ($requirement['type']=='components') {
+				}
+ 
+				foreach ($game['modules'][$this->data['faction']][$entry['module']]['requirements'] as $requirement) {
+					if ($requirement['type']=='components') {
+				
+						$storageResource=$game['components'][$this->data['faction']][$requirement['id']]['storageResource'];
+						$storage=$game['components'][$this->data['faction']][$requirement['id']]['storage']*$requirement['value'];
 					
-							$storageResource=$game['components'][$this->data['faction']][$requirement['id']]['storageResource'];
-							$storage=$game['components'][$this->data['faction']][$requirement['id']]['storage']*$requirement['value'];
-						
-							if ($this->resources[$storageResource]['value'] - $storage>=0) {
-								$this->resources[$storageResource]['value'] -= $storage;
-								$d13->db->query('update resources set value="'.$this->resources[$storageResource]['value'].'" where node="'.$this->data['id'].'" and id="'.$storageResource.'"');
-								if ($d13->db->affected_rows()==-1) $ok=0;
-								$this->components[$requirement['id']]['value'] += $requirement['value'];
-								$d13->db->query('update components set value="'.$this->components[$requirement['id']]['value'].'" where node="'.$this->data['id'].'" and id="'.$requirement['id'].'"');
-								if ($d13->db->affected_rows()==-1) $ok=0;
-							}
-						}
-		 
-						if ($this->modules[$entry['slot']]['input'] > 0) {
-							$inputResource=$game['modules'][$this->data['faction']][$entry['module']]['inputResource'];
-							$this->resources[$inputResource]['value']+=$this->modules[$entry['slot']]['input'];
-							$d13->db->query('update resources set value="'.$this->resources[$inputResource]['value'].'" where node="'.$this->data['id'].'" and id="'.$inputResource.'"');
+						if ($this->resources[$storageResource]['value'] - $storage>=0) {
+							$this->resources[$storageResource]['value'] -= $storage;
+							$d13->db->query('update resources set value="'.$this->resources[$storageResource]['value'].'" where node="'.$this->data['id'].'" and id="'.$storageResource.'"');
+							if ($d13->db->affected_rows()==-1) $ok=0;
+							$this->components[$requirement['id']]['value'] += $requirement['value'];
+							$d13->db->query('update components set value="'.$this->components[$requirement['id']]['value'].'" where node="'.$this->data['id'].'" and id="'.$requirement['id'].'"');
 							if ($d13->db->affected_rows()==-1) $ok=0;
 						}
-				
-						$this->modules[$entry['slot']]['module']=-1;
-						$this->checkModuleDependencies($entry['module'], $entry['slot']);
-						$d13->db->query('update modules set module="-1", input="0" where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
+					}
+	 
+					if ($this->modules[$entry['slot']]['input'] > 0) {
+						$inputResource=$game['modules'][$this->data['faction']][$entry['module']]['inputResource'];
+						$this->resources[$inputResource]['value']+=$this->modules[$entry['slot']]['input'];
+						$d13->db->query('update resources set value="'.$this->resources[$inputResource]['value'].'" where node="'.$this->data['id'].'" and id="'.$inputResource.'"');
 						if ($d13->db->affected_rows()==-1) $ok=0;
 					}
-				
+			
+					$this->modules[$entry['slot']]['module']=-1;
+					$this->checkModuleDependencies($entry['module'], $entry['slot']);
+					$d13->db->query('update modules set module="-1", input="0" where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
+					if ($d13->db->affected_rows()==-1) $ok=0;
 				}
-				
-				$d13->db->query('delete from build where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
-				if ($d13->db->affected_rows()==-1) $ok=0;
-				
-   			
-  		}
-  
-		if ($ok) {
-  			$d13->db->query('commit');
-		} else {
-			$d13->db->query('rollback');
+			
+			}
+			
+			$d13->db->query('delete from build where node="'.$this->data['id'].'" and slot="'.$entry['slot'].'"');
+			if ($d13->db->affected_rows()==-1) $ok=0;
+			
 		}
- }
-
 	}
+	if ($ok) {
+		$d13->db->query('commit');
+	} else {
+		$d13->db->query('rollback');
+	}
+
+}
+
  //----------------------------------------------------------------------------------------
 // 
 //----------------------------------------------------------------------------------------
@@ -1739,46 +1763,83 @@ public function checkCombat($time) {
   $this->checkCombat($time);
  }
  
- //----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+// checkOptions
+// Scan all modules on this node and determine if a specific option is available
+//----------------------------------------------------------------------------------------
+public function checkOptions($option) {
+	
+	global $d13;
+	$this->getModules();
+	foreach ($this->modules as $module) {
+		$options = $d13->data->modules->get($this->data['faction'], $module['module'], 'options');
+		if (isset($options[$option])) {
+			return $options[$option];
+		}
+	}
+	return FALSE;
+}
+
+//----------------------------------------------------------------------------------------
 // 
 //----------------------------------------------------------------------------------------
- public function checkRequirements($requirements, $quantity=1)
- {
+ public function checkRequirements($requirements, $quantity=1) {
+ 
+ 	global $d13;
   $data=array('ok'=>1, 'requirements'=>$requirements);
   foreach ($data['requirements'] as $key=>$requirement)
    if (isset($requirement['value']) || isset($requirement['level']))
-    switch ($requirement['type'])
-    {
     
-     case 'technologies':
-      if ($this->technologies[$requirement['id']]['level']<$requirement['level'])
-      {
-       $data['requirements'][$key]['ok']=0;
-       $data['ok']=0;
-      }
-      else $data['requirements'][$key]['ok']=1;
-     break;
-     
-     case 'modules':
-      $moduleCount=0;
-      foreach ($this->modules as $module)
-       if ($module['module']==$requirement['id']) $moduleCount++;
-      if ($moduleCount < $requirement['level'])
-      {
-       $data['requirements'][$key]['ok']=0;
-       $data['ok']=0;
-      }
-      else $data['requirements'][$key]['ok']=1;
-     break;
-     
-     case 'components':
-      if ($this->components[$requirement['id']]['value']<$requirement['value']*$quantity)
-      {
-       $data['requirements'][$key]['ok']=0;
-       $data['ok']=0;
-      }
-      else $data['requirements'][$key]['ok']=1;
-     break;
+    switch ($requirement['type']) {
+	
+		//- - - - - 
+		case 'technologies':
+			if ($this->technologies[$requirement['id']]['level'] < $requirement['level']) {
+       			$data['requirements'][$key]['ok']=0;
+       			$data['ok']=0;
+      		} else {
+      			$data['requirements'][$key]['ok']=1;
+     		}
+     		break;
+
+		//- - - - -     
+		case 'modules':
+			if (isset($requirement['level'])) {
+				foreach ($this->modules as $module) {
+					if ($module['module']==$requirement['id']) {
+						if ($module['level'] < $requirement['level']) {
+							$data['requirements'][$key]['ok']=0;
+							$data['ok']=0;
+						} else {
+							$data['requirements'][$key]['ok']=1;
+						}
+						break;
+					}
+				}
+			} else if (isset($requirement['value'])) {
+				$moduleCount=0;
+				foreach ($this->modules as $module) {
+					if ($module['module']==$requirement['id']) {
+						$moduleCount++;
+					}
+				}
+				if ($moduleCount < $requirement['value']) {
+					$data['requirements'][$key]['ok']=0;
+					$data['ok']=0;
+				} else {
+					$data['requirements'][$key]['ok']=1;
+				}
+			}
+			break;
+	 
+		//- - - - -      
+		case 'components':
+			if ($this->components[$requirement['id']]['value']<$requirement['value']*$quantity) {
+		   $data['requirements'][$key]['ok']=0;
+		   $data['ok']=0;
+		  }
+		  else $data['requirements'][$key]['ok']=1;
+		 break;
      
     }
    else $data['requirements'][$key]['ok']=1;

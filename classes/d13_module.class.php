@@ -87,10 +87,10 @@ class d13_module {
 	// 
 	//----------------------------------------------------------------------------------------
 	public function __construct($moduleId, $slotId, $type, $node) {
-		
 		$this->setNode($node);
+		
 		$this->setAttributes($moduleId, $slotId, $type);
-		$this->checkUpgrades();
+		
 		$this->getModuleImage();
 	}
 
@@ -101,10 +101,39 @@ class d13_module {
 	//----------------------------------------------------------------------------------------
 	public function setNode($node) { 
 		$this->node	= $node;
-		$this->node->getTechnologies();
 		$this->node->getModules();
+		$this->node->getTechnologies();
+		$this->node->getComponents();
+		$this->node->getUnits();
 	}		
-	
+
+	//----------------------------------------------------------------------------------------
+	// checkUpgrades
+	// @ 
+	// 
+	//----------------------------------------------------------------------------------------
+	public function checkUpgrades() { 	
+		
+		global $d13, $d13_upgrades;
+		
+		//- - - - - - - - - - - - - - - COST & ATTRIBUTES
+		foreach ($d13_upgrades[$this->node->data['faction']] as $upgrade) {
+			if ($upgrade['active']) {
+				if ($upgrade['type'] == $this->data['type'] && $upgrade['id'] == $this->data['moduleId']) {
+					//- - - - - - - - - - - - - - - COST
+					if (isset($upgrade['cost'])) {
+						$this->data['cost_upgrade'] = $upgrade['cost'];
+					}
+					//- - - - - - - - - - - - - - - ATTRIBUTES
+					if (isset($upgrade['attributes'])) {
+						$this->data['attributes_upgrade'] = $upgrade['attributes'];
+					}
+				}
+			}
+		}
+		
+	}
+		
 	//----------------------------------------------------------------------------------------
 	// setAttributes
 	// @ 
@@ -128,30 +157,37 @@ class d13_module {
 		$this->data['moduleSlotInput'] 			= 0;
 		$this->data['moduleProduction'] 		= 0;
 		$this->data['moduleStorage'] 			= 0;
+		
+		$this->data['moduleId']					= $moduleId;
+		$this->data['slotId']					= $slotId;
+		$this->data['type']						= $type;
+		$this->data['level'] 					= $this->node->modules[$slotId]['level'];
+		
+		$this->checkUpgrades();
+		
+		//- - - - - - - - - - - - - - - APPLY ATTRIBUTES
+		foreach ($this->data['attributes_upgrade'] as $attribute) {
+			$this->data[$attribute['stat']] += $attribute['value'] * ($this->data['level']-1);
+		}
 			
 		$this->data['costData']  				= $this->node->checkCost($this->data['cost'], 'build');
 		$this->data['reqData'] 					= $this->node->checkRequirements($this->data['requirements']);
 	
 		if (isset($this->data['inputResource'])) {
-		$this->data['moduleInput']				= $this->data['inputResource'];
 		$this->data['moduleInputLimit'] 		= floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value']+$this->node->modules[$slotId]['input']));
 		$this->data['moduleInputName']			= $gl['resources'][$this->data['inputResource']]['name'];
-		$this->data['moduleMaxInput'] 			= $this->data['maxInput'];
-		$this->data['moduleRatio'] 				= $this->data['ratio'];
 		$this->data['moduleSlotInput'] 			= $this->node->modules[$slotId]['input'];
-		$this->data['totalIR'] 					= $this->node->modules[$slotId]['input'] * $this->data['moduleRatio'];
+		$this->data['totalIR'] 					= $this->node->modules[$slotId]['input'] * $this->data['ratio'];
 		}
 		
 		$this->data['moduleImage']				= '';
-		$this->data['moduleId']					= $moduleId;
-		$this->data['slotId']					= $slotId;
-		$this->data['type']						= $type;
+		
 		$this->data['name']						= $gl['modules'][$this->node->data['faction']][$this->data['moduleId']]['name'];
 		$this->data['description']				= $gl['modules'][$this->node->data['faction']][$this->data['moduleId']]['description'];
 		
 		$this->data['totalIR'] 					= $this->data['ratio'];
 		$this->data['inputLimit'] 				= floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'] + $this->node->modules[$this->data['slotId']]['input']));
-		$this->data['level'] 					= $this->node->modules[$slotId]['level'];
+		
 		
 		if (isset($this->data['outputResource'])) {
 			$this->data['moduleProduction'] 	= $this->data['ratio'] * $game['factors']['production'] * $this->node->modules[$slotId]['input'];
@@ -172,6 +208,9 @@ class d13_module {
 				$i++;
 			}
 		}
+		
+		
+		
 		
 	}	
 
@@ -206,10 +245,10 @@ class d13_module {
 		$tvars['tvar_moduleInput']			= $this->data['moduleInput'];
 		$tvars['tvar_moduleInputLimit'] 	= $this->data['moduleInputLimit'];
 		$tvars['tvar_moduleInputName']		= $this->data['moduleInputName'];
-		$tvars['tvar_moduleMaxInput'] 		= $this->data['moduleMaxInput'];
+		$tvars['tvar_moduleMaxInput'] 		= $this->data['maxInput'];
 		$tvars['tvar_moduleName'] 			= $this->data['name'];
 		$tvars['tvar_moduleProduction'] 	= $this->data['moduleProduction'];
-		$tvars['tvar_moduleRatio'] 			= $this->data['moduleRatio'];
+		$tvars['tvar_moduleRatio'] 			= $this->data['ratio'];
 		$tvars['tvar_moduleSlotInput'] 		= $this->data['moduleSlotInput'];
 		$tvars['tvar_moduleStorage'] 		= $this->data['moduleStorage'];
 		$tvars['tvar_totalIR'] 				= $this->data['totalIR'];
@@ -388,32 +427,6 @@ class d13_module {
 	
 		return $html;
 		
-	}
-	
-	//----------------------------------------------------------------------------------------
-	// checkUpgrades
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function checkUpgrades() { 	
-		
-		global $d13_upgrades;
-		
-		//- - - - - - - - - - - - - - - COST & ATTRIBUTES
-		foreach ($d13_upgrades[$this->node->data['faction']] as $upgrade) {
-		
-			if ($upgrade['type'] == $this->data['type'] && $upgrade['id'] == $this->data['moduleId']) {
-				//- - - - - - - - - - - - - - - COST
-				if (isset($upgrade['cost'])) {
-					$this->data['cost_upgrade'] = $upgrade['cost'];
-				}
-				//- - - - - - - - - - - - - - - ATTRIBUTES
-				if (isset($upgrade['attributes'])) {
-					$this->data['attributes_upgrade'] = $upgrade['attributes'];
-				}
-			}
-		}
-	
 	}
 	
 	//----------------------------------------------------------------------------------------
@@ -679,7 +692,7 @@ class d13_module_storage extends d13_module {
 		
 		if (isset($this->data['options']['inventoryList']) && $this->data['options']['inventoryList']) {
 			foreach ($this->node->resources as $uid=>$unit) {
-				if ($unit['value'] > 0) {
+				if ($d13->data->units->getbyid('active', $uid, $this->node->data['faction'])  && $unit['value'] > 0) {
 					$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$uid.'.png" title="'.$d13->data->gl->get('resources',$uid,'name').'">';
 					$tvars['tvar_listLabel'] 		= $d13->data->gl->get('resources', $uid, 'name');
 					$tvars['tvar_listAmount'] 		= floor($unit['value']);
@@ -740,10 +753,10 @@ class d13_module_storage extends d13_module {
 		$html = '';
 		
 		if (isset($this->data['storedResource'])) {
-			$i=0;
 			foreach ($this->data['storedResource'] as $res) {
-				$html .= $ui['storage'].'<a class="tooltip-left" data-tooltip="'.$ui['storage'].' '.$gl["resources"][$res]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$res.'.png" title="'.$gl["resources"][$res]["name"].'"></a>';
-				$i++;
+				if ($d13->data->resources->getbyid('active', $res)) {
+					$html .= $ui['storage'].'<a class="tooltip-left" data-tooltip="'.$ui['storage'].' '.$gl["resources"][$res]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$res.'.png" title="'.$gl["resources"][$res]["name"].'"></a>';
+				}
 			}
 		}
 		if (empty($html)) {
@@ -785,11 +798,11 @@ class d13_module_harvest extends d13_module {
 		$html = '';
 		
 		if ($this->data['options']['inventoryList']) {
-			foreach ($this->node->resources as $uid=>$unit) {
-				if ($unit['value'] > 0) {
-					$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$uid.'.png" title="'.$gl['resources'][$uid]['name'].'">';
-					$tvars['tvar_listLabel'] 		= $gl['resources'][$uid]['name'];
-					$tvars['tvar_listAmount'] 		= floor($unit['value']);
+			foreach ($this->node->resources as $rid=>$res) {
+				if ($d13->data->resources->get($res['id'],'active') && $res['value'] > 0) {
+					$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$rid.'.png" title="'.$gl['resources'][$rid]['name'].'">';
+					$tvars['tvar_listLabel'] 		= $gl['resources'][$rid]['name'];
+					$tvars['tvar_listAmount'] 		= floor($res['value']);
 					$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
 				}
 			}
@@ -847,10 +860,10 @@ class d13_module_harvest extends d13_module {
 		$html = '';
 		
 		if (isset($this->data['outputResource'])) {
-			$i=0;
 			foreach ($this->data['outputResource'] as $res) {
-				$html .= '<a class="tooltip-left" data-tooltip="'.$gl["resources"][$res]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$res.'.png" title="'.$gl["resources"][$res]["name"].'"></a>';
-				$i++;
+				if ($d13->data->resources->getbyid('active', $res)) {
+					$html .= '<a class="tooltip-left" data-tooltip="'.$gl["resources"][$res]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$res.'.png" title="'.$gl["resources"][$res]["name"].'"></a>';
+				}
 			}
 		}
 		if (empty($html)) {
@@ -955,9 +968,7 @@ class d13_module_craft extends d13_module {
 			
 				//- - - - - Check Permissions
 				$disableData='';
-				$check_requirements = NULL;
-				$check_cost = NULL;
-		
+				
 				$check_requirements = $this->node->checkRequirements($component['requirements']);
 				$check_cost 		= $this->node->checkCost($component['cost'], 'research');
 		
@@ -1026,7 +1037,7 @@ class d13_module_craft extends d13_module {
 					$stage=$ui['remove'];
 				}
 				$remaining=$item['start']+$item['duration']*60-time();
-				$html .= '<div>'.$stage.' '.$item['quantity'].' '.$gl["components"][$this->node->data['faction']][$item['component']]["name"].'(s) <span id="craft_'.$item['id'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("craft_'.$item['id'].'", "?p=module&action=get&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'");</script> <a class="external" href="?p=module&action=cancelComponent&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'&craftId='.$item['id'].'"><i class="f7-icons size-16">close_round</i></a></div>';
+				$html .= '<div>'.$stage.' '.$item['quantity'].' '.$gl["components"][$this->node->data['faction']][$item['component']]["name"].'(s) <span id="craft_'.$item['id'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("craft_'.$item['id'].'", "?p=module&action=get&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'");</script> <a class="external" href="?p=module&action=cancelComponent&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'&craftId='.$item['id'].'"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
 			}
 		}
 		// - - - Popover if Queue empty
@@ -1067,7 +1078,9 @@ class d13_module_craft extends d13_module {
 
 		if (isset($this->data['components'])) {
 			foreach ($this->data['components'] as $component) {
-				$html.='<a class="tooltip-left" data-tooltip="'.$gl["components"][$this->node->data['faction']][$component]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/components/'.$this->node->data['faction'].'/'.$component.'.png" title="'.$gl["components"][$this->node->data['faction']][$component]["name"].'"></a>';
+				if ($d13->data->components->getbyid('active', $component, $this->node->data['faction'])) {
+					$html.='<a class="tooltip-left" data-tooltip="'.$gl["components"][$this->node->data['faction']][$component]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/components/'.$this->node->data['faction'].'/'.$component.'.png" title="'.$gl["components"][$this->node->data['faction']][$component]["name"].'"></a>';
+				}
 			}
 		}
 		if (empty($html)) {
@@ -1102,7 +1115,7 @@ class d13_module_train extends d13_module {
 			
 			foreach ($this->node->units as $uid=>$unit) {
 				if (in_array($uid, $game['modules'][$this->node->data['faction']][$this->data['moduleId']]['units'])) {
-					if ($unit['value'] > 0) {
+					if ($d13->data->units->getbyid('active', $uid, $this->node->data['faction']) && $unit['value'] > 0) {
 						$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/units/'.$this->node->data['faction'].'/'.$uid.'.png" title="'.$gl['units'][$this->node->data['faction']][$uid]['name'].'">';
 						$tvars['tvar_listLabel'] 		= $gl['units'][$this->node->data['faction']][$uid]['name'];
 						$tvars['tvar_listAmount'] 		= $unit['value'];
@@ -1252,7 +1265,7 @@ class d13_module_train extends d13_module {
 					$stage=$ui['remove'];
 				}
 				$remaining=$item['start']+$item['duration']*60-time();
-				$html .= '<div>'.$stage.' '.$item['quantity'].$gl["units"][$this->node->data['faction']][$item['unit']]["name"].' <span id="train_'.$item['id'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("train_'.$item['id'].'", "?p=module&action=get&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'");</script> <a class="external link" href="?p=module&action=cancelUnit&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'&trainId='.$item['id'].'"><i class="f7-icons size-16">close_round</i></a></div>';
+				$html .= '<div>'.$stage.' '.$item['quantity'].$gl["units"][$this->node->data['faction']][$item['unit']]["name"].' <span id="train_'.$item['id'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("train_'.$item['id'].'", "?p=module&action=get&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'");</script> <a class="external link" href="?p=module&action=cancelUnit&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'&trainId='.$item['id'].'"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
 			}
 		}
 
@@ -1295,7 +1308,9 @@ class d13_module_train extends d13_module {
 
 		if (isset($this->data['units'])) {
 			foreach ($this->data['units'] as $unit) {
-				$html.='<a class="tooltip-left" data-tooltip="'.$gl["units"][$this->node->data['faction']][$unit]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/units/'.$this->node->data['faction'].'/'.$unit.'.png" title="'.$gl["units"][$this->node->data['faction']][$unit]["name"].'"></a>';
+				if ($d13->data->units->getbyid('active', $unit, $this->node->data['faction'])) {
+					$html.='<a class="tooltip-left" data-tooltip="'.$gl["units"][$this->node->data['faction']][$unit]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/units/'.$this->node->data['faction'].'/'.$unit.'.png" title="'.$gl["units"][$this->node->data['faction']][$unit]["name"].'"></a>';
+				}
 			}
 		}
 		if (empty($html)) {
@@ -1329,12 +1344,12 @@ class d13_module_research extends d13_module {
 
 		if ($this->data['options']['inventoryList']) {
 			//- - - - - Popover if Inventory filled
-			foreach ($game['technologies'][$this->node->data['faction']] as $uid=>$unit) {
-				if ($unit['active'] && in_array($uid, $game['modules'][$this->node->data['faction']][$this->data['moduleId']]['technologies'])) {
-					if ($this->node->technologies[$uid]['level'] > 0) {
-						$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/technologies/'.$this->node->data['faction'].'/'.$uid.'.png" title="'.$gl['technologies'][$this->node->data['faction']][$uid]['name'].'">';
-						$tvars['tvar_listLabel'] 		= $gl['technologies'][$this->node->data['faction']][$uid]['name'];
-						$tvars['tvar_listAmount'] 		= $this->node->technologies[$uid]['level'];
+			foreach ($game['technologies'][$this->node->data['faction']] as $tid=>$tech) {
+				if ($d13->data->technologies->getbyid('active', $tid, $this->node->data['faction']) && in_array($tid, $game['modules'][$this->node->data['faction']][$this->data['moduleId']]['technologies'])) {
+					if ($this->node->technologies[$tid]['level'] > 0) {
+						$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/technologies/'.$this->node->data['faction'].'/'.$tid.'.png" title="'.$gl['technologies'][$this->node->data['faction']][$tid]['name'].'">';
+						$tvars['tvar_listLabel'] 		= $gl['technologies'][$this->node->data['faction']][$tid]['name'];
+						$tvars['tvar_listAmount'] 		= $this->node->technologies[$tid]['level'];
 						$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
 					}
 				}
@@ -1460,7 +1475,7 @@ class d13_module_research extends d13_module {
 		if (count($this->node->queue['research'])) {
 			foreach ($this->node->queue['research'] as $item) {
 				$remaining=$item['start']+$item['duration']*60-time();
-				$html .= '<div>'.$d13->data->ui->get("research").' '.$gl['technologies'][$this->node->data['faction']][$item['technology']]["name"].' <span id="research_'.$item['node'].'_'.$item['technology'].'">'.implode(':', misc::sToHMS($remaining)).'</span> <script type="text/javascript">timedJump("research_'.$item['node'].'_'.$item['technology'].'", "?p=module&action=get&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'");</script> <a class="external" href="?p=module&action=cancelTechnology&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'&technologyId='.$item['technology'].'"><i class="f7-icons size-16">close_round</i></a></div>';
+				$html .= '<div>'.$d13->data->ui->get("research").' '.$gl['technologies'][$this->node->data['faction']][$item['technology']]["name"].' <span id="research_'.$item['node'].'_'.$item['technology'].'">'.implode(':', misc::sToHMS($remaining)).'</span> <script type="text/javascript">timedJump("research_'.$item['node'].'_'.$item['technology'].'", "?p=module&action=get&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'");</script> <a class="external" href="?p=module&action=cancelTechnology&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'&technologyId='.$item['technology'].'"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
 			}
 		}
 	
@@ -1501,8 +1516,10 @@ class d13_module_research extends d13_module {
 		$html = '';
 
 		if (isset($this->data['technologies'])) {
-		foreach ($this->data['technologies'] as $technology) {
-				$html.='<a class="tooltip-left" data-tooltip="'.$gl["technologies"][$this->node->data['faction']][$technology]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/technologies/'.$this->node->data['faction'].'/'.$technology.'.png" title="'.$gl["technologies"][$this->node->data['faction']][$technology]["name"].'"></a>';
+			foreach ($this->data['technologies'] as $technology) {
+				if ($d13->data->technologies->getbyid('active', $technology, $this->node->data['faction'])) {
+					$html.='<a class="tooltip-left" data-tooltip="'.$gl["technologies"][$this->node->data['faction']][$technology]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/technologies/'.$this->node->data['faction'].'/'.$technology.'.png" title="'.$gl["technologies"][$this->node->data['faction']][$technology]["name"].'"></a>';
+				}
 			}
 		}
 		if (empty($html)) {
@@ -1645,14 +1662,15 @@ class d13_module_command extends d13_module {
 		
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
+		
 		$html = '';
 		
 		if ($this->data['options']['inventoryList']) {
-			foreach ($this->node->resources as $uid=>$unit) {
-				if ($unit['value'] > 0) {
-					$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$uid.'.png" title="'.$gl['resources'][$uid]['name'].'">';
-					$tvars['tvar_listLabel'] 		= $gl['resources'][$uid]['name'];
-					$tvars['tvar_listAmount'] 		= floor($unit['value']);
+			foreach ($this->node->resources as $rid=>$res) {
+				if ($d13->data->resources->get($res['id'],'active') && $res['value'] > 0) {
+					$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$rid.'.png" title="'.$gl['resources'][$rid]['name'].'">';
+					$tvars['tvar_listLabel'] 		= $gl['resources'][$rid]['name'];
+					$tvars['tvar_listAmount'] 		= floor($res['value']);
 					$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
 				}
 			}
