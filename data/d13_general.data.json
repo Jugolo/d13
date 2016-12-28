@@ -1,0 +1,261 @@
+{
+  "users": {
+    "maxNodes": 1,
+    "maxModules": 15,
+    "maxSectors": 3,
+    "idle": 5,
+    "passwordResetIdle": 15,
+    "preferences": {
+      "allianceReports": 1,
+      "combatReports": 1,
+      "tradeReports": 1
+    },
+    "speed": {
+      "research": 1,
+      "build": 1,
+      "craft": 1,
+      "train": 1,
+      "trade": 1,
+      "combat": 1
+    },
+    "cost": {
+      "research": 1,
+      "build": 1,
+      "craft": 1,
+      "train": 1,
+      "trade": 1,
+      "combat": 1,
+      "set": 1,
+      "move": 1,
+      "alliance": 1
+    }
+  },
+  "options": {
+    "gridSystem": 0,
+    "factionFixation": true,
+    "moduleDemolish": true,
+    "moduleUpgrade": true,
+    "unitAttackOnly": true,
+    "defensiveModuleDamage": true
+  },
+  "factors": {
+    "storage": 10,
+    "production": 1
+  },
+  "navigation": [
+    {
+      "active": true,
+      "login": false,
+      "node": false,
+      "class": "left",
+      "name": "home",
+      "link": "index",
+      "icon": "home"
+    },
+    {
+      "active": true,
+      "login": false,
+      "node": false,
+      "class": "left",
+      "name": "login",
+      "link": "login&action=login",
+      "icon": "exitRight"
+    },
+    {
+      "active": true,
+      "login": false,
+      "node": false,
+      "class": "left",
+      "name": "register",
+      "link": "register",
+      "icon": "key"
+    },
+    {
+      "active": true,
+      "login": false,
+      "node": false,
+      "class": "right",
+      "name": "terms",
+      "link": "terms",
+      "icon": "buttonX"
+    },
+    {
+      "active": true,
+      "login": false,
+      "node": false,
+      "class": "right",
+      "name": "credits",
+      "link": "credits",
+      "icon": "buttonY"
+    },
+    {
+      "active": true,
+      "login": true,
+      "node": true,
+      "class": "left",
+      "name": "nodes",
+      "link": "node&action=list",
+      "icon": "home"
+    },
+    {
+      "active": true,
+      "login": true,
+      "node": false,
+      "class": "left",
+      "name": "messages",
+      "link": "message&action=list",
+      "icon": "message{{tvar_global_umcl}}"
+    },
+    {
+      "active": true,
+      "login": true,
+      "node": false,
+      "class": "left",
+      "name": "account",
+      "link": "account",
+      "icon": "wrench"
+    },
+    {
+      "active": true,
+      "login": true,
+      "node": false,
+      "class": "right",
+      "name": "logout",
+      "link": "logout",
+      "icon": "door"
+    }
+  ],
+  "factions": [
+    {
+      "id": 0,
+      "active": true,
+      "costs": {
+        "move": [
+          {
+            "resource": 0,
+            "value": 100
+          }
+        ],
+        "set": [
+          {
+            "resource": 0,
+            "value": 100
+          }
+        ],
+        "alliance": [
+          {
+            "resource": 0,
+            "value": 2000
+          }
+        ],
+        "combat": [
+          {
+            "resource": 0,
+            "value": 500
+          }
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "active": false,
+      "costs": {
+        "move": [
+          {
+            "resource": 0,
+            "value": 100
+          }
+        ],
+        "set": [
+          {
+            "resource": 0,
+            "value": 100
+          }
+        ],
+        "alliance": [
+          {
+            "resource": 0,
+            "value": 2000
+          }
+        ],
+        "combat": [
+          {
+            "resource": 0,
+            "value": 500
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "active": false,
+      "costs": {
+        "move": [
+          {
+            "resource": 0,
+            "value": 100
+          }
+        ],
+        "set": [
+          {
+            "resource": 0,
+            "value": 100
+          }
+        ],
+        "alliance": [
+          {
+            "resource": 0,
+            "value": 2000
+          }
+        ],
+        "combat": [
+          {
+            "resource": 0,
+            "value": 500
+          }
+        ]
+      }
+    }
+  ],
+  "types": {
+    "hero": {
+      "limit": 1
+    },
+    "unit": {
+      "limit": 99999
+    },
+    "component": {
+      "limit": 99999
+    }
+  },
+  "classes": {
+    "spearman": {
+      "duelist": 0.5,
+      "archer": 0.5
+    },
+    "swordsman": {
+      "duelist": 0.5,
+      "archer": -0.5
+    },
+    "duelist": {
+      "archer": 0.5,
+      "cavalry": 0.5
+    },
+    "archer": {
+      "cavalry": 0.5,
+      "duelist": 0.5
+    },
+    "cavalry": {
+      "spearman": 0.5
+    },
+    "static": {
+      "archer": -0.5
+    }
+  },
+  "stats": [
+    "hp",
+    "damage",
+    "armor",
+    "speed"
+  ]
+}

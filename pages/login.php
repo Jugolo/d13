@@ -1,6 +1,6 @@
 <?php
 
-//========================================================================================
+// ========================================================================================
 //
 // LOGIN
 //
@@ -11,133 +11,127 @@
 // # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
-//========================================================================================
-
-//----------------------------------------------------------------------------------------
-// 
-//----------------------------------------------------------------------------------------
+// ========================================================================================
+// ----------------------------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------------------------
 
 global $d13;
-
 $message = NULL;
+$d13->dbQuery('start transaction');
+$flags = $d13->flags->get('name');
 
+if (isset($_GET['action'])) {
+	switch ($_GET['action']) {
+	case 'login':
+		if (isset($_POST['name'], $_POST['password'])) {
+			$name = $_POST['name'];
+			$pass = sha1($_POST['password']);
+			if (isset($_POST['remember'])) $remember = 1;
+			else $remember = 0;
+		}
+		else
+		if (isset($_COOKIE[CONST_PREFIX . 'Name'], $_COOKIE[CONST_PREFIX . 'Password'])) {
+			$name = misc::clean($_COOKIE[CONST_PREFIX . 'Name']);
+			$pass = misc::clean($_COOKIE[CONST_PREFIX . 'Password']);
+			$remember = 1;
+		}
 
-$d13->db->query('start transaction');
-$flags=$d13->flags->get('name');
+		if (isset($name, $pass)) {
+			$user = new user();
+			$status = $user->get('name', $name);
+			if ($status == 'done')
+			if (($flags['login']) || ($user->data['level'] == 3))
+			if ($user->data['password'] == $pass)
+			if ($user->data['level']) {
+				$user->data['ip'] = $_SERVER['REMOTE_ADDR'];
+				$user->data['lastVisit'] = strftime('%Y-%m-%d %H:%M:%S', time());
+				$user->set();
+				$_SESSION[CONST_PREFIX . 'User'] = $user->data;
+				if ($remember) {
+					setcookie(CONST_PREFIX . 'Name', $name, (CONST_COOKIE_LIFETIME + time()));
+					setcookie(CONST_PREFIX . 'Password', $pass, (CONST_COOKIE_LIFETIME + time()));
+				}
+				else {
+					setcookie(CONST_PREFIX . 'Name', $name, (time() - 1));
+					setcookie(CONST_PREFIX . 'Password', $pass, (time() - 1));
+				}
 
-if (isset($_GET['action']))
-{
- 
- switch ($_GET['action'])
- {
- 
-  case 'login':
-   if (isset($_POST['name'], $_POST['password']))
-   {
-    $name=$_POST['name'];
-    $pass=sha1($_POST['password']);
-    if (isset($_POST['remember'])) $remember=1;
-    else $remember=0;
-   }
-   else if (isset($_COOKIE[CONST_PREFIX.'Name'], $_COOKIE[CONST_PREFIX.'Password']))
-   {
-    $name=misc::clean($_COOKIE[CONST_PREFIX.'Name']);
-    $pass=misc::clean($_COOKIE[CONST_PREFIX.'Password']);
-    $remember=1;
-   }
-   if (isset($name, $pass))
-   {
-    $user=new user();
-    $status=$user->get('name', $name);
-    if ($status=='done')
-     if (($flags['login'])||($user->data['level']==3))
-      if ($user->data['password']==$pass)
-       if ($user->data['level'])
-       {
-        $user->data['ip']=$_SERVER['REMOTE_ADDR'];
-        $user->data['lastVisit']=strftime('%Y-%m-%d %H:%M:%S', time());
-        $user->set();
-        $_SESSION[CONST_PREFIX.'User']=$user->data;
-        if ($remember)
-        {
-         setcookie(CONST_PREFIX.'Name', $name, (CONST_COOKIE_LIFETIME+time()));
-         setcookie(CONST_PREFIX.'Password', $pass, (CONST_COOKIE_LIFETIME+time()));
-        }
-        else
-        {
-         setcookie(CONST_PREFIX.'Name', $name, (time()-1));
-         setcookie(CONST_PREFIX.'Password', $pass, (time()-1));
-        }
-        header('Location: index.php?p=node&action=list');
-       }
-       else $message=$d13->data->ui->get("inactive");
-      else $message=$d13->data->ui->get("wrongPassword");
-     else $message=$d13->data->ui->get("loginDisabled");
-    else $message=$d13->data->ui->get($status);
-   }
-  break;
-  
-  case 'sit':
-   if (isset($_POST['user'], $_POST['sitter'], $_POST['password']))
-   {
-    $user=new user();
-    $status=$user->get('name', $_POST['user']);
-    if ($status=='done')
-    {
-     $sitter=new user();
-     $status=$sitter->get('name', $_POST['sitter']);
-     if ($status=='done')
-      if (sha1($_POST['password'])==$sitter->data['password'])
-       if ($user->data['sitter']==$sitter->data['name'])
-       {
-        $user->data['ip']=$_SERVER['REMOTE_ADDR'];
-        $user->data['lastVisit']=strftime('%Y-%m-%d %H:%M:%S', time());
-        $user->set();
-        $_SESSION[CONST_PREFIX.'User']=$user->data;
-        header('Location: index.php');
-       }
-       else $message=$d13->data->ui->get("accessDenied");
-      else $message=$d13->data->ui->get("wrongPassword");
-     else $message=$d13->data->ui->get($status);
-    }
-    else $message=$d13->data->ui->get($status);
-   }
-  break;
- }
+				header('Location: index.php?p=node&action=list');
+			}
+			else $message = $d13->getLangUI("inactive");
+			else $message = $d13->getLangUI("wrongPassword");
+			else $message = $d13->getLangUI("loginDisabled");
+			else $message = $d13->getLangUI($status);
+		}
+
+		break;
+
+	case 'sit':
+		if (isset($_POST['user'], $_POST['sitter'], $_POST['password'])) {
+			$user = new user();
+			$status = $user->get('name', $_POST['user']);
+			if ($status == 'done') {
+				$sitter = new user();
+				$status = $sitter->get('name', $_POST['sitter']);
+				if ($status == 'done')
+				if (sha1($_POST['password']) == $sitter->data['password'])
+				if ($user->data['sitter'] == $sitter->data['name']) {
+					$user->data['ip'] = $_SERVER['REMOTE_ADDR'];
+					$user->data['lastVisit'] = strftime('%Y-%m-%d %H:%M:%S', time());
+					$user->set();
+					$_SESSION[CONST_PREFIX . 'User'] = $user->data;
+					header('Location: index.php');
+				}
+				else $message = $d13->getLangUI("accessDenied");
+				else $message = $d13->getLangUI("wrongPassword");
+				else $message = $d13->getLangUI($status);
+			}
+			else $message = $d13->getLangUI($status);
+		}
+
+		break;
+	}
 }
-if ((isset($status))&&($status=='error')) $d13->db->query('rollback');
-else $d13->db->query('commit');
 
-//----------------------------------------------------------------------------------------
+if ((isset($status)) && ($status == 'error')) $d13->dbQuery('rollback');
+else $d13->dbQuery('commit');
+
+// ----------------------------------------------------------------------------------------
 // Setup Template Variables
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 
 $tvars = array();
 $tvars['tvar_global_message'] = $message;
 
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // Parse & Render Template
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
+
 if (isset($_GET['action'])) {
 	switch ($_GET['action']) {
-	
-		case 'sit':
-			// - - - - Inject Window Code at page bottom
-			$d13->tpl->inject($d13->tpl->render_subpage("sub.assist", $tvars));
-			$d13->tpl->render_page("login", $tvars);
-			break;
-		case 'login':
-			// - - - - Inject Window Code at page bottom
-			$d13->tpl->inject($d13->tpl->render_subpage("sub.login", $tvars));
-			$d13->tpl->render_page("login", $tvars);
-			break;
-	}
-} else {
+	case 'sit':
 
-	$d13->tpl->inject($d13->tpl->render_subpage("sub.login", $tvars));
-	$d13->tpl->render_page("login", $tvars);
-	
+		// - - - - Inject Window Code at page bottom
+
+		$d13->templateInject($d13->templateSubpage("sub.assist", $tvars));
+		$d13->templateRender("login", $tvars);
+		break;
+
+	case 'login':
+
+		// - - - - Inject Window Code at page bottom
+
+		$d13->templateInject($d13->templateSubpage("sub.login", $tvars));
+		$d13->templateRender("login", $tvars);
+		break;
+	}
 }
-//=====================================================================================EOF
+else {
+	$d13->templateInject($d13->templateSubpage("sub.login", $tvars));
+	$d13->templateRender("login", $tvars);
+}
+
+// =====================================================================================EOF
 
 ?>

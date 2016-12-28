@@ -1,6 +1,6 @@
 <?php
 
-//========================================================================================
+// ========================================================================================
 //
 // RESET
 //
@@ -11,65 +11,64 @@
 // # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
-//========================================================================================
-
-//----------------------------------------------------------------------------------------
-// 
-//----------------------------------------------------------------------------------------
+// ========================================================================================
+// ----------------------------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------------------------
 
 global $d13;
-
-$d13->db->query('start transaction');
+$d13->dbQuery('start transaction');
 
 if (isset($_POST['name'], $_POST['email'])) {
-
-	foreach ($_POST as $key=>$value) {
-		$_POST[$key]=misc::clean($value);
+	foreach($_POST as $key => $value) {
+		$_POST[$key] = misc::clean($value);
 	}
-	
-	if ((($_POST['name']!=''))&&($_POST['email']!='')) {
-	$user=new user();
-	$status=$user->get('name', $_POST['name']);
-		if ($status=='done') {
-			$newPass=rand(1000000000, 9999999999);
-			$status=$user->resetPassword($_POST['email'], $newPass);
-			include(CONST_INCLUDE_PATH.'api/email.api.php');
-			$body=CONST_GAME_TITLE.' '.$d13->data->ui->get("newPassword").': '.$newPass;
-			if ($status=='done') {
-				$status=email(CONST_EMAIL, CONST_GAME_TITLE, $user->data['email'], CONST_GAME_TITLE.' '.$d13->data->ui->get("resetPassword"), $body);
-				$message=$ui[$status];
+
+	if ((($_POST['name'] != '')) && ($_POST['email'] != '')) {
+		$user = new user();
+		$status = $user->get('name', $_POST['name']);
+		if ($status == 'done') {
+			$newPass = rand(1000000000, 9999999999);
+			$status = $user->resetPassword($_POST['email'], $newPass);
+			include (CONST_INCLUDE_PATH . 'api/email.api.php');
+
+			$body = CONST_GAME_TITLE . ' ' . $d13->getLangUI("newPassword") . ': ' . $newPass;
+			if ($status == 'done') {
+				$status = email(CONST_EMAIL, CONST_GAME_TITLE, $user->data['email'], CONST_GAME_TITLE . ' ' . $d13->getLangUI("resetPassword") , $body);
+				$message = $$d13->getLangUI($status);
 			}
-		} else {
-			$message=$ui[$status];
 		}
-	} else {
-		$message=$d13->data->ui->get("insufficientData");
+		else {
+			$message = $$d13->getLangUI($status);
+		}
+	}
+	else {
+		$message = $d13->getLangUI("insufficientData");
 	}
 }
 
-if ((isset($status))&&($status=='error')) {
-	$d13->db->query('rollback');
-} else {
-	$d13->db->query('commit');
+if ((isset($status)) && ($status == 'error')) {
+	$d13->dbQuery('rollback');
+}
+else {
+	$d13->dbQuery('commit');
 }
 
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // Setup Template Variables
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 
 $tvars = array();
 $tvars['tvar_global_message'] = $message;
-$tvars['tvar_user_email'] 		= $_SESSION[CONST_PREFIX.'User']['email'];
-$tvars['tvar_user_name'] 		= $_SESSION[CONST_PREFIX.'User']['name'];
+$tvars['tvar_user_email'] = $_SESSION[CONST_PREFIX . 'User']['email'];
+$tvars['tvar_user_name'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 
-
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // Parse & Render Template
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 
-$d13->tpl->render_page("reset", $tvars);
+$d13->templateRender("reset", $tvars);
 
-//=====================================================================================EOF
-
+// =====================================================================================EOF
 
 ?>

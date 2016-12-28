@@ -21,7 +21,7 @@ ob_start();
 
 require_once("config/d13_core.inc.php");
 
-$d13->router->route();
+$d13->routerRoute();
 
 //=====================================================================================EOF
 

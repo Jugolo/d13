@@ -1,0 +1,1417 @@
+[
+  [
+    {
+      "active": true,
+      "type": "unit",
+      "id": 0,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 1,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 2,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 3,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 4,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 5,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 6,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 7,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 8,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 9,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 10,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 11,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 12,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 13,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 14,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 15,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "unit",
+      "id": 16,
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": false,
+      "type": "unit",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    {
+      "active": true,
+      "type": "harvest",
+      "id": 0,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 150
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 350
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 250
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.5
+        },
+        {
+          "stat": "maxInput",
+          "value": 1
+        },
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "harvest",
+      "id": 1,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.5
+        },
+        {
+          "stat": "maxInput",
+          "value": 1
+        },
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "harvest",
+      "id": 2,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.5
+        },
+        {
+          "stat": "maxInput",
+          "value": 1
+        },
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "craft",
+      "id": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "craft",
+      "id": 4,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "train",
+      "id": 5,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "train",
+      "id": 6,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "train",
+      "id": 7,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "research",
+      "id": 8,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "trade",
+      "id": 9,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "storage",
+      "id": 10,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "storage",
+      "id": 11,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "storage",
+      "id": 12,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "alliance",
+      "id": 13,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "command",
+      "id": 14,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "defense",
+      "id": 15,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 125
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 325
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 225
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ],
+      "stats": [
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "harvest",
+      "id": 16,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "research",
+      "id": 17,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "warfare",
+      "id": 18,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    }
+  ]
+]

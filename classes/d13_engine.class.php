@@ -1,6 +1,6 @@
 <?php
 
-//========================================================================================
+// ========================================================================================
 //
 // ENGINE.CLASS
 //
@@ -11,37 +11,235 @@
 // # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
-//========================================================================================
+// ========================================================================================
 
-class d13 {
+class d13
 
-	public $db, $tpl, $flags, $session, $router, $data, $profile, $logger;
-	
-	public function __construct() {
-		$this->db 			= new d13_db();
-		$this->tpl			= new d13_tpl();
-		$this->flags 		= new d13_flags();
-		$this->router 	= new d13_router();
-		$this->session		= new d13_session();
-		$this->logger		= new d13_logger();
-		
-		//- - - - - SETUP DUMMY USER (when not logged in)
-		if (!isset($_SESSION[CONST_PREFIX.'User']['id'])) {
-			$_SESSION[CONST_PREFIX.'User']['color']		= CONST_DEFAULT_COLOR;
-			$_SESSION[CONST_PREFIX.'User']['template']	= CONST_DEFAULT_TEMPLATE;
-			$_SESSION[CONST_PREFIX.'User']['locale']	= CONST_DEFAULT_LOCALE;
-		}
+{
+	public $flags, $data;
 
-		$this->data			= new d13_data();
-		
+	private $db, $tpl, $router, $logger, $session, $profiler;
+
+	// ----------------------------------------------------------------------------------------
+	// constructor
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function __construct()
+	{
+		$this->db = new d13_db();
+		$this->tpl = new d13_tpl();
+		$this->flags = new d13_flags();
+		$this->router = new d13_router();
+		$this->session = new d13_session();
+		$this->logger = new d13_logger();
+		$this->data = new d13_data();
 		if (CONST_FLAG_PROFILER) {
-			$this->profile		= new d13_profiler();
+			$this->profiler = new d13_profiler();
 		}
-		
 	}
-	
+
+	// ========================================================================================
+	//								LANG WRAPPER METHODS
+	// ========================================================================================
+
+	public
+
+	function getLangBW($index)
+	{
+		return $this->data->bw->get($index);
+	}
+
+	public
+
+	function getLangUI($index)
+	{
+		return $this->data->ui->get($index);
+	}
+
+	public
+
+	function getLangGL()
+	{
+		return $this->data->gl->get(func_get_args());
+	}
+
+	// ========================================================================================
+	//								DATA WRAPPER METHODS
+	// ========================================================================================
+
+	public
+
+	function getResource()
+	{
+		return $this->data->resources->get(func_get_args());
+	}
+
+	public
+
+	function getResourceByKey($key, $field)
+	{
+		return $this->data->resources->getByKey($key, $field);
+	}
+
+	public
+
+	function getResourceByID($id, $field)
+	{
+		return $this->data->resources->getByID($id, $field);
+	}
+
+	public
+
+	function getAllResources()
+	{
+		return $this->data->resources->getAll();
+	}
+
+	public
+
+	function getGeneral()
+	{
+		return $this->data->general->get(func_get_args());
+	}
+
+	public
+
+	function getUpgrade()
+	{
+		return $this->data->upgrades->get(func_get_args());
+	}
+
+	public
+
+	function getModule()
+	{
+		return $this->data->modules->get(func_get_args());
+	}
+
+	public
+
+	function getComponent()
+	{
+		return $this->data->components->get(func_get_args());
+	}
+
+	public
+
+	function getTechnology()
+	{
+		return $this->data->technologies->get(func_get_args());
+	}
+
+	public
+
+	function getUnit()
+	{
+		return $this->data->units->get(func_get_args());
+	}
+
+	// ========================================================================================
+	//								TEMPLATE WRAPPER METHODS
+	// ========================================================================================
+
+	public
+
+	function templateRender($template, $vars = "", $node = "")
+	{
+		$this->tpl->render_page($template, $vars, $node);
+	}
+
+	public
+
+	function templateParse($template, $vars)
+	{
+		return $this->tpl->parse($template, $vars);
+	}
+
+	public
+
+	function templateGet($template)
+	{
+		return $this->tpl->get($template);
+	}
+
+	public
+
+	function templateSubpage($template, $vars = "")
+	{
+		return $this->tpl->render_subpage($template, $vars);
+	}
+
+	public
+
+	function templateInject($content)
+	{
+		$this->tpl->inject($content);
+	}
+
+	// ========================================================================================
+	//								DATABASE WRAPPER METHODS
+	// ========================================================================================
+
+	public
+
+	function dbQuery($query)
+	{
+		return $this->db->query($query);
+	}
+
+	public
+
+	function dbFetch($result)
+	{
+		return $this->db->fetch($result);
+	}
+
+	public
+
+	function dbRealEscapeString($string)
+	{
+		return $this->db->real_escape_string($string);
+	}
+
+	public
+
+	function dbAffectedRows()
+	{
+		return $this->db->affected_rows();
+	}
+
+	// ========================================================================================
+	//								... WRAPPER METHODS
+	// ========================================================================================
+	// ========================================================================================
+	//								OTHER WRAPPER METHODS
+	// ========================================================================================
+
+	public
+
+	function routerRoute()
+	{
+		$this->router->route();
+	}
+
+	public
+
+	function logger($string)
+	{
+		$this->logger->log($string);
+	}
+
+	public
+
+	function profileGet()
+	{
+		return $this->profiler->profile_get();
+	}
 }
 
-//=====================================================================================EOF
+// =====================================================================================EOF
 
 ?>

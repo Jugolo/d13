@@ -1,6 +1,6 @@
 <?php
 
-//========================================================================================
+// ========================================================================================
 //
 // MODULE.CLASS
 //
@@ -11,1930 +11,2217 @@
 // # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
-//========================================================================================
-
-//----------------------------------------------------------------------------------------
+// ========================================================================================
+// ----------------------------------------------------------------------------------------
 // d13_module_factory
-// 
-//----------------------------------------------------------------------------------------
-class d13_module_factory {
+//
+// ----------------------------------------------------------------------------------------
 
-	public static function create($moduleId, $slotId, $type, $node) {
+class d13_module_factory
 
+{
+	public static
+
+	function create($moduleId, $slotId, $type, $node)
+	{
 		switch ($type) {
-		
-			case 'storage':
-				return new d13_module_storage($moduleId, $slotId, $type, $node);
-				break;
-				
-			case 'harvest':
-				return new d13_module_harvest($moduleId, $slotId, $type, $node);
-				break;
-			
-			case 'craft':
-				return new d13_module_craft($moduleId, $slotId, $type, $node);
-				break;
+		case 'storage':
+			return new d13_module_storage($moduleId, $slotId, $type, $node);
+			break;
 
-			case 'train':
-				return new d13_module_train($moduleId, $slotId, $type, $node);
-				break;
+		case 'harvest':
+			return new d13_module_harvest($moduleId, $slotId, $type, $node);
+			break;
 
-			case 'research':
-				return new d13_module_research($moduleId, $slotId, $type, $node);
-				break;
+		case 'craft':
+			return new d13_module_craft($moduleId, $slotId, $type, $node);
+			break;
 
-			case 'alliance':
-				return new d13_module_alliance($moduleId, $slotId, $type, $node);
-				break;
+		case 'train':
+			return new d13_module_train($moduleId, $slotId, $type, $node);
+			break;
 
-			case 'command':
-				return new d13_module_command($moduleId, $slotId, $type, $node);
-				break;
+		case 'research':
+			return new d13_module_research($moduleId, $slotId, $type, $node);
+			break;
 
-			case 'defense':
-				return new d13_module_defense($moduleId, $slotId, $type, $node);
-				break;
+		case 'alliance':
+			return new d13_module_alliance($moduleId, $slotId, $type, $node);
+			break;
 
-			case 'warfare':
-				return new d13_module_warfare($moduleId, $slotId, $type, $node);
-				break;
-				
-			case 'trade':
-				return new d13_module_trade($moduleId, $slotId, $type, $node);
-				break;	
-			
-			default:
-				echo $type;
-				break;
-			
+		case 'command':
+			return new d13_module_command($moduleId, $slotId, $type, $node);
+			break;
+
+		case 'defense':
+			return new d13_module_defense($moduleId, $slotId, $type, $node);
+			break;
+
+		case 'warfare':
+			return new d13_module_warfare($moduleId, $slotId, $type, $node);
+			break;
+
+		case 'trade':
+			return new d13_module_trade($moduleId, $slotId, $type, $node);
+			break;
+
+		default:
+			return NULL;
+			break;
 		}
-
 	}
-
 }
 
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // d13_module
-// 
-//----------------------------------------------------------------------------------------
-class d13_module {
+//
+// ----------------------------------------------------------------------------------------
 
+class d13_module
+
+{
 	public $data, $node, $checkRequirements, $checkCost;
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// construct
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function __construct($moduleId, $slotId, $type, $node) {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function __construct($moduleId, $slotId, $type, $node)
+	{
 		$this->setNode($node);
-		
 		$this->setAttributes($moduleId, $slotId, $type);
-		
 		$this->getModuleImage();
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// setNode
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function setNode($node) { 
-		$this->node	= $node;
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function setNode($node)
+	{
+		$this->node = $node;
 		$this->node->getModules();
 		$this->node->getTechnologies();
 		$this->node->getComponents();
 		$this->node->getUnits();
-	}		
+	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// checkUpgrades
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function checkUpgrades() { 	
-		
-		global $d13, $d13_upgrades;
-		
-		//- - - - - - - - - - - - - - - COST & ATTRIBUTES
-		foreach ($d13_upgrades[$this->node->data['faction']] as $upgrade) {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function checkUpgrades()
+	{
+		global $d13;
+
+		// - - - - - - - - - - - - - - - COST & ATTRIBUTES
+
+		foreach($d13->getUpgrade($this->node->data['faction']) as $upgrade) {
 			if ($upgrade['active']) {
 				if ($upgrade['type'] == $this->data['type'] && $upgrade['id'] == $this->data['moduleId']) {
-					//- - - - - - - - - - - - - - - COST
+
+					// - - - - - - - - - - - - - - - COST
+
 					if (isset($upgrade['cost'])) {
 						$this->data['cost_upgrade'] = $upgrade['cost'];
 					}
-					//- - - - - - - - - - - - - - - ATTRIBUTES
+
+					// - - - - - - - - - - - - - - - ATTRIBUTES
+
 					if (isset($upgrade['attributes'])) {
 						$this->data['attributes_upgrade'] = $upgrade['attributes'];
 					}
 				}
 			}
 		}
-		
 	}
-		
-	//----------------------------------------------------------------------------------------
-	// setAttributes
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function setAttributes($moduleId, $slotId, $type) { 
-		
-		global $gl, $game;
-		
-		$this->data = array();
-		
-		$this->data = $game['modules'][$this->node->data['faction']][$moduleId];
-		
-		$this->data['cost_upgrade']				= array();
-		$this->data['attributes_upgrade']		= array();
-		
-		$this->data['moduleInput']				= 0;
-		$this->data['moduleInputLimit'] 		= 0;
-		$this->data['moduleInputName']			= '';
-		$this->data['moduleMaxInput'] 			= 0;
-		$this->data['moduleSlotInput'] 			= 0;
-		$this->data['moduleProduction'] 		= 0;
-		$this->data['moduleStorage'] 			= 0;
-		
-		$this->data['moduleId']					= $moduleId;
-		$this->data['slotId']					= $slotId;
-		$this->data['type']						= $type;
-		$this->data['level'] 					= $this->node->modules[$slotId]['level'];
-		
-		$this->checkUpgrades();
-		
-		//- - - - - - - - - - - - - - - APPLY ATTRIBUTES
-		foreach ($this->data['attributes_upgrade'] as $attribute) {
-			$this->data[$attribute['stat']] += $attribute['value'] * ($this->data['level']-1);
-		}
-			
-		$this->data['costData']  				= $this->node->checkCost($this->data['cost'], 'build');
-		$this->data['reqData'] 					= $this->node->checkRequirements($this->data['requirements']);
-	
-		if (isset($this->data['inputResource'])) {
-		$this->data['moduleInputLimit'] 		= floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value']+$this->node->modules[$slotId]['input']));
-		$this->data['moduleInputName']			= $gl['resources'][$this->data['inputResource']]['name'];
-		$this->data['moduleSlotInput'] 			= $this->node->modules[$slotId]['input'];
-		$this->data['totalIR'] 					= $this->node->modules[$slotId]['input'] * $this->data['ratio'];
-		}
-		
-		$this->data['moduleImage']				= '';
-		
-		$this->data['name']						= $gl['modules'][$this->node->data['faction']][$this->data['moduleId']]['name'];
-		$this->data['description']				= $gl['modules'][$this->node->data['faction']][$this->data['moduleId']]['description'];
-		
-		$this->data['totalIR'] 					= $this->data['ratio'];
-		$this->data['inputLimit'] 				= floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'] + $this->node->modules[$this->data['slotId']]['input']));
-		
-		
-		if (isset($this->data['outputResource'])) {
-			$this->data['moduleProduction'] 	= $this->data['ratio'] * $game['factors']['production'] * $this->node->modules[$slotId]['input'];
-			$i=0;
-			foreach ($this->data['outputResource'] as $res) {
-				$this->data['moduleOutput'.$i]		= $res;
-				$this->data['moduleOutputName'.$i]	= $gl["resources"][$res]["name"];
-				$i++;
-			}
-		}
-		
-		if (isset($this->data['storedResource'])) {
-			$this->data['moduleStorage'] 		= $this->data['ratio'] * $this->node->modules[$slotId]['input'];
-			$i=0;
-			foreach ($this->data['storedResource'] as $res) {
-				$this->data['moduleStorageRes'.$i]		= $res;
-				$this->data['moduleStorageResName'.$i]	= $gl["resources"][$res]["name"];
-				$i++;
-			}
-		}
-		
-		
-		
-		
-	}	
 
-	//----------------------------------------------------------------------------------------
-	// getTemplateVariables
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getTemplateVariables() {
-		
+	// ----------------------------------------------------------------------------------------
+	// setAttributes
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function setAttributes($moduleId, $slotId, $type)
+	{
 		global $d13;
-		
+		$this->data = array();
+		$this->data = $d13->getModule($this->node->data['faction'], $moduleId);
+		$this->data['cost_upgrade'] = array();
+		$this->data['attributes_upgrade'] = array();
+		$this->data['moduleInput'] = 0;
+		$this->data['moduleInputLimit'] = 0;
+		$this->data['moduleInputName'] = '';
+		$this->data['moduleMaxInput'] = 0;
+		$this->data['moduleSlotInput'] = 0;
+		$this->data['moduleProduction'] = 0;
+		$this->data['moduleStorage'] = 0;
+		$this->data['moduleId'] = $moduleId;
+		$this->data['slotId'] = $slotId;
+		$this->data['type'] = $type;
+		$this->data['level'] = $this->node->modules[$slotId]['level'];
+		$this->checkUpgrades();
+
+		// - - - - - - - - - - - - - - - APPLY ATTRIBUTES
+
+		foreach($this->data['attributes_upgrade'] as $attribute) {
+			$this->data[$attribute['stat']]+= $attribute['value'] * ($this->data['level'] - 1);
+		}
+
+		$this->data['costData'] = $this->node->checkCost($this->data['cost'], 'build');
+		$this->data['reqData'] = $this->node->checkRequirements($this->data['requirements']);
+		if (isset($this->data['inputResource'])) {
+			$this->data['moduleInputLimit'] = floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'] + $this->node->modules[$slotId]['input']));
+			$this->data['moduleInputName'] = $d13->getLangGL('resources', $this->data['inputResource'], 'name');
+			$this->data['moduleSlotInput'] = $this->node->modules[$slotId]['input'];
+			$this->data['totalIR'] = $this->node->modules[$slotId]['input'] * $this->data['ratio'];
+		}
+
+		$this->data['moduleImage'] = '';
+		$this->data['name'] = $d13->getLangGL('modules', $this->node->data['faction'], $this->data['moduleId'], 'name');
+		$this->data['description'] = $d13->getLangGL('modules', $this->node->data['faction'], $this->data['moduleId'], 'description');
+		$this->data['totalIR'] = $this->data['ratio'];
+		$this->data['inputLimit'] = floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'] + $this->node->modules[$this->data['slotId']]['input']));
+		if (isset($this->data['outputResource'])) {
+			$this->data['moduleProduction'] = $this->data['ratio'] * $d13->getGeneral('factors', 'production') * $this->node->modules[$slotId]['input'];
+			$i = 0;
+			foreach($this->data['outputResource'] as $res) {
+				$this->data['moduleOutput' . $i] = $res;
+				$this->data['moduleOutputName' . $i] = $d13->getLangGL("resources", $res, "name");
+				$i++;
+			}
+		}
+
+		if (isset($this->data['storedResource'])) {
+			$this->data['moduleStorage'] = $this->data['ratio'] * $this->node->modules[$slotId]['input'];
+			$i = 0;
+			foreach($this->data['storedResource'] as $res) {
+				$this->data['moduleStorageRes' . $i] = $res;
+				$this->data['moduleStorageResName' . $i] = $d13->getLangGL("resources", $res, "name");
+				$i++;
+			}
+		}
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// getTemplateVariables
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getTemplateVariables()
+	{
+		global $d13;
 		$tvars = array();
 		$tvars = $this->getStats();
-		
-		$tvars['tvar_demolishLink'] 		= '';
-		$tvars['tvar_inventoryLink'] 		= '';
-		$tvars['tvar_linkData'] 			= '';
-		$tvars['tvar_moduleItemContent'] 	= '';
-		
-		$tvars['tvar_upgradeCost'] 			= $this->getCostList(true);
-		$tvars['tvar_demolishLink'] 		= $this->getDemolish();
-		$tvars['tvar_inventoryLink'] 		= $this->getInventory();
-		$tvars['tvar_linkData'] 			= $this->getModuleUpgrade();
-		$tvars['tvar_moduleItemContent'] 	= $this->getOptions();
-		$tvars['tvar_queue'] 				= $this->getQueue();
-		$tvars['tvar_popup'] 				= $this->getPopup();
-		$tvars['tvar_moduleImage']			= $this->data['image'];
-		
-		$tvars['tvar_moduleDescription']	= $this->data['description'];
-		$tvars['tvar_moduleID'] 			= $this->data['moduleId'];
-		$tvars['tvar_moduleInput']			= $this->data['moduleInput'];
-		$tvars['tvar_moduleInputLimit'] 	= $this->data['moduleInputLimit'];
-		$tvars['tvar_moduleInputName']		= $this->data['moduleInputName'];
-		$tvars['tvar_moduleMaxInput'] 		= $this->data['maxInput'];
-		$tvars['tvar_moduleName'] 			= $this->data['name'];
-		$tvars['tvar_moduleProduction'] 	= $this->data['moduleProduction'];
-		$tvars['tvar_moduleRatio'] 			= $this->data['ratio'];
-		$tvars['tvar_moduleSlotInput'] 		= $this->data['moduleSlotInput'];
-		$tvars['tvar_moduleStorage'] 		= $this->data['moduleStorage'];
-		$tvars['tvar_totalIR'] 				= $this->data['totalIR'];
-		
-		$tvars['tvar_costData'] 			= $this->getCostList(false);
-		$tvars['tvar_requirementsData'] 	= $this->getRequirementsList();
-		$tvars['tvar_outputData'] 			= $this->getOutputList();
-		
-		$tvars['tvar_nodeFaction'] 			= $this->node->data['faction'];
-		$tvars['tvar_nodeID'] 				= $this->node->data['id'];
-		$tvars['tvar_slotID'] 				= $this->data['slotId'];
-		$tvars['tvar_moduleLevel'] 			= $this->data['level'];
-		$tvars['tvar_moduleMaxLevel'] 		= $this->data['maxLevel'];
-		
-		$tvars['tvar_moduleMaxInstances'] 	= $this->data['maxInstances'];
-		$tvars['tvar_moduleDuration'] 		= $this->data['duration'];
-		$tvars['tvar_moduleSalvage'] 		= $this->data['salvage'];
+		$tvars['tvar_demolishLink'] = '';
+		$tvars['tvar_inventoryLink'] = '';
+		$tvars['tvar_linkData'] = '';
+		$tvars['tvar_moduleItemContent'] = '';
+		$tvars['tvar_upgradeCost'] = $this->getCostList(true);
+		$tvars['tvar_demolishLink'] = $this->getDemolish();
+		$tvars['tvar_inventoryLink'] = $this->getInventory();
+		$tvars['tvar_linkData'] = $this->getModuleUpgrade();
+		$tvars['tvar_moduleItemContent'] = $this->getOptions();
+		$tvars['tvar_queue'] = $this->getQueue();
+		$tvars['tvar_popup'] = $this->getPopup();
+		$tvars['tvar_moduleImage'] = $this->data['image'];
+		$tvars['tvar_moduleDescription'] = $this->data['description'];
+		$tvars['tvar_moduleID'] = $this->data['moduleId'];
+		$tvars['tvar_moduleInput'] = $this->data['moduleInput'];
+		$tvars['tvar_moduleInputLimit'] = $this->data['moduleInputLimit'];
+		$tvars['tvar_moduleInputName'] = $this->data['moduleInputName'];
+		$tvars['tvar_moduleMaxInput'] = $this->data['maxInput'];
+		$tvars['tvar_moduleName'] = $this->data['name'];
+		$tvars['tvar_moduleProduction'] = $this->data['moduleProduction'];
+		$tvars['tvar_moduleRatio'] = $this->data['ratio'];
+		$tvars['tvar_moduleSlotInput'] = $this->data['moduleSlotInput'];
+		$tvars['tvar_moduleStorage'] = $this->data['moduleStorage'];
+		$tvars['tvar_totalIR'] = $this->data['totalIR'];
+		$tvars['tvar_costData'] = $this->getCostList(false);
+		$tvars['tvar_requirementsData'] = $this->getRequirementsList();
+		$tvars['tvar_outputData'] = $this->getOutputList();
+		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
+		$tvars['tvar_nodeID'] = $this->node->data['id'];
+		$tvars['tvar_slotID'] = $this->data['slotId'];
+		$tvars['tvar_moduleLevel'] = $this->data['level'];
+		$tvars['tvar_moduleMaxLevel'] = $this->data['maxLevel'];
+		$tvars['tvar_moduleMaxInstances'] = $this->data['maxInstances'];
+		$tvars['tvar_moduleDuration'] = $this->data['duration'];
+		$tvars['tvar_moduleSalvage'] = $this->data['salvage'];
 		$tvars['tvar_moduleRemoveDuration'] = $this->data['removeDuration'];
-		
 		if ($this->data['reqData']['ok']) {
-			$tvars['tvar_requirementsIcon']	= $d13->tpl->get("sub.requirement.ok");
-		} else {
-			$tvars['tvar_requirementsIcon']	= $d13->tpl->get("sub.requirement.notok");
+			$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.ok");
 		}
+		else {
+			$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.notok");
+		}
+
 		if ($this->data['costData']['ok']) {
-			$tvars['tvar_costIcon']			= $d13->tpl->get("sub.requirement.ok");
-		} else {
-			$tvars['tvar_costIcon']			= $d13->tpl->get("sub.requirement.notok");
+			$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
 		}
-				
-				
+		else {
+			$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
+		}
+
 		if (isset($this->data['storedResource'])) {
-			$i=0;
-			while (isset($this->data['moduleStorageRes'.$i])) {
-				$tvars['tvar_moduleStorageRes'.$i] 		= $this->data['moduleStorageRes'.$i];
-				$tvars['tvar_moduleStorageResName'.$i] 	= $this->data['moduleStorageResName'.$i];
+			$i = 0;
+			while (isset($this->data['moduleStorageRes' . $i])) {
+				$tvars['tvar_moduleStorageRes' . $i] = $this->data['moduleStorageRes' . $i];
+				$tvars['tvar_moduleStorageResName' . $i] = $this->data['moduleStorageResName' . $i];
 				$i++;
 			}
 		}
-		
+
 		if (isset($this->data['outputResource'])) {
-			$i=0;
-			while (isset($this->data['moduleOutput'.$i])) {
-				$tvars['tvar_moduleOutput'.$i]			= $this->data['moduleOutput'.$i];
-				$tvars['tvar_moduleOutputName'.$i]		= $this->data['moduleOutputName'.$i];
+			$i = 0;
+			while (isset($this->data['moduleOutput' . $i])) {
+				$tvars['tvar_moduleOutput' . $i] = $this->data['moduleOutput' . $i];
+				$tvars['tvar_moduleOutputName' . $i] = $this->data['moduleOutputName' . $i];
 				$i++;
 			}
 		}
 
 		return $tvars;
-	
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getImage
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getModuleImage() {
-	
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getModuleImage()
+	{
 		global $d13;
-		
 		$this->data['image'] = '';
-		
-		foreach ($this->data['images'] as $image) {
+		foreach($this->data['images'] as $image) {
 			if ($image['level'] <= $this->data['level']) {
 				$this->data['image'] = $image['image'];
 			}
 		}
-			
-	}
-		
-	//----------------------------------------------------------------------------------------
-	// getCheckDemolish
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getDemolish() {
-	
-		global $d13, $game;
-		
-		$html='';
-		
-		if ($game['options']['moduleDemolish']) {
-			if ($this->node->modules[$this->data['slotId']]['input'] <= 0) {
-				$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-				$html .= '<a class="external button" href="?p=module&action=remove&nodeId='.$this->node->data['id'].'&slotId='.$this->data['slotId'].'">'.$d13->data->ui->get("removeModule").'</a>';
-				$html .= '</p>';
-			} else {
-				$html .= '<p class="buttons-row disabled>';
-				$html .= '<a class="button" href="#">'.$d13->data->ui->get("removeModule").'</a>';
-				$html .= '</p>';
-			}
-		}
-		
-		return $html;
-		
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
+	// getCheckDemolish
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getDemolish()
+	{
+		global $d13;
+		$html = '';
+		if ($d13->getGeneral('options', 'moduleDemolish')) {
+			if ($this->node->modules[$this->data['slotId']]['input'] <= 0) {
+				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+				$html.= '<a class="external button" href="?p=module&action=remove&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '">' . $d13->getLangUI("removeModule") . '</a>';
+				$html.= '</p>';
+			}
+			else {
+				$html.= '<p class="buttons-row disabled>';
+				$html.= '<a class="button" href="#">' . $d13->getLangUI("removeModule") . '</a>';
+				$html.= '</p>';
+			}
+		}
+
+		return $html;
+	}
+
+	// ----------------------------------------------------------------------------------------
 	// getModuleUpgrade
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getModuleUpgrade() {
-		
-		global $d13, $game;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getModuleUpgrade()
+	{
+		global $d13;
 		if ($this->data['level'] <= 0) {
 			return $this->getModuleBuild();
-		} else {
-		
-			$html='';
-
-			if ($game['options']['moduleUpgrade']) {
-			
+		}
+		else {
+			$html = '';
+			if ($d13->getGeneral('options', 'moduleUpgrade')) {
 				if ($this->data['costData']['ok'] && $this->data['reqData']['ok'] && $this->node->modules[$this->data['slotId']]['level'] < $this->data['maxLevel'] && $this->data['maxLevel'] > 1) {
-					$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-					$html .= '<a class="external button" href="?p=module&action=upgrade&nodeId='.$this->node->data['id'].'&moduleId='.$this->data['moduleId'].'&slotId='.$this->data['slotId'].'">'.$d13->data->ui->get("upgrade").'</a>';
-					$html .= '</p>';
-				} else {
-					$html .= '<p class="buttons-row disabled">';
-					$html .= '<a class="button" href="#">'.$d13->data->ui->get("upgrade").'</a>';
-					$html .= '</p>';
+					$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+					$html.= '<a class="external button" href="?p=module&action=upgrade&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'] . '">' . $d13->getLangUI("upgrade") . '</a>';
+					$html.= '</p>';
+				}
+				else {
+					$html.= '<p class="buttons-row disabled">';
+					$html.= '<a class="button" href="#">' . $d13->getLangUI("upgrade") . '</a>';
+					$html.= '</p>';
 				}
 			}
-		
-		}
-		
-		return $html;
-		
-	}
-	
-	//----------------------------------------------------------------------------------------
-	// getModuleBuild
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getModuleBuild() {
-		
-		global $d13, $game;
-		
-		$html='';
-		
-		if ($this->data['costData']['ok'] && $this->data['reqData']['ok'] && ($this->node->getModuleCount($this->data['slotId'], $this->data['moduleId']) < $game['modules'][$this->node->data['faction']][$this->data['moduleId']]['maxInstances'])) {
-			$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-			$html .= '<a class="external button" href="?p=module&action=add&nodeId='.$this->node->data['id'].'&moduleId='.$this->data['moduleId'].'&slotId='.$this->data['slotId'].'">'.$d13->data->ui->get("addModule").'</a>';
-			$html .= '</p>';
-		} else {
-			$html .= '<p class="buttons-row disabled">';
-			$html .= '<a class="button" href="#">'.$d13->data->ui->get("addModule").'</a>';
-			$html .= '</p>';
 		}
 
 		return $html;
-		
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
+	// getModuleBuild
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getModuleBuild()
+	{
+		global $d13;
+		$html = '';
+		if ($this->data['costData']['ok'] && $this->data['reqData']['ok'] && ($this->node->getModuleCount($this->data['slotId'], $this->data['moduleId']) < $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'maxInstances'))) {
+			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+			$html.= '<a class="external button" href="?p=module&action=add&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'] . '">' . $d13->getLangUI("addModule") . '</a>';
+			$html.= '</p>';
+		}
+		else {
+			$html.= '<p class="buttons-row disabled">';
+			$html.= '<a class="button" href="#">' . $d13->getLangUI("addModule") . '</a>';
+			$html.= '</p>';
+		}
+
+		return $html;
+	}
+
+	// ----------------------------------------------------------------------------------------
 	// getCostList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getCostList($upgrade=false) {
-		
-		global $d13, $gl, $game;
-		
-		$html='';
-		
-		if ($game['options']['moduleUpgrade'] && $this->data['level'] < $this->data['maxLevel']) {
-			$this->data['cost'] = $this->getCost($upgrade);	
-			foreach ($this->data['cost'] as $key=>$cost) {
-				$html.='<div class="cell"><a class="tooltip-left" data-tooltip="'.$gl["resources"][$cost['resource']]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$cost['resource'].'.png" title="'.$gl["resources"][$cost['resource']]["name"].'"></a></div><div class="cell">'.$cost['value'].'</div>';
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getCostList($upgrade = false)
+	{
+		global $d13;
+		$html = '';
+		if ($d13->getGeneral('options', 'moduleUpgrade') && $this->data['level'] < $this->data['maxLevel']) {
+			$this->data['cost'] = $this->getCost($upgrade);
+			foreach($this->data['cost'] as $key => $cost) {
+				$html.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div><div class="cell">' . $cost['value'] . '</div>';
 			}
 		}
-	
+
 		return $html;
-		
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getRequirementsList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getRequirementsList() { 
-	
-		global $d13, $gl, $ui;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getRequirementsList()
+	{
+		global $d13;
 		$html = '';
-		
 		if (!count($this->data['requirements'])) {
-			$html = $ui['none'];
-		} else {
-			
-			foreach ($this->data['requirements'] as $key=>$requirement) {
+			$html = $d13->getLangUI('none');
+		}
+		else {
+			foreach($this->data['requirements'] as $key => $requirement) {
 				if (isset($requirement['level'])) {
 					$value = $requirement['level'];
-				} else {
+				}
+				else {
 					$value = $requirement['value'];
 				}
+
 				if ($requirement['type'] == 'modules') {
 					$images = array();
-					$images = $d13->data->modules->get($this->node->data['faction'],$requirement['id'],'images');
+					$images = $d13->getModule($this->node->data['faction'], $requirement['id'], 'images');
 					$image = $images[0]['image'];
-				} else {
-					$image = $requirement['id'];	//change later to image
 				}
-				$html.='<div class="cell">'.$value.'</div><div class="cell"><a class="tooltip-left" data-tooltip="'.$gl[$requirement['type']][$this->node->data['faction']][$requirement['id']]['name'].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/'.$requirement['type'].'/'.$this->node->data['faction'].'/'.$image.'" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$this->node->data['faction']][$requirement['id']]['name'].'"></a></div>';
+				else {
+					$image = $requirement['id']; //change later to image
+				}
+
+				$html.= '<div class="cell">' . $value . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div>';
 			}
 		}
-			 
+
 		return $html;
-			 
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getOutputList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOutputList() {
-	
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOutputList()
+	{
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getCost
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getCost($upgrade=false) { 
-		
-		global $game, $ui, $gl;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getCost($upgrade = false)
+	{
+		global $d13;
 		$cost_array = array();
-		
-		foreach ($this->data['cost'] as $key=>$cost) {
+		foreach($this->data['cost'] as $key => $cost) {
 			$tmp_array = array();
-			$tmp_array['resource']	= $cost['resource'];
-			$tmp_array['value'] 	= $cost['value'] * $game['users']['cost']['build'];
-			$tmp_array['name'] 		= $gl['resources'][$cost['resource']]['name'];
-			$tmp_array['icon'] 		= $cost['resource'].'.png';
-			$tmp_array['factor']	= 1;
-			
+			$tmp_array['resource'] = $cost['resource'];
+			$tmp_array['value'] = $cost['value'] * $d13->getGeneral('users', 'cost', 'build');
+			$tmp_array['name'] = $d13->getLangGL('resources', $cost['resource'], 'name');
+			$tmp_array['icon'] = $cost['resource'] . '.png';
+			$tmp_array['factor'] = 1;
 			if ($upgrade) {
-				foreach ($this->data['cost_upgrade'] as $key=>$upcost) {
+				foreach($this->data['cost_upgrade'] as $key => $upcost) {
 					$tmp2_array = array();
-					$tmp2_array['resource']	= $upcost['resource'];
-					$tmp2_array['value'] 	= $upcost['value'] * $game['users']['cost']['build'];
-					$tmp2_array['name'] 	= $gl['resources'][$upcost['resource']]['name'];
-					$tmp2_array['icon'] 	= $upcost['resource'].'.png';
-					$tmp2_array['factor'] 	= $upcost['factor'];
-					
+					$tmp2_array['resource'] = $upcost['resource'];
+					$tmp2_array['value'] = $upcost['value'] * $d13->getGeneral('users', 'cost', 'build');
+					$tmp2_array['name'] = $d13->getLangGL('resources', $upcost['resource'], 'name');
+					$tmp2_array['icon'] = $upcost['resource'] . '.png';
+					$tmp2_array['factor'] = $upcost['factor'];
 					if ($tmp_array['resource'] == $tmp2_array['resource']) {
 						$tmp_array['value'] = $tmp_array['value'] + floor($tmp2_array['value'] * $tmp2_array['factor'] * $this->data['level']);
 					}
-
 				}
 			}
+
 			$cost_array[] = $tmp_array;
-			
 		}
 
 		return $cost_array;
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getTemplate
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getTemplate() {
-		return "module.get.".$this->data['type'];
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getTemplate()
+	{
+		return "module.get." . $this->data['type'];
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getInventory
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getInventory() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getInventory()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getOptions
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOptions() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOptions()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getQueue
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getQueue() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getQueue()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getPopup
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getPopup() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getPopup()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getStats
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getStats() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getStats()
+	{
 		return '';
 	}
-	
 }
 
-//========================================================================================
+// ========================================================================================
 //									DERIVED MODULE CLASSES
-//========================================================================================
-
-//----------------------------------------------------------------------------------------
+// ========================================================================================
+// ----------------------------------------------------------------------------------------
 // d13_module_warfare
-// 
-//----------------------------------------------------------------------------------------
-class d13_module_warfare extends d13_module {
+//
+// ----------------------------------------------------------------------------------------
 
-	//----------------------------------------------------------------------------------------
+class d13_module_warfare extends d13_module
+
+{
+
+	// ----------------------------------------------------------------------------------------
 	// getOptions
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOptions() {
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOptions()
+	{
 		global $d13;
-		
 		$tvars = array();
 		$html = '';
-		
-		//- - - - Option: Raid
+
+		// - - - - Option: Raid
+
 		if ($this->data['options']['combatRaid']) {
-			$tvars['tvar_Label']				= $d13->data->ui->get("launch") . ' ' . $d13->data->ui->get("raid");
-			$tvars['tvar_Link']					= '?p=combat&action=add&nodeId='.$this->node->data['id'];
-			$tvars['tvar_LinkLabel']			= $d13->data->ui->get("set");
-			$html	.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+			$tvars['tvar_Label'] = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("raid");
+			$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'];
+			$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
+			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
 		}
-	
-		//- - - - Option: Conquer
-		//- - - - Option: Raze
-		//- - - - Option: Scout
-		//- - - - Option: 
-		//- - - - Option: 
-		
+
+		// - - - - Option: Conquer
+		// - - - - Option: Raze
+		// - - - - Option: Scout
+		// - - - - Option:
+		// - - - - Option:
+
 		return $html;
-	
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getInventory
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getInventory() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getInventory()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getPopup
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getPopup() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getPopup()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getQueue
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getQueue() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getQueue()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getStats
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getStats() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getStats()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getOutputList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOutputList() {
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOutputList()
+	{
 		global $d13;
-		
-		return $d13->data->ui->get("none");
-		
+		return $d13->getLangUI("none");
 	}
-	
 }
 
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // d13_module_storage
-// 
-//----------------------------------------------------------------------------------------
-class d13_module_storage extends d13_module {
+//
+// ----------------------------------------------------------------------------------------
 
-	//----------------------------------------------------------------------------------------
+class d13_module_storage extends d13_module
+
+{
+
+	// ----------------------------------------------------------------------------------------
 	// getOptions
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOptions() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOptions()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getInventory
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getInventory() {
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getInventory()
+	{
 		global $d13;
-		
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$html = '';
-		
 		if (isset($this->data['options']['inventoryList']) && $this->data['options']['inventoryList']) {
-			foreach ($this->node->resources as $uid=>$unit) {
-				if ($d13->data->units->getbyid('active', $uid, $this->node->data['faction'])  && $unit['value'] > 0) {
-					$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$uid.'.png" title="'.$d13->data->gl->get('resources',$uid,'name').'">';
-					$tvars['tvar_listLabel'] 		= $d13->data->gl->get('resources', $uid, 'name');
-					$tvars['tvar_listAmount'] 		= floor($unit['value']);
-					$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
+			foreach($this->node->resources as $uid => $unit) {
+				if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
+					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $uid . '.png" title="' . $d13->getLangGL('resources', $uid, 'name') . '">';
+					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $uid, 'name');
+					$tvars['tvar_listAmount'] = floor($unit['value']);
+					$tvars['tvar_sub_popuplist'].= $d13->templateParse($d13->templateGet("sub.module.listcontent") , $tvars);
 				}
 			}
-			$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.list"), $tvars));
-	
-			$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-			$html .= '<a href="#" class="button active open-popup" data-popup=".popup-list">'.$d13->data->ui->get("inventory").'</a>';
-			$html .= '</p>';
-		} else {
-			$html .= '<p class="buttons-row theme-gray">';
-			$html .= '<a href="#" class="button active">'.$d13->data->ui->get("inventory").'</a>';
-			$html .= '</p>';
+
+			$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
+			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
+			$html.= '</p>';
+		}
+		else {
+			$html.= '<p class="buttons-row theme-gray">';
+			$html.= '<a href="#" class="button active">' . $d13->getLangUI("inventory") . '</a>';
+			$html.= '</p>';
 		}
 
 		return $html;
-	
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getPopup
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getPopup() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getPopup()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getQueue
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getQueue() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getQueue()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getStats
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getStats() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getStats()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getOutputList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOutputList() {
-		
-		global $d13, $gl, $ui;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOutputList()
+	{
+		global $d13;
 		$html = '';
-		
 		if (isset($this->data['storedResource'])) {
-			foreach ($this->data['storedResource'] as $res) {
-				if ($d13->data->resources->getbyid('active', $res)) {
-					$html .= $ui['storage'].'<a class="tooltip-left" data-tooltip="'.$ui['storage'].' '.$gl["resources"][$res]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$res.'.png" title="'.$gl["resources"][$res]["name"].'"></a>';
+			foreach($this->data['storedResource'] as $res) {
+				if ($d13->getResource($res, 'active')) {
+					$html.= $d13->getLangUI('storage') . '<a class="tooltip-left" data-tooltip="' . $d13->getLangUI('storage') . ' ' . $d13->getLangGL("resources", $res, "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $d13->getLangGL("resources", $res, "name") . '"></a>';
 				}
 			}
 		}
+
 		if (empty($html)) {
-			$html = $d13->data->ui->get("none");
+			$html = $d13->getLangUI("none");
 		}
+
 		return $html;
-		
 	}
-	
 }
 
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // d13_module_harvest
-// 
-//----------------------------------------------------------------------------------------
-class d13_module_harvest extends d13_module {
+//
+// ----------------------------------------------------------------------------------------
 
-	//----------------------------------------------------------------------------------------
+class d13_module_harvest extends d13_module
+
+{
+
+	// ----------------------------------------------------------------------------------------
 	// getOptions
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOptions() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOptions()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getInventory
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getInventory() {
-		
-		global $d13, $gl;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getInventory()
+	{
+		global $d13;
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
-		
 		$html = '';
-		
 		if ($this->data['options']['inventoryList']) {
-			foreach ($this->node->resources as $rid=>$res) {
-				if ($d13->data->resources->get($res['id'],'active') && $res['value'] > 0) {
-					$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$rid.'.png" title="'.$gl['resources'][$rid]['name'].'">';
-					$tvars['tvar_listLabel'] 		= $gl['resources'][$rid]['name'];
-					$tvars['tvar_listAmount'] 		= floor($res['value']);
-					$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
+			foreach($this->node->resources as $rid => $res) {
+				if ($d13->getResourceByID($res['id'], 'active') && $res['value'] > 0) {
+					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
+					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $rid, 'name');
+					$tvars['tvar_listAmount'] = floor($res['value']);
+					$tvars['tvar_sub_popuplist'].= $d13->templateParse($d13->templateGet("sub.module.listcontent") , $tvars);
 				}
 			}
-			$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.list"), $tvars));
-	
-			$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-			$html .= '<a href="#" class="button active open-popup" data-popup=".popup-list">'.$d13->data->ui->get("inventory").'</a>';
-			$html .= '</p>';
-		} else {
-			$html .= '<p class="buttons-row theme-gray">';
-			$html .= '<a href="#" class="button active">'.$d13->data->ui->get("inventory").'</a>';
-			$html .= '</p>';
+
+			$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
+			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
+			$html.= '</p>';
+		}
+		else {
+			$html.= '<p class="buttons-row theme-gray">';
+			$html.= '<a href="#" class="button active">' . $d13->getLangUI("inventory") . '</a>';
+			$html.= '</p>';
 		}
 
 		return $html;
-	
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getPopup
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getPopup() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getPopup()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getQueue
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getQueue() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getQueue()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getStats
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getStats() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getStats()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getOutputList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOutputList() {
-		
-		global $d13, $gl;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOutputList()
+	{
+		global $d13;
 		$html = '';
-		
 		if (isset($this->data['outputResource'])) {
-			foreach ($this->data['outputResource'] as $res) {
-				if ($d13->data->resources->getbyid('active', $res)) {
-					$html .= '<a class="tooltip-left" data-tooltip="'.$gl["resources"][$res]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$res.'.png" title="'.$gl["resources"][$res]["name"].'"></a>';
+			foreach($this->data['outputResource'] as $res) {
+				if ($d13->getResource($res, 'active')) {
+
+					// if ($d13->data->resources->getbyid('active', $res)) {
+
+					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $res, "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $d13->getLangGL("resources", $res, "name") . '"></a>';
 				}
 			}
 		}
+
 		if (empty($html)) {
-			$html = $d13->data->ui->get("none");
+			$html = $d13->getLangUI("none");
 		}
+
 		return $html;
 	}
-	
 }
 
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // d13_module_craft
-// 
-//----------------------------------------------------------------------------------------
-class d13_module_craft extends d13_module {
+//
+// ----------------------------------------------------------------------------------------
 
-	//----------------------------------------------------------------------------------------
+class d13_module_craft extends d13_module
+
+{
+
+	// ----------------------------------------------------------------------------------------
 	// getInventory
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getInventory() {
-		
-		global $d13, $game, $ui, $gl;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getInventory()
+	{
+		global $d13;
 		$html = '';
-	
-		//- - - - - Check Inventory
+
+		// - - - - - Check Inventory
+
 		$inventoryData = '';
 		$tvars['tvar_sub_popuplist'] = '';
-	
 		if ($this->data['options']['inventoryList']) {
-			//- - - - - Popover if Inventory filled
-			foreach ($this->node->components as $uid=>$unit) {
-				if (in_array($uid, $game['modules'][$this->node->data['faction']][$this->data['moduleId']]['components'])) {
+
+			// - - - - - Popover if Inventory filled
+
+			foreach($this->node->components as $uid => $unit) {
+				if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
 					if ($unit['value'] > 0) {
-						$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/components/'.$this->node->data['faction'].'/'.$uid.'.png" title="'.$gl['components'][$this->node->data['faction']][$uid]['name'].'">';
-						$tvars['tvar_listLabel'] 		= $gl['components'][$this->node->data['faction']][$uid]['name'];
-						$tvars['tvar_listAmount'] 		= $unit['value'];
-						$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
+						$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'] . '">';
+						$tvars['tvar_listLabel'] = $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'];
+						$tvars['tvar_listAmount'] = $unit['value'];
+						$tvars['tvar_sub_popuplist'].= $d13->templateParse($d13->templateGet("sub.module.listcontent") , $tvars);
 					}
 				}
 			}
-			$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.list"), $tvars));
-	
-			$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-			$html .= '<a href="#" class="button active open-popup" data-popup=".popup-list">'.$d13->data->ui->get("inventory").'</a>';
-			$html .= '</p>';
-		} else {
-			$html .= '<p class="buttons-row theme-gray">';
-			$html .= '<a href="#" class="button active">'.$d13->data->ui->get("inventory").'</a>';
-			$html .= '</p>';
+
+			$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
+			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
+			$html.= '</p>';
 		}
-	
+		else {
+			$html.= '<p class="buttons-row theme-gray">';
+			$html.= '<a href="#" class="button active">' . $d13->getLangUI("inventory") . '</a>';
+			$html.= '</p>';
+		}
+
 		return $html;
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getOptions
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOptions() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOptions()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getPopup
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getPopup() {
-	
-		global $d13, $game, $ui, $gl;
-	
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getPopup()
+	{
+		global $d13;
 		$tvars['tvar_sub_popupswiper'] = '';
 		$html = '';
-		
+
 		// - - - Craft Popup
-		foreach ($game['components'][$this->node->data['faction']] as $cid=>$component) {
-			if (in_array($cid, $game['modules'][$this->node->data['faction']][$this->data['moduleId']]['components'])) {
-				$costData='';
-				foreach ($component['cost'] as $key=>$cost) {
-					$costData.='<div class="cell">'.($cost['value']*$game['users']['cost']['train']).'</div><div class="cell"><a class="tooltip-left" data-tooltip="'.$gl["resources"][$cost['resource']]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$cost['resource'].'.png" title="'.$gl["resources"][$cost['resource']]["name"].'"></a></div>';
+
+		foreach($d13->getComponent($this->node->data['faction']) as $cid => $component) {
+			if (in_array($cid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
+				$costData = '';
+				foreach($component['cost'] as $key => $cost) {
+					$costData.= '<div class="cell">' . ($cost['value'] * $d13->getGeneral('users', 'cost', 'train')) . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div>';
 				}
+
 				if (!count($component['requirements'])) {
-					$requirementsData=$ui['none'];
-				} else {
-					$requirementsData='';
-					foreach ($component['requirements'] as $key=>$requirement) {
-						$requirementsData.='<div class="cell">'.$requirement['value'].'</div><div class="cell"><a class="tooltip-left" data-tooltip="'.$gl[$requirement['type']][$this->node->data['faction']][$requirement['id']]['name'].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/'.$requirement['type'].'/'.$this->node->data['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$this->node->data['faction']][$requirement['id']]['name'].'"></a></div>';
+					$requirementsData = $d13->getLangUI('none');
+				}
+				else {
+					$requirementsData = '';
+					foreach($component['requirements'] as $key => $requirement) {
+						$requirementsData.= '<div class="cell">' . $requirement['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $requirement['id'] . '.png" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div>';
 					}
 				}
-			
+
 				// - - - Check Affordable Maximum
-				$costLimit 	= $this->node->checkCostMax($component['cost'], 'craft');
-				$reqLimit 	= $this->node->checkRequirementsMax($component['requirements']);
-				$upkeepLimit = floor($this->node->resources[$game['components'][$this->node->data['faction']][$cid]['storageResource']]['value'] / $game['components'][$this->node->data['faction']][$cid]['storage']);
-				$unitLimit = abs($this->node->components[$cid]['value'] - $game['types'][$component['type']]['limit']);
+
+				$costLimit = $this->node->checkCostMax($component['cost'], 'craft');
+				$reqLimit = $this->node->checkRequirementsMax($component['requirements']);
+				$upkeepLimit = floor($this->node->resources[$d13->getComponent($this->node->data['faction'], $cid, 'storageResource') ]['value'] / $d13->getComponent($this->node->data['faction'], $cid, 'storage'));
+				$unitLimit = abs($this->node->components[$cid]['value'] - $d13->getGeneral('types', $component['type'], 'limit'));
 				$limitData = min($costLimit, $reqLimit, $upkeepLimit, $unitLimit);
 				$limitData = floor($limitData);
-			
-				//- - - - - Check Permissions
-				$disableData='';
-				
+
+				// - - - - - Check Permissions
+
+				$disableData = '';
 				$check_requirements = $this->node->checkRequirements($component['requirements']);
-				$check_cost 		= $this->node->checkCost($component['cost'], 'research');
-		
+				$check_cost = $this->node->checkCost($component['cost'], 'research');
 				if ($check_requirements['ok'] && $check_cost['ok']) {
 					$disableData = '';
-				} else {
+				}
+				else {
 					$disableData = 'disabled';
 				}
-			
+
 				if ($check_requirements['ok']) {
-					$tvars['tvar_requirementsIcon']		= $d13->tpl->get("sub.requirement.ok");
-				 } else {
-					$tvars['tvar_requirementsIcon']		= $d13->tpl->get("sub.requirement.notok");
+					$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.ok");
 				}
+				else {
+					$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.notok");
+				}
+
 				if ($check_cost['ok']) {
-					$tvars['tvar_costIcon']		= $d13->tpl->get("sub.requirement.ok");
-				} else {
-					$tvars['tvar_costIcon']		= $d13->tpl->get("sub.requirement.notok");
+					$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
 				}
-				
-				$tvars['tvar_nodeID'] 				= $this->node->data['id'];
-				$tvars['tvar_slotID'] 				= $this->data['slotId'];
-				$tvars['tvar_nodeFaction'] 			= $this->node->data['faction'];
-				$tvars['tvar_costData'] 			= $costData;
-				$tvars['tvar_requirementsData'] 	= $requirementsData;
-				$tvars['tvar_disableData'] 			= $disableData;
-				$tvars['tvar_cid'] 					= $cid;
-				$tvars['tvar_componentName'] 		= $gl["components"][$this->node->data['faction']][$cid]["name"];
-				$tvars['tvar_componentDescription'] = $gl["components"][$this->node->data['faction']][$cid]["description"];
-				$tvars['tvar_duration'] 			= misc::time_format((($component['duration']-$component['duration']*$this->data['totalIR']) * $game['users']['speed']['craft'])*60);
-				$tvars['tvar_compLimit'] 			= $limitData;
-				$tvars['tvar_compValue'] 			= $this->node->components[$cid]['value'];
-				$tvars['tvar_compStorage'] 			= $component['storage'];
-				$tvars['tvar_compResource'] 		= $component['storageResource'];
-				$tvars['tvar_compResourceName'] 	= $gl["resources"][$component['storageResource']]["name"];
-				$tvars['tvar_sub_popupswiper'] 		.=  $d13->tpl->render_subpage("sub.module.craft", $tvars);
-				
-			
+				else {
+					$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
+				}
+
+				$tvars['tvar_nodeID'] = $this->node->data['id'];
+				$tvars['tvar_slotID'] = $this->data['slotId'];
+				$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
+				$tvars['tvar_costData'] = $costData;
+				$tvars['tvar_requirementsData'] = $requirementsData;
+				$tvars['tvar_disableData'] = $disableData;
+				$tvars['tvar_cid'] = $cid;
+				$tvars['tvar_componentName'] = $d13->getLangGL("components", $this->node->data['faction'], $cid) ["name"];
+				$tvars['tvar_componentDescription'] = $d13->getLangGL("components", $this->node->data['faction'], $cid) ["description"];
+				$tvars['tvar_duration'] = misc::time_format((($component['duration'] - $component['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'craft')) * 60);
+				$tvars['tvar_compLimit'] = $limitData;
+				$tvars['tvar_compValue'] = $this->node->components[$cid]['value'];
+				$tvars['tvar_compStorage'] = $component['storage'];
+				$tvars['tvar_compResource'] = $component['storageResource'];
+				$tvars['tvar_compResourceName'] = $d13->getLangGL("resources", $component['storageResource'], "name");
+				$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.craft", $tvars);
 			}
 		}
-		
-		$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.swiper"), $tvars));
-		$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.swiper.horizontal"), $tvars));
 
+		$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.swiper") , $tvars));
+		$d13->templateInject($d13->templateParse($d13->templateGet("sub.swiper.horizontal") , $tvars));
 		return $tvars['tvar_sub_popupswiper'];
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getQueue
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getQueue() {
-		
-		global $d13, $game, $ui, $gl;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getQueue()
+	{
+		global $d13;
 		$html = '';
-	
+
 		// - - - Queue
+
 		if (count($this->node->queue['craft'])) {
 			$html = '';
-			foreach ($this->node->queue['craft'] as $item) {
+			foreach($this->node->queue['craft'] as $item) {
 				if (!$item['stage']) {
-					$stage=$ui['craft'];
-				} else {
-					$stage=$ui['remove'];
+					$stage = $d13->getLangUI('craft');
 				}
-				$remaining=$item['start']+$item['duration']*60-time();
-				$html .= '<div>'.$stage.' '.$item['quantity'].' '.$gl["components"][$this->node->data['faction']][$item['component']]["name"].'(s) <span id="craft_'.$item['id'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("craft_'.$item['id'].'", "?p=module&action=get&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'");</script> <a class="external" href="?p=module&action=cancelComponent&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'&craftId='.$item['id'].'"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
+				else {
+					$stage = $d13->getLangUI('remove');
+				}
+
+				$remaining = $item['start'] + $item['duration'] * 60 - time();
+				$html.= '<div>' . $stage . ' ' . $item['quantity'] . ' ' . $d13->getLangGL("components", $this->node->data['faction'], $item['component'], "name") . '(s) <span id="craft_' . $item['id'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("craft_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelComponent&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId'] . '&craftId=' . $item['id'] . '"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
 			}
 		}
+
 		// - - - Popover if Queue empty
+
 		if ($html == '') {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
-				#$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-				$html .= '<a href="#" class="button active open-popup" data-popup=".popup-swiper" onclick="swiperUpdate();">'.$d13->data->ui->get("craft").'</a>';
-				#$html .= '</p>';
-			} else {
-				#$html .= '<p class="buttons-row theme-gray">';
-				$html .= '<a href="#" class="button active">'.$d13->data->ui->get("craft").'</a>';
-				#$html .= '</p>';
+
+				// $html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
+
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-swiper" onclick="swiperUpdate();">' . $d13->getLangUI("craft") . '</a>';
+
+				// $html .= '</p>';
+
+			}
+			else {
+
+				// $html .= '<p class="buttons-row theme-gray">';
+
+				$html.= '<a href="#" class="button active">' . $d13->getLangUI("craft") . '</a>';
+
+				// $html .= '</p>';
+
 			}
 		}
-	
+
 		return $html;
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getStats
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getStats() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getStats()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
-	// getOutputList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOutputList() {
-	
-		global $d13, $gl;
-		
-		$html = '';
 
+	// ----------------------------------------------------------------------------------------
+	// getOutputList
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOutputList()
+	{
+		global $d13;
+		$html = '';
 		if (isset($this->data['components'])) {
-			foreach ($this->data['components'] as $component) {
-				if ($d13->data->components->getbyid('active', $component, $this->node->data['faction'])) {
-					$html.='<a class="tooltip-left" data-tooltip="'.$gl["components"][$this->node->data['faction']][$component]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/components/'.$this->node->data['faction'].'/'.$component.'.png" title="'.$gl["components"][$this->node->data['faction']][$component]["name"].'"></a>';
+			foreach($this->data['components'] as $component) {
+				if ($d13->getComponent($this->node->data['faction'], $component, 'active')) {
+
+					// if ($d13->data->components->getbyid('active', $component, $this->node->data['faction'])) {
+
+					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("components", $this->node->data['faction'], $component) ["name"] . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $component . '.png" title="' . $d13->getLangGL("components", $this->node->data['faction'], $component) ["name"] . '"></a>';
 				}
 			}
 		}
+
 		if (empty($html)) {
-			$html = $d13->data->ui->get("none");
+			$html = $d13->getLangUI("none");
 		}
+
 		return $html;
-		
 	}
-	
 }
 
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // d13_module_train
-// 
-//----------------------------------------------------------------------------------------
-class d13_module_train extends d13_module {
+//
+// ----------------------------------------------------------------------------------------
 
-	//----------------------------------------------------------------------------------------
+class d13_module_train extends d13_module
+
+{
+
+	// ----------------------------------------------------------------------------------------
 	// getInventory
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getInventory() {
-		
-		global $d13, $game, $ui, $gl;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getInventory()
+	{
+		global $d13;
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$html = '';
-		
 		if ($this->data['options']['inventoryList']) {
-			
-			foreach ($this->node->units as $uid=>$unit) {
-				if (in_array($uid, $game['modules'][$this->node->data['faction']][$this->data['moduleId']]['units'])) {
-					if ($d13->data->units->getbyid('active', $uid, $this->node->data['faction']) && $unit['value'] > 0) {
-						$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/units/'.$this->node->data['faction'].'/'.$uid.'.png" title="'.$gl['units'][$this->node->data['faction']][$uid]['name'].'">';
-						$tvars['tvar_listLabel'] 		= $gl['units'][$this->node->data['faction']][$uid]['name'];
-						$tvars['tvar_listAmount'] 		= $unit['value'];
-						$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
+			foreach($this->node->units as $uid => $unit) {
+				if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'units'))) {
+					if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
+
+						// if ($d13->data->units->getbyid('active', $uid, $this->node->data['faction']) && $unit['value'] > 0) {
+
+						$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
+						$tvars['tvar_listLabel'] = $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'];
+						$tvars['tvar_listAmount'] = $unit['value'];
+						$tvars['tvar_sub_popuplist'].= $d13->templateParse($d13->templateGet("sub.module.listcontent") , $tvars);
 					}
 				}
 			}
-			$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.list"), $tvars));
-	
-			$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-			$html .= '<a href="#" class="button active open-popup" data-popup=".popup-list">'.$d13->data->ui->get("inventory").'</a>';
-			$html .= '</p>';
-		} else {
-			$html .= '<p class="buttons-row theme-gray">';
-			$html .= '<a href="#" class="button active">'.$d13->data->ui->get("inventory").'</a>';
-			$html .= '</p>';
+
+			$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
+			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
+			$html.= '</p>';
 		}
-		
+		else {
+			$html.= '<p class="buttons-row theme-gray">';
+			$html.= '<a href="#" class="button active">' . $d13->getLangUI("inventory") . '</a>';
+			$html.= '</p>';
+		}
+
 		return $html;
-		
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getOptions
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOptions() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOptions()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getPopup
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getPopup() {
-		
-		global $d13, $game, $gl, $ui;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getPopup()
+	{
+		global $d13;
 		$html = '';
 		$tvars = array();
 		$tvars['tvar_sub_popupswiper'] = '';
-		
-		foreach ($game['units'][$this->node->data['faction']] as $uid=>$unit) {
-			if (in_array($uid, $game['modules'][$this->node->data['faction']][$this->data['moduleId']]['units'])) {
-			
+		foreach($d13->getUnit($this->node->data['faction']) as $uid => $unit) {
+			if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'units'))) {
 				$unit = new d13_unit($uid, $this->node);
-			
-				//- - - - - Assemble Costs
+
+				// - - - - - Assemble Costs
+
 				$get_costs = $unit->getCost();
 				$costData = '';
-				foreach ($get_costs as $cost) {
-					$costData .= '<div class="cell">'.$cost['value'].'</div><div class="cell"><a class="tooltip-left" data-tooltip="'.$cost['name'].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$cost['icon'].'" title="'.$cost['name'].'"></a></div>';
+				foreach($get_costs as $cost) {
+					$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $cost['name'] . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['icon'] . '" title="' . $cost['name'] . '"></a></div>';
 				}
-			
-				//- - - - - Assemble Requirements
+
+				// - - - - - Assemble Requirements
+
 				$get_requirements = $unit->getRequirements();
 				if (empty($get_requirements)) {
-					$requirementsData = $ui['none'];
-				} else {
+					$requirementsData = $d13->getLangUI('none');
+				}
+				else {
 					$requirementsData = '';
 				}
-				foreach ($get_requirements as $req) {
-					$requirementsData .= '<div class="cell">'.$req['value'].'</div><div class="cell"><a class="tooltip-left" data-tooltip="'.$req['name'].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/'.$req['type'].'/'.$this->node->data['faction'].'/'.$req['icon'].'" title="'.$req['type_name'].' - '.$req['name'].'"></a></div>';
+
+				foreach($get_requirements as $req) {
+					$requirementsData.= '<div class="cell">' . $req['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $req['name'] . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $req['type'] . '/' . $this->node->data['faction'] . '/' . $req['icon'] . '" title="' . $req['type_name'] . ' - ' . $req['name'] . '"></a></div>';
 				}
 
-				//- - - - - Check Permissions
-				$disableData='';
-			
-				$check_requirements = $unit->getCheckRequirements();
-				$check_cost 		= $unit->getCheckCost();
+				// - - - - - Check Permissions
 
+				$disableData = '';
+				$check_requirements = $unit->getCheckRequirements();
+				$check_cost = $unit->getCheckCost();
 				if ($check_requirements && $check_cost) {
 					$disableData = '';
-				} else {
+				}
+				else {
 					$disableData = 'disabled';
 				}
 
 				if ($check_requirements) {
-					$tvars['tvar_requirementsIcon']	= $d13->tpl->get("sub.requirement.ok");
-				 } else {
-					$tvars['tvar_requirementsIcon']	= $d13->tpl->get("sub.requirement.notok");
+					$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.ok");
 				}
+				else {
+					$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.notok");
+				}
+
 				if ($check_cost) {
-					$tvars['tvar_costIcon']			= $d13->tpl->get("sub.requirement.ok");
-				} else {
-					$tvars['tvar_costIcon']			= $d13->tpl->get("sub.requirement.notok");
+					$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
 				}
-			
-				//- - - - - Check Upgrades
+				else {
+					$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
+				}
+
+				// - - - - - Check Upgrades
+
 				$upgradeData = array();
 				$upgradeData = $unit->getUpgrades();
+				$tvars['tvar_unitHPPlus'] = "[+" . $upgradeData['hp'] . "]";
+				$tvars['tvar_unitDamagePlus'] = "[+" . $upgradeData['damage'] . "]";
+				$tvars['tvar_unitArmorPlus'] = "[+" . $upgradeData['armor'] . "]";
+				$tvars['tvar_unitSpeedPlus'] = "[+" . $upgradeData['speed'] . "]";
 
-				$tvars['tvar_unitHPPlus'] 				= "[+". $upgradeData['hp'] . "]";
-				$tvars['tvar_unitDamagePlus'] 			= "[+". $upgradeData['damage'] . "]";
-				$tvars['tvar_unitArmorPlus'] 			= "[+". $upgradeData['armor'] . "]";
-				$tvars['tvar_unitSpeedPlus'] 			= "[+". $upgradeData['speed'] . "]";
-			
-				//- - - - - Setup Template Data
-				$tvars['tvar_nodeFaction'] 				= $this->node->data['faction'];
-				$tvars['tvar_costData'] 				= $costData;
-				$tvars['tvar_requirementsData'] 		= $requirementsData;
-				$tvars['tvar_disableData'] 				= $disableData;
-				$tvars['tvar_uid'] 						= $uid;
-				$tvars['tvar_unitName'] 				= $unit->data['name'];
-				$tvars['tvar_unitDescription'] 			= $unit->data['description'];
-				$tvars['tvar_unitValue'] 				= $this->node->units[$uid]['value'];
-				$tvars['tvar_unitType'] 				= $unit->data['type'];
-				$tvars['tvar_unitClass'] 				= $unit->data['class'];
-				$tvars['tvar_unitHP'] 					= $unit->data['hp'];
-				$tvars['tvar_unitDamage'] 				= $unit->data['damage'];
-				$tvars['tvar_unitArmor'] 				= $unit->data['armor'];
-				$tvars['tvar_unitSpeed'] 				= $unit->data['speed'];
-				$tvars['tvar_unitLimit'] 				= $unit->getMaxProduction();
-				$tvars['tvar_unitDuration'] 			= misc::time_format((($unit->data['duration'] - $unit->data['duration'] * $this->data['totalIR']) * $game['users']['speed']['train']) * 60);
-				$tvars['tvar_unitUpkeep'] 				= $unit->data['upkeep'];
-				$tvars['tvar_unitUpkeepResource'] 		= $unit->data['upkeepResource'];
-				$tvars['tvar_unitUpkeepResourceName']	= $gl['resources'][$unit->data['upkeepResource']]['name'];
-				
-				$tvars['tvar_sub_popupswiper'] 			.= $d13->tpl->render_subpage("sub.module.train", $tvars);
-				
+				// - - - - - Setup Template Data
+
+				$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
+				$tvars['tvar_costData'] = $costData;
+				$tvars['tvar_requirementsData'] = $requirementsData;
+				$tvars['tvar_disableData'] = $disableData;
+				$tvars['tvar_uid'] = $uid;
+				$tvars['tvar_unitName'] = $unit->data['name'];
+				$tvars['tvar_unitDescription'] = $unit->data['description'];
+				$tvars['tvar_unitValue'] = $this->node->units[$uid]['value'];
+				$tvars['tvar_unitType'] = $unit->data['type'];
+				$tvars['tvar_unitClass'] = $unit->data['class'];
+				$tvars['tvar_unitHP'] = $unit->data['hp'];
+				$tvars['tvar_unitDamage'] = $unit->data['damage'];
+				$tvars['tvar_unitArmor'] = $unit->data['armor'];
+				$tvars['tvar_unitSpeed'] = $unit->data['speed'];
+				$tvars['tvar_unitLimit'] = $unit->getMaxProduction();
+				$tvars['tvar_unitDuration'] = misc::time_format((($unit->data['duration'] - $unit->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'train')) * 60);
+				$tvars['tvar_unitUpkeep'] = $unit->data['upkeep'];
+				$tvars['tvar_unitUpkeepResource'] = $unit->data['upkeepResource'];
+				$tvars['tvar_unitUpkeepResourceName'] = $d13->getLangGL('resources', $unit->data['upkeepResource'], 'name');
+				$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.train", $tvars);
 			}
 		}
-		
-		$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.swiper"), $tvars));
-	$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.swiper.horizontal"), $tvars));
+
+		$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.swiper") , $tvars));
+		$d13->templateInject($d13->templateParse($d13->templateGet("sub.swiper.horizontal") , $tvars));
 		return $tvars['tvar_sub_popupswiper'];
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getQueue
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getQueue() {
-		
-		global $d13;
-		
-		$html = '';
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
 
+	public
+
+	function getQueue()
+	{
+		global $d13;
+		$html = '';
 		if (count($this->node->queue['train'])) {
-			foreach ($this->node->queue['train'] as $item) {
+			foreach($this->node->queue['train'] as $item) {
 				if (!$item['stage']) {
-					$stage=$ui['train'];
-				} else {
-					$stage=$ui['remove'];
+					$stage = $d13->getLangUI('train');
 				}
-				$remaining=$item['start']+$item['duration']*60-time();
-				$html .= '<div>'.$stage.' '.$item['quantity'].$gl["units"][$this->node->data['faction']][$item['unit']]["name"].' <span id="train_'.$item['id'].'">'.implode(':', misc::sToHMS($remaining)).'</span><script type="text/javascript">timedJump("train_'.$item['id'].'", "?p=module&action=get&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'");</script> <a class="external link" href="?p=module&action=cancelUnit&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'&trainId='.$item['id'].'"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
+				else {
+					$stage = $d13->getLangUI('remove');
+				}
+
+				$remaining = $item['start'] + $item['duration'] * 60 - time();
+				$html.= '<div>' . $stage . ' ' . $item['quantity'] . $d13->getLangGL("units", $this->node->data['faction'], $item['unit'], "name") . ' <span id="train_' . $item['id'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("train_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId'] . '");</script> <a class="external link" href="?p=module&action=cancelUnit&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId'] . '&trainId=' . $item['id'] . '"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
 			}
 		}
 
 		// - - - Popover if Queue empty
+
 		if ($html == '') {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
-				$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-				$html .= '<a href="#" class="button active open-popup" data-popup=".popup-swiper" onclick="swiperUpdate();">'.$d13->data->ui->get("train").'</a>';
-				$html .= '</p>';
-			} else {
-				$html .= '<p class="buttons-row theme-gray">';
-				$html .= '<a href="#" class="button active">'.$d13->data->ui->get("train").'</a>';
-				$html .= '</p>';
+				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-swiper" onclick="swiperUpdate();">' . $d13->getLangUI("train") . '</a>';
+				$html.= '</p>';
+			}
+			else {
+				$html.= '<p class="buttons-row theme-gray">';
+				$html.= '<a href="#" class="button active">' . $d13->getLangUI("train") . '</a>';
+				$html.= '</p>';
 			}
 		}
-		
+
 		return $html;
-		
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getStats
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getStats() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getStats()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
-	// getOutputList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOutputList() {
-		
-		global $d13, $gl;
-		
-		$html = '';
 
+	// ----------------------------------------------------------------------------------------
+	// getOutputList
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOutputList()
+	{
+		global $d13;
+		$html = '';
 		if (isset($this->data['units'])) {
-			foreach ($this->data['units'] as $unit) {
-				if ($d13->data->units->getbyid('active', $unit, $this->node->data['faction'])) {
-					$html.='<a class="tooltip-left" data-tooltip="'.$gl["units"][$this->node->data['faction']][$unit]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/units/'.$this->node->data['faction'].'/'.$unit.'.png" title="'.$gl["units"][$this->node->data['faction']][$unit]["name"].'"></a>';
+			foreach($this->data['units'] as $unit) {
+				if ($d13->getUnit($this->node->data['faction'], $unit, 'active')) {
+
+					// if ($d13->data->units->getbyid('active', $unit, $this->node->data['faction'])) {
+
+					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("units", $this->node->data['faction'], $unit) ["name"] . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $unit . '.png" title="' . $d13->getLangGL("units", $this->node->data['faction'], $unit) ["name"] . '"></a>';
 				}
 			}
 		}
+
 		if (empty($html)) {
-			$html = $d13->data->ui->get("none");
+			$html = $d13->getLangUI("none");
 		}
+
 		return $html;
 	}
-	
 }
 
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // d13_module_research
-// 
-//----------------------------------------------------------------------------------------
-class d13_module_research extends d13_module {
+//
+// ----------------------------------------------------------------------------------------
 
+class d13_module_research extends d13_module
 
-	//----------------------------------------------------------------------------------------
+{
+
+	// ----------------------------------------------------------------------------------------
 	// getInventory
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getInventory() {
-		
-		global $d13, $game, $gl, $ui;
-		
-		$html = '';
-		
-		//- - - - - Check Inventory
-		$tvars['tvar_sub_popuplist'] = '';
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
 
+	public
+
+	function getInventory()
+	{
+		global $d13;
+		$html = '';
+
+		// - - - - - Check Inventory
+
+		$tvars['tvar_sub_popuplist'] = '';
 		if ($this->data['options']['inventoryList']) {
-			//- - - - - Popover if Inventory filled
-			foreach ($game['technologies'][$this->node->data['faction']] as $tid=>$tech) {
-				if ($d13->data->technologies->getbyid('active', $tid, $this->node->data['faction']) && in_array($tid, $game['modules'][$this->node->data['faction']][$this->data['moduleId']]['technologies'])) {
+
+			// - - - - - Popover if Inventory filled
+
+			foreach($d13->getTechnology($this->node->data['faction']) as $tid => $tech) {
+				if ($tech['active'] && in_array($tid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'technologies'))) {
 					if ($this->node->technologies[$tid]['level'] > 0) {
-						$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/technologies/'.$this->node->data['faction'].'/'.$tid.'.png" title="'.$gl['technologies'][$this->node->data['faction']][$tid]['name'].'">';
-						$tvars['tvar_listLabel'] 		= $gl['technologies'][$this->node->data['faction']][$tid]['name'];
-						$tvars['tvar_listAmount'] 		= $this->node->technologies[$tid]['level'];
-						$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
+						$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $tid . '.png" title="' . $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['name'] . '">';
+						$tvars['tvar_listLabel'] = $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['name'];
+						$tvars['tvar_listAmount'] = $this->node->technologies[$tid]['level'];
+						$tvars['tvar_sub_popuplist'].= $d13->templateParse($d13->templateGet("sub.module.listcontent") , $tvars);
 					}
 				}
 			}
-			$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.list"), $tvars));
 
-			$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-			$html .= '<a href="#" class="button active open-popup" data-popup=".popup-list">'.$d13->data->ui->get("inventory").'</a>';
-			$html .= '</p>';
-		} else {
-			$html .= '<p class="buttons-row theme-gray">';
-			$html .= '<a href="#" class="button active">'.$d13->data->ui->get("inventory").'</a>';
-			$html .= '</p>';
+			$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
+			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
+			$html.= '</p>';
 		}
-	
+		else {
+			$html.= '<p class="buttons-row theme-gray">';
+			$html.= '<a href="#" class="button active">' . $d13->getLangUI("inventory") . '</a>';
+			$html.= '</p>';
+		}
+
 		return $html;
-		
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getOptions
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOptions() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOptions()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getPopup
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getPopup() {
-		
-		global $d13, $game, $gl, $ui;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getPopup()
+	{
+		global $d13;
 		$html = '';
-		
+
 		// - - - Research Popup
+
 		$tvars['tvar_sub_popupswiper'] = "";
-	
-		foreach ($game['technologies'][$this->node->data['faction']] as $tid=>$technology) {
-	
-			if ($technology['active'] && in_array($tid, $game['modules'][$this->node->data['faction']][$this->data['moduleId']]['technologies'])) {
-			
-				//- - - - - Check Cost & Requirements
-				$costData='';
-				foreach ($technology['cost'] as $key=>$cost) {
-					$costData.='<div class="cell"><a class="tooltip-left" data-tooltip="'.$gl["resources"][$cost['resource']]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$cost['resource'].'.png" title="'.$gl["resources"][$cost['resource']]["name"].'"></a></div><div class="cell">'.($cost['value']*$game['users']['cost']['research']).'</div>';
+		foreach($d13->getTechnology($this->node->data['faction']) as $tid => $technology) {
+			if ($technology['active'] && in_array($tid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'technologies'))) {
+
+				// - - - - - Check Cost & Requirements
+
+				$costData = '';
+				foreach($technology['cost'] as $key => $cost) {
+					$costData.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div><div class="cell">' . ($cost['value'] * $d13->getGeneral('users', 'cost', 'research')) . '</div>';
 				}
+
 				if (!count($technology['requirements'])) {
-					$requirementsData=$ui['none'];
-				} else {
-					$requirementsData='';
-					foreach ($technology['requirements'] as $key=>$requirement) {
-						$requirementsData.='<div class="cell"><a class="tooltip-left" data-tooltip="'.$gl[$requirement['type']][$this->node->data['faction']][$requirement['id']]['name'].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/'.$requirement['type'].'/'.$this->node->data['faction'].'/'.$requirement['id'].'.png" title="'.$ui[$requirement['type']].' - '.$gl[$requirement['type']][$this->node->data['faction']][$requirement['id']]['name'].'"></a></div><div class="cell">'.$requirement['level'].'</div>';
+					$requirementsData = $d13->getLangUI('none');
+				}
+				else {
+					$requirementsData = '';
+					foreach($technology['requirements'] as $key => $requirement) {
+						$requirementsData.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $requirement['id'] . '.png" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div><div class="cell">' . $requirement['level'] . '</div>';
 					}
 				}
-			
-				//- - - - - Check Permissions
-				$linkData='';
+
+				// - - - - - Check Permissions
+
+				$linkData = '';
 				$check_requirements = NULL;
 				$check_cost = NULL;
-		
 				$check_requirements = $this->node->checkRequirements($technology['requirements']);
-				$check_cost 		= $this->node->checkCost($technology['cost'], 'research');
-		
+				$check_cost = $this->node->checkCost($technology['cost'], 'research');
 				if ($check_requirements['ok'] && $check_cost['ok'] && $this->node->technologies[$tid]['level'] < $technology['maxLevel']) {
-					$linkData .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-					$linkData .= '<a href="?p=module&action=addTechnology&nodeId='.$this->node->data['id'].'&slotId='.$this->data['slotId'].'&technologyId='.$tid.'" class="external button active">'.$d13->data->ui->get("research").'</a>';
-					$linkData .= '</p>';
-				} else {
-					$linkData .= '<p class="buttons-row theme-gray">';
-					$linkData .= '<a href="#" class="button active">'.$d13->data->ui->get("research").'</a>';
-					$linkData .= '</p>';
+					$linkData.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+					$linkData.= '<a href="?p=module&action=addTechnology&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&technologyId=' . $tid . '" class="external button active">' . $d13->getLangUI("research") . '</a>';
+					$linkData.= '</p>';
+				}
+				else {
+					$linkData.= '<p class="buttons-row theme-gray">';
+					$linkData.= '<a href="#" class="button active">' . $d13->getLangUI("research") . '</a>';
+					$linkData.= '</p>';
 				}
 
 				if ($check_requirements['ok']) {
-					$tvars['tvar_requirementsIcon']		= $d13->tpl->get("sub.requirement.ok");
-				 } else {
-					$tvars['tvar_requirementsIcon']		= $d13->tpl->get("sub.requirement.notok");
+					$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.ok");
 				}
+				else {
+					$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.notok");
+				}
+
 				if ($check_cost['ok']) {
-					$tvars['tvar_costIcon']		= $d13->tpl->get("sub.requirement.ok");
-				} else {
-					$tvars['tvar_costIcon']		= $d13->tpl->get("sub.requirement.notok");
+					$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
 				}
-				
-				$tvars['tvar_nodeFaction'] 			= $this->node->data['faction'];
-				$tvars['tvar_linkData'] 		= $linkData;
-				$tvars['tvar_costData'] 		= $costData;
+				else {
+					$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
+				}
+
+				$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
+				$tvars['tvar_linkData'] = $linkData;
+				$tvars['tvar_costData'] = $costData;
 				$tvars['tvar_requirementsData'] = $requirementsData;
-				$tvars['tvar_tid'] 				= $tid;
-				$tvars['tvar_techName'] 		= $gl['technologies'][$this->node->data['faction']][$tid]['name'];
-				$tvars['tvar_techDescription'] 	= $gl['technologies'][$this->node->data['faction']][$tid]['description'];
-				$tvars['tvar_techTier'] 		= $this->node->technologies[$tid]['level'];
-				$tvars['tvar_techMaxTier'] 		= $technology['maxLevel'];
-				$tvars['tvar_techDuration'] 	= misc::time_format((($technology['duration']-$technology['duration'] * $this->data['totalIR'])*$game['users']['speed']['research'])*60);
-				$tvars['tvar_sub_popupswiper'] .= $d13->tpl->render_subpage("sub.module.research", $tvars);
-			
+				$tvars['tvar_tid'] = $tid;
+				$tvars['tvar_techName'] = $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['name'];
+				$tvars['tvar_techDescription'] = $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['description'];
+				$tvars['tvar_techTier'] = $this->node->technologies[$tid]['level'];
+				$tvars['tvar_techMaxTier'] = $technology['maxLevel'];
+				$tvars['tvar_techDuration'] = misc::time_format((($technology['duration'] - $technology['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'research')) * 60);
+				$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.research", $tvars);
 			}
 		}
-		
-		$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.swiper"), $tvars));
-		$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.swiper.horizontal"), $tvars));
-		
+
+		$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.swiper") , $tvars));
+		$d13->templateInject($d13->templateParse($d13->templateGet("sub.swiper.horizontal") , $tvars));
 		return $tvars['tvar_sub_popupswiper'];
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getQueue
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getQueue() {
-		
-		global $d13, $gl;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getQueue()
+	{
+		global $d13;
 		$html = '';
-		
+
 		// - - - Queue
+
 		if (count($this->node->queue['research'])) {
-			foreach ($this->node->queue['research'] as $item) {
-				$remaining=$item['start']+$item['duration']*60-time();
-				$html .= '<div>'.$d13->data->ui->get("research").' '.$gl['technologies'][$this->node->data['faction']][$item['technology']]["name"].' <span id="research_'.$item['node'].'_'.$item['technology'].'">'.implode(':', misc::sToHMS($remaining)).'</span> <script type="text/javascript">timedJump("research_'.$item['node'].'_'.$item['technology'].'", "?p=module&action=get&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'");</script> <a class="external" href="?p=module&action=cancelTechnology&nodeId='.$this->node->data['id'].'&slotId='.$_GET['slotId'].'&technologyId='.$item['technology'].'"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
+			foreach($this->node->queue['research'] as $item) {
+				$remaining = $item['start'] + $item['duration'] * 60 - time();
+				$html.= '<div>' . $d13->getLangUI("research") . ' ' . $d13->getLangGL('technologies', $this->node->data['faction'], $item['technology'], "name") . ' <span id="research_' . $item['node'] . '_' . $item['technology'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span> <script type="text/javascript">timedJump("research_' . $item['node'] . '_' . $item['technology'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelTechnology&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId'] . '&technologyId=' . $item['technology'] . '"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
 			}
 		}
-	
+
 		// - - - Popover if Queue empty
+
 		if ($html == '') {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
-				$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-				$html .= '<a href="#" class="button active open-popup" data-popup=".popup-swiper" onclick="swiperUpdate();">'.$d13->data->ui->get("research").'</a>';
-				$html .= '</p>';
-			} else {
-				$html .= '<p class="buttons-row theme-gray">';
-				$html .= '<a href="#" class="button active">'.$d13->data->ui->get("research").'</a>';
-				$html .= '</p>';
+				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-swiper" onclick="swiperUpdate();">' . $d13->getLangUI("research") . '</a>';
+				$html.= '</p>';
+			}
+			else {
+				$html.= '<p class="buttons-row theme-gray">';
+				$html.= '<a href="#" class="button active">' . $d13->getLangUI("research") . '</a>';
+				$html.= '</p>';
 			}
 		}
-	
+
 		return $html;
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getStats
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getStats() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getStats()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
-	// getOutputList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOutputList() {
-	
-		global $d13, $gl;
-		
-		$html = '';
 
+	// ----------------------------------------------------------------------------------------
+	// getOutputList
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOutputList()
+	{
+		global $d13;
+		$html = '';
 		if (isset($this->data['technologies'])) {
-			foreach ($this->data['technologies'] as $technology) {
-				if ($d13->data->technologies->getbyid('active', $technology, $this->node->data['faction'])) {
-					$html.='<a class="tooltip-left" data-tooltip="'.$gl["technologies"][$this->node->data['faction']][$technology]["name"].'"><img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/technologies/'.$this->node->data['faction'].'/'.$technology.'.png" title="'.$gl["technologies"][$this->node->data['faction']][$technology]["name"].'"></a>';
+			foreach($this->data['technologies'] as $technology) {
+				if ($d13->getTechnology($this->node->data['faction'], $technology, 'active')) {
+
+					// if ($d13->data->technologies->getbyid('active', $technology, $this->node->data['faction'])) {
+
+					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology) ["name"] . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $technology . '.png" title="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology) ["name"] . '"></a>';
 				}
 			}
 		}
+
 		if (empty($html)) {
-			$html = $d13->data->ui->get("none");
+			$html = $d13->getLangUI("none");
 		}
+
 		return $html;
-		
 	}
-		
 }
 
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // d13_module_alliance
-// 
-//----------------------------------------------------------------------------------------
-class d13_module_alliance extends d13_module {
+//
+// ----------------------------------------------------------------------------------------
 
-	//----------------------------------------------------------------------------------------
+class d13_module_alliance extends d13_module
+
+{
+
+	// ----------------------------------------------------------------------------------------
 	// getInventory
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getInventory() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getInventory()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getOptions
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOptions() {
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOptions()
+	{
 		global $d13;
-		
 		$tvars = array();
 		$html = '';
-		
-		//- - - - Option: Alliance List
+
+		// - - - - Option: Alliance List
+
 		if ($this->data['options']['allianceGet']) {
-			$tvars['tvar_Label']				= $d13->data->ui->get("get") . ' ' . $d13->data->ui->get("alliance");
-			$tvars['tvar_Link']					= '?p=alliance&action=get&nodeId='.$this->node->data['id'];
-			$tvars['tvar_LinkLabel']			= $d13->data->ui->get("get") . ' ' . $d13->data->ui->get("alliance");
-			$html								.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+			$tvars['tvar_Label'] = $d13->getLangUI("get") . ' ' . $d13->getLangUI("alliance");
+			$tvars['tvar_Link'] = '?p=alliance&action=get&nodeId=' . $this->node->data['id'];
+			$tvars['tvar_LinkLabel'] = $d13->getLangUI("get") . ' ' . $d13->getLangUI("alliance");
+			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
 		}
-	
-		//- - - - Option: Alliance Edit
+
+		// - - - - Option: Alliance Edit
+
 		if ($this->data['options']['allianceEdit']) {
-			$tvars['tvar_Label']				= $d13->data->ui->get("edit") . ' ' . $d13->data->ui->get("alliance");
-			$tvars['tvar_Link']					= '?p=alliance&action=add&nodeId='.$this->node->data['id'];
-			$tvars['tvar_LinkLabel']			= $d13->data->ui->get("edit") . ' ' . $d13->data->ui->get("alliance");
-			$html								.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+			$tvars['tvar_Label'] = $d13->getLangUI("edit") . ' ' . $d13->getLangUI("alliance");
+			$tvars['tvar_Link'] = '?p=alliance&action=add&nodeId=' . $this->node->data['id'];
+			$tvars['tvar_LinkLabel'] = $d13->getLangUI("edit") . ' ' . $d13->getLangUI("alliance");
+			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
 		}
-	
-		//- - - - Option: Alliance Remove
+
+		// - - - - Option: Alliance Remove
+
 		if ($this->data['options']['allianceRemove']) {
-			$tvars['tvar_Label']				= $d13->data->ui->get("remove") . ' ' . $d13->data->ui->get("alliance");
-			$tvars['tvar_Link']					= '?p=alliance&action=remove&nodeId='.$this->node->data['id'];
-			$tvars['tvar_LinkLabel']			= $d13->data->ui->get("remove") . ' ' . $d13->data->ui->get("alliance");
-			$html								.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+			$tvars['tvar_Label'] = $d13->getLangUI("remove") . ' ' . $d13->getLangUI("alliance");
+			$tvars['tvar_Link'] = '?p=alliance&action=remove&nodeId=' . $this->node->data['id'];
+			$tvars['tvar_LinkLabel'] = $d13->getLangUI("remove") . ' ' . $d13->getLangUI("alliance");
+			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
 		}
-	
-		//- - - - Option: Alliance Invite
+
+		// - - - - Option: Alliance Invite
+
 		if ($this->data['options']['allianceInvite']) {
-			$tvars['tvar_Label']				= $d13->data->ui->get("invite") . ' ' . $d13->data->ui->get("members");
-			$tvars['tvar_Link']					= '?p=alliance&action=addInvitation&nodeId='.$this->node->data['id'];
-			$tvars['tvar_LinkLabel']			= $d13->data->ui->get("invite") . ' ' . $d13->data->ui->get("members");
-			$html								.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+			$tvars['tvar_Label'] = $d13->getLangUI("invite") . ' ' . $d13->getLangUI("members");
+			$tvars['tvar_Link'] = '?p=alliance&action=addInvitation&nodeId=' . $this->node->data['id'];
+			$tvars['tvar_LinkLabel'] = $d13->getLangUI("invite") . ' ' . $d13->getLangUI("members");
+			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
 		}
-	
-		//- - - - Option: Alliance Go to War
+
+		// - - - - Option: Alliance Go to War
+
 		if ($this->data['options']['allianceWar']) {
-			$tvars['tvar_Label']				= $d13->data->ui->get("warDeclaration");
-			$tvars['tvar_Link']					= '?p=alliance&action=addWar&nodeId='.$this->node->data['id'];
-			$tvars['tvar_LinkLabel']			= $d13->data->ui->get("warDeclaration");
-			$html								.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+			$tvars['tvar_Label'] = $d13->getLangUI("warDeclaration");
+			$tvars['tvar_Link'] = '?p=alliance&action=addWar&nodeId=' . $this->node->data['id'];
+			$tvars['tvar_LinkLabel'] = $d13->getLangUI("warDeclaration");
+			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
 		}
-	
-		//- - - - Option: 
-		//- - - - Option: 
-		//- - - - Option: 
-	
+
+		// - - - - Option:
+		// - - - - Option:
+		// - - - - Option:
+
 		return $html;
-	
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getPopup
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getPopup() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getPopup()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getQueue
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getQueue() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getQueue()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getStats
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getStats() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getStats()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getOutputList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOutputList() {
-	global $d13;
-		
-		return $d13->data->ui->get("none");
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOutputList()
+	{
+		global $d13;
+		return $d13->getLangUI("none");
 	}
 }
 
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // d13_module_command
-// 
-//----------------------------------------------------------------------------------------
-class d13_module_command extends d13_module {
-	
-	//----------------------------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------------------------
+
+class d13_module_command extends d13_module
+
+{
+
+	// ----------------------------------------------------------------------------------------
 	// getInventory
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getInventory() {
-	
-		global $d13, $gl;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getInventory()
+	{
+		global $d13;
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
-		
 		$html = '';
-		
 		if ($this->data['options']['inventoryList']) {
-			foreach ($this->node->resources as $rid=>$res) {
-				if ($d13->data->resources->get($res['id'],'active') && $res['value'] > 0) {
-					$tvars['tvar_listImage'] 		= '<img class="resource" src="templates/'.$_SESSION[CONST_PREFIX.'User']['template'].'/images/resources/'.$rid.'.png" title="'.$gl['resources'][$rid]['name'].'">';
-					$tvars['tvar_listLabel'] 		= $gl['resources'][$rid]['name'];
-					$tvars['tvar_listAmount'] 		= floor($res['value']);
-					$tvars['tvar_sub_popuplist'] 	.= $d13->tpl->parse($d13->tpl->get("sub.module.listcontent"), $tvars);
+			foreach($this->node->resources as $rid => $res) {
+				if ($d13->getResourceByID($res['id'], 'active') && $res['value'] > 0) {
+					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
+					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $rid, 'name');
+					$tvars['tvar_listAmount'] = floor($res['value']);
+					$tvars['tvar_sub_popuplist'].= $d13->templateParse($d13->templateGet("sub.module.listcontent") , $tvars);
 				}
 			}
-			$d13->tpl->inject($d13->tpl->parse($d13->tpl->get("sub.popup.list"), $tvars));
-	
-			$html .= '<p class="buttons-row theme-'.$_SESSION[CONST_PREFIX.'User']['color'].'">';
-			$html .= '<a href="#" class="button active open-popup" data-popup=".popup-list">'.$d13->data->ui->get("inventory").'</a>';
-			$html .= '</p>';
-		} else {
-			$html .= '<p class="buttons-row theme-gray">';
-			$html .= '<a href="#" class="button active">'.$d13->data->ui->get("inventory").'</a>';
-			$html .= '</p>';
+
+			$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
+			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
+			$html.= '</p>';
+		}
+		else {
+			$html.= '<p class="buttons-row theme-gray">';
+			$html.= '<a href="#" class="button active">' . $d13->getLangUI("inventory") . '</a>';
+			$html.= '</p>';
 		}
 
 		return $html;
-		
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getOptions
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOptions() {
-		
-		global $d13, $game;
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOptions()
+	{
+		global $d13;
 		$tvars = array();
 		$html = '';
-		
-		//- - - - Option: Remove Node
-		$nodes = $this->node->getList($_SESSION[CONST_PREFIX.'User']['id']);
+
+		// - - - - Option: Remove Node
+
+		$nodes = $this->node->getList($_SESSION[CONST_PREFIX . 'User']['id']);
 		$t = count($nodes);
 		if ($this->data['options']['nodeRemove'] && $t > 1) {
-			$tvars['tvar_Label']				= $d13->data->ui->get("remove") . ' ' . $d13->data->ui->get("node");
-			$tvars['tvar_Link']					= '?p=node&action=remove&nodeId='.$this->node->data['id'];
-			$tvars['tvar_LinkLabel']			= $d13->data->ui->get("remove");
-			$html								.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+			$tvars['tvar_Label'] = $d13->getLangUI("remove") . ' ' . $d13->getLangUI("node");
+			$tvars['tvar_Link'] = '?p=node&action=remove&nodeId=' . $this->node->data['id'];
+			$tvars['tvar_LinkLabel'] = $d13->getLangUI("remove");
+			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
 		}
-	
-		//- - - - Option: Move Node
+
+		// - - - - Option: Move Node
+
 		if ($this->data['options']['nodeMove']) {
-			$tvars['tvar_Label']				= $d13->data->ui->get("move") . ' ' . $d13->data->ui->get("node");
-			$tvars['tvar_Link']					= '?p=node&action=move&nodeId='.$this->node->data['id'];
-			$tvars['tvar_LinkLabel']			= $d13->data->ui->get("move");
-			$html								.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+			$tvars['tvar_Label'] = $d13->getLangUI("move") . ' ' . $d13->getLangUI("node");
+			$tvars['tvar_Link'] = '?p=node&action=move&nodeId=' . $this->node->data['id'];
+			$tvars['tvar_LinkLabel'] = $d13->getLangUI("move");
+			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
 		}
-	
-		//- - - - Option: Edit Node
+
+		// - - - - Option: Edit Node
+
 		if ($this->data['options']['nodeEdit']) {
-			$tvars['tvar_Label']				= $d13->data->ui->get("edit") . ' ' . $d13->data->ui->get("node");
-			$tvars['tvar_Link']					= '?p=node&action=set&nodeId='.$this->node->data['id'];
-			$tvars['tvar_LinkLabel']			= $d13->data->ui->get("edit");
-			$html								.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+			$tvars['tvar_Label'] = $d13->getLangUI("edit") . ' ' . $d13->getLangUI("node");
+			$tvars['tvar_Link'] = '?p=node&action=set&nodeId=' . $this->node->data['id'];
+			$tvars['tvar_LinkLabel'] = $d13->getLangUI("edit");
+			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
 		}
-	
-		//- - - - Option: Add new Node
-		$nodes = $this->node->getList($_SESSION[CONST_PREFIX.'User']['id']);
-		if (count($nodes)< $game['users']['maxNodes']) {
-			$tvars['tvar_Label']				= $d13->data->ui->get("add") . ' ' . $d13->data->ui->get("node");
-			if ($game['options']['gridSystem'] == 1) {
-				$tvars['tvar_Link']				= '?p=node&action=add';
-			} else {
-				$tvars['tvar_Link']				= '?p=node&action=random';
+
+		// - - - - Option: Add new Node
+
+		$nodes = $this->node->getList($_SESSION[CONST_PREFIX . 'User']['id']);
+		if (count($nodes) < $d13->getGeneral('maxNodes')) {
+			$tvars['tvar_Label'] = $d13->getLangUI("add") . ' ' . $d13->getLangUI("node");
+			if ($d13->getGeneral('options', 'gridSystem') == 1) {
+				$tvars['tvar_Link'] = '?p=node&action=add';
 			}
-			$tvars['tvar_LinkLabel']			= $d13->data->ui->get("add");
-			$html								.= $d13->tpl->parse($d13->tpl->get("sub.module.itemcontent"), $tvars);
+			else {
+				$tvars['tvar_Link'] = '?p=node&action=random';
+			}
+
+			$tvars['tvar_LinkLabel'] = $d13->getLangUI("add");
+			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
 		}
-		
+
 		return $html;
-	
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getPopup
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getPopup() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getPopup()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getQueue
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getQueue() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getQueue()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getStats
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getStats() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getStats()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	// getOutputList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOutputList() {
-		
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOutputList()
+	{
 		global $d13;
-		
-		return $d13->data->ui->get("none");
+		return $d13->getLangUI("none");
 	}
-	
 }
 
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // d13_module_defense
-// 
-//----------------------------------------------------------------------------------------
-class d13_module_defense extends d13_module {
-	
-	//----------------------------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------------------------
+
+class d13_module_defense extends d13_module
+
+{
+
+	// ----------------------------------------------------------------------------------------
 	// getStats
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getStats() {
-	
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getStats()
+	{
 		$unit = new d13_modulit($this->data['moduleId'], $this->data['level'], $this->data['moduleInput'], $this->data['unitId'], $this->node);
 
-		//- - - - - Check Upgrades
+		// - - - - - Check Upgrades
+
 		$upgradeData = array();
 		$upgradeData = $unit->getUpgrades();
-
-		$tvars['tvar_unitHPPlus'] 				= "[+". $upgradeData['hp'] . "]";
-		$tvars['tvar_unitDamagePlus'] 			= "[+". $upgradeData['damage'] . "]";
-		$tvars['tvar_unitArmorPlus'] 			= "[+". $upgradeData['armor'] . "]";
-		$tvars['tvar_unitSpeedPlus'] 			= "[+". $upgradeData['speed'] . "]";
-	
-		$tvars['tvar_unitType'] 				= $unit->data['type'];
-		$tvars['tvar_unitClass'] 				= $unit->data['class'];
-		$tvars['tvar_unitHP'] 					= $unit->data['hp'];
-		$tvars['tvar_unitDamage'] 				= $unit->data['damage'];
-		$tvars['tvar_unitArmor'] 				= $unit->data['armor'];
-		$tvars['tvar_unitSpeed'] 				= $unit->data['speed'];
-		
+		$tvars['tvar_unitHPPlus'] = "[+" . $upgradeData['hp'] . "]";
+		$tvars['tvar_unitDamagePlus'] = "[+" . $upgradeData['damage'] . "]";
+		$tvars['tvar_unitArmorPlus'] = "[+" . $upgradeData['armor'] . "]";
+		$tvars['tvar_unitSpeedPlus'] = "[+" . $upgradeData['speed'] . "]";
+		$tvars['tvar_unitType'] = $unit->data['type'];
+		$tvars['tvar_unitClass'] = $unit->data['class'];
+		$tvars['tvar_unitHP'] = $unit->data['hp'];
+		$tvars['tvar_unitDamage'] = $unit->data['damage'];
+		$tvars['tvar_unitArmor'] = $unit->data['armor'];
+		$tvars['tvar_unitSpeed'] = $unit->data['speed'];
 		return $tvars;
-
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getInventory
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getInventory() {
-		return '';
-	}
-	
-	//----------------------------------------------------------------------------------------
-	// getOptions
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOptions() {
-		return '';
-	}
-	
-	//----------------------------------------------------------------------------------------
-	// getPopup
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getPopup() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getInventory()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
-	// getQueue
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getQueue() {
+	// ----------------------------------------------------------------------------------------
+	// getOptions
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOptions()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
-	// getOutputList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOutputList() {
-		global $d13;
-		
-		return $d13->data->ui->get("none");
+
+	// ----------------------------------------------------------------------------------------
+	// getPopup
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getPopup()
+	{
+		return '';
 	}
-	
+
+	// ----------------------------------------------------------------------------------------
+	// getQueue
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getQueue()
+	{
+		return '';
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// getOutputList
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOutputList()
+	{
+		global $d13;
+		return $d13->getLangUI("none");
+	}
 }
 
-
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // d13_module_trade
-// 
-//----------------------------------------------------------------------------------------
-class d13_module_trade extends d13_module {
-	
-	//----------------------------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------------------------
+
+class d13_module_trade extends d13_module
+
+{
+
+	// ----------------------------------------------------------------------------------------
 	// getStats
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getStats() {
-	
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getStats()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// getInventory
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getInventory() {
-		return '';
-	}
-	
-	//----------------------------------------------------------------------------------------
-	// getOptions
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOptions() {
-		return '';
-	}
-	
-	//----------------------------------------------------------------------------------------
-	// getPopup
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getPopup() {
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getInventory()
+	{
 		return '';
 	}
 
-	//----------------------------------------------------------------------------------------
-	// getQueue
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getQueue() {
+	// ----------------------------------------------------------------------------------------
+	// getOptions
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOptions()
+	{
 		return '';
 	}
-	
-	//----------------------------------------------------------------------------------------
-	// getOutputList
-	// @ 
-	// 
-	//----------------------------------------------------------------------------------------
-	public function getOutputList() {
-		global $d13;
-		
-		return $d13->data->ui->get("none");
+
+	// ----------------------------------------------------------------------------------------
+	// getPopup
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getPopup()
+	{
+		return '';
 	}
-	
+
+	// ----------------------------------------------------------------------------------------
+	// getQueue
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getQueue()
+	{
+		return '';
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// getOutputList
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getOutputList()
+	{
+		global $d13;
+		return $d13->getLangUI("none");
+	}
 }
 
-//=====================================================================================EOF
+// =====================================================================================EOF
 
 ?>

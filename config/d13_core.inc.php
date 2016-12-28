@@ -39,22 +39,8 @@ include(CONST_INCLUDE_PATH."classes/d13_data.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_module.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_logger.class.php");
 
-//- - - - - INCLUDE GAME DATA
-include(CONST_INCLUDE_PATH."data/d13_general.data.inc.php");
-#include(CONST_INCLUDE_PATH."data/d13_resource.data.inc.php");
-include(CONST_INCLUDE_PATH."data/d13_component.data.inc.php");
-include(CONST_INCLUDE_PATH."data/d13_module.data.inc.php");
-include(CONST_INCLUDE_PATH."data/d13_technology.data.inc.php");
-include(CONST_INCLUDE_PATH."data/d13_upgrade.data.inc.php");
-include(CONST_INCLUDE_PATH."data/d13_unit.data.inc.php");
-
 //- - - - - CREATE ENGINE
 $d13 = new d13();
-
-//- - - - - READ LANGUAGE FILES
-include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/d13_userinterface.locale.inc.php");
-include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/d13_gamelang.locale.inc.php");
-include(CONST_INCLUDE_PATH."locales/".$_SESSION[CONST_PREFIX.'User']['locale']."/d13_blockwords.locale.inc.php");
 
 //- - - - - INCLUDE TEMPLATE DEFINITIONS
 include(CONST_INCLUDE_PATH."templates/".$_SESSION[CONST_PREFIX.'User']['template']."/template.php");
