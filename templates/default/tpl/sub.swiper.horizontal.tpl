@@ -17,7 +17,5 @@
 		mySwiper.update();
 		});
 	}
-	
-	mySwiper.update();
-	
+
 </script>

@@ -253,8 +253,8 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				$tvars['tvar_getHTMLNode'] = "";
 				foreach($node->modules as $module) {
 					if ($module['slot'] >= $offset_start && $module['slot'] <= $offset_end) {
-						$type = $d13->getModule($node->data['faction'], $module['module'], 'type');
-						$the_module = d13_module_factory::create($module['module'], $module['slot'], $type, $node);
+						
+						$the_module = d13_module_factory::create($module['module'], $module['slot'], $node);
 						if ($i == $s) {
 							$tvars['tvar_getHTMLNode'].= '</div>';
 							$i = 0;

@@ -22,8 +22,10 @@ class d13_module_factory
 {
 	public static
 
-	function create($moduleId, $slotId, $type, $node)
+	function create($moduleId, $slotId, $node)
 	{
+		global $d13;
+		$type = $d13->getModule($node->data['faction'], $moduleId, 'type');
 		switch ($type) {
 		case 'storage':
 			return new d13_module_storage($moduleId, $slotId, $type, $node);
@@ -127,19 +129,14 @@ class d13_module
 		global $d13;
 
 		// - - - - - - - - - - - - - - - COST & ATTRIBUTES
-
-		foreach($d13->getUpgrade($this->node->data['faction']) as $upgrade) {
-			if ($upgrade['active']) {
-				if ($upgrade['type'] == $this->data['type'] && $upgrade['id'] == $this->data['moduleId']) {
-
+		if ($this->data['level'] > 1) {
+			foreach($d13->getUpgrade($this->node->data['faction']) as $upgrade) {
+				if ($upgrade['active'] && $upgrade['type'] == $this->data['type'] && $upgrade['id'] == $this->data['moduleId']) {
 					// - - - - - - - - - - - - - - - COST
-
 					if (isset($upgrade['cost'])) {
 						$this->data['cost_upgrade'] = $upgrade['cost'];
 					}
-
 					// - - - - - - - - - - - - - - - ATTRIBUTES
-
 					if (isset($upgrade['attributes'])) {
 						$this->data['attributes_upgrade'] = $upgrade['attributes'];
 					}
@@ -173,29 +170,38 @@ class d13_module
 		$this->data['moduleId'] = $moduleId;
 		$this->data['slotId'] = $slotId;
 		$this->data['type'] = $type;
-		$this->data['level'] = $this->node->modules[$slotId]['level'];
-		$this->checkUpgrades();
-
-		// - - - - - - - - - - - - - - - APPLY ATTRIBUTES
-
-		foreach($this->data['attributes_upgrade'] as $attribute) {
-			$this->data[$attribute['stat']]+= $attribute['value'] * ($this->data['level'] - 1);
+		$this->data['level'] = 0;
+				
+		if ($this->node->modules[$slotId]['level'] > 0) {
+			$this->data['level'] = $this->node->modules[$slotId]['level'];
 		}
+		
+		// - - - - - - - - - - - - - - - APPLY ATTRIBUTES
+		if ($this->data['level'] > 1) {
+			$this->checkUpgrades();
+			foreach($this->data['attributes_upgrade'] as $attribute) {
+				$this->data[$attribute['stat']]+= $attribute['value'] * ($this->data['level'] - 1);
+			}
+		}
+	
+		$this->data['moduleImage'] = '';
+		$this->data['name'] = $d13->getLangGL('modules', $this->node->data['faction'], $this->data['moduleId'], 'name');
+		$this->data['description'] = $d13->getLangGL('modules', $this->node->data['faction'], $this->data['moduleId'], 'description');
+		$this->data['totalIR'] = $this->data['ratio'];
+		$this->data['inputLimit'] = floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'] + $this->node->modules[$this->data['slotId']]['input']));
 
 		$this->data['costData'] = $this->node->checkCost($this->data['cost'], 'build');
 		$this->data['reqData'] = $this->node->checkRequirements($this->data['requirements']);
+		
 		if (isset($this->data['inputResource'])) {
+			$this->data['moduleInput'] = $this->data['inputResource'];
 			$this->data['moduleInputLimit'] = floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'] + $this->node->modules[$slotId]['input']));
 			$this->data['moduleInputName'] = $d13->getLangGL('resources', $this->data['inputResource'], 'name');
 			$this->data['moduleSlotInput'] = $this->node->modules[$slotId]['input'];
 			$this->data['totalIR'] = $this->node->modules[$slotId]['input'] * $this->data['ratio'];
 		}
 
-		$this->data['moduleImage'] = '';
-		$this->data['name'] = $d13->getLangGL('modules', $this->node->data['faction'], $this->data['moduleId'], 'name');
-		$this->data['description'] = $d13->getLangGL('modules', $this->node->data['faction'], $this->data['moduleId'], 'description');
-		$this->data['totalIR'] = $this->data['ratio'];
-		$this->data['inputLimit'] = floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'] + $this->node->modules[$this->data['slotId']]['input']));
+		
 		if (isset($this->data['outputResource'])) {
 			$this->data['moduleProduction'] = $this->data['ratio'] * $d13->getGeneral('factors', 'production') * $this->node->modules[$slotId]['input'];
 			$i = 0;
@@ -347,7 +353,7 @@ class d13_module
 
 		return $html;
 	}
-
+	
 	// ----------------------------------------------------------------------------------------
 	// getModuleUpgrade
 	// @
@@ -380,6 +386,47 @@ class d13_module
 
 		return $html;
 	}
+
+	// ----------------------------------------------------------------------------------------
+	// getModuleBuild
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getModuleBuild_XXXXXXXXXXXXXXXX()
+	{
+		global $d13;
+		
+		$tvars = array();
+
+		$html = '';
+		if (($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput']) > 0 && $this->data['costData']['ok'] && $this->data['reqData']['ok'] && ($this->node->getModuleCount($this->data['slotId'], $this->data['moduleId']) < $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'maxInstances'))) {
+			
+			$tvars['tvar_moduleInputName'] 	= $this->data['moduleInputName'];
+			$tvars['tvar_moduleInput'] 		= $this->data['moduleInput'];
+			$tvars['tvar_moduleDuration'] 	= $this->data['duration'];
+			$tvars['tvar_moduleAction'] 	= '?p=module&action=add&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'];
+			$tvars['tvar_id'] 				= $this->data['id'];
+			$tvars['tvar_moduleLimit'] 		= floor($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput']);
+			$tvars['tvar_disableData'] 		= '';
+			
+			$d13->templateInject($d13->templateSubpage("sub.popup.build" , $tvars));
+			
+			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-build-'.$this->data['id'].'">' . $d13->getLangUI("addModule") . '</a>';
+			$html.= '</p>';
+		}
+		else {
+			$html.= '<p class="buttons-row theme-gray">';
+			$html.= '<a href="#" class="button active">' . $d13->getLangUI("addModule") . '</a>';
+			$html.= '</p>';
+		}
+
+		return $html;
+	}
+	
 
 	// ----------------------------------------------------------------------------------------
 	// getModuleBuild

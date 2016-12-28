@@ -16,18 +16,21 @@
 // sub_module_list
 // ----------------------------------------------------------------------------------------
 
-function sub_module_list($node, $module_data, $message)
+function sub_module_list($node, $message)
 {
 	global $d13;
 	$tvars = array();
 	$tvars['tvar_sub_list'] = "";
 	$tvars['tvar_global_message'] = $message;
+	$tvars['tvar_nodeFaction'] = $node->data['faction'];
+	
 	if (isset($node->modules[$_GET['slotId']])) {
-		foreach($d13->getModule($node->data['faction']) as $mid => $module_data) {
-			$module = NULL;
-			$module = d13_module_factory::create($mid, $_GET['slotId'], $d13->getModule($node->data['faction'], $mid, 'type') , $node);
-			$tvars = array_merge($tvars, $module->getTemplateVariables());
-			$tvars['tvar_sub_list'].= $d13->templateSubpage("sub.module.list", $tvars);
+		foreach($d13->getModule($node->data['faction']) as $module) {
+			$tmp_module = NULL;
+			$tmp_module = d13_module_factory::create($module['id'], $_GET['slotId'], $node);
+			$vars = array();
+			$vars = array_merge($tvars, $tmp_module->getTemplateVariables());
+			$tvars['tvar_sub_list'].= $d13->templateSubpage("sub.module.list", $tmp_module->getTemplateVariables());
 		}
 	}
 

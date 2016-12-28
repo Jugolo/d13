@@ -280,8 +280,7 @@ class node
 		if ($this->modules) {
 			foreach($this->modules as $module) {
 				if ($module['module'] > - 1) {
-					$type = $d13->getModule($this->data['faction'], $module['module'], 'type');
-					$tmp_module = d13_module_factory::create($module['module'], $module['slot'], $type, $this);
+					$tmp_module = d13_module_factory::create($module['module'], $module['slot'], $this);
 					if ($d13->getModule($this->data['faction'], $module['module'], 'storedResource')) {
 						foreach($d13->getModule($this->data['faction'], $module['module'], 'storedResource') as $res) {
 							$this->storage[$res]+= $tmp_module->data['ratio'] * $d13->getGeneral('factors', 'storage') * $module['input'];
@@ -536,7 +535,7 @@ class node
 		$module = $d13->dbFetch($result);
 		if (isset($module['module']))
 		if ($module['module'] > - 1) {
-			$tmp_module = d13_module_factory::create($module['module'], $slotId, $d13->getModule($this->data['faction'], $module['module'], 'type') , $this);
+			$tmp_module = d13_module_factory::create($module['module'], $slotId, $this);
 			$result = $d13->dbQuery('select * from resources where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
 			$resource = $d13->dbFetch($result);
 			if ($resource['value'] + $module['input'] >= $this->modules[$slotId]['input'])
@@ -696,7 +695,7 @@ class node
 				$this->getResources();
 				$this->getTechnologies();
 				$this->getComponents();
-				$tmp_module = d13_module_factory::create($moduleId, $slotId, $d13->getModule($this->data['faction'], $moduleId, 'type'), $this);
+				$tmp_module = d13_module_factory::create($moduleId, $slotId, $this);
 				$module['requirementsData'] = $this->checkRequirements($d13->getModule($this->data['faction'], $moduleId) ['requirements']);
 				if ($module['requirementsData']['ok']) {
 					$module['costData'] = $this->checkCost($d13->getModule($this->data['faction'], $moduleId) ['cost'], 'build');

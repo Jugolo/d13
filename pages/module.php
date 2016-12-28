@@ -246,7 +246,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 		// - - - -
 
 	case 'get':
-		$the_module = d13_module_factory::create($node->modules[$_GET['slotId']]['module'], $_GET['slotId'], $module['type'], $node);
+		$the_module = d13_module_factory::create($node->modules[$_GET['slotId']]['module'], $_GET['slotId'], $node);
 		$d13->templateRender($the_module->getTemplate() , $the_module->getTemplateVariables());
 		break;
 
@@ -254,8 +254,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 
 	case 'list':
 		include ("sub.module.list.php");
-
-		sub_module_list($node, $module, $message);
+		sub_module_list($node, $message);
 		break;
 	}
 }

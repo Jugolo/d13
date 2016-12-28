@@ -30,7 +30,7 @@ function sub_resources($node)
 				$tvars['tvar_resProduction'] = '';
 				if ($node->production[$resource['id']]) {
 					if (floor($resource['value']) < $node->storage[$resource['id']]) {
-						$tvars['tvar_resProduction'] = ' [+' . $node->production[$resource['id']] . $d13->getLangUI('perHour') . ']';
+						$tvars['tvar_resProduction'] = ' [+' . round($node->production[$resource['id']]) . $d13->getLangUI('perHour') . ']';
 					}
 					else {
 						$tvars['tvar_resProduction'] = ' [' . $d13->getLangUI("full") . ']';
