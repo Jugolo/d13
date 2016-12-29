@@ -594,7 +594,9 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				foreach($d13->getGeneral('factions', $node->data['faction'], 'costs') ['move'] as $key => $cost) {
 					$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></div>';
 				}
-
+				$node->getLocation();
+				$tvars['tvar_nodeX'] = $node->location['x'];
+				$tvars['tvar_nodeY'] = $node->location['y'];
 				$tvars['tvar_costData'] = $costData;
 				$page = "node.move";
 			}

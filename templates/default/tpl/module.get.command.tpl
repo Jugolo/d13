@@ -22,7 +22,6 @@
 				</div>
 				<p class="d13-italic">{{tvar_moduleDescription}}</p>
 				{{tvar_linkData}}
-				{{tvar_upgradeCost}}
 			</div>
 		
 			<div class="col-60">

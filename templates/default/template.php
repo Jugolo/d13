@@ -13,6 +13,8 @@
 //
 //========================================================================================
 
+//this file will be removed completely, data moved to general data
+
 //iOS Theme Colors
 $template['colors-ios']=array(
  0=>array('name'=>'gray', 		'code'=>'#8e8e93'),

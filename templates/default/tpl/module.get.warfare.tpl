@@ -22,9 +22,22 @@
 				</div>
 				<p class="d13-italic">{{tvar_moduleDescription}}</p>
 				{{tvar_linkData}}
-				{{tvar_upgradeCost}}
 			</div>
-		
+			
+			<li class="item-content">
+					<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
+					<div class="item-inner">
+					<div class="item-title label">{{tvar_moduleInputName}}</div>
+				
+					<form class="pure-form" method="post" action="?p=module&action=set&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}">
+						<input class="pure-input" type="number" size="6" name="input" id="workers" min="0" max="{{tvar_moduleInputLimit}}" autocomplete="off" placeholder="{{tvar_moduleSlotInput}}" value="{{tvar_moduleSlotInput}}">
+						<button class="pure-input pure-button pure-{{tvar_global_color}}" type="button" onClick="set_maximum('workers',{{tvar_moduleInputLimit}})">{{tvar_ui_max}}</button>
+						<input class="pure-input pure-button pure-{{tvar_global_color}}" class="button active" type="submit" value="{{tvar_ui_set}}">
+					</form>
+				
+					</div>
+				</li>
+			
 			<div class="col-60">
 			
 				<div class="list-block">

@@ -55,7 +55,7 @@ class d13_profiler
 	{
 		$this->endtime = $this->microtime_float();
 		$this->duration = round(($this->endtime - $this->starttime) * 1000, 3);
-		$fd = fopen("profile.txt", "a");
+		$fd = fopen("./logs/profile.txt", "a");
 		fwrite($fd, ($this->duration) . "," . $note . "\n");
 		fclose($fd);
 	}

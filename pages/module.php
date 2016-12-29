@@ -87,7 +87,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 		case 'add':
 			if ($flags['build']) {
 				if (isset($_GET['moduleId'])) {
-					$status = $node->addModule($_GET['slotId'], $_GET['moduleId']);
+					$status = $node->addModule($_GET['slotId'], $_GET['moduleId'], $_POST['input']);
 					if ($status == 'done') header('Location: index.php?p=node&action=get&nodeId=' . $node->data['id']);
 					else $message = $d13->getLangUI($status);
 				}
@@ -100,7 +100,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 		case 'upgrade':
 			if ($flags['upgrade']) {
 				if (isset($_GET['slotId']) && isset($_GET['moduleId'])) {
-					$status = $node->upgradeModule($_GET['slotId'], $_GET['moduleId']);
+					$status = $node->upgradeModule($_GET['slotId'], $_GET['moduleId'], $_POST['input']);
 					if ($status == 'done') header('Location: index.php?p=node&action=get&nodeId=' . $node->data['id']);
 					else $message = $d13->getLangUI($status);
 				}

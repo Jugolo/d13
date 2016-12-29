@@ -51,7 +51,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 	}
 
 	// - - - - - Colors
-
+	global $template;
 	$colors = '<option value="' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">' . $_SESSION[CONST_PREFIX . 'User']['color'] . '</option>';
 	foreach($template['colors-ios'] as $color) {
 		if ($_SESSION[CONST_PREFIX . 'User']['color'] != $color['name']) {
@@ -127,7 +127,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 	$preferenceNames = '';
 	$preferenceValues = array();
 	foreach($user->preferences as $key => $preference) {
-		$preferenceNames.= '<option value="' . $preference['name'] . '">' . $ui[$preference['name']] . '</option>';
+		$preferenceNames.= '<option value="' . $preference['name'] . '">' . $d13->getLangUI($preference['name']) . '</option>';
 		$preferenceValues[$key] = '"' . $preference['value'] . '"';
 	}
 

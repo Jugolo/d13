@@ -37,7 +37,7 @@ class d13_logger
 
 	function log($note = "")
 	{
-		$fd = fopen("log.txt", "a");
+		$fd = fopen("./logs/log.txt", "a");
 		fwrite($fd, $note . "\n");
 		fclose($fd);
 	}

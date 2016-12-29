@@ -872,9 +872,6 @@
         }
       ],
       "outputResource": [
-        0,
-        1,
-        2,
         3
       ],
       "storedResource": [
@@ -1097,9 +1094,9 @@
       "priority": 18,
       "type": "warfare",
       "maxLevel": 1,
-      "inputResource": 0,
+      "inputResource": 3,
       "ratio": 0,
-      "maxInput": 0,
+      "maxInput": 5,
       "duration": 5,
       "salvage": 0.5,
       "removeDuration": 1,

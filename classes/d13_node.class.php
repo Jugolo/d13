@@ -533,7 +533,7 @@ class node
 		$this->getResources();
 		$result = $d13->dbQuery('select * from modules where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
 		$module = $d13->dbFetch($result);
-		if (isset($module['module']))
+		if (isset($module['module'])) {
 		if ($module['module'] > - 1) {
 			$tmp_module = d13_module_factory::create($module['module'], $slotId, $this);
 			$result = $d13->dbQuery('select * from resources where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
@@ -553,9 +553,12 @@ class node
 			}
 			else $status = 'maxInputExceeded';
 			else $status = 'notEnoughResources';
+		} else {
+		$status = 'emptySlot';
 		}
-		else $status = 'emptySlot';
-		else $status = 'noSlot';
+		} else {
+			$status = 'noSlot';
+		}
 		return $status;
 	}
 
@@ -579,9 +582,10 @@ class node
 
 	public
 
-	function addModule($slotId, $moduleId)
+	function addModule($slotId, $moduleId, $input=1)
 	{
 		global $d13;
+		
 		$result = $d13->dbQuery('select * from modules where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
 		$module = $d13->dbFetch($result);
 		if (isset($module['module']))
@@ -596,13 +600,15 @@ class node
 					$this->getResources();
 					$this->getTechnologies();
 					$this->getComponents();
-					$module['requirementsData'] = $this->checkRequirements($d13->getModule($this->data['faction'], $moduleId) ['requirements']);
+					$module['requirementsData'] = $this->checkRequirements($d13->getModule($this->data['faction'], $moduleId, 'requirements'));
 					if ($module['requirementsData']['ok']) {
-						$module['costData'] = $this->checkCost($d13->getModule($this->data['faction'], $moduleId) ['cost'], 'build');
+						$module['costData'] = $this->checkCost($d13->getModule($this->data['faction'], $moduleId, 'cost'), 'build');
 						if ($module['costData']['ok']) {
 							$ok = 1;
-							foreach($d13->getModule($this->data['faction'], $moduleId) ['cost'] as $cost) {
-								$this->resources[$cost['resource']]['value']-= $cost['value'] * $d13->getGeneral('users', 'cost', 'build');
+							$tmp_module = d13_module_factory::create($moduleId, $slotId, $this);
+							
+							foreach($tmp_module->data['cost'] as $cost) {
+								$this->resources[$cost['resource']]['value'] -= $cost['value'] * $d13->getGeneral('users', 'cost', 'build');
 								$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
 								if ($d13->dbAffectedRows() == - 1) $ok = 0;
 							}
@@ -617,15 +623,30 @@ class node
 								$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
 								if ($d13->dbAffectedRows() == - 1) $ok = 0;
 							}
-
-							$this->getQueue('build');
-							$lastBuild = count($this->queue['build']) - 1;
-							if ($lastBuild > - 1) $start = strftime('%Y-%m-%d %H:%M:%S', $this->queue['build'][$lastBuild]['start'] + floor($this->queue['build'][$lastBuild]['duration'] * 60));
-							else $start = strftime('%Y-%m-%d %H:%M:%S', time());
-							$d13->dbQuery('insert into build (node, slot, module, start, duration, action) values ("' . $this->data['id'] . '", "' . $slotId . '", "' . $moduleId . '", "' . $start . '", "' . ($d13->getModule($this->data['faction'], $moduleId) ['duration'] * $d13->getGeneral('users', 'speed', 'build')) . '", "build")');
+							
+							$this->resources[$tmp_module->data['inputResource']]['value'] -= $input;
+							$d13->dbQuery('update resources set value="' . $this->resources[$tmp_module->data['inputResource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
-							if ($ok) $status = 'done';
-							else $status = 'error';
+							$d13->dbQuery('update modules set input="' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+							if ($d13->dbAffectedRows() == - 1) $ok = 0;
+							
+							$this->getQueue('build');
+							#$lastBuild = count($this->queue['build']) - 1;
+							#if ($lastBuild > - 1) $start = strftime('%Y-%m-%d %H:%M:%S', $this->queue['build'][$lastBuild]['start'] + floor($this->queue['build'][$lastBuild]['duration'] * 60));
+							#else $start = strftime('%Y-%m-%d %H:%M:%S', time());
+							$start = strftime('%Y-%m-%d %H:%M:%S', time());
+							$duration = ceil(($tmp_module->data['duration'] * $d13->getGeneral('users', 'speed', 'build')) / $input);
+							
+							$d13->logger($duration);
+							
+							$d13->dbQuery('insert into build (node, slot, module, start, duration, action) values ("' . $this->data['id'] . '", "' . $slotId . '", "' . $moduleId . '", "' . $start . '", "' . $duration . '", "build")');
+							if ($d13->dbAffectedRows() == - 1) $ok = 0;
+							if ($ok) {
+								$status = 'done';
+							} else {
+								$status = 'error';
+							}
+							
 						}
 						else $status = 'notEnoughResources';
 					}
@@ -637,6 +658,139 @@ class node
 		}
 		else $status = 'notEmptySlot';
 		else $status = 'noSlot';
+		return $status;
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// upgradeModule
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function upgradeModule($slotId, $moduleId, $input=1)
+	{
+		global $d13;
+		$result = $d13->dbQuery('select * from modules where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+		$module = $d13->dbFetch($result);
+		if (isset($module['module']))
+		if ($module['module'] > - 1) {
+			$result = $d13->dbQuery('select count(*) as count from modules where node="' . $this->data['id'] . '" and module="' . $moduleId . '"');
+			$row = $d13->dbFetch($result);
+			$result = $d13->dbQuery('select count(*) as count from build where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+			$row = $d13->dbFetch($result);
+			if (!$row['count']) {
+				$this->getModules();
+				$this->getResources();
+				$this->getTechnologies();
+				$this->getComponents();
+				$tmp_module = d13_module_factory::create($moduleId, $slotId, $this);
+				$module['requirementsData'] = $this->checkRequirements($d13->getModule($this->data['faction'], $moduleId, 'requirements'));
+				if ($module['requirementsData']['ok']) {
+					$module['costData'] = $this->checkCost($d13->getModule($this->data['faction'], $moduleId, 'cost'), 'build');
+					if ($module['costData']['ok']) {
+						$ok = 1;
+						$tmp_module = d13_module_factory::create($moduleId, $slotId, $this);
+						
+						foreach($tmp_module->data['cost'] as $cost) {
+							$this->resources[$cost['resource']]['value']-= $cost['value'] * $d13->getGeneral('users', 'cost', 'build');
+							$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
+							if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						}
+
+						foreach($d13->getModule($this->data['faction'], $moduleId) ['requirements'] as $requirement)
+						if ($requirement['type'] == 'components') {
+							$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
+							$this->resources[$storageResource]['value']+= $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $requirement['value'];
+							$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
+							if ($d13->dbAffectedRows() == - 1) $ok = 0;
+							$this->components[$requirement['id']]['value']-= $requirement['value'];
+							$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
+							if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						}
+						
+						$this->resources[$tmp_module->data['inputResource']]['value'] -= $input;
+							$d13->dbQuery('update resources set value="' . $this->resources[$tmp_module->data['inputResource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
+							if ($d13->dbAffectedRows() == - 1) $ok = 0;
+							$d13->dbQuery('update modules set input="' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+							if ($d13->dbAffectedRows() == - 1) $ok = 0;
+
+						$this->getQueue('build');
+						#$lastBuild = count($this->queue['build']) - 1;
+						#if ($lastBuild > - 1) $start = strftime('%Y-%m-%d %H:%M:%S', $this->queue['build'][$lastBuild]['start'] + floor($this->queue['build'][$lastBuild]['duration'] * 60));
+						#else $start = strftime('%Y-%m-%d %H:%M:%S', time());
+						$start = strftime('%Y-%m-%d %H:%M:%S', time());
+						$duration = ceil(($tmp_module->data['duration'] * $d13->getGeneral('users', 'speed', 'build')) / $input);
+						
+						$d13->dbQuery('insert into build (node, slot, module, start, duration, action) values ("' . $this->data['id'] . '", "' . $slotId . '", "' . $moduleId . '", "' . $start . '", "' . $duration . '", "upgrade")');
+						if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						if ($ok) $status = 'done';
+						else $status = 'error';
+					}
+					else $status = 'notEnoughResources';
+				}
+				else $status = 'requirementsNotMet';
+			}
+			else $status = 'slotBusy';
+		}
+		else $status = 'notEmptySlot';
+		else $status = 'noSlot';
+		return $status;
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function cancelModule($slotId)
+	{
+		global $d13;
+		$this->getModules();
+		$this->getResources();
+		$this->getComponents();
+		$result = $d13->dbQuery('select * from build where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+		$entry = $d13->dbFetch($result);
+		if (isset($entry['start'])) {
+			$entry['start'] = strtotime($entry['start']);
+			$ok = 1;
+			$tmp_module = d13_module_factory::create($entry['module'], $slotId, $this);
+			
+			if ($this->modules[$slotId == - 1]) {
+			
+				foreach($tmp_module->data['cost'] as $cost) {
+					$this->resources[$cost['resource']]['value']+= $cost['value'] * $d13->getGeneral('users', 'cost', 'build');
+					$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
+					if ($d13->dbAffectedRows() == - 1) $ok = 0;
+				}
+
+				foreach($d13->getModule($this->data['faction'], $entry['module'], 'requirements') as $requirement)
+				if ($requirement['type'] == 'components') {
+					$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
+					$this->resources[$storageResource]['value']-= $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $requirement['value'];
+					$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
+					if ($d13->dbAffectedRows() == - 1) $ok = 0;
+					$this->components[$requirement['id']]['value']+= $requirement['value'];
+					$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
+					if ($d13->dbAffectedRows() == - 1) $ok = 0;
+				}
+			}
+
+			$this->getQueue('build');
+			$entry['duration'] = floor($entry['duration'] * 60);
+			foreach($this->queue['build'] as $queueEntry) {
+				if ($queueEntry['start'] > $entry['start']) {
+					$d13->dbQuery('update build set start="' . strftime('%Y-%m-%d %H:%M:%S', $queueEntry['start'] - $entry['duration']) . '" where node="' . $this->data['id'] . '" and slot="' . $queueEntry['slot'] . '"');
+					if ($d13->dbAffectedRows() == - 1) $ok = 0;
+				}
+			}
+
+			$d13->dbQuery('delete from build where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+			if ($d13->dbAffectedRows() == - 1) $ok = 0;
+			if ($ok) $status = 'done';
+			else $status = 'error';
+		}
+		else $status = 'noEntry';
 		return $status;
 	}
 
@@ -670,125 +824,6 @@ class node
 		}
 		else $status = 'emptySlot';
 		else $status = 'noSlot';
-		return $status;
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// upgradeModule
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function upgradeModule($slotId, $moduleId)
-	{
-		global $d13;
-		$result = $d13->dbQuery('select * from modules where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
-		$module = $d13->dbFetch($result);
-		if (isset($module['module']))
-		if ($module['module'] > - 1) {
-			$result = $d13->dbQuery('select count(*) as count from modules where node="' . $this->data['id'] . '" and module="' . $moduleId . '"');
-			$row = $d13->dbFetch($result);
-			$result = $d13->dbQuery('select count(*) as count from build where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
-			$row = $d13->dbFetch($result);
-			if (!$row['count']) {
-				$this->getModules();
-				$this->getResources();
-				$this->getTechnologies();
-				$this->getComponents();
-				$tmp_module = d13_module_factory::create($moduleId, $slotId, $this);
-				$module['requirementsData'] = $this->checkRequirements($d13->getModule($this->data['faction'], $moduleId) ['requirements']);
-				if ($module['requirementsData']['ok']) {
-					$module['costData'] = $this->checkCost($d13->getModule($this->data['faction'], $moduleId) ['cost'], 'build');
-					if ($module['costData']['ok']) {
-						$ok = 1;
-						foreach($d13->getModule($this->data['faction'], $moduleId) ['cost'] as $cost) {
-							$this->resources[$cost['resource']]['value']-= $cost['value'] * $d13->getGeneral('users', 'cost', 'build');
-							$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
-							if ($d13->dbAffectedRows() == - 1) $ok = 0;
-						}
-
-						foreach($d13->getModule($this->data['faction'], $moduleId) ['requirements'] as $requirement)
-						if ($requirement['type'] == 'components') {
-							$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
-							$this->resources[$storageResource]['value']+= $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $requirement['value'];
-							$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
-							if ($d13->dbAffectedRows() == - 1) $ok = 0;
-							$this->components[$requirement['id']]['value']-= $requirement['value'];
-							$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
-							if ($d13->dbAffectedRows() == - 1) $ok = 0;
-						}
-
-						$this->getQueue('build');
-						$lastBuild = count($this->queue['build']) - 1;
-						if ($lastBuild > - 1) $start = strftime('%Y-%m-%d %H:%M:%S', $this->queue['build'][$lastBuild]['start'] + floor($this->queue['build'][$lastBuild]['duration'] * 60));
-						else $start = strftime('%Y-%m-%d %H:%M:%S', time());
-						$d13->dbQuery('insert into build (node, slot, module, start, duration, action) values ("' . $this->data['id'] . '", "' . $slotId . '", "' . $moduleId . '", "' . $start . '", "' . ($tmp_module->data['duration'] * $d13->getGeneral('users', 'speed', 'build')) . '", "upgrade")');
-						if ($d13->dbAffectedRows() == - 1) $ok = 0;
-						if ($ok) $status = 'done';
-						else $status = 'error';
-					}
-					else $status = 'notEnoughResources';
-				}
-				else $status = 'requirementsNotMet';
-			}
-			else $status = 'slotBusy';
-		}
-		else $status = 'notEmptySlot';
-		else $status = 'noSlot';
-		return $status;
-	}
-
-	// ----------------------------------------------------------------------------------------
-	//
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function cancelModule($slotId)
-	{
-		global $d13;
-		$this->getModules();
-		$this->getResources();
-		$this->getComponents();
-		$result = $d13->dbQuery('select * from build where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
-		$entry = $d13->dbFetch($result);
-		if (isset($entry['start'])) {
-			$entry['start'] = strtotime($entry['start']);
-			$ok = 1;
-			if ($this->modules[$slotId == - 1]) {
-				foreach($d13->getModule($this->data['faction'], $entry['module'], 'cost') as $cost) {
-					$this->resources[$cost['resource']]['value']+= $cost['value'] * $d13->getGeneral('users', 'cost', 'build');
-					$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
-					if ($d13->dbAffectedRows() == - 1) $ok = 0;
-				}
-
-				foreach($d13->getModule($this->data['faction'], $entry['module'], 'requirements') as $requirement)
-				if ($requirement['type'] == 'components') {
-					$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
-					$this->resources[$storageResource]['value']-= $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $requirement['value'];
-					$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
-					if ($d13->dbAffectedRows() == - 1) $ok = 0;
-					$this->components[$requirement['id']]['value']+= $requirement['value'];
-					$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
-					if ($d13->dbAffectedRows() == - 1) $ok = 0;
-				}
-			}
-
-			$this->getQueue('build');
-			$entry['duration'] = floor($entry['duration'] * 60);
-			foreach($this->queue['build'] as $queueEntry) {
-				if ($queueEntry['start'] > $entry['start']) {
-					$d13->dbQuery('update build set start="' . strftime('%Y-%m-%d %H:%M:%S', $queueEntry['start'] - $entry['duration']) . '" where node="' . $this->data['id'] . '" and slot="' . $queueEntry['slot'] . '"');
-					if ($d13->dbAffectedRows() == - 1) $ok = 0;
-				}
-			}
-
-			$d13->dbQuery('delete from build where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
-			if ($d13->dbAffectedRows() == - 1) $ok = 0;
-			if ($ok) $status = 'done';
-			else $status = 'error';
-		}
-		else $status = 'noEntry';
 		return $status;
 	}
 
@@ -1002,7 +1037,7 @@ class node
 					if ($unit['costData']['ok']) {
 						$ok = 1;
 						$upkeepResource = $d13->getUnit($this->data['faction'], $unitId, 'upkeepResource');
-						$this->resources[$upkeepResource]['value']-= $d13->getUnit($this->data['faction'], $unitId, 'upkeep') * $quantity;
+						$this->resources[$upkeepResource]['value'] -= $d13->getUnit($this->data['faction'], $unitId, 'upkeep') * $quantity;
 						$d13->dbQuery('update resources set value="' . $this->resources[$upkeepResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $upkeepResource . '"');
 						if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						foreach($d13->getUnit($this->data['faction'], $unitId, 'cost') as $cost) {
@@ -1014,7 +1049,7 @@ class node
 						foreach($d13->getUnit($this->data['faction'], $unitId, 'requirements') as $requirement)
 						if ($requirement['type'] == 'components') {
 							$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
-							$this->resources[$storageResource]['value']+= $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $quantity;
+							$this->resources[$storageResource]['value'] += $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $quantity;
 							$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 							$this->components[$requirement['id']]['value']-= $requirement['value'] * $quantity;
@@ -1022,7 +1057,7 @@ class node
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						}
 
-						$this->getQueue('train', 'unit', $d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], ['units']));
+						$this->getQueue('train', 'unit', $d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'units'));
 						$lastTrain = count($this->queue['train']) - 1;
 						if ($lastTrain > - 1) $start = strftime('%Y-%m-%d %H:%M:%S', $this->queue['train'][$lastTrain]['start'] + floor($this->queue['train'][$lastTrain]['duration'] * 60));
 						else $start = strftime('%Y-%m-%d %H:%M:%S', time());
