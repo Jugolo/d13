@@ -276,7 +276,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 							$tvars['tvar_moduleLink'] = "index.php?p=module&action=get&nodeId=" . $node->data['id'] . "&slotId=" . $module['slot'];
 							$tvars['tvar_moduleImage'] = $the_module->data['image'];
 							if (($module['input'] <= 0 && $d13->getModule($node->data['faction'], $module['module'], 'maxInput') > 0) || ($d13->getModule($node->data['faction'], $module['module'], 'type') == 'defense' && $module['input'] < $d13->getModule($node->data['faction'], $module['module'], 'maxInput'))) {
-								$tvars['tvar_moduleClass'] = '<img class="animated bounce resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/exclamation.png">';
+								$tvars['tvar_moduleClass'] = '<a href="#" class="tooltip-left" data-tooltip="' . $d13->getLangUI("no") . " " . $d13->getLangGL('resources', $the_module->data['inputResource'], 'name') . '"><img class="animated bounce resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/exclamation.png"></a>';
 							}
 							else {
 								$tvars['tvar_moduleClass'] = "";
@@ -371,9 +371,9 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				foreach($node->queue['research'] as $item) {
 					$action = 'research';
 					$remaining = $item['start'] + $item['duration'] * 60 - time();
-					if ($remaining > 0) {
+					
 						$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $node->data['faction'] . '/' . $item['technology'] . '.png"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("technologies", $node->data['faction'], $item['technology'], "name") . '</div><div class="cell"><span id="build_' . $item['node'] . '_' . $item['technology'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("build_' . $item['node'] . '_' . $item['technology'] . '", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div>';
-					}
+					
 				}
 
 				$tvars['tvar_getHTMLResearch'] = $d13->templateParse($d13->templateGet("sub.queue") , $tvars);
@@ -399,9 +399,9 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 						$action = 'remove';
 					}
 
-					if ($remaining > 0) {
-						$remaining = $item['start'] + $item['duration'] * 60 - time();
-					}
+					
+					$remaining = $item['start'] + $item['duration'] * 60 - time();
+					
 
 					$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $node->data['faction'] . '/' . $item['component'] . '.png"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("components", $node->data['faction'], $item['component'], "name") . '</div><div class="cell"><span id="build_' . $item['node'] . '_' . $item['component'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("build_' . $item['node'] . '_' . $item['component'] . '", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div>';
 				}
@@ -429,9 +429,9 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 						$action = 'remove';
 					}
 
-					if ($remaining > 0) {
+					
 						$remaining = $item['start'] + $item['duration'] * 60 - time();
-					}
+					
 
 					$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $node->data['faction'] . '/' . $item['unit'] . '.png"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("units", $node->data['faction'], $item['unit'], "name") . '</div><div class="cell"><span id="build_' . $item['node'] . '_' . $item['unit'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("build_' . $item['node'] . '_' . $item['unit'] . '", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div>';
 				}

@@ -238,5 +238,7 @@
   "tryAgain": "try again in 15 minutes",
   "peaceAccepted": "peace accepted",
   "peaceDenied": "peace denied",
-  "cannotSendStatic": "cannot send static units"
+  "cannotSendStatic": "cannot send static units",
+  "impossible": "impossible",
+  "empty": "empty"
 }

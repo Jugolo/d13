@@ -346,7 +346,7 @@ class d13_module
 			}
 			else {
 				$html.= '<p class="buttons-row disabled>';
-				$html.= '<a class="button" href="#">' . $d13->getLangUI("removeModule") . '</a>';
+				$html.= '<a class="button" href="#">' . $d13->getLangUI("removeModule") . " " . $d13->getLangUI("impossible") .'</a>';
 				$html.= '</p>';
 			}
 		}
@@ -378,7 +378,7 @@ class d13_module
 				}
 				else {
 					$html.= '<p class="buttons-row disabled">';
-					$html.= '<a class="button" href="#">' . $d13->getLangUI("upgrade") . '</a>';
+					$html.= '<a href="#" class="button">' . $d13->getLangUI("upgrade") . " " . $d13->getLangUI("impossible") . '</a>';
 					$html.= '</p>';
 				}
 			}
@@ -420,7 +420,7 @@ class d13_module
 		}
 		else {
 			$html.= '<p class="buttons-row theme-gray">';
-			$html.= '<a href="#" class="button active">' . $d13->getLangUI("addModule") . '</a>';
+			$html.= '<a href="#" class="button">' . $d13->getLangUI("addModule") . " " . $d13->getLangUI("impossible") . '</a>';
 			$html.= '</p>';
 		}
 
@@ -793,25 +793,30 @@ class d13_module_storage extends d13_module
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$html = '';
+		$i=0;
+		
 		if (isset($this->data['options']['inventoryList']) && $this->data['options']['inventoryList']) {
+			
 			foreach($this->node->resources as $uid => $unit) {
 				if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
 					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $uid . '.png" title="' . $d13->getLangGL('resources', $uid, 'name') . '">';
 					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $uid, 'name');
 					$tvars['tvar_listAmount'] = floor($unit['value']);
 					$tvars['tvar_sub_popuplist'].= $d13->templateParse($d13->templateGet("sub.module.listcontent") , $tvars);
+					$i++;
 				}
 			}
-
-			$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
-			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
-			$html.= '</p>';
-		}
-		else {
-			$html.= '<p class="buttons-row theme-gray">';
-			$html.= '<a href="#" class="button active">' . $d13->getLangUI("inventory") . '</a>';
-			$html.= '</p>';
+			if ($i > 0) {
+				$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
+				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
+				$html.= '</p>';
+			} else {
+				$html.= '<p class="buttons-row theme-gray">';
+				$html.= '<a href="#" class="button">' . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '</p>';
+			}
+		
 		}
 
 		return $html;
@@ -920,25 +925,29 @@ class d13_module_harvest extends d13_module
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$html = '';
+		$i=0;
+		
 		if ($this->data['options']['inventoryList']) {
+			
 			foreach($this->node->resources as $rid => $res) {
 				if ($d13->getResourceByID($res['id'], 'active') && $res['value'] > 0) {
 					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
 					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $rid, 'name');
 					$tvars['tvar_listAmount'] = floor($res['value']);
 					$tvars['tvar_sub_popuplist'].= $d13->templateParse($d13->templateGet("sub.module.listcontent") , $tvars);
+					$i++;
 				}
 			}
-
-			$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
-			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
-			$html.= '</p>';
-		}
-		else {
-			$html.= '<p class="buttons-row theme-gray">';
-			$html.= '<a href="#" class="button active">' . $d13->getLangUI("inventory") . '</a>';
-			$html.= '</p>';
+			if ($i>0) {
+				$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
+				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
+				$html.= '</p>';
+			} else {
+				$html.= '<p class="buttons-row theme-gray">';
+				$html.= '<a href="#" class="button">' . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '</p>';
+			}
 		}
 
 		return $html;
@@ -1035,35 +1044,34 @@ class d13_module_craft extends d13_module
 	{
 		global $d13;
 		$html = '';
-
-		// - - - - - Check Inventory
-
 		$inventoryData = '';
 		$tvars['tvar_sub_popuplist'] = '';
+		$i=0;
+		
 		if ($this->data['options']['inventoryList']) {
-
-			// - - - - - Popover if Inventory filled
 
 			foreach($this->node->components as $uid => $unit) {
 				if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
 					if ($unit['value'] > 0) {
+						
 						$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'] . '">';
 						$tvars['tvar_listLabel'] = $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'];
 						$tvars['tvar_listAmount'] = $unit['value'];
 						$tvars['tvar_sub_popuplist'].= $d13->templateParse($d13->templateGet("sub.module.listcontent") , $tvars);
+						$i++;
 					}
 				}
 			}
-
-			$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
-			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
-			$html.= '</p>';
-		}
-		else {
-			$html.= '<p class="buttons-row theme-gray">';
-			$html.= '<a href="#" class="button active">' . $d13->getLangUI("inventory") . '</a>';
-			$html.= '</p>';
+			if ($i>0) {
+				$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
+				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
+				$html.= '</p>';
+			} else {
+				$html.= '<p class="buttons-row theme-gray">';
+				$html.= '<a href="#" class="button">' . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '</p>';
+			}
 		}
 
 		return $html;
@@ -1297,30 +1305,31 @@ class d13_module_train extends d13_module
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$html = '';
+		$i=0;
+		
 		if ($this->data['options']['inventoryList']) {
+			
 			foreach($this->node->units as $uid => $unit) {
 				if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'units'))) {
 					if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
-
-						// if ($d13->data->units->getbyid('active', $uid, $this->node->data['faction']) && $unit['value'] > 0) {
-
 						$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
 						$tvars['tvar_listLabel'] = $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'];
 						$tvars['tvar_listAmount'] = $unit['value'];
 						$tvars['tvar_sub_popuplist'].= $d13->templateParse($d13->templateGet("sub.module.listcontent") , $tvars);
+						$i++;
 					}
 				}
 			}
-
-			$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
-			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
-			$html.= '</p>';
-		}
-		else {
-			$html.= '<p class="buttons-row theme-gray">';
-			$html.= '<a href="#" class="button active">' . $d13->getLangUI("inventory") . '</a>';
-			$html.= '</p>';
+			if ($i>0) {
+				$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
+				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
+				$html.= '</p>';
+			} else {
+				$html.= '<p class="buttons-row theme-gray">';
+				$html.= '<a href="#" class="button">' . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '</p>';
+			}
 		}
 
 		return $html;
@@ -1553,13 +1562,10 @@ class d13_module_research extends d13_module
 	{
 		global $d13;
 		$html = '';
-
-		// - - - - - Check Inventory
-
 		$tvars['tvar_sub_popuplist'] = '';
+		$i=0;
+		
 		if ($this->data['options']['inventoryList']) {
-
-			// - - - - - Popover if Inventory filled
 
 			foreach($d13->getTechnology($this->node->data['faction']) as $tid => $tech) {
 				if ($tech['active'] && in_array($tid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'technologies'))) {
@@ -1568,19 +1574,20 @@ class d13_module_research extends d13_module
 						$tvars['tvar_listLabel'] = $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['name'];
 						$tvars['tvar_listAmount'] = $this->node->technologies[$tid]['level'];
 						$tvars['tvar_sub_popuplist'].= $d13->templateParse($d13->templateGet("sub.module.listcontent") , $tvars);
+						$i++;
 					}
 				}
 			}
-
-			$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
-			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
-			$html.= '</p>';
-		}
-		else {
-			$html.= '<p class="buttons-row theme-gray">';
-			$html.= '<a href="#" class="button active">' . $d13->getLangUI("inventory") . '</a>';
-			$html.= '</p>';
+			if ($i>0) {
+				$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
+				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
+				$html.= '</p>';
+			}else {
+				$html.= '<p class="buttons-row theme-gray">';
+				$html.= '<a href="#" class="button">' . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '</p>';
+			}
 		}
 
 		return $html;
@@ -1935,25 +1942,29 @@ class d13_module_command extends d13_module
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$html = '';
+		$i=0;
+		
 		if ($this->data['options']['inventoryList']) {
+			
 			foreach($this->node->resources as $rid => $res) {
 				if ($d13->getResourceByID($res['id'], 'active') && $res['value'] > 0) {
 					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
 					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $rid, 'name');
 					$tvars['tvar_listAmount'] = floor($res['value']);
 					$tvars['tvar_sub_popuplist'].= $d13->templateParse($d13->templateGet("sub.module.listcontent") , $tvars);
+					$i++;
 				}
 			}
-
-			$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
-			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
-			$html.= '</p>';
-		}
-		else {
-			$html.= '<p class="buttons-row theme-gray">';
-			$html.= '<a href="#" class="button active">' . $d13->getLangUI("inventory") . '</a>';
-			$html.= '</p>';
+			if ($i>0) {
+				$d13->templateInject($d13->templateParse($d13->templateGet("sub.popup.list") , $tvars));
+				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list">' . $d13->getLangUI("inventory") . '</a>';
+				$html.= '</p>';
+			} else {
+				$html.= '<p class="buttons-row theme-gray">';
+				$html.= '<a href="#" class="button">' . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '</p>';
+			}
 		}
 
 		return $html;

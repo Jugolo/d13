@@ -418,13 +418,13 @@ class node
 			if (isset($this->modules[$slotId]['module']))
 			if (in_array($technologyId, $d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'technologies'))) $okModule = 1;
 			if ($okModule)
-			if ($this->technologies[$technologyId]['level'] < $d13->getTechnology($this->data['faction'][$technologyId]['maxLevel'])) {
+			if ($this->technologies[$technologyId]['level'] < $d13->getTechnology($this->data['faction'], $technologyId,'maxLevel')) {
 				$result = $d13->dbQuery('select count(*) as count from research where node="' . $this->data['id'] . '" and technology="' . $technologyId . '"');
 				$row = $d13->dbFetch($result);
 				if (!$row['count']) {
-					$technology['requirementsData'] = $this->checkRequirements($d13->getTechnology($this->data['faction'][$technologyId]['requirements']));
+					$technology['requirementsData'] = $this->checkRequirements($d13->getTechnology($this->data['faction'],$technologyId,'requirements'));
 					if ($technology['requirementsData']['ok']) {
-						$technology['costData'] = $this->checkCost($d13->getTechnology($this->data['faction'][$technologyId]['cost'], 'research'));
+						$technology['costData'] = $this->checkCost($d13->getTechnology($this->data['faction'],$technologyId,'cost'), 'research');
 						if ($technology['costData']['ok']) {
 							$ok = 1;
 							foreach($d13->getTechnology($this->data['faction'], $technologyId, 'cost') as $cost) {
@@ -451,7 +451,7 @@ class node
 							$totalIR = 0;
 							foreach($this->modules as $key => $item)
 							if ($item['module'] == $this->modules[$slotId]['module']) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
-							$duration = $d13->getTechnology($this->data['faction'][$technologyId]['duration']);
+							$duration = $d13->getTechnology($this->data['faction'],$technologyId,'duration');
 							$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'research');
 							$d13->dbQuery('insert into research (node, technology, start, duration) values ("' . $this->data['id'] . '", "' . $technologyId . '", "' . $start . '", "' . $duration . '")');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
