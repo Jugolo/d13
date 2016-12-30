@@ -17,6 +17,11 @@ CREDITS
 RELEASE CANDIDATE 0
 ------------------------------------------------------------------------------------------
 
+V010 --- FIRST STABLE VERSION ---
+
+V010 * New building type: 'storvest' a hybrid building of a storage and a harvest building
+allows to both produce and store resources.
+
 V009 * Building/Upgrading duration can now be accelerated by investing more Workers (or InputResource
 in general).
 

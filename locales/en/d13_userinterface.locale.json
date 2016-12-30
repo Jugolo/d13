@@ -240,5 +240,9 @@
   "peaceDenied": "peace denied",
   "cannotSendStatic": "cannot send static units",
   "impossible": "impossible",
-  "empty": "empty"
+  "empty": "empty",
+  "resource": "resource",
+  "unit": "unit",
+  "component": "component",
+  "technology": "technology"
 }

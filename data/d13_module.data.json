@@ -523,7 +523,7 @@
       "id": 9,
       "active": true,
       "priority": 9,
-      "type": "trade",
+      "type": "market",
       "maxLevel": 1,
       "inputResource": 3,
       "ratio": 0.1,
@@ -979,7 +979,7 @@
       "id": 16,
       "active": true,
       "priority": 16,
-      "type": "storage",
+      "type": "storvest",
       "maxLevel": 1,
       "inputResource": 3,
       "ratio": 0.25,
@@ -993,6 +993,9 @@
           "level": 0,
           "image": "module_farm_0.png"
         }
+      ],
+      "outputResource": [
+        5
       ],
       "storedResource": [
         5

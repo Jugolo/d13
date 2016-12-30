@@ -627,7 +627,7 @@ class node
 							$this->resources[$tmp_module->data['inputResource']]['value'] -= $input;
 							$d13->dbQuery('update resources set value="' . $this->resources[$tmp_module->data['inputResource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
-							$d13->dbQuery('update modules set input="' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+							$d13->dbQuery('update modules set input=input+"' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 							
 							$this->getQueue('build');
@@ -709,10 +709,10 @@ class node
 						}
 						
 						$this->resources[$tmp_module->data['inputResource']]['value'] -= $input;
-							$d13->dbQuery('update resources set value="' . $this->resources[$tmp_module->data['inputResource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
-							if ($d13->dbAffectedRows() == - 1) $ok = 0;
-							$d13->dbQuery('update modules set input="' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
-							if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						$d13->dbQuery('update resources set value="' . $this->resources[$tmp_module->data['inputResource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
+						if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						$d13->dbQuery('update modules set input=input+"' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+						if ($d13->dbAffectedRows() == - 1) $ok = 0;
 
 						$this->getQueue('build');
 						#$lastBuild = count($this->queue['build']) - 1;
@@ -775,7 +775,15 @@ class node
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 				}
 			}
+			
+			$input = $tmp_module->data['input'];
+			$this->resources[$tmp_module->data['inputResource']]['value'] -= $input;
+			$d13->dbQuery('update resources set value=value+"' . $this->resources[$tmp_module->data['inputResource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
+			if ($d13->dbAffectedRows() == - 1) $ok = 0;
+			$d13->dbQuery('update modules set input=input-"' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+			if ($d13->dbAffectedRows() == - 1) $ok = 0;
 
+			
 			$this->getQueue('build');
 			$entry['duration'] = floor($entry['duration'] * 60);
 			foreach($this->queue['build'] as $queueEntry) {

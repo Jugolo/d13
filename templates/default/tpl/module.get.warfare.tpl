@@ -24,7 +24,14 @@
 				{{tvar_linkData}}
 			</div>
 			
-			<li class="item-content">
+			
+			
+			<div class="col-60">
+			
+				<div class="list-block">
+				<ul>
+					
+				<li class="item-content">
 					<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
 					<div class="item-inner">
 					<div class="item-title label">{{tvar_moduleInputName}}</div>
@@ -36,13 +43,8 @@
 					</form>
 				
 					</div>
-				</li>
-			
-			<div class="col-60">
-			
-				<div class="list-block">
-				<ul>
-			
+				</li>	
+				
 				{{tvar_moduleItemContent}}
 						
 				</ul>
