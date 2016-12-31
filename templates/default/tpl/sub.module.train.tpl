@@ -73,6 +73,15 @@
 						</li>
 
 						<li class="item-content">
+							<div class="item-inner">
+							<div class="item-after">{{tvar_ui_vision}}: {{tvar_unitVision}} {{tvar_unitVisionPlus}}</div>
+							</div>
+							<div class="item-inner">
+							<div class="item-after"></div>
+							</div>
+						</li>
+						
+						<li class="item-content">
 							<div class="item-media">{{tvar_requirementsIcon}}</div>
 							<div class="item-inner">
 							<div class="item-title">{{tvar_ui_requirements}}:</div>
@@ -93,15 +102,13 @@
 							
 								<form class="pure-form" method="post" id="trainForm" action="?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}" id="unitForm_{{tvar_uid}}">
 								
-									<select class="pure-input" onChange="change_maximum('quantity{{tvar_cid}}',{{tvar_compValue}}, 'trainForm', this.value)">
+									<select class="pure-input" onChange="change_maximum('input{{tvar_sliderID}}', {{tvar_unitValue}}, 'trainForm', this.value)">
 	 									<option value="index.php?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}">{{tvar_ui_train}}</option>
 	 								 	<option value="index.php?p=module&action=removeUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}">{{tvar_ui_remove}}</option>
 	 								 </select>
 
-									<input  class="pure-input" type="number" size="6" name="quantity" id="quantity{{tvar_uid}}" min="0" max="{{tvar_unitLimit}}" value="0">
-									<button class="pure-input pure-button pure-{{tvar_global_color}}" type="button" {{tvar_disableData}} onClick="set_maximum('quantity{{tvar_uid}}',{{tvar_unitLimit}})">{{tvar_ui_max}}</button>
-									<input class="pure-input pure-button pure-{{tvar_global_color}}" type="submit" {{tvar_disableData}} value="{{tvar_ui_train}}">
-							
+									<span class="badge" id="sliderRangeTrain{{tvar_sliderID}}">{{tvar_sliderValue}}</span><input type="range" name="quantity" id="input{{tvar_sliderID}}" min="{{tvar_sliderMin}}" max="{{tvar_sliderMax}}" value="{{tvar_sliderValue}}" step="1" onMouseDown="mySwiper.lockSwipes()" onMouseUp="mySwiper.unlockSwipes()" onInput="showValue('sliderRange{{tvar_sliderID}}', this.value)" onInput="showValue('sliderRangeTrain{{tvar_sliderID}}', this.value)" onChange="showValue('sliderRangeTrain{{tvar_sliderID}}', this.value)"><input class="pure-input pure-button pure-{{tvar_global_color}}" type="submit" value="{{tvar_ui_set}}">
+									
 								</form>
 							
 						</li>

@@ -7,6 +7,8 @@
     "storage": 5000,
     "type": "dynamic",
     "visible": true,
+    "rarity": 50,
+    "storeable": true,
     "carryable": true
   },
   {
@@ -17,6 +19,8 @@
     "storage": 5000,
     "type": "dynamic",
     "visible": true,
+    "rarity": 50,
+    "storeable": true,
     "carryable": true
   },
   {
@@ -27,6 +31,8 @@
     "storage": 5000,
     "type": "dynamic",
     "visible": true,
+    "rarity": 50,
+    "storeable": true,
     "carryable": true
   },
   {
@@ -37,6 +43,8 @@
     "storage": 100,
     "type": "dynamic",
     "visible": true,
+    "rarity": 50,
+    "storeable": false,
     "carryable": false
   },
   {
@@ -47,6 +55,8 @@
     "storage": 200,
     "type": "static",
     "visible": true,
+    "rarity": 50,
+    "storeable": true,
     "carryable": false
   },
   {
@@ -57,6 +67,8 @@
     "storage": 200,
     "type": "dynamic",
     "visible": true,
-    "carryable": false
+    "rarity": 50,
+    "storeable": true,
+    "carryable": true
   }
 ]

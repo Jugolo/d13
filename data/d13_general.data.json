@@ -256,6 +256,7 @@
     "hp",
     "damage",
     "armor",
-    "speed"
+    "speed",
+    "vision"
   ]
 }

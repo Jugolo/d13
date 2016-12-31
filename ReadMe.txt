@@ -17,6 +17,12 @@ CREDITS
 RELEASE CANDIDATE 0
 ------------------------------------------------------------------------------------------
 
+V011 	* Hybrid harvest/storage buildings implemented
+		* Unlimited resources that require no storage building implemented
+		* Fixed minor security issue
+		* Replaced most text inputs with HTML input slider (Mobile First)
+		* Restyled resource bar a bit
+
 V010 --- FIRST STABLE VERSION ---
 
 V010 * New building type: 'storvest' a hybrid building of a storage and a harvest building

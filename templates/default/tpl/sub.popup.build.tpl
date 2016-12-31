@@ -36,16 +36,12 @@
 				
 				<li class="item-content">
 					<div class="item-inner">
-							
-						<form class="pure-form" method="post" id="buildForm" action="{{tvar_moduleAction}}" id="buildForm_{{tvar_id}}">
-							<input  class="pure-input" type="number" size="6" name="input" id="quantity{{tvar_id}}" min="1" max="{{tvar_moduleLimit}}" value="{{tvar_moduleInput}}">
-							<button class="pure-input pure-button pure-{{tvar_global_color}}" type="button" {{tvar_disableData}} onClick="set_maximum('quantity{{tvar_id}}',{{tvar_moduleLimit}})">{{tvar_ui_max}}</button>
-							<input class="pure-input pure-button pure-{{tvar_global_color}}" type="submit" {{tvar_disableData}} value="{{tvar_ui_build}}">
-						</form>
-						
+					<div class="item-after" style="text-align:center;">
+					{{tvar_inputSlider}}
 					</div>
-				</li>		
-
+					</div>
+				</li>
+				
 			</ul>
 			
 		</div>

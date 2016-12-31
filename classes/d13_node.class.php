@@ -559,6 +559,7 @@ class node
 		} else {
 			$status = 'noSlot';
 		}
+		$d13->logger($status);
 		return $status;
 	}
 
@@ -1323,10 +1324,11 @@ class node
 		$ok = 1;
 		foreach($d13->getResource() as $resource) {
 			if ($resource['type'] == 'dynamic') {
-				$this->resources[$resource['id']]['value']+= $this->production[$resource['id']] * $elapsed; //value
+				$this->resources[$resource['id']]['value']+= $this->production[$resource['id']] * $elapsed;
 				if ($this->storage[$resource['id']]) {
-					if ($this->resources[$resource['id']]['value'] > $this->storage[$resource['id']]) { //value
-						$this->resources[$resource['id']]['value'] = $this->storage[$resource['id']]; //value
+				
+					if ($resource['storage'] == true && $this->resources[$resource['id']]['value'] > $this->storage[$resource['id']]) {
+						$this->resources[$resource['id']]['value'] = $this->storage[$resource['id']];
 					}
 
 					$d13->dbQuery('update resources set value="' . $this->resources[$resource['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $resource['id'] . '"');

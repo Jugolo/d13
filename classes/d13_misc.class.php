@@ -47,7 +47,7 @@ class misc
 	{
 		$percentage = 0;
 		if ($fraction > 0 && $total > 0) {
-			$percentage = $total * ($fraction / 100);
+			$percentage = ($fraction/$total)*100;#$total * ($fraction / 100);
 		}
 
 		return $percentage;

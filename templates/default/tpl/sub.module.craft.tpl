@@ -67,15 +67,13 @@
 								
 								<form class="pure-form" method="post" id="componentForm" action="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">
 									
-									<select class="pure-input" onChange="change_maximum('quantity{{tvar_cid}}',{{tvar_compValue}}, 'componentForm', this.value)">
+									<select class="pure-input" onChange="change_maximum('input{{tvar_sliderID}}', {{tvar_compValue}}, 'componentForm', this.value)">
 										<option value="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">{{tvar_ui_craft}}</option>
 										<option value="?p=module&action=removeComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">{{tvar_ui_remove}}</option>
 									</select>
-								
-									<input class="pure-input" type="number" size="6" name="quantity" id="quantity{{tvar_cid}}" min="0" max="{{tvar_compLimit}}" value="0">
-									<button class="pure-input pure-button pure-{{tvar_global_color}}" type="button" {{tvar_disableData}} onClick="set_maximum('quantity{{tvar_cid}}',{{tvar_compLimit}})">{{tvar_ui_max}}</button>
-									<input class="pure-input pure-button pure-{{tvar_global_color}}" type="submit" {{tvar_disableData}} value="{{tvar_ui_craft}}">
-										
+
+									<span class="badge" id="sliderRangeCraft{{tvar_sliderID}}">{{tvar_sliderValue}}</span><input type="range" name="quantity" id="input{{tvar_sliderID}}" min="{{tvar_sliderMin}}" max="{{tvar_sliderMax}}" value="{{tvar_sliderValue}}" step="1" onMouseDown="mySwiper.lockSwipes()" onMouseUp="mySwiper.unlockSwipes()" onInput="showValue('sliderRangeCraft{{tvar_sliderID}}', this.value)" onChange="showValue('sliderRangeCraft{{tvar_sliderID}}', this.value)"><input class="pure-input pure-button pure-{{tvar_global_color}}" type="submit" value="{{tvar_ui_set}}">
+									
 								</form>
 								
 						</li>

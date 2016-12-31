@@ -129,6 +129,7 @@
   "damage": "damage",
   "armor": "armor",
   "speed": "speed",
+  "vision": "vision",
   "research": "research",
   "build": "build",
   "craft": "craft",
@@ -244,5 +245,10 @@
   "resource": "resource",
   "unit": "unit",
   "component": "component",
-  "technology": "technology"
+  "battle": "battle",
+  "power": "power",
+  "army": "army",
+  "size": "size"
+  
+  
 }

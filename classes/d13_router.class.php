@@ -28,13 +28,15 @@ class d13_router
 		$this->sanitize_vars();
 		if (isset($_GET['p'])) {
 			$page = CONST_INCLUDE_PATH . "pages/" . $_GET['p'] . ".php";
-		}
-		else {
+		} else {
 			$page = CONST_INCLUDE_PATH . "pages/index.php";
 		}
-
-		include_once ($page);
-
+		
+		if (file_exists($page)) {
+			include_once ($page);
+		} else {
+			header("location:index.php");
+		}
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -90,6 +92,9 @@ class d13_router
 					else {
 						$value = floor(abs($value));
 					}
+				} else if (is_string($data)) {
+
+					$data = basename($data);
 				}
 
 				$value = $d13->dbRealEscapeString($value);
@@ -104,8 +109,11 @@ class d13_router
 				else {
 					$data = floor(abs($data));
 				}
-			}
+			} else if (is_string($data)) {
 
+				$data = basename($data);
+			}
+			
 			$data = $d13->dbRealEscapeString($data);
 			$data = htmlspecialchars($data);
 		}

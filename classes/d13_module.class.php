@@ -250,10 +250,13 @@ class d13_module
 		$tvars['tvar_inventoryLink'] = $this->getInventory();
 		$tvars['tvar_linkData'] = $this->getModuleUpgrade();
 		$tvars['tvar_moduleItemContent'] = $this->getOptions();
+		
 		if ($this->data['level'] > 0) {
 		$tvars['tvar_queue'] = $this->getQueue();
 		$tvars['tvar_popup'] = $this->getPopup();
+		$tvars['tvar_inputSlider'] = $this->getInputSlider("?p=module&action=set&nodeId=".$this->node->data['id']."&slotId=".$this->data['slotId'], $this->data['slotId'], 0, $this->data['moduleInputLimit'], $this->node->modules[$this->data['slotId']]['input']);
 		}
+		
 		$tvars['tvar_moduleImage'] = $this->data['image'];
 		$tvars['tvar_moduleDescription'] = $this->data['description'];
 		$tvars['tvar_moduleID'] = $this->data['moduleId'];
@@ -280,6 +283,8 @@ class d13_module
 		$tvars['tvar_moduleSalvage'] = $this->data['salvage'];
 		$tvars['tvar_moduleRemoveDuration'] = $this->data['removeDuration'];
 		
+		if ($this->data['level'] <= 0) {
+		
 		if ($this->data['reqData']['ok']) {
 			$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.ok");
 		}
@@ -293,7 +298,9 @@ class d13_module
 		else {
 			$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
 		}
-
+		
+		}
+		
 		if (isset($this->data['storedResource'])) {
 			$i = 0;
 			while (isset($this->data['moduleStorageRes' . $i])) {
@@ -332,6 +339,30 @@ class d13_module
 				$this->data['image'] = $image['image'];
 			}
 		}
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// getInputSlider
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getInputSlider($action, $id, $min, $max, $value)
+	{
+	
+		global $d13;
+
+		$vars = array();		
+		$vars['tvar_formAction'] 	= $action;
+		$vars['tvar_sliderID'] 	= $id;
+		$vars['tvar_sliderMin'] 	= $min;
+		$vars['tvar_sliderMax'] 	= $max;
+		$vars['tvar_sliderValue'] 	= $value;
+		
+		return $d13->templateSubpage("sub.range.slider", $vars);
+				
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -391,7 +422,8 @@ class d13_module
 				$tvars['tvar_moduleInput']		= $this->data['moduleSlotInput'];
 				$tvars['tvar_moduleLimit'] 		= floor(min($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput'],$this->data['maxInput']));
 				$tvars['tvar_disableData'] 		= '';
-				$d13->logger("ID-build:".$this->data['moduleId']); //DEBUG
+				$tvars['tvar_inputSlider'] = $this->getInputSlider('?p=module&action=add&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'], $this->data['slotId'], 0, $this->data['moduleInputLimit'], $this->node->modules[$this->data['slotId']]['input']);
+
 				$d13->templateInject($d13->templateSubpage("sub.popup.build" , $tvars));
 			
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
@@ -408,7 +440,6 @@ class d13_module
 			
 		} else {
 		
-			
 			if (($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput']) > 0 && $this->data['costData']['ok'] && $this->data['reqData']['ok'] && $this->node->modules[$this->data['slotId']]['level'] < $this->data['maxLevel'] && $this->data['maxLevel'] > 1) {
 				
 				$tvars['tvar_title'] 			= $d13->getLangUI("upgrade");
@@ -421,7 +452,7 @@ class d13_module
 				$tvars['tvar_moduleInput']		= $this->data['moduleSlotInput'];
 				$tvars['tvar_moduleLimit'] 		= floor(min($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput'],$this->data['maxInput']));
 				$tvars['tvar_disableData'] 		= '';
-			$d13->logger("ID-build:".$this->data['moduleId']); //UPGRADE
+				
 				$d13->templateInject($d13->templateSubpage("sub.popup.build" , $tvars));
 			
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
@@ -492,9 +523,12 @@ class d13_module
 					$images = array();
 					$images = $d13->getModule($this->node->data['faction'], $requirement['id'], 'images');
 					$image = $images[0]['image'];
-				}
-				else {
-					$image = $requirement['id']; //change later to image
+				} else if ($requirement['type'] == 'technology') {
+					$image = $d13->getTechnology($this->node->data['faction'], $requirement['id'], 'image');
+				} else if ($requirement['type'] == 'component') {
+					$image = $d13->getComponent($this->node->data['faction'], $requirement['id'], 'image');
+				} else {
+					$image = $requirement['id'];
 				}
 
 				$html.= '<div class="cell">' . $value . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div>';
@@ -541,7 +575,7 @@ class d13_module
 					$tmp2_array['resource'] = $upcost['resource'];
 					$tmp2_array['value'] = $upcost['value'] * $d13->getGeneral('users', 'cost', 'build');
 					$tmp2_array['name'] = $d13->getLangGL('resources', $upcost['resource'], 'name');
-					$tmp2_array['icon'] = $upcost['resource'] . '.png';
+					$tmp2_array['icon'] = $d13->getResource($upcost['resource'], 'image');
 					$tmp2_array['factor'] = $upcost['factor'];
 					if ($tmp_array['resource'] == $tmp2_array['resource']) {
 						$tmp_array['value'] = $tmp_array['value'] + floor($tmp2_array['value'] * $tmp2_array['factor'] * $this->data['level']);
@@ -662,7 +696,7 @@ class d13_module_warfare extends d13_module
 
 		// - - - - Option: Raid
 
-		if ($this->data['options']['combatRaid']) {
+		if ($this->data['options']['combatRaid'] && $this->data['moduleSlotInput'] > 0) {
 			$tvars['tvar_Label'] = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("raid");
 			$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'];
 			$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
@@ -1161,6 +1195,12 @@ class d13_module_craft extends d13_module
 				$tvars['tvar_compStorage'] = $component['storage'];
 				$tvars['tvar_compResource'] = $component['storageResource'];
 				$tvars['tvar_compResourceName'] = $d13->getLangGL("resources", $component['storageResource'], "name");
+				
+				$tvars['tvar_sliderID'] 	= $this->data['slotId'];
+				$tvars['tvar_sliderMin'] 	= 0;
+				$tvars['tvar_sliderMax'] 	= $limitData;
+				$tvars['tvar_sliderValue'] 	= 0;
+
 				$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.craft", $tvars);
 			}
 		}
@@ -1410,7 +1450,8 @@ class d13_module_train extends d13_module
 				$tvars['tvar_unitDamagePlus'] = "[+" . $upgradeData['damage'] . "]";
 				$tvars['tvar_unitArmorPlus'] = "[+" . $upgradeData['armor'] . "]";
 				$tvars['tvar_unitSpeedPlus'] = "[+" . $upgradeData['speed'] . "]";
-
+				$tvars['tvar_unitVisionPlus'] = "[+" . $upgradeData['vision'] . "]";
+				
 				// - - - - - Setup Template Data
 				$tvars['tvar_nodeID'] = $this->node->data['id'];
 				$tvars['tvar_slotID'] = $this->data['slotId'];
@@ -1428,11 +1469,18 @@ class d13_module_train extends d13_module
 				$tvars['tvar_unitDamage'] = $unit->data['damage'];
 				$tvars['tvar_unitArmor'] = $unit->data['armor'];
 				$tvars['tvar_unitSpeed'] = $unit->data['speed'];
+				$tvars['tvar_unitVision'] = $unit->data['vision'];
 				$tvars['tvar_unitLimit'] = $unit->getMaxProduction();
 				$tvars['tvar_unitDuration'] = misc::time_format((($unit->data['duration'] - $unit->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'train')) * 60);
 				$tvars['tvar_unitUpkeep'] = $unit->data['upkeep'];
 				$tvars['tvar_unitUpkeepResource'] = $unit->data['upkeepResource'];
 				$tvars['tvar_unitUpkeepResourceName'] = $d13->getLangGL('resources', $unit->data['upkeepResource'], 'name');
+				
+				$tvars['tvar_sliderID'] 	= $this->data['slotId'];
+				$tvars['tvar_sliderMin'] 	= 0;
+				$tvars['tvar_sliderMax'] 	= $unit->getMaxProduction();
+				$tvars['tvar_sliderValue'] 	= 0;
+
 				$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.train", $tvars);
 			}
 		}
@@ -2101,12 +2149,14 @@ class d13_module_defense extends d13_module
 		$tvars['tvar_unitDamagePlus'] = "[+" . $upgradeData['damage'] . "]";
 		$tvars['tvar_unitArmorPlus'] = "[+" . $upgradeData['armor'] . "]";
 		$tvars['tvar_unitSpeedPlus'] = "[+" . $upgradeData['speed'] . "]";
+		$tvars['tvar_unitVisionPlus'] = "[+" . $upgradeData['vision'] . "]";
 		$tvars['tvar_unitType'] = $unit->data['type'];
 		$tvars['tvar_unitClass'] = $unit->data['class'];
 		$tvars['tvar_unitHP'] = $unit->data['hp'];
 		$tvars['tvar_unitDamage'] = $unit->data['damage'];
 		$tvars['tvar_unitArmor'] = $unit->data['armor'];
 		$tvars['tvar_unitSpeed'] = $unit->data['speed'];
+		$tvars['tvar_unitVision'] = $unit->data['vision'];
 		return $tvars;
 	}
 

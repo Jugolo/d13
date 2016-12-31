@@ -24,9 +24,13 @@ $d13->dbQuery('start transaction');
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId'], $_GET['slotId'])) {
 	$flags = $d13->flags->get('name');
 	$node = new node();
+	
 	$status = $node->get('id', $_GET['nodeId']);
+	$node->getModules();
+	
 	$mid = $node->modules[$_GET['slotId']]['module'];
 	$sid = $node->modules[$_GET['slotId']]['slot'];
+	
 	if ($status == 'done') {
 		$node->checkAll(time());
 		$node->getLocation();
@@ -36,6 +40,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 			// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 		case 'get':
+			
 			$mid = $node->modules[$_GET['slotId']]['module'];
 			$sid = $node->modules[$_GET['slotId']]['slot'];
 			if ($mid > - 1) $module = $d13->getModule($node->data['faction'], $mid);

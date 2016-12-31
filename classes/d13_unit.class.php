@@ -322,6 +322,67 @@ class d13_unit
 			}
 		}
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getTemplateVariables
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getTemplateVariables()
+	{
+		global $d13;
+		$tvars = array();
+		
+		$upgradeData = $this->getUpgrades();
+		
+		$tvars['tvar_unitType'] = $this->data['type'];
+		$tvars['tvar_unitClass'] = $this->data['class'];
+				
+		$tvars['tvar_unitHPPlus'] = "[+" . $upgradeData['hp'] . "]";
+		$tvars['tvar_unitDamagePlus'] = "[+" . $upgradeData['damage'] . "]";
+		$tvars['tvar_unitArmorPlus'] = "[+" . $upgradeData['armor'] . "]";
+		$tvars['tvar_unitSpeedPlus'] = "[+" . $upgradeData['speed'] . "]";
+		$tvars['tvar_unitVisionPlus'] = "[+" . $upgradeData['vision'] . "]";
+		
+		$tvars['tvar_unitType'] = $this->data['type'];
+		$tvars['tvar_unitClass'] = $this->data['class'];
+		$tvars['tvar_unitHP'] = $this->data['hp'];
+		$tvars['tvar_unitDamage'] = $this->data['damage'];
+		$tvars['tvar_unitArmor'] = $this->data['armor'];
+		$tvars['tvar_unitSpeed'] = $this->data['speed'];
+		$tvars['tvar_unitVision'] = $this->data['vision'];
+		
+		
+		#$tvars['tvar_costData'] = $costData;
+		#$tvars['tvar_requirementsData'] = $requirementsData;
+		#$tvars['tvar_disableData'] = $disableData;
+		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
+		$tvars['tvar_unitImage'] = $this->data['image'];
+		$tvars['tvar_uid'] = $this->data['unitId'];
+		$tvars['tvar_unitName'] = $this->data['name'];
+		$tvars['tvar_unitDescription'] = $this->data['description'];
+		$tvars['tvar_unitValue'] = $this->node->units[$this->data['unitId']]['value'];
+		$tvars['tvar_unitType'] = $this->data['type'];
+		$tvars['tvar_unitClass'] = $this->data['class'];
+		$tvars['tvar_unitHP'] = $this->data['hp'];
+		$tvars['tvar_unitDamage'] = $this->data['damage'];
+		$tvars['tvar_unitArmor'] = $this->data['armor'];
+		$tvars['tvar_unitSpeed'] = $this->data['speed'];
+		$tvars['tvar_unitVision'] = $this->data['vision'];
+		$tvars['tvar_unitLimit'] = $this->getMaxProduction();
+		#$tvars['tvar_unitDuration'] = misc::time_format((($this->data['duration'] - $this->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'train')) * 60);
+		$tvars['tvar_unitUpkeep'] = $this->data['upkeep'];
+		$tvars['tvar_unitUpkeepResource'] = $this->data['upkeepResource'];
+		$tvars['tvar_unitUpkeepResourceName'] = $d13->getLangGL('resources', $this->data['upkeepResource'], 'name');
+				
+	
+		return $tvars;
+		
+	}	
+	
 }
 
 // =====================================================================================EOF

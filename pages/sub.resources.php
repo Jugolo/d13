@@ -24,16 +24,27 @@ function sub_resources($node)
 	if (isset($node) && isset($node->resources)) {
 		foreach($node->resources as $resource) {
 			if ($d13->getResourceByID($resource['id'], 'active') && $d13->getResourceByID($resource['id'], 'visible')) {
-				$tvars['tvar_resName'] = $d13->getLangGL('resources', $resource['id'], 'name');
-				$tvars['tvar_resImage'] = $d13->getResourceByID($resource['id'], 'image');
-				$tvars['tvar_resValue'] = floor($resource['value']) . '/' . $node->storage[$resource['id']];
-				$tvars['tvar_resProduction'] = '';
+				
+				$tvars['tvar_resImage'] 	= $d13->getResourceByID($resource['id'], 'image');
+				$tvars['tvar_resValue'] 	= 0;
+				$tvars['tvar_resPercentage'] = 0;
+				$tvars['tvar_resTooltip'] 	= '';
+				
+				$tvars['tvar_resTooltip'] .= $d13->getLangGL('resources', $resource['id'], 'name') . ' ';
+				if ($d13->getResourceByID($resource['id'], 'storeable')) {
+					$tvars['tvar_resValue'] = floor($resource['value']) . '/' . floor($node->storage[$resource['id']]);
+					$tvars['tvar_resPercentage'] = misc::percentage(floor($resource['value']), floor($node->storage[$resource['id']]));
+					$tvars['tvar_resTooltip'] .= floor($resource['value']) . '/' . floor($node->storage[$resource['id']]);
+				} else {
+					$tvars['tvar_resValue'] = floor($resource['value']);
+					
+				}
 				if ($node->production[$resource['id']]) {
 					if (floor($resource['value']) < $node->storage[$resource['id']]) {
-						$tvars['tvar_resProduction'] = ' [+' . round($node->production[$resource['id']]) . $d13->getLangUI('perHour') . ']';
+						$tvars['tvar_resTooltip'] .= ' [+' . round($node->production[$resource['id']]) . $d13->getLangUI('perHour') . ']';
 					}
 					else {
-						$tvars['tvar_resProduction'] = ' [' . $d13->getLangUI("full") . ']';
+						$tvars['tvar_resTooltip'] .= ' [' . $d13->getLangUI("full") . ']';
 					}
 				}
 

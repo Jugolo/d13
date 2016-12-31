@@ -97,6 +97,11 @@ img {
   border-color: #007aff;
 }  
 
+.range-slider {
+	width: 75%;
+	vertical-align: middle;
+}
+
 .badge{
 	background-color: #000;
 	background-color: hsla(0, 0%, 0%, 0.5);

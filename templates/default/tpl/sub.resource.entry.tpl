@@ -1,3 +1,14 @@
-<span class="badge">
-<a class="tooltip-bottom" data-tooltip="{{tvar_resName}}"><img class="d13-resource" src="templates/{{tvar_global_template}}/images/resources/{{tvar_resImage}}" title="{{tvar_resName}}"></a>{{tvar_resValue}} {{tvar_resProduction}}
-</span>&nbsp;
+<a class="tooltip-bottom" data-tooltip="{{tvar_resTooltip}}">
+	<div class="chip">
+    	<div class="chip-media">
+        	<img src="templates/{{tvar_global_template}}/images/resources/{{tvar_resImage}}">
+    	</div>
+    	<div class="chip-label">
+    		<b>{{tvar_resValue}}</b>
+    		<div class="progressbar" data-progress="{{tvar_resPercentage}}">
+    			<span></span>
+			</div>
+    	</div>
+	</div>
+</a>
+<span style="width:5px;"></span>

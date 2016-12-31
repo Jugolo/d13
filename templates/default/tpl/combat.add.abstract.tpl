@@ -1,57 +1,42 @@
 <div class="d13-node" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/nodeBackground.png);">
+	<div class="card card-shadow">
 
-<div class="card card-shadow">
-
-  <div class="card-header">
-  	{{tvar_ui_combat}}
-  	<a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
-  </div>
+  		<div class="card-header">
+  			<div class="left">{{tvar_ui_combat}}</div>
+  			<div class="right"><a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>
+  		</div>
   
-  <div class="card-content">
-    <div class="card-content-inner">
+  		<div class="card-content">
+    		<div class="card-content-inner">
     
-					<script type="text/javascript">
-			 var attacker=new Array(), defender=new Array();
-			 function Group(groupType, groupQuantity)
-			 {
-			  this.type=groupType;
-			  this.quantity=groupQuantity;
-			 }
-			</script>
-
-		<div class="swiper-container">
-			<div class="swiper-wrapper">
-				 {{tvar_unitsHTML}}
-			</div>
-			<div class="swiper-button-prev"></div>
-    		<div class="swiper-button-next"></div>
-			<div class="swiper-pagination"></div>
-			<div class="swiper-scrollbar"></div>
-		</div>
+			<form class="pure-form" method="post" id="combatForm" action="?p=combat&action=add&nodeId={{tvar_nodeID}}" id="combatForm">
 			
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						 {{tvar_unitsHTML}}
+					</div>
+					<div class="swiper-button-prev"></div>
+					<div class="swiper-button-next"></div>
+					<div class="swiper-pagination"></div>
+					<div class="swiper-scrollbar"></div>
+				</div>
+			
+				<select>{{tvar_nodeList}}</select> {{tvar_ui_cost}}: {{tvar_costData}} <input class="pure-button" type="submit" value="{{tvar_ui_send}}">
+			
+			</form>
 
-	  <form method="post" action="">
-	   <div><div class="cell">{{tvar_ui_node}}</div><div class="cell"><select class="dropdown" name="name"">{{tvar_nodeList}}</select></div></div>
-	   <div>
-		{{tvar_ui_focus}}
-		<select class="dropdown" name="attackerFocus" id="attackerFocus">
-		 <option value="hp">{{tvar_ui_hp}}</option>
-		 <option value="damage">{{tvar_ui_damage}}</option>
-		 <option value="armor">{{tvar_ui_armor}}</option>
-		</select> | 
-		<select class="dropdown" id="attackerUnit">{{tvar_units}}</select>
-		<input class="button" type="button" value="{{tvar_ui_add}}" onClick="addGroup()">
-	   </div>
-	   <div class="container" id="attacker"></div>
-	   <div>
-		<div class="cell" style="float: right;">{{tvar_ui_cost}}: {{tvar_costData}}</div>
-		<input class="button" type="submit" value="{{tvar_ui_send}}">
-	   </div>
-	  </form>
 	 </div>
 	</div>
-
-			<script type="text/javascript">
+		
+		<div class="card-footer">
+  			<div class="left">{{tvar_ui_army}} {{tvar_ui_size}}: <span id="size" class="badge">0/0</span></div>
+  			<div class="left">{{tvar_ui_battle}} {{tvar_ui_power}}: <span id="power" class="badge">0</span></div>
+  			
+  			
+  		</div>
+		
+		<script type="text/javascript">
+		/*
 				function addGroup()
 				{
 				 var group=new Group(document.getElementById("attackerUnit").value, 0);
@@ -72,11 +57,10 @@
 					document.getElementById("attacker").innerHTML=holder;
 				}
 				setUnits();
+				*/
 			</script>
-    
-    </div>
-  </div>
-  </div>
+    	
+    	
+    	
+	</div>
 </div>
-
-

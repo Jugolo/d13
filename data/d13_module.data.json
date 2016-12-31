@@ -527,6 +527,7 @@
       "maxLevel": 1,
       "inputResource": 3,
       "ratio": 0.1,
+      "maxRarity": 50,
       "maxInput": 10,
       "duration": 10,
       "salvage": 0.5,
@@ -561,7 +562,10 @@
         }
       ],
       "options": [
-        
+        {
+        	"resourceBuy": true,
+        	"resourceSell": true
+        }
       ],
       "upgrades": [
         109
