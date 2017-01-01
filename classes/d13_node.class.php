@@ -1225,7 +1225,7 @@ class node
 
 	public
 
-	function addCombat($nodeId, $data)
+	function addCombat($nodeId, $data, $type)
 	{
 		global $d13;
 		$this->getResources();
@@ -1233,25 +1233,40 @@ class node
 		$this->getLocation();
 		$node = new node();
 		$okUnits = 1;
+		
 		$army = array();
-		foreach($data['input']['attacker']['groups'] as $group)
-		if (isset($army[$group['unitId']])) $army[$group['unitId']]+= $group['quantity'];
-		else $army[$group['unitId']] = $group['quantity'];
-		$speed = 999999999;
-		foreach($this->units as $key => $group)
-		if (isset($army[$key])) {
-			if ($army[$key] > $group['value']) $okUnits = 0;
-			if ($d13->getUnit($this->data['faction'], $key, 'speed') < $speed) $speed = $d13->getUnit($this->data['faction'], $key, 'speed');
+		foreach($data['input']['attacker']['groups'] as $group) {
+			if (isset($army[$group['unitId']])) {
+				$army[$group['unitId']]+= $group['quantity'];
+			} else {
+				$army[$group['unitId']] = $group['quantity'];
+			}
 		}
-
-		$combatCost = $d13->getGeneral('factions', $this->data['id'], 'costs') ['combat'];
+		
+		$speed = 999999999;
+		foreach($this->units as $key => $group) {
+		if (isset($army[$key])) {
+			if ($army[$key] > $group['value']) {
+			$okUnits = 0;
+			}
+			if ($d13->getUnit($this->data['faction'], $key, 'speed') < $speed) {
+			$speed = $d13->getUnit($this->data['faction'], $key, 'speed');
+			}
+		}
+		}
+		
+		$combatCost = $d13->getGeneral('factions', $this->data['id'], 'costs', 'combat');
+		$combatCost = $combatCost[0];
+		
+		$d13->logger(print_r($combatCost));
+		
 		$okCombatCost = $this->checkCost($combatCost, 'combat');
 		if ($okUnits)
 		if ($okCombatCost['ok'])
 		if ($node->get('id', $nodeId) == 'done') {
 			$node->getLocation();
 			$distance = sqrt(pow(abs($this->location['x'] - $node->location['x']) , 2) + pow(abs($this->location['y'] - $node->location['y']) , 2));
-			$duration = $distance / ($speed * $d13->getGeneral('users', 'speed', 'combat'));
+			$duration = ($distance * $d13->getGeneral('factors', 'movement')) / ($speed * $d13->getGeneral('users', 'speed', 'combat'));
 			$combatId = misc::newId('combat');
 			$ok = 1;
 			$cuBuffer = array();
@@ -2086,7 +2101,11 @@ class node
 			}
 
 			while ($finished == false) {
-				$limit+= 5;
+				if ($limit <= 10) {
+					$limit++;
+				} else {
+					$limit+= 5;
+				}
 				$check = $this->checkRequirements($cost, $limit);
 				if (!$check['ok']) {
 					return $lastlimit;

@@ -40,7 +40,8 @@
   },
   "factors": {
     "storage": 10,
-    "production": 1
+    "production": 1,
+    "movement": 10
   },
   "navigation": [
     {
@@ -257,6 +258,7 @@
     "damage",
     "armor",
     "speed",
-    "vision"
+    "vision",
+    "capacity"
   ]
 }

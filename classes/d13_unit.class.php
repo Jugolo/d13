@@ -86,6 +86,8 @@ class d13_unit
 		$upkeepLimit = floor($this->node->resources[$d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeepResource') ]['value'] / $d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeep'));
 		$unitLimit = abs($this->node->units[$this->data['unitId']]['value'] - $d13->getGeneral('types', $this->data['type'], 'limit'));
 		$limitData = min($costLimit, $reqLimit, $upkeepLimit, $unitLimit);
+		
+		#$d13->logger($costLimit."/".$reqLimit."/".$upkeepLimit."/".$unitLimit);
 		return $limitData;
 	}
 
@@ -338,6 +340,7 @@ class d13_unit
 		
 		$upgradeData = $this->getUpgrades();
 		
+		$tvars['tvar_unitId'] = $this->data['id'];
 		$tvars['tvar_unitType'] = $this->data['type'];
 		$tvars['tvar_unitClass'] = $this->data['class'];
 				

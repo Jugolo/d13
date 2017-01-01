@@ -20,8 +20,9 @@
 					<div class="swiper-pagination"></div>
 					<div class="swiper-scrollbar"></div>
 				</div>
-			
-				<select>{{tvar_nodeList}}</select> {{tvar_ui_cost}}: {{tvar_costData}} <input class="pure-button" type="submit" value="{{tvar_ui_send}}">
+				
+				<input type="hidden" name="type" value="{{tvar_type}}">
+				<select name="id">{{tvar_nodeList}}</select> {{tvar_ui_cost}}: {{tvar_costData}} <input class="pure-button" type="submit" value="{{tvar_ui_send}}">
 			
 			</form>
 

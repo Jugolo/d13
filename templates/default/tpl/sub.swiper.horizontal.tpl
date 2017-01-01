@@ -5,8 +5,8 @@
     	scrollbar: ".swiper-scrollbar",
     	nextButton: ".swiper-button-next",
     	prevButton: ".swiper-button-prev",
-    	pagination: '.swiper-pagination',
-        paginationClickable: true,
+    	//pagination: '.swiper-pagination',
+        //paginationClickable: true,
         preloadImage: false,
         lazyLoading: true
 	});

@@ -1141,7 +1141,9 @@
       ],
       "options": {
         "combatCancel": true,
-        "combatRaid": true
+        "combatRaid": true,
+        "combatConquer": true,
+        "combatScout": true
       }
     }
   ]

@@ -37,6 +37,7 @@ function sub_resources($node)
 					$tvars['tvar_resTooltip'] .= floor($resource['value']) . '/' . floor($node->storage[$resource['id']]);
 				} else {
 					$tvars['tvar_resValue'] = floor($resource['value']);
+					$tvars['tvar_resTooltip'] .= floor($resource['value']);
 					
 				}
 				if ($node->production[$resource['id']]) {

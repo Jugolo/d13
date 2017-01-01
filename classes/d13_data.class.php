@@ -168,9 +168,10 @@ class d13_collection implements IteratorAggregate
 
 		if ((array)$array !== $array) {
 			return (string)$array;
-		}
-		else {
+		} else {
+			
 			return $array;
+			
 		}
 	}
 }

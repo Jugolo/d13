@@ -1,4 +1,4 @@
-<div class="popup popup-unit">
+<div class="popup popup-unit-{{tvar_unitId}}">
 
 <div class="card">
 	<div class="card-header">
@@ -63,7 +63,7 @@
 						<div class="item-after">{{tvar_ui_vision}}: {{tvar_unitVision}} {{tvar_unitVisionPlus}}</div>
 						</div>
 						<div class="item-inner">
-						<div class="item-after"></div>
+						<div class="item-after">{{tvar_ui_capacity}}: {{tvar_unitCapacity}} {{tvar_unitCapacityPlus}}</div>
 						</div>
 					</li>
 

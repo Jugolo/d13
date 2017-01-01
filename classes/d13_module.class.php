@@ -694,18 +694,35 @@ class d13_module_warfare extends d13_module
 		$tvars = array();
 		$html = '';
 
+		// - - - - Option: Scout
+		
+		if ($this->data['options']['combatScout'] && $this->data['moduleSlotInput'] > 0) {
+			$tvars['tvar_Label'] = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("scout");
+			$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'] . '&type=scout';
+			$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
+			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
+		}
+
 		// - - - - Option: Raid
 
 		if ($this->data['options']['combatRaid'] && $this->data['moduleSlotInput'] > 0) {
 			$tvars['tvar_Label'] = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("raid");
-			$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'];
+			$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'] . '&type=raid';
 			$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
 			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
 		}
 
 		// - - - - Option: Conquer
+		
+		if ($this->data['options']['combatConquer'] && $this->data['moduleSlotInput'] > 0) {
+			$tvars['tvar_Label'] = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("conquer");
+			$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'] . '&type=conquer';
+			$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
+			$html.= $d13->templateParse($d13->templateGet("sub.module.itemcontent") , $tvars);
+		}
+		
+		
 		// - - - - Option: Raze
-		// - - - - Option: Scout
 		// - - - - Option:
 		// - - - - Option:
 
@@ -1129,7 +1146,7 @@ class d13_module_craft extends d13_module
 		// - - - Craft Popup
 
 		foreach($d13->getComponent($this->node->data['faction']) as $cid => $component) {
-			if (in_array($cid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
+			if ($component['active'] && in_array($cid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
 				$costData = '';
 				foreach($component['cost'] as $key => $cost) {
 					$costData.= '<div class="cell">' . ($cost['value'] * $d13->getGeneral('users', 'cost', 'train')) . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div>';
@@ -1196,7 +1213,7 @@ class d13_module_craft extends d13_module
 				$tvars['tvar_compResource'] = $component['storageResource'];
 				$tvars['tvar_compResourceName'] = $d13->getLangGL("resources", $component['storageResource'], "name");
 				
-				$tvars['tvar_sliderID'] 	= $this->data['slotId'];
+				$tvars['tvar_sliderID'] 	= $cid;
 				$tvars['tvar_sliderMin'] 	= 0;
 				$tvars['tvar_sliderMax'] 	= $limitData;
 				$tvars['tvar_sliderValue'] 	= 0;
@@ -1391,7 +1408,7 @@ class d13_module_train extends d13_module
 		$tvars = array();
 		$tvars['tvar_sub_popupswiper'] = '';
 		foreach($d13->getUnit($this->node->data['faction']) as $uid => $unit) {
-			if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'units'))) {
+			if ($unit['active'] && in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'units'))) {
 				$unit = new d13_unit($uid, $this->node);
 
 				// - - - - - Assemble Costs
@@ -1476,7 +1493,7 @@ class d13_module_train extends d13_module
 				$tvars['tvar_unitUpkeepResource'] = $unit->data['upkeepResource'];
 				$tvars['tvar_unitUpkeepResourceName'] = $d13->getLangGL('resources', $unit->data['upkeepResource'], 'name');
 				
-				$tvars['tvar_sliderID'] 	= $this->data['slotId'];
+				$tvars['tvar_sliderID'] 	= $uid;
 				$tvars['tvar_sliderMin'] 	= 0;
 				$tvars['tvar_sliderMax'] 	= $unit->getMaxProduction();
 				$tvars['tvar_sliderValue'] 	= 0;

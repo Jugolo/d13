@@ -131,7 +131,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				$node = new node();
 				$node->data['faction'] = $_POST['faction'];
 				$node->data['user'] = $_SESSION[CONST_PREFIX . 'User']['id'];
-				$node->data['name'] = $_SESSION[CONST_PREFIX . 'User']['name'] . ' ' . rand(1, 9999); //TODO
+				$node->data['name'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 				$node->location['x'] = $coord['x'];
 				$node->location['y'] = $coord['y'];
 				$message = $d13->getLangUI($node->add($_SESSION[CONST_PREFIX . 'User']['id']));
@@ -155,7 +155,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					if ($node->checkOptions('nodeRemove') && $node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
 						$status = node::remove($_GET['nodeId']);
 						if ($status == 'done') {
-							header('location: node.php?action=list');
+							header('location: p=node&action=list');
 						}
 						else {
 							$message = $d13->getLangUI($status);
@@ -460,7 +460,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					}
 
 					if ($status == 'done') {
-						$tvars['tvar_winContent'].= '<div><div class="cell">' . $d13->getLangUI($action) . ' ' . $d13->getLangUI("combat") . '</div><div class="cell">"' . $otherNode->data['name'] . '"</div><div class="cell"><span id="combat_' . $item['id'] . '">[' . implode(':', misc::sToHMS($remaining)) . ']</span><script type="text/javascript">timedJump("combat_' . $item['id'] . '", "?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div>' . $cancel . '</div>';
+						$tvars['tvar_winContent'].= '<div><div class="cell">' . $d13->getLangUI($action) . ' ' . $d13->getLangUI("combat") . '</div><div class="cell">"' . $otherNode->data['name'] . '"</div><div class="cell"><span id="combat_' . $item['id'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("combat_' . $item['id'] . '", "?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div>' . $cancel . '</div>';
 					}
 				}
 

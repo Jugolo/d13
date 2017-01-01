@@ -19,7 +19,7 @@ RELEASE CANDIDATE 0
 
 V011 	* Hybrid harvest/storage buildings implemented
 		* Unlimited resources that require no storage building implemented
-		* Fixed minor security issue
+		* Fixed a minor security issue
 		* Replaced most text inputs with HTML input slider (Mobile First)
 		* Restyled resource bar a bit
 

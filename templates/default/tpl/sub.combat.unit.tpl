@@ -5,7 +5,7 @@
 	
     	<div class="card-header">
     	<div class="left">{{tvar_unitName}} ({{tvar_unitAmount}})</div>
-    	<div class="right"><a href="#" class="open-popup" data-popup=".popup-info"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/information.png"></a>
+    	<div class="right"><a href="#" class="open-popup" data-popup=".popup-unit-{{tvar_unitId}}"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/information.png"></a>
     	</div>
     	</div>
     	
@@ -14,9 +14,14 @@
     	</div>
     	
     	<div class="card-footer">
-    	    <input class="pure-input" type="number" size="6" name="attackerGroups[]" id="quantity{{tvar_unitId}}" min="0" max="{{tvar_unitAmount}}" value="0">
+			
+			<div style="width:50%, text-align: center;">
+    		<span class="badge" id="sliderRangeTrain{{tvar_unitId}}">0</span><input type="range" name="attackerGroups[]" id="quantity{{tvar_unitId}}" min="0" max="{{tvar_unitAmount}}" value="0" step="1" onMouseDown="mySwiper.lockSwipes()" onMouseUp="mySwiper.unlockSwipes()" onInput="showValue('sliderRange{{tvar_unitId}}', this.value)" onInput="showValue('sliderRangeTrain{{tvar_unitId}}', this.value)" onChange="showValue('sliderRangeTrain{{tvar_unitId}}', this.value)">
+
 			<input type="hidden" name="attackerGroupUnitIds[]" value="{{tvar_unitId}}">
-			<button class="pure-input pure-button pure-{{tvar_global_color}}" type="button" {{tvar_disableData}} onClick="set_maximum('quantity{{tvar_unitId}}',{{tvar_unitAmount}})">{{tvar_ui_max}}</button>
+			</div>
+    	
+									
     	</div>
     	
 	</div> 
