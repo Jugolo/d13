@@ -34,7 +34,7 @@ if (isset($_POST['email'], $_POST['name'], $_POST['password'], $_POST['rePasswor
 			$user->data['name'] = $_POST['name'];
 			$user->data['email'] = $_POST['email'];
 			$user->data['password'] = sha1($_POST['password']);
-			$user->data['level'] = 3;
+			$user->data['access'] = 3;
 			$user->data['joined'] = strftime('%Y-%m-%d', time());
 			$user->data['lastVisit'] = strftime('%Y-%m-%d %H:%M:%S', time());
 			$user->data['ip'] = $_SERVER['REMOTE_ADDR'];

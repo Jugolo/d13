@@ -32,10 +32,10 @@ if ($flags['register']) {
 					$user->data['email'] = $_POST['email'];
 					$user->data['password'] = sha1($_POST['password']);
 					if ($flags['activation']) {
-						$user->data['level'] = 0;
+						$user->data['access'] = 0;
 					}
 					else {
-						$user->data['level'] = 1;
+						$user->data['access'] = 1;
 					}
 
 					$user->data['joined'] = strftime('%Y-%m-%d', time());

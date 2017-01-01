@@ -21,6 +21,23 @@ function sub_resources($node)
 	global $d13;
 	$tvars = array();
 	$tvars['tvar_resEntry'] = '';
+	
+	//- - - - - Player Stats
+	$user = new user();
+	$status = $user->get('id', $_SESSION[CONST_PREFIX . 'User']['id']);
+	if ($status == 'done') {
+		foreach($d13->getGeneral("userstats") as $stat) {
+			if ($stat['active'] && $stat['visible']) {
+				$tvars['tvar_resImage'] 		= $stat['image'];
+				$tvars['tvar_resValue'] 		= $user->data[$stat['value']];
+				$tvars['tvar_resPercentage'] 	= 0;
+				$tvars['tvar_resTooltip'] 		= $d13->getLangUI($stat['name']);
+				$tvars['tvar_resEntry']			.= $d13->templateSubpage("sub.resource.entry", $tvars);
+			}
+		}
+	}
+	
+	//- - - - - Resources
 	if (isset($node) && isset($node->resources)) {
 		foreach($node->resources as $resource) {
 			if ($d13->getResourceByID($resource['id'], 'active') && $d13->getResourceByID($resource['id'], 'visible')) {
@@ -31,7 +48,7 @@ function sub_resources($node)
 				$tvars['tvar_resTooltip'] 	= '';
 				
 				$tvars['tvar_resTooltip'] .= $d13->getLangGL('resources', $resource['id'], 'name') . ' ';
-				if ($d13->getResourceByID($resource['id'], 'storeable')) {
+				if ($d13->getResourceByID($resource['id'], 'limited')) {
 					$tvars['tvar_resValue'] = floor($resource['value']) . '/' . floor($node->storage[$resource['id']]);
 					$tvars['tvar_resPercentage'] = misc::percentage(floor($resource['value']), floor($node->storage[$resource['id']]));
 					$tvars['tvar_resTooltip'] .= floor($resource['value']) . '/' . floor($node->storage[$resource['id']]);

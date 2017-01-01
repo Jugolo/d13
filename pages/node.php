@@ -42,11 +42,13 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					$nodecount = $d13->getGeneral('users', 'maxModules') * $d13->getGeneral('users', 'maxSectors');
 					$buildQueue = array();
 					for ($i = 0; $i < $nodecount; $i++) {
-						$buildQueue[$i] = 0;
+						$buildQueue[$i]['check'] = 0;
+						$buildQueue[$i]['image'] = '';
 					}
 
 					foreach($node->queue['build'] as $item) {
-						$buildQueue[$item['slot']] = 1;
+						$buildQueue[$item['slot']]['check'] = 1;
+						$buildQueue[$item['slot']]['image'] = $d13->getModule($node->data['faction'], $item['module'], 'images');
 					}
 				}
 				else {
@@ -254,7 +256,10 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				foreach($node->modules as $module) {
 					if ($module['slot'] >= $offset_start && $module['slot'] <= $offset_end) {
 						
-						$the_module = d13_module_factory::create($module['module'], $module['slot'], $node);
+						if ($module['module'] > - 1) {
+							$the_module = d13_module_factory::create($module['module'], $module['slot'], $node);
+						}
+						
 						if ($i == $s) {
 							$tvars['tvar_getHTMLNode'].= '</div>';
 							$i = 0;
@@ -264,9 +269,9 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 							$tvars['tvar_getHTMLNode'].= '<div class="row no-gutter">';
 						}
 
-						if ($buildQueue[$module['slot']]) {
+						if ($buildQueue[$module['slot']]['check']) {
 							$tvars['tvar_moduleLink'] = "";
-							$tvars['tvar_moduleImage'] = "pending.png";
+							$tvars['tvar_moduleImage'] = $buildQueue[$module['slot']]['image'][0]['image'];
 							$tvars['tvar_moduleClass'] = '<img class="spinner resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/gear.png">';
 							$tvars['tvar_moduleLabel'] = $d13->getLangUI("underConstruction");
 							$tvars['tvar_getHTMLNode'].= $d13->templateSubpage("sub.node.module", $tvars);
@@ -341,7 +346,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					}
 					$images = array();
 					$images = $d13->getModule($node->data['faction'], $item['module'], 'images');
-					$image = $images[0]['image'];
+					$image = $images[1]['image'];
 					$remaining = $item['start'] + $item['duration'] * 60 - time();
 					if ($remaining > 0) {
 						$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/modules/' . $node->data['faction'] . '/' . $image . '"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("modules", $node->data['faction'], $item['module'], "name") . '</div><div class="cell"><span id="build_' . $item['node'] . '_' . $item['slot'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("build_' . $item['node'] . '_' . $item['slot'] . '", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div><div class="cell"><a class="external" href="index.php?p=module&action=cancel&nodeId=' . $node->data['id'] . '&slotId=' . $item['slot'] . '"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';

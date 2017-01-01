@@ -32,7 +32,7 @@ function sub_navbar($node)
 
 	// - - - Place Admin Panel
 
-	if ((isset($_SESSION[CONST_PREFIX . 'User']['level'])) && ($_SESSION[CONST_PREFIX . 'User']['level'] >= 3)) {
+	if ((isset($_SESSION[CONST_PREFIX . 'User']['access'])) && ($_SESSION[CONST_PREFIX . 'User']['access'] >= 3)) {
 		$html_right.= "<a class=\"external\" href=\"" . CONST_BASE_PATH . "index.php?p=admin\">" . $d13->getLangUI("adminPanel") . "</a>";
 	}
 

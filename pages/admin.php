@@ -20,7 +20,7 @@ global $d13;
 $message = NULL;
 $d13->dbQuery('start transaction');
 
-if ((isset($_SESSION[CONST_PREFIX . 'User']['level'])) && ($_SESSION[CONST_PREFIX . 'User']['level'] >= 3)) {
+if ((isset($_SESSION[CONST_PREFIX . 'User']['access'])) && ($_SESSION[CONST_PREFIX . 'User']['access'] >= 3)) {
 	if (isset($_GET['action'], $_POST['password'])) {
 		foreach($_POST as $key => $value)
 		if ($key == 'maxIdleTime') $_POST[$key] = misc::clean($value, 'numeric');
@@ -37,7 +37,7 @@ if ((isset($_SESSION[CONST_PREFIX . 'User']['level'])) && ($_SESSION[CONST_PREFI
 			if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password']))
 			if ($status == 'done') {
 				if ($_POST['level'] > - 1) {
-					$user->data['level'] = $_POST['level'];
+					$user->data['access'] = $_POST['access'];
 					$message = $$d13->getLangUI($user->set());
 				}
 				else $message = $$d13->getLangUI(user::remove($user->data['id']));

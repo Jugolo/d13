@@ -14,8 +14,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_goldmine_0.png"
         }
       ],
@@ -60,8 +64,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_lumbermill_0.png"
         }
       ],
@@ -106,8 +114,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_ironmine_0.png"
         }
       ],
@@ -152,8 +164,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_armorsmith_0.png"
         }
       ],
@@ -223,8 +239,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_weaponshop_0.png"
         }
       ],
@@ -296,8 +316,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_barracks_0.png"
         }
       ],
@@ -368,8 +392,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_stables_0.png"
         }
       ],
@@ -427,8 +455,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_mercenarytent_0.png"
         }
       ],
@@ -483,8 +515,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_laboratory_0.png"
         }
       ],
@@ -534,8 +570,12 @@
       "removeDuration": 1,
       "maxInstances": 1,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_marketplace_0.png"
         }
       ],
@@ -585,8 +625,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_goldstorage_0.png"
         }
       ],
@@ -654,8 +698,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_lumberstorage_0.png"
         }
       ],
@@ -723,8 +771,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_ironstorage_0.png"
         }
       ],
@@ -792,8 +844,12 @@
       "removeDuration": 1,
       "maxInstances": 1,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_guildhouse_0.png"
         }
       ],
@@ -863,15 +919,19 @@
       "type": "command",
       "maxLevel": 2,
       "inputResource": 3,
-      "ratio": 0.1,
+      "ratio": 0.2,
       "maxInput": 10,
       "duration": 5,
       "salvage": 0.5,
       "removeDuration": 1,
       "maxInstances": 1,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_townhall_0.png"
         }
       ],
@@ -925,8 +985,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_archertower_0.png"
         },
         {
@@ -993,8 +1057,12 @@
       "removeDuration": 1,
       "maxInstances": 3,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_farm_0.png"
         }
       ],
@@ -1047,8 +1115,12 @@
       "removeDuration": 1,
       "maxInstances": 2,
       "images": [
-        {
+      	 {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_waracademy_0.png"
         }
       ],
@@ -1111,6 +1183,10 @@
       "images": [
         {
           "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
           "image": "module_wargate_0.png"
         }
       ],

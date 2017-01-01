@@ -24,8 +24,10 @@ class d13_module_factory
 
 	function create($moduleId, $slotId, $node)
 	{
+	
 		global $d13;
 		$type = $d13->getModule($node->data['faction'], $moduleId, 'type');
+		
 		switch ($type) {
 		case 'storage':
 			return new d13_module_storage($moduleId, $slotId, $type, $node);
@@ -254,7 +256,7 @@ class d13_module
 		if ($this->data['level'] > 0) {
 		$tvars['tvar_queue'] = $this->getQueue();
 		$tvars['tvar_popup'] = $this->getPopup();
-		$tvars['tvar_inputSlider'] = $this->getInputSlider("?p=module&action=set&nodeId=".$this->node->data['id']."&slotId=".$this->data['slotId'], $this->data['slotId'], 0, $this->data['moduleInputLimit'], $this->node->modules[$this->data['slotId']]['input']);
+		$tvars['tvar_inputSlider'] = $this->getInputSlider("?p=module&action=set&nodeId=".$this->node->data['id']."&slotId=".$this->data['slotId'], $this->data['slotId'].'_'.$this->data['moduleId'], 0, $this->data['moduleInputLimit'], $this->node->modules[$this->data['slotId']]['input']);
 		}
 		
 		$tvars['tvar_moduleImage'] = $this->data['image'];
@@ -335,11 +337,32 @@ class d13_module
 		global $d13;
 		$this->data['image'] = '';
 		foreach($this->data['images'] as $image) {
-			if ($image['level'] <= $this->data['level']) {
+			if ($image['level'] <= $this->data['level'] || $image['level'] == 1 && $this->data['level'] == 0) {
 				$this->data['image'] = $image['image'];
 			}
 		}
 	}
+
+	// ----------------------------------------------------------------------------------------
+	// getPendingImage
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getPendingImage()
+	{
+		global $d13;
+		
+		foreach($this->data['images'] as $image) {
+			if ($image['level'] == 0) {
+				return $image['image'];
+			}
+		}
+		return NULL;
+	}
+
 
 	// ----------------------------------------------------------------------------------------
 	// getInputSlider
@@ -422,7 +445,7 @@ class d13_module
 				$tvars['tvar_moduleInput']		= $this->data['moduleSlotInput'];
 				$tvars['tvar_moduleLimit'] 		= floor(min($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput'],$this->data['maxInput']));
 				$tvars['tvar_disableData'] 		= '';
-				$tvars['tvar_inputSlider'] = $this->getInputSlider('?p=module&action=add&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'], $this->data['slotId'], 0, $this->data['moduleInputLimit'], $this->node->modules[$this->data['slotId']]['input']);
+				$tvars['tvar_inputSlider'] = $this->getInputSlider('?p=module&action=add&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'], $this->data['slotId'].'_'.$this->data['moduleId'], 0, $this->data['moduleInputLimit'], $this->node->modules[$this->data['slotId']]['input']);
 
 				$d13->templateInject($d13->templateSubpage("sub.popup.build" , $tvars));
 			

@@ -77,6 +77,8 @@
   "vars": "vars",
   "bans": "bans",
   "level": "level",
+  "experience": "experience",
+  "trophies": "trophies",
   "rememberMe": "remember me",
   "jumpTo": "jump to",
   "North": "North",

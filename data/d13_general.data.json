@@ -35,7 +35,7 @@
     "factionFixation": true,
     "moduleDemolish": true,
     "moduleUpgrade": true,
-    "unitAttackOnly": true,
+    "unitAttackOnly": false,
     "defensiveModuleDamage": true
   },
   "factors": {
@@ -260,5 +260,28 @@
     "speed",
     "vision",
     "capacity"
-  ]
+  ],
+  "userstats": {
+    "level": {
+    	"active": true,
+    	"visible": true,
+      "name": "level",
+      "value": "level",
+      "image": "level.png"
+    },
+    "experience": {
+    	"active": true,
+    	"visible": true,
+      "name": "experience",
+       "value": "experience",
+      "image": "experience.png"
+    },
+    "trophies": {
+    	"active": true,
+    	"visible": true,
+      "name": "trophies",
+       "value": "trophies",
+      "image": "trophies.png"
+    }
+  }
 }

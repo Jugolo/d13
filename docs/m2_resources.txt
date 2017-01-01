@@ -79,6 +79,12 @@ starting value for each resource. it has been decided to make all these storage 
 all factions. You can vary them by creating storage buildings with different capabilities to make
 factions storage the various resources at different efficiency.
 
+Limited
+A boolean value that is either TRUE or FALSE. When set to true, only a limited amount of this
+resource can be stored. Players require special storage buildings in order to increase resource
+storage, or excess amounts of this resource are lost. When set to false, an unlimited amount of
+this resource can be stored by any player at any time.
+
 Carryable (not implemented yet)
 A boolean value that is either TRUE or FALSE. When you raid an opponents town, your surviving
 troops will carry a certain amount of resources home. Only resources with carrayble set to true

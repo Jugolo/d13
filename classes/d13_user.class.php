@@ -17,18 +17,37 @@ class user
 
 {
 	public $data, $preferences, $blocklist;
+	
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
 
 	public
 
 	function get($idType, $id)
 	{
 		global $d13;
-		$result = $d13->dbQuery('select * from users where ' . $idType . '="' . $id . '"');
+		
+		$lower = '';
+		if (is_string($id)) {
+			$id = strtolower($id);
+			$result = $d13->dbQuery('select * from users where LOWER(' . $idType . ')= LOWER("' . strtolower($id) . '")');
+		} else {
+			$result = $d13->dbQuery('select * from users where ' . $idType . '="' . $id . '"');
+		}
+		
 		$this->data = $d13->dbFetch($result);
-		if (isset($this->data['id'])) $status = 'done';
-		else $status = 'noUser';
+		if (isset($this->data['id'])) {
+			$status = 'done';
+		} else {
+			$status = 'noUser';
+		}
 		return $status;
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
 
 	public
 
@@ -37,13 +56,17 @@ class user
 		global $d13;
 		$user = new user();
 		if ($user->get('id', $this->data['id']) == 'done') {
-			$d13->dbQuery('update users set name="' . $this->data['name'] . '", password="' . $this->data['password'] . '", email="' . $this->data['email'] . '", level="' . $this->data['level'] . '", joined="' . $this->data['joined'] . '", lastVisit="' . $this->data['lastVisit'] . '", ip="' . $this->data['ip'] . '", alliance="' . $this->data['alliance'] . '", template="' . $this->data['template'] . '", color="' . $this->data['color'] . '", locale="' . $this->data['locale'] . '", sitter="' . $this->data['sitter'] . '" where id="' . $this->data['id'] . '"');
+			$d13->dbQuery('update users set name="' . $this->data['name'] . '", password="' . $this->data['password'] . '", email="' . $this->data['email'] . '", access="' . $this->data['access'] . '", joined="' . $this->data['joined'] . '", lastVisit="' . $this->data['lastVisit'] . '", ip="' . $this->data['ip'] . '", alliance="' . $this->data['alliance'] . '", template="' . $this->data['template'] . '", color="' . $this->data['color'] . '", locale="' . $this->data['locale'] . '", sitter="' . $this->data['sitter'] . '" where id="' . $this->data['id'] . '"');
 			if ($d13->dbAffectedRows() > - 1) $status = 'done';
 			else $status = 'error';
 		}
 		else $status = 'noUser';
 		return $status;
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
 
 	public
 
@@ -51,28 +74,44 @@ class user
 	{
 		global $d13;
 		$user = new user();
-		if ($user->get('name', $this->data['name']) == 'noUser')
-		if ($user->get('email', $this->data['email']) == 'noUser')
-		if (!blacklist::check('ip', $this->data['ip']))
-		if (!blacklist::check('email', $this->data['email'])) {
-			$ok = 1;
-			$this->data['id'] = misc::newId('users');
-			$d13->dbQuery('insert into users (id, name, password, email, level, joined, lastVisit, ip, template, color, locale) values ("' . $this->data['id'] . '", "' . $this->data['name'] . '", "' . $this->data['password'] . '", "' . $this->data['email'] . '", "' . $this->data['level'] . '", "' . $this->data['joined'] . '", "' . $this->data['lastVisit'] . '", "' . $this->data['ip'] . '", "' . $this->data['template'] . '", "' . $this->data['color'] . '", "' . $this->data['locale'] . '")');
-			if ($d13->dbAffectedRows() == - 1) $ok = 0;
-			$preferences = array();
-			foreach($d13->getGeneral('users','preferences') as $key => $preference) $preferences[] = '("' . $this->data['id'] . '", "' . $key . '", "' . $preference . '")';
-			$preferences = implode(', ', $preferences);
-			$d13->dbQuery('insert into preferences (user, name, value) values ' . $preferences);
-			if ($d13->dbAffectedRows() == - 1) $ok = 0;
-			if ($ok) $status = 'done';
-			else $status = 'error';
+		if ($user->get('name', $this->data['name']) == 'noUser') {
+			if ($user->get('email', $this->data['email']) == 'noUser') {
+				if (!blacklist::check('ip', $this->data['ip'])) {
+					if (!blacklist::check('email', $this->data['email'])) {
+						$ok = 1;
+						$this->data['id'] = misc::newId('users');
+						$d13->dbQuery('insert into users (id, name, password, email, access, joined, lastVisit, ip, template, color, locale) values ("' . $this->data['id'] . '", "' . $this->data['name'] . '", "' . $this->data['password'] . '", "' . $this->data['email'] . '", "' . $this->data['access'] . '", "' . $this->data['joined'] . '", "' . $this->data['lastVisit'] . '", "' . $this->data['ip'] . '", "' . $this->data['template'] . '", "' . $this->data['color'] . '", "' . $this->data['locale'] . '")');
+						if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						$preferences = array();
+						foreach($d13->getGeneral('users', 'preferences') as $key => $preference) $preferences[] = '("' . $this->data['id'] . '", "' . $key . '", "' . $preference . '")';
+						$preferences = implode(', ', $preferences);
+						$d13->dbQuery('insert into preferences (user, name, value) values ' . $preferences);
+						if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						if ($ok) $status = 'done';
+						else $status = 'error';
+					}
+					else {
+						$status = 'emailBanned';
+					}
+				}
+				else {
+					$status = 'ipBanned';
+				}
+			}
+			else {
+				$status = 'emailInUse';
+			}
 		}
-		else $status = 'emailBanned';
-		else $status = 'ipBanned';
-		else $status = 'emailInUse';
-		else $status = 'nameTaken';
+		else {
+			$status = 'nameTaken';
+		}
+
 		return $status;
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
 
 	public static
 
@@ -115,7 +154,7 @@ class user
 		global $d13;
 		$fromWhen = time() - $maxIdleTime * 86400;
 		$fromWhen = strftime('%Y-%m-%d %H:%M:%S', $fromWhen);
-		$usersResult = $d13->dbQuery('select id from users where (lastVisit<"' . $fromWhen . '" or level=0) and level<2');
+		$usersResult = $d13->dbQuery('select id from users where (lastVisit<"' . $fromWhen . '" or access=0) and access<2');
 		$pendingCount = $removedCount = 0;
 		while ($userRow = $d13->dbFetch($usersResult)) {
 			$pendingCount++;

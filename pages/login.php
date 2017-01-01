@@ -23,9 +23,10 @@ $flags = $d13->flags->get('name');
 
 if (isset($_GET['action'])) {
 	switch ($_GET['action']) {
+	
 	case 'login':
 		if (isset($_POST['name'], $_POST['password'])) {
-			$name = $_POST['name'];
+			$name = strtolower($_POST['name']);
 			$pass = sha1($_POST['password']);
 			if (isset($_POST['remember'])) $remember = 1;
 			else $remember = 0;
@@ -41,9 +42,9 @@ if (isset($_GET['action'])) {
 			$user = new user();
 			$status = $user->get('name', $name);
 			if ($status == 'done')
-			if (($flags['login']) || ($user->data['level'] == 3))
+			if (($flags['login']) || ($user->data['access'] == 3))
 			if ($user->data['password'] == $pass)
-			if ($user->data['level']) {
+			if ($user->data['access']) {
 				$user->data['ip'] = $_SERVER['REMOTE_ADDR'];
 				$user->data['lastVisit'] = strftime('%Y-%m-%d %H:%M:%S', time());
 				$user->set();

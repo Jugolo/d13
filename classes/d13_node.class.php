@@ -1258,7 +1258,7 @@ class node
 		$combatCost = $d13->getGeneral('factions', $this->data['id'], 'costs', 'combat');
 		$combatCost = $combatCost[0];
 		
-		$d13->logger(print_r($combatCost));
+		$d13->logger(print_r($combatCost['value']));
 		
 		$okCombatCost = $this->checkCost($combatCost, 'combat');
 		if ($okUnits)
@@ -1288,7 +1288,7 @@ class node
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			}
 
-			$d13->dbQuery('insert into combat (id, sender, recipient, focus, stage, start, duration) values ("' . $combatId . '", "' . $this->data['id'] . '", "' . $node->data['id'] . '", "' . $data['input']['attacker']['focus'] . '", "0", "' . strftime('%Y-%m-%d %H:%M:%S', time()) . '", "' . $duration . '")');
+			$d13->dbQuery('insert into combat (id, sender, recipient, focus, stage, start, duration, type) values ("' . $combatId . '", "' . $this->data['id'] . '", "' . $node->data['id'] . '", "' . $data['input']['attacker']['focus'] . '", "0", "' . strftime('%Y-%m-%d %H:%M:%S', time()) . '", "' . $duration . '", "' . $type . '")');
 			if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			$d13->dbQuery('insert into combat_units (combat, id, value) values ' . implode(', ', $cuBuffer));
 			if ($d13->dbAffectedRows() == - 1) $ok = 0;
@@ -1601,6 +1601,7 @@ class node
 		$d13->dbQuery('start transaction');
 		$this->getQueue('combat');
 		$ok = 1;
+		
 		foreach($this->queue['combat'] as $combat) {
 			$combat['end'] = $combat['start'] + floor($combat['duration'] * 60);
 			if ($combat['end'] <= $time) {
@@ -1740,7 +1741,7 @@ class node
 							}
 						}
 
-						// - - - - -
+						// - - - - - Check Battle Result
 
 						$start = strftime('%Y-%m-%d %H:%M:%S', $combat['end']);
 						$d13->dbQuery('update combat set stage=1, start="' . $start . '" where id="' . $combat['id'] . '"');
@@ -1748,7 +1749,14 @@ class node
 							$ok = 0;
 						}
 
-						if ($captureNode) {
+
+						// $scout
+						// $raid
+						// $raze
+
+
+						// conquer
+						if ($combat['type'] == 'conquer' && $captureNode) {
 							$d13->dbQuery('update nodes set user="' . $$nodes['attacker']->data['user'] . '" where id="' . $$nodes['defender']->data['id'] . '"');
 						}
 
