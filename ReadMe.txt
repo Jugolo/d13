@@ -17,7 +17,12 @@ CREDITS
 RELEASE CANDIDATE 0
 ------------------------------------------------------------------------------------------
 
-V011 	* buildings can now have a unique pending image, defined in modules.data
+V011 	
+		* implemented class based OP caching of the JSON files to increase performance
+		* cleaned up some templates
+		* multiple research/craft/train projects can now run at the same time when the
+		  player has enough extra buildings of the same type available (aka 2+ Barracks)
+		* buildings can now have a unique pending image, defined in modules.data
 		* Users now have a level, experience and trophies (no effect yet)
 		* Usernames are now unique (mixed lowercase, uppercase etc. registration disabled)
 		* Hybrid harvest/storage buildings implemented
@@ -33,9 +38,5 @@ allows to both produce and store resources.
 
 V009 * Building/Upgrading duration can now be accelerated by investing more Workers (or InputResource
 in general).
-
-
-
-
 
 ------------------------------------------------------------------------------------------

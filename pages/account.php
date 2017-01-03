@@ -6,9 +6,9 @@
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
-// # Download & Updates..........: https://sourceforge.net/projects/d13/
-// # Project Documentation.......: https://sourceforge.net/p/d13/wiki/Home/
-// # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
@@ -76,7 +76,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 				$user->data['locale'] = $_SESSION[CONST_PREFIX . 'User']['locale'] = $_POST['locale'];
 				$user->data['color'] = $_SESSION[CONST_PREFIX . 'User']['color'] = $_POST['color'];
 				$user->data['template'] = $_SESSION[CONST_PREFIX . 'User']['template'] = $_POST['template'];
-				$message = $$d13->getLangUI($user->set());
+				$message = $d13->getLangUI($user->set());
 			}
 			else {
 				$message = $d13->getLangUI("wrongPassword");
@@ -87,14 +87,14 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 			// - - - - -
 
 		case 'preferences':
-			if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) $message = $$d13->getLangUI($user->setPreference($_POST['name'], $_POST['value']));
+			if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) $message = $d13->getLangUI($user->setPreference($_POST['name'], $_POST['value']));
 			else $message = $d13->getLangUI("wrongPassword");
 			break;
 
 			// - - - - -
 
 		case 'blocklist':
-			if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) $message = $$d13->getLangUI($user->setBlocklist($_POST['name']));
+			if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) $message = $d13->getLangUI($user->setBlocklist($_POST['name']));
 			else $message = $d13->getLangUI("wrongPassword");
 			break;
 
@@ -104,7 +104,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 			if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password']))
 			if ($_POST['newPassword'] == $_POST['rePassword']) {
 				$user->data['password'] = $_SESSION[CONST_PREFIX . 'User']['password'] = sha1($_POST['newPassword']);
-				$message = $$d13->getLangUI($user->set());
+				$message = $d13->getLangUI($user->set());
 			}
 			else $message = $d13->getLangUI("rePassNotMatch");
 			else $message = $d13->getLangUI("wrongPassword");
@@ -116,7 +116,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 			if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) {
 				$status = user::remove($user->data['id']);
 				if ($status == 'done') header('Location: index.php?p=logout');
-				else $message = $$d13->getLangUI($status);
+				else $message = $d13->getLangUI($status);
 			}
 			else $message = $d13->getLangUI("wrongPassword");
 			break;

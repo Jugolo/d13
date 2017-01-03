@@ -6,9 +6,9 @@
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
-// # Download & Updates..........: https://sourceforge.net/projects/d13/
-// # Project Documentation.......: https://sourceforge.net/p/d13/wiki/Home/
-// # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
@@ -370,7 +370,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				foreach($node->queue['research'] as $item) {
 					$action = 'research';
 					$remaining = $item['start'] + $item['duration'] * 60 - time();
-					$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $node->data['faction'] . '/' . $item['technology'] . '.png"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("technologies", $node->data['faction'], $item['technology'], "name") . '</div><div class="cell"><span id="build_' . $item['node'] . '_' . $item['technology'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("build_' . $item['node'] . '_' . $item['technology'] . '", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div>';
+					$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $node->data['faction'] . '/' . $item['technology'] . '.png"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("technologies", $node->data['faction'], $item['technology'], "name") . '</div><div class="cell"><span id="research_' . $item['node'] . '_' . $item['technology'] . '_' . $item['slot'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("research_' . $item['node'] . '_' . $item['technology'] . '_' . $item['slot'] .'", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div><br>';
 				}
 				$tvars['tvar_getHTMLResearch'] = $d13->templateParse($d13->templateGet("sub.queue") , $tvars);
 			}
@@ -395,7 +395,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 						$action = 'remove';
 					}
 					$remaining = $item['start'] + $item['duration'] * 60 - time();
-					$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $node->data['faction'] . '/' . $item['component'] . '.png"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("components", $node->data['faction'], $item['component'], "name") . '</div><div class="cell"><span id="build_' . $item['node'] . '_' . $item['component'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("build_' . $item['node'] . '_' . $item['component'] . '", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div>';
+					$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $node->data['faction'] . '/' . $item['component'] . '.png"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("components", $node->data['faction'], $item['component'], "name") . '</div><div class="cell"><span id="craft_' . $item['node'] . '_' . $item['component'] . '_' . $item['slot'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("craft_' . $item['node'] . '_' . $item['component'] . '_' . $item['slot'] .'", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div><br>';
 				}
 				$tvars['tvar_getHTMLCraft'] = $d13->templateParse($d13->templateGet("sub.queue") , $tvars);
 			}
@@ -420,7 +420,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 						$action = 'remove';
 					}
 					$remaining = $item['start'] + $item['duration'] * 60 - time();
-					$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $node->data['faction'] . '/' . $item['unit'] . '.png"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("units", $node->data['faction'], $item['unit'], "name") . '</div><div class="cell"><span id="build_' . $item['node'] . '_' . $item['unit'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("build_' . $item['node'] . '_' . $item['unit'] . '", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div>';
+					$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $node->data['faction'] . '/' . $item['unit'] . '.png"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("units", $node->data['faction'], $item['unit'], "name") . '</div><div class="cell"><span id="train_' . $item['node'] . '_' . $item['unit'] . '_' . $item['slot'] .'">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("train_' . $item['node'] . '_' . $item['unit'] . '_' . $item['slot'] .'", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div><br>';
 				}
 
 				$tvars['tvar_getHTMLTrain'] = $d13->templateParse($d13->templateGet("sub.queue") , $tvars);

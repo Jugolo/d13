@@ -36,7 +36,7 @@
 				
 				<li class="item-content">
 					<div class="item-inner">
-					<div class="item-after" style="text-align:center;">
+					<div class="cell">
 					{{tvar_inputSlider}}
 					</div>
 					</div>

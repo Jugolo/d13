@@ -6,9 +6,9 @@
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
-// # Download & Updates..........: https://sourceforge.net/projects/d13/
-// # Project Documentation.......: https://sourceforge.net/p/d13/wiki/Home/
-// # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
@@ -115,11 +115,11 @@ $defender = array(
 if (isset($data['output'])) {
 	$showOutput = ' style="display: table;"';
 	foreach($data['output']['attacker']['groups'] as $group) $attacker['output'].= '<div class="cell" style="text-align: center;"><div class="unitBlock">' . $group['quantity'] . '</div></div>';
-	if ($data['output']['attacker']['winner']) $attacker['outcome'] = $$d13->getLangUI('won');
-	else $attacker['outcome'] = $$d13->getLangUI('lost');
+	if ($data['output']['attacker']['winner']) $attacker['outcome'] = $d13->getLangUI('won');
+	else $attacker['outcome'] = $d13->getLangUI('lost');
 	foreach($data['output']['defender']['groups'] as $group) $defender['output'].= '<div class="cell" style="text-align: center;"><div class="unitBlock">' . $group['quantity'] . '</div></div>';
-	if ($data['output']['defender']['winner']) $defender['outcome'] = $$d13->getLangUI('won');
-	else $defender['outcome'] = $$d13->getLangUI('lost');
+	if ($data['output']['defender']['winner']) $defender['outcome'] = $d13->getLangUI('won');
+	else $defender['outcome'] = $d13->getLangUI('lost');
 }
 else $tvars['tvar_showOutput'] = ' style="display: none;"';
 $tvars['tvar_attacker_output'] = $attacker['output'];

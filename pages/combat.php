@@ -6,9 +6,9 @@
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
-// # Download & Updates..........: https://sourceforge.net/projects/d13/
-// # Project Documentation.......: https://sourceforge.net/p/d13/wiki/Home/
-// # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
@@ -115,7 +115,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 								header('Location: ?p=node&action=get&nodeId=' . $node->data['id']);
 							}
 							else {
-								$message = $$d13->getLangUI($status);
+								$message = $d13->getLangUI($status);
 							}
 						}
 						else {
@@ -169,7 +169,7 @@ if (isset($node)) {
 	$tvars['tvar_nodeID'] 			= $node->data['id'];
 	
 	if (isset($_GET['type'])) {
-	$tvars['tvar_type'] 			= $_GET['type'];
+		$tvars['tvar_type'] 		= $_GET['type'];
 	}
 	
 	// - - - - Available Units
@@ -185,7 +185,6 @@ if (isset($node)) {
 		
 			$d13->templateInject($d13->templateSubpage("sub.popup.unit", $tmp_unit->getTemplateVariables()));
 		
-			
 			$tvars['tvar_unitName'] = $d13->getLangGL('units', $node->data['faction'], $id) ['name'];
 			$tvars['tvar_unitId'] = $id;
 			$tvars['tvar_unitAmount'] = $unit['value'];

@@ -2,7 +2,7 @@
 
 <div class="card">
 	<div class="card-header">
-		<div class="d13-heading">{{tvar_unitName}}</div>
+		<div class="d13-heading">{{tvar_unitName}} ({{tvar_unitValue}})</div>
 		<a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 	</div>
 
@@ -20,17 +20,7 @@
 			
 			<div class="list-block">
 				<ul>
-					
-					<li class="item-content">
-						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cart.png" title=""></div>
-						<div class="item-inner">
-						<div class="item-title">{{tvar_ui_stationed}}</div>
-						<div class="item-after"><span class="badge">{{tvar_unitValue}}</span></div>
-						</div>
-					</li>
-					
-					
-					
+
 					<li class="item-content">
 						<div class="item-inner">
 						<div class="item-after">{{tvar_ui_type}}: {{tvar_unitType}}</div>
@@ -40,32 +30,91 @@
 						</div>
 					</li>
 					
-					<li class="item-content">
-						<div class="item-inner">
-						<div class="item-after">{{tvar_ui_hp}}: {{tvar_unitHP}} {{tvar_unitHPPlus}}</div>
-						</div>
-						<div class="item-inner">
-						<div class="item-after">{{tvar_ui_damage}}: {{tvar_unitDamage}} {{tvar_unitDamagePlus}}</div>
-						</div>
-					</li>
 					
-					<li class="item-content">
-						<div class="item-inner">
-						<div class="item-after">{{tvar_ui_armor}}: {{tvar_unitArmor}} {{tvar_unitArmorPlus}}</div>
-						</div>
-						<div class="item-inner">
-						<div class="item-after">{{tvar_ui_speed}}: {{tvar_unitSpeed}} {{tvar_unitSpeedPlus}}</div>
-						</div>
-					</li>
-					
-					<li class="item-content">
-						<div class="item-inner">
-						<div class="item-after">{{tvar_ui_vision}}: {{tvar_unitVision}} {{tvar_unitVisionPlus}}</div>
-						</div>
-						<div class="item-inner">
-						<div class="item-after">{{tvar_ui_capacity}}: {{tvar_unitCapacity}} {{tvar_unitCapacityPlus}}</div>
-						</div>
-					</li>
+								<li class="item-content">
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_hp.png"></div>
+									<div class="item-inner">
+										<div class="item-title">
+											{{tvar_ui_hp}}:
+										</div>
+										<div class="item-after">
+											<span class="badge">{{tvar_unitHP}} {{tvar_unitHPPlus}}</span>
+										</div>
+									</div>
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_damage.png"></div>
+									<div class="item-inner">
+										<div class="item-title">
+											{{tvar_ui_damage}}:
+										</div>
+										<div class="item-after">
+											<span class="badge">{{tvar_unitDamage}} {{tvar_unitDamagePlus}}</span>
+										</div>
+									</div>
+								</li>
+								
+								<li class="item-content">
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_armor.png"></div>
+									<div class="item-inner">
+										<div class="item-title">
+											{{tvar_ui_armor}}:
+										</div>
+										<div class="item-after">
+											<span class="badge">{{tvar_unitArmor}} {{tvar_unitArmorPlus}}</span>
+										</div>
+									</div>
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_speed.png"></div>
+									<div class="item-inner">
+										<div class="item-title">
+											{{tvar_ui_speed}}:
+										</div>
+										<div class="item-after">
+											<span class="badge">{{tvar_unitSpeed}} {{tvar_unitSpeedPlus}}</span>
+										</div>
+									</div>
+								</li>
+								
+								<li class="item-content">
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_critical.png"></div>
+									<div class="item-inner">
+										<div class="item-title">
+											{{tvar_ui_critical}}:
+										</div>
+										<div class="item-after">
+											<span class="badge">{{tvar_unitCritical}} {{tvar_unitCriticalPlus}}</span>
+										</div>
+									</div>
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_other.png"></div>
+									<div class="item-inner">
+										<div class="item-title">
+											
+										</div>
+										<div class="item-after">
+											
+										</div>
+									</div>
+								</li>
+								
+								<li class="item-content">
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_vision.png"></div>
+									<div class="item-inner">
+										<div class="item-title">
+											{{tvar_ui_vision}}:
+										</div>
+										<div class="item-after">
+											 <span class="badge">{{tvar_unitVision}} {{tvar_unitVisionPlus}}</span>
+										</div>
+									</div>
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_capacity.png"></div>
+									<div class="item-inner">
+										<div class="item-title">
+											{{tvar_ui_capacity}}:
+										</div>
+										<div class="item-after">
+											 <span class="badge">{{tvar_unitCapacity}} {{tvar_unitCapacityPlus}}</span>
+										</div>
+									</div>
+								</li>
+								
 
 					
 					

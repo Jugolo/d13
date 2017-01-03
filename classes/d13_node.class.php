@@ -6,9 +6,9 @@
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
-// # Download & Updates..........: https://sourceforge.net/projects/d13/
-// # Project Documentation.......: https://sourceforge.net/p/d13/wiki/Home/
-// # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
@@ -453,7 +453,7 @@ class node
 							if ($item['module'] == $this->modules[$slotId]['module']) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
 							$duration = $d13->getTechnology($this->data['faction'],$technologyId,'duration');
 							$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'research');
-							$d13->dbQuery('insert into research (node, technology, start, duration) values ("' . $this->data['id'] . '", "' . $technologyId . '", "' . $start . '", "' . $duration . '")');
+							$d13->dbQuery('insert into research (node, technology, start, duration, slot) values ("' . $this->data['id'] . '", "' . $technologyId . '", "' . $start . '", "' . $duration . '", "' . $slotId . '")');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 							if ($ok) $status = 'done';
 							else $status = 'error';
@@ -894,7 +894,7 @@ class node
 						$result = $d13->dbQuery('select max(id) as id from craft where node="' . $this->data['id'] . '"');
 						$row = $d13->dbFetch($result);
 						$id = $row['id'] + 1;
-						$d13->dbQuery('insert into craft (id, node, component, quantity, stage, start, duration) values ("' . $id . '", "' . $this->data['id'] . '", "' . $componentId . '", "' . $quantity . '", 0, "' . $start . '", "' . $duration . '")');
+						$d13->dbQuery('insert into craft (id, node, component, quantity, stage, start, duration, slot) values ("' . $id . '", "' . $this->data['id'] . '", "' . $componentId . '", "' . $quantity . '", 0, "' . $start . '", "' . $duration . '", "' . $slotId . '")');
 						if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						if ($ok) $status = 'done';
 						else $status = 'error';
@@ -1078,7 +1078,7 @@ class node
 						$result = $d13->dbQuery('select max(id) as id from train where node="' . $this->data['id'] . '"');
 						$row = $d13->dbFetch($result);
 						$id = $row['id'] + 1;
-						$d13->dbQuery('insert into train (id, node, unit, quantity, stage, start, duration) values ("' . $id . '", "' . $this->data['id'] . '", "' . $unitId . '", "' . $quantity . '", 0, "' . $start . '", "' . $duration . '")');
+						$d13->dbQuery('insert into train (id, node, unit, quantity, stage, start, duration, slot) values ("' . $id . '", "' . $this->data['id'] . '", "' . $unitId . '", "' . $quantity . '", 0, "' . $start . '", "' . $duration . '", "' . $slotId . '")');
 						if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						if ($ok) $status = 'done';
 						else $status = 'error';
@@ -1256,11 +1256,8 @@ class node
 		}
 		
 		$combatCost = $d13->getGeneral('factions', $this->data['id'], 'costs', 'combat');
-		$combatCost = $combatCost[0];
-		
-		$d13->logger(print_r($combatCost['value']));
-		
 		$okCombatCost = $this->checkCost($combatCost, 'combat');
+		
 		if ($okUnits)
 		if ($okCombatCost['ok'])
 		if ($node->get('id', $nodeId) == 'done') {
@@ -1270,6 +1267,7 @@ class node
 			$combatId = misc::newId('combat');
 			$ok = 1;
 			$cuBuffer = array();
+			
 			foreach($army as $key => $value) {
 				$cuBuffer[] = '("' . $combatId . '", "' . $key . '", "' . $value . '")';
 				$this->units[$key]['value']-= $value;
@@ -1763,7 +1761,7 @@ class node
 						if ($d13->dbAffectedRows() == - 1) {
 							$ok = 0;
 						}
-
+/*
 						// - - - - - send reports
 
 						if ($data['output']['attacker']['winner']) {
@@ -1816,7 +1814,7 @@ class node
 
 						$msgBody.= '</div>';
 						$msgBody = $d13->dbRealEscapeString($msgBody);
-
+*/
 						// - - - - -
 
 						$attackerUser = new user();
@@ -1827,7 +1825,7 @@ class node
 								$msg->data['sender'] = $attackerUser->data['name'];
 								$msg->data['recipient'] = $attackerUser->data['name'];
 								$msg->data['subject'] = $d13->getLangUI("combatReport") . ' - ' . $$nodes['defender']->data['name'];
-								$msg->data['body'] = $msgBody;
+								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type']); #$msgBody;
 								$msg->data['viewed'] = 0;
 								$msg->add();
 							}
@@ -1843,7 +1841,7 @@ class node
 								$msg->data['sender'] = $defenderUser->data['name'];
 								$msg->data['recipient'] = $defenderUser->data['name'];
 								$msg->data['subject'] = $d13->getLangUI("combatReport") . ' - ' . $$nodes['defender']->data['name'];
-								$msg->data['body'] = $msgBody;
+								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type'], true); #$msgBody;
 								$msg->data['viewed'] = 0;
 								$msg->add();
 							}

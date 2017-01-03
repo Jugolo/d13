@@ -1216,10 +1216,14 @@
         118
       ],
       "options": {
+      	"inventoryList": true,
         "combatCancel": true,
         "combatRaid": true,
         "combatConquer": true,
-        "combatScout": true
+        "combatScout": true,
+        "combatRaze": true,
+        "combatSkirmish": true,
+        "combatSabotage": true
       }
     }
   ]

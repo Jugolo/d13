@@ -6,9 +6,9 @@
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
-// # Download & Updates..........: https://sourceforge.net/projects/d13/
-// # Project Documentation.......: https://sourceforge.net/p/d13/wiki/Home/
-// # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
@@ -27,7 +27,7 @@ if ((isset($_SESSION[CONST_PREFIX . 'User']['access'])) && ($_SESSION[CONST_PREF
 		else $_POST[$key] = misc::clean($value);
 		switch ($_GET['action']) {
 		case 'vars':
-			if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) $message = $$d13->getLangUI(flags::set($_POST['name'], $_POST['value']));
+			if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) $message = $d13->getLangUI(flags::set($_POST['name'], $_POST['value']));
 			else $message = $d13->getLangUI("wrongPassword");
 			break;
 
@@ -38,11 +38,11 @@ if ((isset($_SESSION[CONST_PREFIX . 'User']['access'])) && ($_SESSION[CONST_PREF
 			if ($status == 'done') {
 				if ($_POST['level'] > - 1) {
 					$user->data['access'] = $_POST['access'];
-					$message = $$d13->getLangUI($user->set());
+					$message = $d13->getLangUI($user->set());
 				}
-				else $message = $$d13->getLangUI(user::remove($user->data['id']));
+				else $message = $d13->getLangUI(user::remove($user->data['id']));
 			}
-			else $message = $$d13->getLangUI($status);
+			else $message = $d13->getLangUI($status);
 			else $message = $d13->getLangUI("wrongPassword");
 			break;
 
@@ -62,7 +62,7 @@ if ((isset($_SESSION[CONST_PREFIX . 'User']['access'])) && ($_SESSION[CONST_PREF
 				$user = new user();
 				$status = $user->get('name', $_POST['name']);
 				if ($status == 'done') $message = '<div>' . $user->data['name'] . '</div><div><div class="cell">' . $d13->getLangUI("ip") . ': </div><div class="cell">' . $user->data['ip'] . '</div></div><div><div class="cell">' . $d13->getLangUI("email") . ': </div><div class="cell">' . $user->data['email'] . '</div></div>';
-				else $message = $$d13->getLangUI($status);
+				else $message = $d13->getLangUI($status);
 			}
 			else $message = $d13->getLangUI("insufficientData");
 			else $message = $d13->getLangUI("wrongPassword");
@@ -72,11 +72,11 @@ if ((isset($_SESSION[CONST_PREFIX . 'User']['access'])) && ($_SESSION[CONST_PREF
 			if (isset($_GET['blacklistAction'], $_POST['type'], $_POST['value']))
 			if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) switch ($_GET['blacklistAction']) {
 			case 'add':
-				$message = $$d13->getLangUI(blacklist::add($_POST['type'], $_POST['value']));
+				$message = $d13->getLangUI(blacklist::add($_POST['type'], $_POST['value']));
 				break;
 
 			case 'remove':
-				foreach($_POST['value'] as $value) $message = $$d13->getLangUI(blacklist::remove($_POST['type'], $value));
+				foreach($_POST['value'] as $value) $message = $d13->getLangUI(blacklist::remove($_POST['type'], $value));
 				break;
 			}
 			else $message = $d13->getLangUI("wrongPassword");
@@ -89,7 +89,7 @@ if ((isset($_SESSION[CONST_PREFIX . 'User']['access'])) && ($_SESSION[CONST_PREF
 	$flagNames = '';
 	$flagValues = array();
 	foreach($flags as $key => $flag) {
-		$flagNames.= '<option value="' . $flag['name'] . '">' . $ui[$flag['name']] . '</option>';
+		$flagNames.= '<option value="' . $flag['name'] . '">' . $d13->getLangUI($flag['name']) . '</option>';
 		$flagValues[$key] = '"' . $flag['value'] . '"';
 	}
 

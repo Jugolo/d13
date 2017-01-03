@@ -6,80 +6,13 @@
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
-// # Download & Updates..........: https://sourceforge.net/projects/d13/
-// # Project Documentation.......: https://sourceforge.net/p/d13/wiki/Home/
-// # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
-// ----------------------------------------------------------------------------------------
-// d13_data
-// @
-//
-// ----------------------------------------------------------------------------------------
 
-class d13_data
-
-{
-	public $resources, $modules, $technologies, $units, $upgrades, $components, $general, $bw, $gl, $ui;
-
-	// ----------------------------------------------------------------------------------------
-	// construct
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function __construct()
-	{
-		$this->bw = new d13_collection($this->loadFromJSON(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/d13_blockwords.locale.json"));
-		$this->ui = new d13_collection($this->loadFromJSON(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/d13_userinterface.locale.json"));
-		$this->gl = new d13_collection($this->loadFromJSON(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/d13_gamelang.locale.json"));
-		$this->general = new d13_collection($this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_general.data.json"));
-		$this->upgrades = new d13_collection($this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_upgrade.data.json"));
-		$this->resources = new d13_collection($this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_resource.data.json"));
-		$this->modules = new d13_collection($this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_module.data.json"));
-		$this->components = new d13_collection($this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_component.data.json"));
-		$this->technologies = new d13_collection($this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_technology.data.json"));
-		$this->units = new d13_collection($this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_unit.data.json"));
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// loadFromJSON
-	//
-	// @
-	// ----------------------------------------------------------------------------------------
-
-	private
-	function loadFromJSON($file)
-	{
-		return json_decode(file_get_contents($file) , true);
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// record_sort
-	//
-	// @
-	// ----------------------------------------------------------------------------------------
-
-	private
-	function record_sort($records, $field, $reverse = false)
-	{
-		$hash = array();
-		foreach($records as $key => $record) {
-			$hash[$record[$field] . $key] = $record;
-		}
-
-		($reverse) ? krsort($hash) : ksort($hash);
-		$records = array();
-		foreach($hash as $record) {
-			$records[] = $record;
-		}
-
-		return $records;
-	}
-}
 
 // ----------------------------------------------------------------------------------------
 // d13_Collection
@@ -88,9 +21,9 @@ class d13_data
 // ----------------------------------------------------------------------------------------
 
 class d13_collection implements IteratorAggregate
-
 {
 	private $data = array();
+	
 	public
 
 	function __construct($data)
@@ -146,6 +79,7 @@ class d13_collection implements IteratorAggregate
 
 	function get($indices)
 	{
+		
 		if (empty($indices)) {
 			return $this->data;
 		}
@@ -166,14 +100,123 @@ class d13_collection implements IteratorAggregate
 			}
 		}
 
-		if ((array)$array !== $array) {
+		if ((array)$array === $array) {
+			return (array)$array;
+		} else if ((string)$array === $array) {
 			return (string)$array;
-		} else {
-			
-			return $array;
-			
+		} else if ((integer)$array === $array) {
+			return (integer)$array;
 		}
+		
+		return $array;
+		
 	}
+
+}
+
+// ----------------------------------------------------------------------------------------
+// d13_data
+// @
+//
+// ----------------------------------------------------------------------------------------
+
+class d13_data
+
+{
+	public $resources, $modules, $technologies, $units, $upgrades, $components, $general, $bw, $gl, $ui;
+
+	// ----------------------------------------------------------------------------------------
+	// construct
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function __construct()
+	{
+		global $d13;
+		
+		$this->bw 			= $this->loadFromJSON(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/d13_blockwords.locale.json");
+		$this->ui 			= $this->loadFromJSON(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/d13_userinterface.locale.json");
+		$this->gl 			= $this->loadFromJSON(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/d13_gamelang.locale.json");
+		$this->general 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_general.data.json");
+		$this->upgrades 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_upgrade.data.json");
+		$this->resources 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_resource.data.json");
+		$this->modules 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_module.data.json");
+		$this->components 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_component.data.json");
+		$this->technologies = $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_technology.data.json");
+		$this->units 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_unit.data.json");
+				
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// loadFromJSON
+	//
+	// @
+	// ----------------------------------------------------------------------------------------
+
+	private
+
+	function loadFromJSON($url)
+	{
+   		
+		$cacheFile = CONST_INCLUDE_PATH . 'cache' . DIRECTORY_SEPARATOR . md5($url) . ".cache.php";
+		
+		if (is_file($cacheFile) && filemtime($url) < filemtime($cacheFile)) {
+			$classConstruct = require_once $cacheFile;
+			return $classConstruct;
+		}
+		$jsonString = file_get_contents($url);
+		if (!$jsonString) {
+			throw  new Exception('Cannot read url: ' . $url);
+		}
+		$jsonData = json_decode($jsonString, true);
+		
+		$name = md5($url);
+		$vars = var_export($jsonData, true);
+
+		$cacheFileData = '';
+		$cacheFileData .= '<?php '.PHP_EOL;
+		$cacheFileData .= 'class d13_'.$name.' extends d13_collection {'.PHP_EOL;
+		$cacheFileData .= '	public function __construct() {'.PHP_EOL;
+		$cacheFileData .= '	$data = '.$vars.';'.PHP_EOL;
+		$cacheFileData .= ' parent::__construct($data);';
+		$cacheFileData .= '	}'.PHP_EOL;
+		$cacheFileData .= '}'.PHP_EOL;
+		$cacheFileData .= 'return new d13_'.$name.'();'.PHP_EOL;
+		$cacheFileData .= '?>';
+		
+		file_put_contents($cacheFile, $cacheFileData);
+		$classConstruct = require_once $cacheFile;
+		return $classConstruct;
+		
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// record_sort
+	//
+	// @
+	// ----------------------------------------------------------------------------------------
+
+	private
+	
+	function record_sort($records, $field, $reverse = false)
+	{
+		$hash = array();
+		foreach($records as $key => $record) {
+			$hash[$record[$field] . $key] = $record;
+		}
+
+		($reverse) ? krsort($hash) : ksort($hash);
+		$records = array();
+		foreach($hash as $record) {
+			$records[] = $record;
+		}
+
+		return $records;
+	}
+
 }
 
 // =====================================================================================EOF

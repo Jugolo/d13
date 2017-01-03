@@ -130,6 +130,7 @@ CREATE TABLE IF NOT EXISTS `components` (
 CREATE TABLE IF NOT EXISTS `craft` (
   `id` int(10) unsigned NOT NULL,
   `node` int(10) unsigned NOT NULL,
+  `slot` int(10) unsigned NOT NULL,
   `component` int(10) unsigned NOT NULL,
   `quantity` int(10) unsigned NOT NULL,
   `stage` tinyint(3) unsigned NOT NULL,
@@ -280,6 +281,7 @@ CREATE TABLE IF NOT EXISTS `preferences` (
 
 CREATE TABLE IF NOT EXISTS `research` (
   `node` int(10) unsigned NOT NULL,
+  `slot` int(10) unsigned NOT NULL,
   `technology` int(10) unsigned NOT NULL,
   `start` datetime NOT NULL,
   `duration` float unsigned NOT NULL,
@@ -323,6 +325,7 @@ CREATE TABLE IF NOT EXISTS `trade` (
   `id` int(10) unsigned NOT NULL,
   `distance` int(10) unsigned NOT NULL,
   `node` int(10) unsigned NOT NULL,
+  `slot` int(10) unsigned NOT NULL,
   `seller` int(10) unsigned NOT NULL,
   `sellIdentifier` int(10) unsigned NOT NULL,
   `sellQuantity` int(10) unsigned NOT NULL,
@@ -349,6 +352,7 @@ CREATE TABLE IF NOT EXISTS `trade` (
 CREATE TABLE IF NOT EXISTS `train` (
   `id` int(10) unsigned NOT NULL,
   `node` int(10) unsigned NOT NULL,
+  `slot` int(10) unsigned NOT NULL,
   `unit` int(10) unsigned NOT NULL,
   `quantity` int(10) unsigned NOT NULL,
   `stage` tinyint(3) unsigned NOT NULL,

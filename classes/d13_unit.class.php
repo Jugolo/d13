@@ -6,9 +6,9 @@
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
-// # Download & Updates..........: https://sourceforge.net/projects/d13/
-// # Project Documentation.......: https://sourceforge.net/p/d13/wiki/Home/
-// # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
@@ -58,16 +58,19 @@ class d13_unit
 	function setStats($unitId)
 	{
 		global $d13;
+		
 		$this->data = array();
 		$this->data = $d13->getUnit($this->node->data['faction'], $unitId);
 		$this->data['type'] = 'unit';
 		$this->data['unitId'] = $unitId;
 		$this->data['name'] = $d13->getLangGL("units", $this->node->data['faction'], $this->data['unitId'], "name");
 		$this->data['description'] = $d13->getLangGL("units", $this->node->data['faction'], $this->data['unitId'], "description");
+		
 		foreach($d13->getGeneral('stats') as $stat) {
 			$this->data[$stat] = $d13->getUnit($this->node->data['faction'], $this->data['unitId'], $stat);
 			$this->data['upgrade_' . $stat] = 0;
 		}
+		
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -81,13 +84,13 @@ class d13_unit
 	function getMaxProduction()
 	{
 		global $d13;
+		
 		$costLimit = $this->node->checkCostMax($this->data['cost'], 'train');
 		$reqLimit = $this->node->checkRequirementsMax($this->data['requirements']);
 		$upkeepLimit = floor($this->node->resources[$d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeepResource') ]['value'] / $d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeep'));
 		$unitLimit = abs($this->node->units[$this->data['unitId']]['value'] - $d13->getGeneral('types', $this->data['type'], 'limit'));
 		$limitData = min($costLimit, $reqLimit, $upkeepLimit, $unitLimit);
-		
-		#$d13->logger($costLimit."/".$reqLimit."/".$upkeepLimit."/".$unitLimit);
+
 		return $limitData;
 	}
 
@@ -326,6 +329,58 @@ class d13_unit
 	}
 	
 	// ----------------------------------------------------------------------------------------
+	// getCostList
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getCostList()
+	{
+	
+		$get_costs = $this->getCost();
+		
+		$costData = '';
+		foreach($get_costs as $cost) {
+			$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $cost['name'] . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['icon'] . '" title="' . $cost['name'] . '"></a></div>';
+		}
+
+		return $costData;
+
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getRequirementList
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getRequirementList()
+	{
+
+		$get_requirements = $this->getRequirements();
+		
+		if (empty($get_requirements)) {
+			$requirementsData = $d13->getLangUI('none');
+		}
+		else {
+			$requirementsData = '';
+		}
+
+		foreach($get_requirements as $req) {
+			$requirementsData.= '<div class="cell">' . $req['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $req['name'] . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $req['type'] . '/' . $this->node->data['faction'] . '/' . $req['icon'] . '" title="' . $req['type_name'] . ' - ' . $req['name'] . '"></a></div>';
+		}
+				
+		return $requirementsData;
+	}
+	
+	
+	
+	
+	// ----------------------------------------------------------------------------------------
 	// getTemplateVariables
 	// @
 	//
@@ -335,6 +390,7 @@ class d13_unit
 
 	function getTemplateVariables()
 	{
+	
 		global $d13;
 		$tvars = array();
 		
@@ -344,24 +400,29 @@ class d13_unit
 		$tvars['tvar_unitType'] = $this->data['type'];
 		$tvars['tvar_unitClass'] = $this->data['class'];
 				
-		$tvars['tvar_unitHPPlus'] = "[+" . $upgradeData['hp'] . "]";
-		$tvars['tvar_unitDamagePlus'] = "[+" . $upgradeData['damage'] . "]";
-		$tvars['tvar_unitArmorPlus'] = "[+" . $upgradeData['armor'] . "]";
-		$tvars['tvar_unitSpeedPlus'] = "[+" . $upgradeData['speed'] . "]";
-		$tvars['tvar_unitVisionPlus'] = "[+" . $upgradeData['vision'] . "]";
+		foreach($d13->getGeneral('stats') as $stat) {
+			$tvars['tvar_unit'.$stat] 			= $this->data[$stat];
+			$tvars['tvar_unit'.$stat.'Plus'] 	= "[+".$this->data['upgrade_'.$stat]."]";
+		}
 		
-		$tvars['tvar_unitType'] = $this->data['type'];
-		$tvars['tvar_unitClass'] = $this->data['class'];
-		$tvars['tvar_unitHP'] = $this->data['hp'];
-		$tvars['tvar_unitDamage'] = $this->data['damage'];
-		$tvars['tvar_unitArmor'] = $this->data['armor'];
-		$tvars['tvar_unitSpeed'] = $this->data['speed'];
-		$tvars['tvar_unitVision'] = $this->data['vision'];
+		$tvars['tvar_costData'] = $this->getCostList();
+		$tvars['tvar_requirementsData'] = $this->getRequirementList();
 		
+		$check_requirements = $this->getCheckRequirements();
+		$check_cost = $this->getCheckCost();
 		
-		#$tvars['tvar_costData'] = $costData;
-		#$tvars['tvar_requirementsData'] = $requirementsData;
-		#$tvars['tvar_disableData'] = $disableData;
+		if ($check_requirements) {
+			$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.ok");
+		} else {
+			$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.notok");
+		}
+
+		if ($check_cost) {
+			$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
+		} else {
+			$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
+		}
+		
 		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
 		$tvars['tvar_unitImage'] = $this->data['image'];
 		$tvars['tvar_uid'] = $this->data['unitId'];
@@ -370,20 +431,14 @@ class d13_unit
 		$tvars['tvar_unitValue'] = $this->node->units[$this->data['unitId']]['value'];
 		$tvars['tvar_unitType'] = $this->data['type'];
 		$tvars['tvar_unitClass'] = $this->data['class'];
-		$tvars['tvar_unitHP'] = $this->data['hp'];
-		$tvars['tvar_unitDamage'] = $this->data['damage'];
-		$tvars['tvar_unitArmor'] = $this->data['armor'];
-		$tvars['tvar_unitSpeed'] = $this->data['speed'];
-		$tvars['tvar_unitVision'] = $this->data['vision'];
+		
 		$tvars['tvar_unitLimit'] = $this->getMaxProduction();
 		#$tvars['tvar_unitDuration'] = misc::time_format((($this->data['duration'] - $this->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'train')) * 60);
 		$tvars['tvar_unitUpkeep'] = $this->data['upkeep'];
 		$tvars['tvar_unitUpkeepResource'] = $this->data['upkeepResource'];
 		$tvars['tvar_unitUpkeepResourceName'] = $d13->getLangGL('resources', $this->data['upkeepResource'], 'name');
-				
-	
-		return $tvars;
 		
+		return $tvars;
 	}	
 	
 }

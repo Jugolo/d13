@@ -259,7 +259,8 @@
     "armor",
     "speed",
     "vision",
-    "capacity"
+    "capacity",
+    "critical"
   ],
   "userstats": {
     "level": {

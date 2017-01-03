@@ -55,7 +55,7 @@
 					<li class="item-content">
 						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
 						<div class="item-inner">
-						<div class="item-title label">{{tvar_moduleInputName}}</div>
+						<div class="item-title">{{tvar_moduleInputName}}</div>
 					
 						<div class="item-after">{{tvar_inputSlider}}</div>
 					
@@ -66,9 +66,10 @@
 						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/return.png"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_active}} {{tvar_ui_task}}:</div>
-						<div class="item-after">{{tvar_queue}}</div>
 						</div>
 					</li>
+					
+					{{tvar_queue}}
 								
 				</ul>
 				</div>

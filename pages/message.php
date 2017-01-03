@@ -6,9 +6,9 @@
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
-// # Download & Updates..........: https://sourceforge.net/projects/d13/
-// # Project Documentation.......: https://sourceforge.net/p/d13/wiki/Home/
-// # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
@@ -48,7 +48,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				$msg->data['body'] = str_replace("\n", "<br />", $msg->data['body']);
 			}
 			else $message = $d13->getLangUI("accessDenied");
-			else $message = $$d13->getLangUI($status);
+			else $message = $d13->getLangUI($status);
 		}
 		else $message = $d13->getLangUI("insufficientData");
 		break;
@@ -76,7 +76,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				$msg->data['subject'] = $_POST['subject'];
 				$msg->data['body'] = $_POST['body'];
 				$msg->data['viewed'] = 0;
-				$message = $$d13->getLangUI($msg->add());
+				$message = $d13->getLangUI($msg->add());
 			}
 			else {
 				$message = $d13->getLangUI("insufficientData");
@@ -96,7 +96,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				if ($msg->data['recipient'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
 					$status = message::remove($_GET['messageId']);
 					if ($status == 'done') header('location: ?p=message&action=list');
-					else $message = $$d13->getLangUI($status);
+					else $message = $d13->getLangUI($status);
 				}
 				else $message = $d13->getLangUI("accessDenied");
 			}
@@ -113,7 +113,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 	case 'removeAll':
 		$status = message::removeAll($_SESSION[CONST_PREFIX . 'User']['id']);
 		if ($status == 'done') header('location: ?p=message&action=list');
-		else $message = $$d13->getLangUI($status);
+		else $message = $d13->getLangUI($status);
 		break;
 
 	case 'list':

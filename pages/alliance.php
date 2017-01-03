@@ -6,9 +6,9 @@
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
-// # Download & Updates..........: https://sourceforge.net/projects/d13/
-// # Project Documentation.......: https://sourceforge.net/p/d13/wiki/Home/
-// # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
@@ -37,7 +37,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					$alliance->getAll();
 				}
 				else {
-					$message = $$d13->getLangUI($status);
+					$message = $d13->getLangUI($status);
 				}
 			}
 			else {
@@ -66,10 +66,10 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
 					$alliance->data['name'] = $_POST['name'];
 					$status = $alliance->set($node->data['id']);
-					$message = $$d13->getLangUI($status);
+					$message = $d13->getLangUI($status);
 				}
 				else $message = $d13->getLangUI("accessDenied");
-				else $message = $$d13->getLangUI($status);
+				else $message = $d13->getLangUI($status);
 			}
 			else $message = $d13->getLangUI("accessDenied");
 			else $message = $d13->getLangUI("insufficientData");
@@ -104,10 +104,10 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 								if ($status == 'done') $_SESSION[CONST_PREFIX . 'User']['alliance'] = $alliance->data['id'];
 							}
 
-							$message = $$d13->getLangUI($status);
+							$message = $d13->getLangUI($status);
 						}
 						else $message = $d13->getLangUI("accessDenied");
-						else $message = $$d13->getLangUI($status);
+						else $message = $d13->getLangUI($status);
 					}
 					else $message = $d13->getLangUI("insufficientData");
 				}
@@ -134,10 +134,10 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 						$_SESSION[CONST_PREFIX . 'User']['alliance'] = 0;
 						header('location: alliance.php?action=get');
 					}
-					else $message = $$d13->getLangUI($status);
+					else $message = $d13->getLangUI($status);
 				}
 				else $message = $d13->getLangUI("accessDenied");
-				else $message = $$d13->getLangUI($status);
+				else $message = $d13->getLangUI($status);
 			}
 			else $message = $d13->getLangUI("insufficientData");
 		}
@@ -197,7 +197,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			))) {
 				$status = alliance::removeInvitation($_GET['alliance'], $_GET['user']);
 				if ($status == 'done') header('Location: alliance.php?action=get');
-				else $message = $$d13->getLangUI($status);
+				else $message = $d13->getLangUI($status);
 			}
 			else $message = $d13->getLangUI("accessDenied");
 			else $message = $d13->getLangUI("noAlliance");
@@ -212,7 +212,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		if ($_SESSION[CONST_PREFIX . 'User']['id'] == $_GET['user']) {
 			$status = alliance::acceptInvitation($_GET['alliance'], $_GET['user']);
 			if ($status == 'done') $_SESSION[CONST_PREFIX . 'User']['alliance'] = $_GET['alliance'];
-			$message = $$d13->getLangUI($status);
+			$message = $d13->getLangUI($status);
 		}
 		else $message = $d13->getLangUI("accessDenied");
 		else $message = $d13->getLangUI("insufficientData");
@@ -231,7 +231,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					header('Location: alliance.php?action=get');
 				}
 
-				$message = $$d13->getLangUI($status);
+				$message = $d13->getLangUI($status);
 			}
 			else $message = $d13->getLangUI("accessDenied");
 			else $message = $d13->getLangUI("insufficientData");
@@ -273,7 +273,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 						else $message = $d13->getLangUI("noUser");
 					}
 
-					$message = $$d13->getLangUI($status);
+					$message = $d13->getLangUI($status);
 				}
 				else $message = $d13->getLangUI("accessDenied");
 				else $message = $d13->getLangUI("noAlliance");
@@ -299,7 +299,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				if ($recipientAlliance->get('id', $_GET['recipient']) == 'done') {
 					$status = $alliance->proposePeace($recipientAlliance->data['id']);
 					if ($status == 'done') header('Location: alliance.php?action=get');
-					$message = $$d13->getLangUI($status);
+					$message = $d13->getLangUI($status);
 				}
 				else $message = $d13->getLangUI("noAlliance");
 			}
@@ -323,7 +323,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			if ($recipientAlliance->get('id', $_GET['recipient']) == 'done') {
 				$status = $alliance->removePeace($recipientAlliance->data['id']);
 				if ($status == 'done') header('Location: alliance.php?action=get');
-				else $message = $$d13->getLangUI($status);
+				else $message = $d13->getLangUI($status);
 			}
 			else $message = $d13->getLangUI("noAlliance");
 		}
@@ -359,7 +359,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					else $message = $d13->getLangUI("noUser");
 				}
 
-				$message = $$d13->getLangUI($status);
+				$message = $d13->getLangUI($status);
 			}
 			else $message = $d13->getLangUI("noAlliance");
 		}
@@ -420,7 +420,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 						$removeLabel = 'x';
 						if ($user->data['id'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
 							$accept = '<a class="external" href="index.php?p=alliance&action=acceptInvitation&alliance=' . $invitation['alliance'] . '&user=' . $invitation['user'] . '">{{tvar_ui_accept}}</a> | ';
-							$removeLabel = $$d13->getLangUI('decline');
+							$removeLabel = $d13->getLangUI('decline');
 						}
 
 						$html.= '<div class="right"> ' . $user->data['name'] . ' | ' . $accept . '<a class="external" href="index.php?p=alliance&action=removeInvitation&alliance=' . $invitation['alliance'] . '&user=' . $invitation['user'] . '">' . $removeLabel . '</a></div>';
@@ -452,7 +452,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 							$removeLabel = 'x';
 							if ($user->data['id'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
 								$accept = '<a class="external" href="index.php?p=alliance&action=acceptInvitation&alliance=' . $invitation['alliance'] . '&user=' . $invitation['user'] . '">{{tvar_ui_accept}}</a> | ';
-								$removeLabel = $$d13->getLangUI('decline');
+								$removeLabel = $d13->getLangUI('decline');
 							}
 
 							$html.= '<div class="right"> ' . $user->data['name'] . ' | ' . $accept . '<a class="external" href="index.php?p=alliance&action=removeInvitation&alliance=' . $invitation['alliance'] . '&user=' . $invitation['user'] . '">' . $removeLabel . '</a></div>';

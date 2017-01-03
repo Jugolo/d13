@@ -12,7 +12,7 @@
 		</div>
 
 		<div class="card-content">
-	<div class="card-content-inner">
+		<div class="card-content-inner">
 
 		<div class="row">
 	
@@ -36,6 +36,7 @@
 						<div class="item-after"><span class="badge">{{tvar_moduleMaxInput}}</span></div>
 						</div>
 					</li>
+					
 					<li class="item-content">
 						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
 						<div class="item-inner">
@@ -55,9 +56,8 @@
 					<li class="item-content">
 						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
 						<div class="item-inner">
-							<div class="item-title label">{{tvar_moduleInputName}}</div>
-					
-						<div class="item-after">{{tvar_inputSlider}}</div>
+							<div class="item-title">{{tvar_moduleInputName}}</div>
+							<div class="item-after">{{tvar_inputSlider}}</div>
 					
 						</div>	
 					</li>
@@ -66,9 +66,10 @@
 						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/return.png"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_active}} {{tvar_ui_task}}:</div>
-						<div class="item-after">{{tvar_queue}}</div>
 						</div>
-					</li>					
+					</li>
+					
+					{{tvar_queue}}
 								
 				</ul>
 				</div>
@@ -77,8 +78,8 @@
 		
 		</div>
 	
-	</div>
-	</div>
+		</div>
+		</div>
 
 		<div class="card-footer">
 			<div class="left">{{tvar_demolishLink}}</div><div class="right">{{tvar_inventoryLink}}</div>

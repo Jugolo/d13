@@ -6,9 +6,9 @@
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
-// # Download & Updates..........: https://sourceforge.net/projects/d13/
-// # Project Documentation.......: https://sourceforge.net/p/d13/wiki/Home/
-// # Bugs & Suggestions..........: https://sourceforge.net/p/d13/tickets/
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
@@ -38,9 +38,12 @@ class d13_combat
 	function doCombat($data)
 	{
 		global $d13;
+		
 		$data['output']['attacker']['groups'] = array();
 		$data['output']['defender']['groups'] = array();
+		
 		$classes = array();
+		
 		foreach($d13->getGeneral('classes') as $key => $class) {
 			$classes['attacker'][$key] = 0;
 			$classes['defender'][$key] = 0;
@@ -55,10 +58,12 @@ class d13_combat
 
 		$node = new node();
 		$status = $node->get('id', $data['input']['attacker']['nodeId']);
+		
 		foreach($data['input']['attacker']['groups'] as $key => $group) {
 			$unit = new d13_unit($group['unitId'], $node);
 			$stats = $unit->getStats();
 			$upgrades = $unit->getUpgrades();
+			
 			foreach($d13->getGeneral('stats') as $stat) {
 				$data['input']['attacker']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['quantity'];
 				$data['input']['attacker'][$stat]+= $data['input']['attacker']['groups'][$key][$stat];
@@ -71,14 +76,17 @@ class d13_combat
 
 		$node = new node();
 		$status = $node->get('id', $data['input']['defender']['nodeId']);
+		
 		foreach($data['input']['defender']['groups'] as $key => $group) {
 
 			// - - - - - UNITS
 
 			if ($group['type'] == 'unit') {
+			
 				$unit = new d13_unit($group['unitId'], $node);
 				$stats = $unit->getStats();
 				$upgrades = $unit->getUpgrades();
+				
 				foreach($d13->getGeneral('stats') as $stat) {
 					$data['input']['attacker']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['quantity'];
 					$data['input']['attacker'][$stat]+= $data['input']['attacker']['groups'][$key][$stat];
@@ -86,11 +94,10 @@ class d13_combat
 
 				$classes['defender'][$d13->getUnit($data['input']['defender']['faction']) [$group['unitId']]['class']]+= $data['input']['defender']['groups'][$key]['damage'];
 
-				// - - - - - MODULES
+			// - - - - - MODULES
 
-			}
-			else
-			if ($group['type'] == 'module') {
+			} else if ($group['type'] == 'module') {
+			
 				$modulit = new d13_modulit($group['moduleId'], $group['level'], $group['input'], $group['unitId'], $node);
 				$stats = $modulit->getStats();
 				$upgrades = $modulit->getUpgrades();
@@ -229,6 +236,118 @@ class d13_combat
 	
 	}
 	
+	#function assembleReport
+	#function assembleReportScout
+	#function assembleReportSkirmish
+	#function assembleReportRaid
+	#function assembleReportSabotage
+	#function assembleReportConquer
+	#function assembleReportRaze
+	
+	// ----------------------------------------------------------------------------------------
+	// assembleReport
+	// ----------------------------------------------------------------------------------------
+
+	public static
+	
+	function assembleReport($data, $attackerNode, $defenderNode, $type, $other=false)
+	{
+		
+		global $d13;
+		
+		$html = '';
+		$tvars = array();
+		
+		// - - - - - Report Header
+
+		if (!$other) {
+			if ($data['output']['attacker']['winner']) {
+				$tvars['tvar_msgHeader'] = $d13->getLangUI("won");
+			}
+			else {
+				$tvars['tvar_msgHeader'] = $d13->getLangUI("lost");
+			}
+		} else {
+			if ($data['output']['defender']['winner']) {
+				$tvars['tvar_msgHeader'] = $d13->getLangUI("won");
+			}
+			else {
+				$tvars['tvar_msgHeader'] = $d13->getLangUI("lost");
+			}
+		}
+
+		// - - - - - Report Attacker
+
+		foreach($data['output']['attacker']['groups'] as $key => $group) {
+			
+			$name = $d13->getUnit($attackerNode->data['faction'], $key, 'id');
+			$vars = array();
+			$vars['tvar_entryImage'] = $d13->getUnit($attackerNode->data['faction'], $key, 'image');
+			$vars['tvar_entryLabel'] = $name . "(".$group['quantity']."/".$data['input']['attacker']['groups'][$key]['quantity'].")";
+		
+			$html .= $d13->templateParse($d13->templateGet("sub.msg.entry") , $vars);
+		}
+
+		if (!$other) {
+			$tvars['tvar_msgSelf'] = '';
+			$tvars['tvar_msgSelfRow'] = $html;
+		} else {
+			$tvars['tvar_msgOther'] = '';
+			$tvars['tvar_msgOtherRow'] = $html;
+		}
+
+		// - - - - - Report Defender
+
+		foreach($data['output']['defender']['groups'] as $key => $group) {
+
+			if ($group['type'] == 'unit') {
+				// - - - - - Unit
+				if ($data['input']['defender']['groups'][$key]['quantity']) {
+				
+					$name = $d13->getUnit($defenderNode->data['faction'], $key, 'id');
+					$vars = array();
+					$vars['tvar_entryImage'] = $d13->getUnit($defenderNode->data['faction'], $key, 'image');
+					$vars['tvar_entryLabel'] = $name . "(".$group['quantity']."/".$data['input']['defender']['groups'][$key]['quantity'].")";
+		
+					$html .= $d13->templateParse($d13->templateGet("sub.msg.entry") , $vars);
+				
+					#$msgBody.= '<div class="cell"><div class="unitBlock">' . $group['quantity'] . '</div><div class="unitBlock">' . $data['input']['defender']['groups'][$key]['quantity'] . '</div><div class="unitBlock"><img class="unitBlock" src="templates/default/images/units/' . $$nodes['defender']->data['faction'] . '/' . $group['unitId'] . '.png"></div></div>';
+				}
+
+			} else if ($group['type'] == 'module') {
+				// - - - - - Module
+				if ($data['input']['defender']['groups'][$key]['input']) {
+				
+					$name = $d13->getUnit($defenderNode->data['faction'], $key, 'id');
+					$vars = array();
+					$vars['tvar_entryImage'] = $d13->getUnit($defenderNode->data['faction'], $key, 'image');
+					$vars['tvar_entryLabel'] = $name . "(".$group['input']."/".$data['input']['defender']['groups'][$key]['input'].")";
+		
+					$html .= $d13->templateParse($d13->templateGet("sub.msg.entry") , $vars);
+				
+					#$msgBody.= '<div class="cell"><div class="unitBlock">' . $group['input'] . '</div><div class="unitBlock">' . $data['input']['defender']['groups'][$key]['input'] . '</div><div class="unitBlock"><img class="unitBlock" src="templates/default/images/units/' . $$nodes['defender']->data['faction'] . '/' . $group['unitId'] . '.png"></div></div>';
+				}
+			}
+		}
+
+		if (!$other) {
+			$tvars['tvar_msgOther'] = '';
+			$tvars['tvar_msgOtherRow'] = $html;
+		} else {
+			$tvars['tvar_msgSelf'] = '';
+			$tvars['tvar_msgSelfRow'] = $html;
+		}
+
+		// - - - - Report Resources etc.
+
+		$tvars['tvar_msgSelfRes'] = '';
+		$tvars['tvar_msgSelfResRow'] = '';
+					
+		// - - - - - Return Report
+		return $d13->templateParse($d13->templateGet("msg.combat") , $tvars);
+		
+	}
+
 }
 
 // =====================================================================================EOF
