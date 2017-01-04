@@ -1,6 +1,6 @@
-<div class="popup popup-list">
+<div class="popup popup-list-{{tvar_listID}}">
 
-<div class="card">
+<div class="card large-card">
 	
 	<div class="card-content">
 	<div class="card-content-inner">

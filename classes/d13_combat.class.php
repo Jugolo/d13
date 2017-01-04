@@ -69,7 +69,7 @@ class d13_combat
 				$data['input']['attacker'][$stat]+= $data['input']['attacker']['groups'][$key][$stat];
 			}
 
-			$classes['attacker'][$d13->getUnit($data['input']['attacker']['faction']) [$group['unitId']]['class']]+= $data['input']['attacker']['groups'][$key]['damage'];
+			$classes['attacker'][$d13->getUnit($data['input']['attacker']['faction'],$group['unitId'],'class')] += $data['input']['attacker']['groups'][$key]['damage'];
 		}
 
 		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CALCULATE DEFENDER STATS
@@ -88,11 +88,11 @@ class d13_combat
 				$upgrades = $unit->getUpgrades();
 				
 				foreach($d13->getGeneral('stats') as $stat) {
-					$data['input']['attacker']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['quantity'];
-					$data['input']['attacker'][$stat]+= $data['input']['attacker']['groups'][$key][$stat];
+					$data['input']['defender']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['quantity'];
+					$data['input']['defender'][$stat] += $data['input']['defender']['groups'][$key][$stat];
 				}
 
-				$classes['defender'][$d13->getUnit($data['input']['defender']['faction']) [$group['unitId']]['class']]+= $data['input']['defender']['groups'][$key]['damage'];
+				$classes['defender'][$d13->getUnit($data['input']['defender']['faction'],$group['unitId'],'class')] += $data['input']['defender']['groups'][$key]['damage'];
 
 			// - - - - - MODULES
 
@@ -112,7 +112,7 @@ class d13_combat
 					$data['input']['defender']['groups'][$key]['hp'] = ($data['input']['defender']['groups'][$key]['input'] / $data['input']['defender']['groups'][$key]['maxInput']) * $data['input']['defender']['groups'][$key]['hp'];
 				}
 
-				$classes['defender'][$d13->getUnit($data['input']['defender']['faction']) [$group['unitId']]['class']]+= $data['input']['defender']['groups'][$key]['damage'];
+				$classes['defender'][$d13->getUnit($data['input']['defender']['faction'],$group['unitId'],'class')] += $data['input']['defender']['groups'][$key]['damage'];
 			}
 		}
 
@@ -144,7 +144,7 @@ class d13_combat
 
 			$baseDamage = ceil($data['input']['defender']['trueDamage'] * $ratio);
 			$bonusDamage = 0;
-			foreach($d13->getGeneral('classes') [$d13->getUnit($data['input']['attacker']['faction']) [$group['unitId']]['class']] as $classKey => $damageMod) {
+			foreach($d13->getGeneral('classes', $d13->getUnit($data['input']['attacker']['faction'], $group['unitId'], 'class')) as $classKey => $damageMod) {
 				$bonusDamage+= floor($baseDamage * $classes['defender'][$classKey] * $damageMod);
 			}
 
@@ -280,10 +280,16 @@ class d13_combat
 
 		foreach($data['output']['attacker']['groups'] as $key => $group) {
 			
-			$name = $d13->getUnit($attackerNode->data['faction'], $key, 'id');
+			$name = $d13->getLangGL('units', $attackerNode->data['faction'], $group['unitId'], 'name');
+			$class = $d13->getLangGL('classes', $d13->getUnit($attackerNode->data['faction'], $group['unitId'], 'class'));
+			$label = "(".$group['quantity']."/".$data['input']['attacker']['groups'][$key]['quantity'].")";
+			$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $attackerNode->data['faction'] . '/' . $d13->getUnit($attackerNode->data['faction'], $group['unitId'], 'image');
+					
 			$vars = array();
-			$vars['tvar_entryImage'] = $d13->getUnit($attackerNode->data['faction'], $key, 'image');
-			$vars['tvar_entryLabel'] = $name . "(".$group['quantity']."/".$data['input']['attacker']['groups'][$key]['quantity'].")";
+			$vars['tvar_entryImage'] = $image;
+			$vars['tvar_entryName'] = $name;
+			$vars['tvar_entryClass'] = $class;
+			$vars['tvar_entryLabel'] = $label;
 		
 			$html .= $d13->templateParse($d13->templateGet("sub.msg.entry") , $vars);
 		}
@@ -297,35 +303,45 @@ class d13_combat
 		}
 
 		// - - - - - Report Defender
-
+		$html = '';
+	
 		foreach($data['output']['defender']['groups'] as $key => $group) {
 
 			if ($group['type'] == 'unit') {
 				// - - - - - Unit
 				if ($data['input']['defender']['groups'][$key]['quantity']) {
 				
-					$name = $d13->getUnit($defenderNode->data['faction'], $key, 'id');
+					
+					$name = $d13->getLangGL('units', $defenderNode->data['faction'], $group['unitId'], 'name');
+					$class = $d13->getLangGL('classes', $d13->getUnit($defenderNode->data['faction'], $group['unitId'], 'class'));
+					$label = "(".$group['quantity']."/".$data['input']['defender']['groups'][$key]['quantity'].")";
+					$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $defenderNode->data['faction'] . '/' . $d13->getUnit($defenderNode->data['faction'], $group['unitId'], 'image');
+					
 					$vars = array();
-					$vars['tvar_entryImage'] = $d13->getUnit($defenderNode->data['faction'], $key, 'image');
-					$vars['tvar_entryLabel'] = $name . "(".$group['quantity']."/".$data['input']['defender']['groups'][$key]['quantity'].")";
+					$vars['tvar_entryImage'] = $image;
+					$vars['tvar_entryName'] = $name;
+					$vars['tvar_entryClass'] = $class;
+					$vars['tvar_entryLabel'] = $label;
 		
 					$html .= $d13->templateParse($d13->templateGet("sub.msg.entry") , $vars);
 				
-					#$msgBody.= '<div class="cell"><div class="unitBlock">' . $group['quantity'] . '</div><div class="unitBlock">' . $data['input']['defender']['groups'][$key]['quantity'] . '</div><div class="unitBlock"><img class="unitBlock" src="templates/default/images/units/' . $$nodes['defender']->data['faction'] . '/' . $group['unitId'] . '.png"></div></div>';
 				}
 
 			} else if ($group['type'] == 'module') {
 				// - - - - - Module
 				if ($data['input']['defender']['groups'][$key]['input']) {
 				
-					$name = $d13->getUnit($defenderNode->data['faction'], $key, 'id');
+					$name = $d13->getLangGL($defenderNode->data['faction'], $group['unitId'], 'name');
+					$label = "(".$group['input']."/".$data['input']['defender']['groups'][$key]['input'].")";
+					$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $defenderNode->data['faction'] . '/' . $d13->getUnit($defenderNode->data['faction'], $group['unitId'], 'image');
+					
 					$vars = array();
-					$vars['tvar_entryImage'] = $d13->getUnit($defenderNode->data['faction'], $key, 'image');
-					$vars['tvar_entryLabel'] = $name . "(".$group['input']."/".$data['input']['defender']['groups'][$key]['input'].")";
+					$vars['tvar_entryImage'] = $image;
+					$vars['tvar_entryName'] = $name;
+					$vars['tvar_entryLabel'] = $label;
 		
 					$html .= $d13->templateParse($d13->templateGet("sub.msg.entry") , $vars);
 				
-					#$msgBody.= '<div class="cell"><div class="unitBlock">' . $group['input'] . '</div><div class="unitBlock">' . $data['input']['defender']['groups'][$key]['input'] . '</div><div class="unitBlock"><img class="unitBlock" src="templates/default/images/units/' . $$nodes['defender']->data['faction'] . '/' . $group['unitId'] . '.png"></div></div>';
 				}
 			}
 		}
@@ -344,8 +360,10 @@ class d13_combat
 		$tvars['tvar_msgSelfResRow'] = '';
 					
 		// - - - - - Return Report
-		return $d13->templateParse($d13->templateGet("msg.combat") , $tvars);
+		$html = $d13->templateParse($d13->templateGet("msg.combat") , $tvars);
+		$html = $d13->dbRealEscapeString($html);
 		
+		return $html;
 	}
 
 }

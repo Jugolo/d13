@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `build` (
 CREATE TABLE IF NOT EXISTS `combat` (
   `id` int(10) unsigned NOT NULL,
   `sender` int(10) unsigned NOT NULL,
+  `slot` int(10) unsigned NOT NULL,
   `recipient` int(10) unsigned NOT NULL,
   `focus` varchar(16) COLLATE utf8_bin NOT NULL,
   `type` varchar(16) COLLATE utf8_bin NOT NULL,

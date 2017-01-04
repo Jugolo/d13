@@ -360,7 +360,9 @@ class d13_unit
 
 	function getRequirementList()
 	{
-
+		
+		global $d13;
+		
 		$get_requirements = $this->getRequirements();
 		
 		if (empty($get_requirements)) {

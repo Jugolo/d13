@@ -15,6 +15,24 @@ img {
  border: 0px;
 }
 
+.large-card {
+	width: 97%;
+	height: auto;
+	border-radius: 10px;
+	text-align: center;
+	margin: auto;
+}
+
+.tiny-card {
+	width: 160px;
+	height: auto;
+	border-radius: 5px;
+	text-align: center;
+	margin: auto;
+}
+
+
+
 /* -- Framework7 Overwrite Styling -----------------------------------------------------*/
 
 .page ,.page-content ,.views ,.view-main ,.login-screen-content ,.statusbar ,.statusbar-overlay { 
@@ -44,14 +62,6 @@ img {
 
 .row {
 	padding-top: 4%;
-	margin: auto;
-}
-
-.card {
-	width: 97%;
-	height: auto;
-	border-radius: 10px;
-	text-align: center;
 	margin: auto;
 }
 
@@ -98,7 +108,7 @@ img {
 }  
 
 .badge{
-	background-color: #000;
+	background-color: #000000;
 	background-color: hsla(0, 0%, 0%, 0.5);
 }
 

@@ -1217,7 +1217,6 @@
       ],
       "options": {
       	"inventoryList": true,
-        "combatCancel": true,
         "combatRaid": true,
         "combatConquer": true,
         "combatScout": true,

@@ -21,6 +21,7 @@ $message = NULL;
 $d13->dbQuery('start transaction');
 
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
+
 	foreach($_POST as $key => $value) $_POST[$key] = misc::clean($value);
 	foreach($_GET as $key => $value)
 	if (in_array($key, array(
@@ -117,7 +118,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		break;
 
 	case 'list':
-		$limit = 20;
+		$limit = 10;
 		if (isset($_GET['page'])) $offset = $limit * $_GET['page'];
 		else $offset = 0;
 		$messages = message::getList($_SESSION[CONST_PREFIX . 'User']['id'], $limit, $offset);
@@ -136,12 +137,14 @@ else $d13->dbQuery('commit');
 
 $tvars = array();
 $tvars['tvar_global_message'] = $message;
+
 $page = "message";
 
 // - - - - -
 
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 	switch ($_GET['action']) {
+	
 	case 'get':
 		if (isset($msg->data['recipient'])) {
 			$tvars['tvar_senderName'] = $msg->data['senderName'];
@@ -171,7 +174,8 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		$tvars['tvar_body'] = $body;
 		$page = "message.add";
 		break;
-
+	
+	// - - - - - View Messages List
 	case 'list':
 		$tvars['tvar_removeAll'] = "";
 		$tvars['tvar_messages'] = "";
@@ -187,18 +191,27 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		$tvars['tvar_removeAll'] = $removeAll;
 		foreach($messages['messages'] as $message) {
 			if (!$message->data['viewed']) {
-				$new = ' style="text-decoration: underline;"';
+				$new = 'mail_on.png';
 			}
 			else {
-				$new = '';
+				$new = 'mail_off.png';
 			}
-
-			$hours = round((time() - strtotime($message->data['sent'])) / 3600, 2);
-			$tvars['tvar_messages'].= '<div><div class="cell"><input type="checkbox" name="messageId[]" value="' . $message->data['id'] . '"></div><div class="cell"><a class="external" href="index.php?p=message&action=get&messageId=' . $message->data['id'] . '"' . $new . '>' . $message->data['subject'] . '</a></div><div class="cell">' . $hours . ' {{tvar_ui_hours}}</div><div class="cell"><a class="external" href="?p=message&action=remove&messageId=' . $message->data['id'] . '">x</a></div></div>';
+			$hours = floor((time() - strtotime($message->data['sent'])) / 3600);
+			$vars = array();
+			$vars['tvar_listImage'] = '<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/'.$new.'">';
+			$vars['tvar_listLabel'] = '<input type="checkbox" name="messageId[]" value="' . $message->data['id'] . '"> <a class="external" href="index.php?p=message&action=get&messageId=' . $message->data['id'] . '"' . $new . '>' . $message->data['subject'] . '</a>';
+			$vars['tvar_listAmount'] = $hours . ' {{tvar_ui_hours}} {{tvar_ui_ago}} <a class="external" href="?p=message&action=remove&messageId=' . $message->data['id'] . '"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
+			$html = $d13->templateParse($d13->templateGet("sub.module.listcontent") , $vars);
+			$tvars['tvar_messages'] .= $html;
 		}
 
 		if (count($messages['messages'])) {
-			$tvars['tvar_remove'] = '<a class="external" href="javascript: document.getElementById(\'messageList\').submit()">' . $d13->getLangUI("remove") . '</a>';
+			$vars = array();
+			$vars['tvar_listImage'] = '';
+			$vars['tvar_listLabel'] = '<a class="external" href="javascript: document.getElementById(\'messageList\').submit()">' . $d13->getLangUI("remove") . ' ' . $d13->getLangUI("selected") . '</a>';
+			$vars['tvar_listAmount'] = '<a class="external" href="javascript: document.getElementById(\'messageList\').submit()"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
+			$html = $d13->templateParse($d13->templateGet("sub.module.listcontent") , $vars);
+			$tvars['tvar_remove'] = $html;
 		}
 
 		if ($pageCount > 1) {
@@ -220,7 +233,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				$next = '<a class="external" href="?p=message&action=list&page=' . ($_GET['page'] + 1) . '">' . $d13->getLangUI("next") . '</a>';
 			}
 
-			$tvars['tvar_controls'].= $d13->getLangUI("tvar_ui_page") . $previous . ' <select class="dropdown" id="page" onChange="window.location.href=\'index.php?p=message&action=list&page=\'+this.value">';
+			$tvars['tvar_controls'].= $d13->getLangUI("page") . $previous . ' <select class="dropdown" id="page" onChange="window.location.href=\'index.php?p=message&action=list&page=\'+this.value">';
 			for ($i = 0; $i < $pageCount; $i++) {
 				$tvars['tvar_controls'].= '<option value="' . $i . '">' . $i . '</option>';
 			}

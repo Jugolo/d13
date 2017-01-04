@@ -5,9 +5,9 @@ News, Updates & Latest version available at Sourceforge:
 
 https://sourceforge.net/projects/d13/
 
-Please report bugs and request features using the Sourceforge ticket system:
+Official project documentation can now be found at my website:
 
-https://sourceforge.net/p/d13/tickets/
+http://www.critical-hit.biz
 
 CREDITS
 ------------------------------------------------------------------------------------------
@@ -17,7 +17,17 @@ CREDITS
 RELEASE CANDIDATE 0
 ------------------------------------------------------------------------------------------
 
+V012
+		* Marching units now shown in the Warfare type building as well
+		* Players can send one army marching per Warfare building they have, multiple only
+		  possible with multiple warfare buildings
+		* 
+		* 
+
 V011 	
+		* Added new attributes for units (vision, capacity, critical)
+		* started project documentation at http://www.critical-hit.biz
+		* workers inside a building cannot be modified anymore when a task is running
 		* implemented class based OP caching of the JSON files to increase performance
 		* cleaned up some templates
 		* multiple research/craft/train projects can now run at the same time when the

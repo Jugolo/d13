@@ -41,7 +41,7 @@ class d13_db
 			return $result;
 		}
 		else {
-			echo $this->db->error;
+			echo "Query:".$query." Error:".$this->db->error;
 		}
 
 		return NULL;

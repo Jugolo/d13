@@ -1,6 +1,6 @@
 <div class="popup popup-unit-{{tvar_unitId}}">
 
-<div class="card">
+<div class="card large-card">
 	<div class="card-header">
 		<div class="d13-heading">{{tvar_unitName}} ({{tvar_unitValue}})</div>
 		<a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>

@@ -32,21 +32,27 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 
 		case 'add':
 			
-			if (isset($_POST['type'])) {
+			if (isset($_GET['type'], $_GET['slotId'])) {
 			
 				$pass = false;
-				if ($_POST['type'] == 'scout' && $node->checkOptions('combatScout')) {
+				if ($_GET['type'] == 'scout' && $node->checkOptions('combatScout')) {
 					$pass = true;
-				} else if ($_POST['type'] == 'raid' && $node->checkOptions('combatRaid')) {
+				} else if ($_GET['type'] == 'raid' && $node->checkOptions('combatRaid')) {
 					$pass = true;
-				} else if ($_POST['type'] == 'conquer' && $node->checkOptions('combatConquer')) {
+				} else if ($_GET['type'] == 'conquer' && $node->checkOptions('combatConquer')) {
 					$pass = true;
+				} else if ($_GET['type'] == 'skirmish' && $node->checkOptions('combatSkirmish')) {
+					$pass = true;
+				} else if ($_GET['type'] == 'sabotage' && $node->checkOptions('combatSabotage')) {
+					$pass = true;
+				} else if ($_GET['type'] == 'raze' && $node->checkOptions('combatRaze')) {
+					$pass = true;	
 				} else {
 					$message = $d13->getLangUI("featureDisabled");
 				}
 				
 				if ($pass && isset($_POST['type'], $_POST['id'], $_POST['attackerGroupUnitIds'], $_POST['attackerGroups'])) {
-
+					
 					$target = new node();
 					if ($target->get('id', $_POST['id']) == 'done') {
 						$targetUser = new user();
@@ -81,9 +87,9 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 								}
 
 								if (!$gotStatic) {
-									$status = $node->addCombat($target->data['id'], $data, $_POST['type']);
-								}
-								else {
+									$status = $node->addCombat($target->data['id'], $data, $_GET['type'], $_GET['slotId']);
+									header("location: ?p=node&action=list&nodeId=0");
+								} else {
 									$status = 'cannotSendStatic';
 								}
 
@@ -105,25 +111,20 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 			// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 		case 'cancel':
-			if ($node->checkOptions('combatCancel')) {
-				if (isset($_GET['combatId'])) {
-					$combat = node::getCombat($_GET['combatId']);
-					if (isset($combat['id'])) {
-						if ($combat['sender'] == $node->data['id']) {
-							$status = $node->cancelCombat($combat['id']);
-							if ($status == 'done') {
-								header('Location: ?p=node&action=get&nodeId=' . $node->data['id']);
-							}
-							else {
-								$message = $d13->getLangUI($status);
-							}
+			if (isset($_GET['combatId'])) {
+				$combat = node::getCombat($_GET['combatId']);
+				if (isset($combat['id'])) {
+					if ($combat['sender'] == $node->data['id']) {
+						$status = $node->cancelCombat($combat['id']);
+						if ($status == 'done') {
+							header('Location: ?p=node&action=get&nodeId=' . $node->data['id']);
 						}
 						else {
-							$message = $d13->getLangUI("accessDenied");
+							$message = $d13->getLangUI($status);
 						}
 					}
 					else {
-						$message = $d13->getLangUI("noCombat");
+						$message = $d13->getLangUI("accessDenied");
 					}
 				}
 				else {
@@ -131,8 +132,9 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 				}
 			}
 			else {
-				$message = $d13->getLangUI("accessDenied");
+				$message = $d13->getLangUI("noCombat");
 			}
+			
 
 			break;
 
@@ -162,16 +164,22 @@ else {
 $tvars = array();
 $tvars['tvar_global_message'] = $message;
 
+
 if (isset($node)) {
 
 	$tvars['tvar_unitImagePath'] 	= $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $node->data['faction'];
 	$tvars['tvar_nodeFaction'] 		= $node->data['faction'];
 	$tvars['tvar_nodeID'] 			= $node->data['id'];
+	$tvars['tvar_combatType'] 		= $_GET['type'];
 	
 	if (isset($_GET['type'])) {
 		$tvars['tvar_type'] 		= $_GET['type'];
 	}
 	
+	if (isset($_GET['slotId'])) {
+		$tvars['tvar_slotId'] 		= $_GET['slotId'];
+	}
+
 	// - - - - Available Units
 
 	$tvars['tvar_units'] = "";
@@ -203,12 +211,14 @@ if (isset($node)) {
 	}
 
 	// - - - - Combat Cost
-	$cost = $d13->getGeneral('factions', $node->data['faction'], 'costs', 'combat');
-	$resource = $cost[0]['resource'];
-	$cost =  $cost[0]['value'];
+	$cost = $d13->getGeneral('factions', $node->data['faction'], 'costs', $_GET['type']);
+	$tvars['tvar_costData'] = '';
+	foreach ($cost as $res) {
+		$resource = $res['resource'];
+		$cost =  $res['value'];
+		$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'image') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '">'.$cost . '</span>';
+	}
 	
-	$tvars['tvar_costData'] =  '<span class="badge">'.$cost . '</span><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'image') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '">';
-
 	// - - - - Template according to map system
 	if (isset($node->data['id'])) {
 		switch ($_GET['action']) {

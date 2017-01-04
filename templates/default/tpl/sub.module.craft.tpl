@@ -1,5 +1,5 @@
 <div class="swiper-slide">
-	<div class="card">
+	<div class="card large-card">
 		<div class="card-header">
 			<div class="d13-heading">
 				{{tvar_componentName}}

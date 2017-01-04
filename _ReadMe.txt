@@ -5,9 +5,9 @@ News, Updates & Latest version available at Sourceforge:
 
 https://sourceforge.net/projects/d13/
 
-Please report bugs and request features using the Sourceforge ticket system:
+Official project documentation can now be found at my website:
 
-https://sourceforge.net/p/d13/tickets/
+http://www.critical-hit.biz
 
 CREDITS
 ------------------------------------------------------------------------------------------

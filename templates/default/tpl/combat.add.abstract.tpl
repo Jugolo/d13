@@ -2,14 +2,14 @@
 	<div class="card card-shadow">
 
   		<div class="card-header">
-  			<div class="left">{{tvar_ui_combat}}</div>
+  			<div class="left">{{tvar_ui_combat}}: {{tvar_combatType}}</div>
   			<div class="right"><a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>
   		</div>
   
   		<div class="card-content">
     		<div class="card-content-inner">
     
-			<form class="pure-form" method="post" id="combatForm" action="?p=combat&action=add&nodeId={{tvar_nodeID}}" id="combatForm">
+			<form class="pure-form" method="post" id="combatForm" action="?p=combat&action=add&nodeId={{tvar_nodeID}}&type={{tvar_combatType}}&slotId={{tvar_slotID}}" id="combatForm">
 				
 				<div class="swiper-container">
 					<div class="swiper-wrapper">
@@ -22,7 +22,7 @@
 				</div>
 				
 				<input type="hidden" name="type" value="{{tvar_type}}">
-				{{tvar_ui_target}}: <select name="id">{{tvar_nodeList}}</select> {{tvar_ui_cost}}: {{tvar_costData}} <input class="pure-button" type="submit" value="{{tvar_ui_send}}">
+				{{tvar_ui_target}}: <select name="id">{{tvar_nodeList}}</select> {{tvar_ui_cost}}: {{tvar_costData}} <input class="pure-button" type="submit" value="{{tvar_combatType}}!">
 			
 			</form>
 

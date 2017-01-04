@@ -2,12 +2,13 @@
 	var mySwiper = new Swiper('.swiper-container', {
     	speed: 400,
     	spaceBetween: 50,
-    	//scrollbar: ".swiper-scrollbar",
-    	nextButton: ".swiper-button-next",
-    	prevButton: ".swiper-button-prev",
+    	scrollbar: '.swiper-scrollbar',
+    	nextButton: '.swiper-button-next',
+    	prevButton: '.swiper-button-prev',
     	pagination: '.swiper-pagination',
         paginationClickable: true,
         preloadImage: false,
+        slidesPerView: 'auto',
         lazyLoading: true
 	});
 	

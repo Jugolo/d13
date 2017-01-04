@@ -559,7 +559,7 @@ class node
 		} else {
 			$status = 'noSlot';
 		}
-		$d13->logger($status);
+		
 		return $status;
 	}
 
@@ -638,8 +638,7 @@ class node
 							$start = strftime('%Y-%m-%d %H:%M:%S', time());
 							$duration = ceil(($tmp_module->data['duration'] * $d13->getGeneral('users', 'speed', 'build')) / $input);
 							
-							$d13->logger($duration);
-							
+
 							$d13->dbQuery('insert into build (node, slot, module, start, duration, action) values ("' . $this->data['id'] . '", "' . $slotId . '", "' . $moduleId . '", "' . $start . '", "' . $duration . '", "build")');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 							if ($ok) {
@@ -1225,7 +1224,7 @@ class node
 
 	public
 
-	function addCombat($nodeId, $data, $type)
+	function addCombat($nodeId, $data, $type, $slotId)
 	{
 		global $d13;
 		$this->getResources();
@@ -1245,17 +1244,17 @@ class node
 		
 		$speed = 999999999;
 		foreach($this->units as $key => $group) {
-		if (isset($army[$key])) {
-			if ($army[$key] > $group['value']) {
-			$okUnits = 0;
+			if (isset($army[$key])) {
+				if ($army[$key] > $group['value']) {
+					$okUnits = 0;
+				}
+				if ($d13->getUnit($this->data['faction'], $key, 'speed') < $speed) {
+					$speed = $d13->getUnit($this->data['faction'], $key, 'speed');
+				}
 			}
-			if ($d13->getUnit($this->data['faction'], $key, 'speed') < $speed) {
-			$speed = $d13->getUnit($this->data['faction'], $key, 'speed');
-			}
-		}
 		}
 		
-		$combatCost = $d13->getGeneral('factions', $this->data['id'], 'costs', 'combat');
+		$combatCost = $d13->getGeneral('factions', $this->data['id'], 'costs', $type);
 		$okCombatCost = $this->checkCost($combatCost, 'combat');
 		
 		if ($okUnits)
@@ -1286,7 +1285,7 @@ class node
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			}
 
-			$d13->dbQuery('insert into combat (id, sender, recipient, focus, stage, start, duration, type) values ("' . $combatId . '", "' . $this->data['id'] . '", "' . $node->data['id'] . '", "' . $data['input']['attacker']['focus'] . '", "0", "' . strftime('%Y-%m-%d %H:%M:%S', time()) . '", "' . $duration . '", "' . $type . '")');
+			$d13->dbQuery('insert into combat (id, sender, recipient, focus, stage, start, duration, type, slot) values ("' . $combatId . '", "' . $this->data['id'] . '", "' . $node->data['id'] . '", "' . $data['input']['attacker']['focus'] . '", "0", "' . strftime('%Y-%m-%d %H:%M:%S', time()) . '", "' . $duration . '", "' . $type . '", "' . $slotId . '")');
 			if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			$d13->dbQuery('insert into combat_units (combat, id, value) values ' . implode(', ', $cuBuffer));
 			if ($d13->dbAffectedRows() == - 1) $ok = 0;
@@ -1761,60 +1760,7 @@ class node
 						if ($d13->dbAffectedRows() == - 1) {
 							$ok = 0;
 						}
-/*
-						// - - - - - send reports
 
-						if ($data['output']['attacker']['winner']) {
-							$attackerOutcome = $d13->getLangUI("won");
-						}
-						else {
-							$attackerOutcome = $d13->getLangUI("lost");
-						}
-
-						if ($data['output']['defender']['winner']) {
-							$defenderOutcome = $d13->getLangUI("won");
-						}
-						else {
-							$defenderOutcome = $d13->getLangUI("lost");
-						}
-
-						// - - - - - Assemble Report (TODO port to template file)
-
-						$msgBody = '<div style="text-align: center;">';
-
-						// - - - - - Attacker
-
-						foreach($data['output']['attacker']['groups'] as $key => $group) {
-							$msgBody.= '<div class="cell"><div class="unitBlock"><img class="unitBlock" src="templates/default/images/units/' . $$nodes['attacker']->data['faction'] . '/' . $group['unitId'] . '.png"></div><div class="unitBlock">' . $data['input']['attacker']['groups'][$key]['quantity'] . '</div><div class="unitBlock">' . $group['quantity'] . '</div></div>';
-						}
-
-						$msgBody.= '</div><div style="text-align: center;">' . $attackerOutcome . '</div><div style="text-align: center;">-----</div><div style="text-align: center;">' . $defenderOutcome . '</div><div style="text-align: center;">';
-
-						// - - - - - Defender
-
-						foreach($data['output']['defender']['groups'] as $key => $group) {
-
-							// - - - - - Unit
-
-							if ($group['type'] == 'unit') {
-								if ($data['input']['defender']['groups'][$key]['quantity']) {
-									$msgBody.= '<div class="cell"><div class="unitBlock">' . $group['quantity'] . '</div><div class="unitBlock">' . $data['input']['defender']['groups'][$key]['quantity'] . '</div><div class="unitBlock"><img class="unitBlock" src="templates/default/images/units/' . $$nodes['defender']->data['faction'] . '/' . $group['unitId'] . '.png"></div></div>';
-								}
-
-								// - - - - - Module
-
-							}
-							else
-							if ($group['type'] == 'module') {
-								if ($data['input']['defender']['groups'][$key]['input']) {
-									$msgBody.= '<div class="cell"><div class="unitBlock">' . $group['input'] . '</div><div class="unitBlock">' . $data['input']['defender']['groups'][$key]['input'] . '</div><div class="unitBlock"><img class="unitBlock" src="templates/default/images/units/' . $$nodes['defender']->data['faction'] . '/' . $group['unitId'] . '.png"></div></div>';
-								}
-							}
-						}
-
-						$msgBody.= '</div>';
-						$msgBody = $d13->dbRealEscapeString($msgBody);
-*/
 						// - - - - -
 
 						$attackerUser = new user();
@@ -1855,7 +1801,7 @@ class node
 					$$nodes['attacker']->getResources();
 					$result = $d13->dbQuery('select * from combat_units where combat="' . $combat['id'] . '"');
 					while ($group = $d13->dbFetch($result)) {
-						$d13->dbQuery('update units set value="' . $group['value'] . '" where node="' . $combat['sender'] . '" and id="' . $group['id'] . '"');
+						$d13->dbQuery('update units set value=value+"' . $group['value'] . '" where node="' . $combat['sender'] . '" and id="' . $group['id'] . '"');
 						if ($d13->dbAffectedRows() == - 1) {
 							$ok = 0;
 						}

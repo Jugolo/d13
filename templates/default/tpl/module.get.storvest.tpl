@@ -7,7 +7,7 @@
 	<div class="card card-shadow">
 
 		<div class="card-header">
-			<div class="d13-heading">{{tvar_moduleName}} (Level: {{tvar_moduleLevel}}/{{tvar_moduleMaxLevel}})</div>
+			<div class="d13-heading">{{tvar_moduleName}} {{tvar_levelLabel}}</div>
 			<a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 		</div>
 
