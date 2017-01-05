@@ -323,7 +323,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					$tvars['tvar_getHTMLNode'].= '</div>';
 				}
 
-				$tvars['tvar_getHTMLSectors'].= $d13->templateParse($d13->templateGet("sub.node.sector") , $tvars);
+				$tvars['tvar_getHTMLSectors'].= $d13->templateSubpage("sub.node.sector", $tvars);
 			}
 
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Build Queue of all Sectors
@@ -355,7 +355,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 						$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/modules/' . $node->data['faction'] . '/' . $image . '"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("modules", $node->data['faction'], $item['module'], "name") . '</div><div class="cell"><span id="build_' . $item['node'] . '_' . $item['slot'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("build_' . $item['node'] . '_' . $item['slot'] . '", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div><div class="cell"><a class="external" href="index.php?p=module&action=cancel&nodeId=' . $node->data['id'] . '&slotId=' . $item['slot'] . '"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
 					}
 				}
-				$tvars['tvar_getHTMLBuild'] = $d13->templateParse($d13->templateGet("sub.queue") , $tvars);
+				$tvars['tvar_getHTMLBuild'] = $d13->templateSubpage("sub.queue", $tvars);
 			}
 
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Research Queue of all Sectors
@@ -376,7 +376,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					$remaining = $item['start'] + $item['duration'] * 60 - time();
 					$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $node->data['faction'] . '/' . $item['technology'] . '.png"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("technologies", $node->data['faction'], $item['technology'], "name") . '</div><div class="cell"><span id="research_' . $item['node'] . '_' . $item['technology'] . '_' . $item['slot'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("research_' . $item['node'] . '_' . $item['technology'] . '_' . $item['slot'] .'", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div>'.$cancel.'<br>';
 				}
-				$tvars['tvar_getHTMLResearch'] = $d13->templateParse($d13->templateGet("sub.queue") , $tvars);
+				$tvars['tvar_getHTMLResearch'] = $d13->templateSubpage("sub.queue", $tvars);
 			}
 
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Craft Queue of all Sectors
@@ -401,7 +401,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					$remaining = $item['start'] + $item['duration'] * 60 - time();
 					$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $node->data['faction'] . '/' . $item['component'] . '.png"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("components", $node->data['faction'], $item['component'], "name") . '</div><div class="cell"><span id="craft_' . $item['node'] . '_' . $item['component'] . '_' . $item['slot'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("craft_' . $item['node'] . '_' . $item['component'] . '_' . $item['slot'] .'", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div>'.$cancel.'<br>';
 				}
-				$tvars['tvar_getHTMLCraft'] = $d13->templateParse($d13->templateGet("sub.queue") , $tvars);
+				$tvars['tvar_getHTMLCraft'] = $d13->templateSubpage("sub.queue", $tvars);
 			}
 
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Train Queue of all Sectors
@@ -427,7 +427,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					$tvars['tvar_winContent'].= '<div class="cell"><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $node->data['faction'] . '/' . $item['unit'] . '.png"> ' . $d13->getLangUI($action) . ' ' . $d13->getLangGL("units", $node->data['faction'], $item['unit'], "name") . '</div><div class="cell"><span id="train_' . $item['node'] . '_' . $item['unit'] . '_' . $item['slot'] .'">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("train_' . $item['node'] . '_' . $item['unit'] . '_' . $item['slot'] .'", "index.php?p=node&action=get&nodeId=' . $node->data['id'] . '");</script></div>'.$cancel.'<br>';
 				}
 
-				$tvars['tvar_getHTMLTrain'] = $d13->templateParse($d13->templateGet("sub.queue") , $tvars);
+				$tvars['tvar_getHTMLTrain'] = $d13->templateSubpage("sub.queue", $tvars);
 			}
 
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Combat Queue of all Sectors
@@ -470,14 +470,14 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					}
 				}
 
-				$tvars['tvar_getHTMLCombat'] = $d13->templateParse($d13->templateGet("sub.queue") , $tvars);
+				$tvars['tvar_getHTMLCombat'] = $d13->templateSubpage("sub.queue", $tvars);
 			}
 
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 		}
 
-		$d13->templateInject($d13->templateParse($d13->templateGet("sub.swiper.horizontal") , $tvars));
+		$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
 		$page = "node.get";
 		break;
 
@@ -552,12 +552,12 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					$tvars['tvar_factionName'] = $d13->getLangGL('factions', $faction['id'], 'name');
 					$tvars['tvar_factionText'] = $d13->getLangGL('factions', $faction['id'], 'description');
 					$tvars['tvar_factionID'] = $faction['id'];
-					$tvars['tvar_getHTMLFactions'].= $d13->templateParse($d13->templateGet("sub.node.faction") , $tvars);
+					$tvars['tvar_getHTMLFactions'].= $d13->templateSubpage("sub.node.faction", $tvars);
 				}
 			}
 		}
 
-		$d13->templateInject($d13->templateParse($d13->templateGet("sub.swiper.horizontal") , $tvars));
+		$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
 		$page = "node.random";
 		break;
 

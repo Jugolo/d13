@@ -47,7 +47,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        100
+        0
       ]
     },
     {
@@ -97,7 +97,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        101
+        1
       ]
     },
     {
@@ -147,7 +147,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        102
+        2, 102
       ]
     },
     {
@@ -552,7 +552,8 @@
         1,
         2,
         3,
-        4
+        4,
+        5
       ]
     },
     {

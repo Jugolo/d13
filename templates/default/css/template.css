@@ -24,11 +24,16 @@ img {
 }
 
 .tiny-card {
-	width: 160px;
-	height: auto;
+	width: 240px;
+	height: 240px;
 	border-radius: 5px;
-	text-align: center;
-	margin: auto;
+	font-size: 9pt;
+}
+
+.d13-unit {
+	width: 80px;
+	height: auto;
+	border: 0;
 }
 
 
@@ -88,9 +93,13 @@ img {
     filter: drop-shadow(2px 2px 2px #222);
 }
 
-.swiper-wrapper, .swiper-container, .swiper-slide {
+.swiper-wrapper,  {
 	width: 100%;
 	height: 98%;
+}
+
+.swiper-container, .swiper-slide {
+
 }
 
 .swiper-pagination-bullet {

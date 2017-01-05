@@ -61,6 +61,10 @@
         "name": "Currency",
         "description": "Allows the exchange of resources."
       },
+      "5": {
+        "name": "Iron Mining",
+        "description": "Allows accelerated mining of iron."
+      },
       "100": {
         "name": "Spearman Training",
         "description": "Increases fighting power of your Spearman units."

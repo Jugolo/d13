@@ -108,7 +108,7 @@ class d13_combat
 
 				// - - - - - Special rule for Module HP
 
-				if ($d13->getGeneral('defensiveModuleDamage')) {
+				if ($d13->getGeneral('options', 'defensiveModuleDamage')) {
 					$data['input']['defender']['groups'][$key]['hp'] = ($data['input']['defender']['groups'][$key]['input'] / $data['input']['defender']['groups'][$key]['maxInput']) * $data['input']['defender']['groups'][$key]['hp'];
 				}
 
@@ -174,7 +174,7 @@ class d13_combat
 
 			$baseDamage = ceil($data['input']['attacker']['trueDamage'] * $ratio);
 			$bonusDamage = 0;
-			foreach($d13->getGeneral('classes') [$d13->getUnit($data['input']['defender']['faction']) [$group['unitId']]['class']] as $classKey => $damageMod) {
+			foreach($d13->getGeneral('classes', $d13->getUnit($data['input']['defender']['faction'], $group['unitId'], 'class')) as $classKey => $damageMod) {
 				$bonusDamage+= floor($baseDamage * $classes['attacker'][$classKey] * $damageMod);
 			}
 
@@ -222,6 +222,143 @@ class d13_combat
 
 		return $data;
 	}
+
+	// ----------------------------------------------------------------------------------------
+	// doScoutCheck
+	// ----------------------------------------------------------------------------------------
+	
+	public static
+	
+	function doScoutCheck($data)
+	{
+	
+		global $d13;
+		
+		
+		
+		
+		
+		
+		
+	
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// doScout
+	// ----------------------------------------------------------------------------------------
+	
+	public static
+	
+	function doScout($data)
+	{
+	
+		global $d13;
+		
+		
+		
+		
+		
+		
+		
+	
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// doStealResources
+	// ----------------------------------------------------------------------------------------
+	
+	public static
+	
+	function doStealResources($data)
+	{
+	
+		global $d13;
+		
+		$resourceRatio = 10; 										//replace with % comparison of both players later
+		
+		// ============================== Calculate total Capacity and Ratio
+		
+		$totalResCapacity	= 0;
+		$totalResAvailable	= 0;
+		$resList = array();
+		
+		// - Attacker Capacity
+		foreach($data['input']['attacker']['groups'] as $key => $group) {
+			$unit = new d13_unit($group['unitId'], $node);
+			$stats = $unit->getStats();
+			$upgrades = $unit->getUpgrades();
+			
+			foreach($d13->getGeneral('stats') as $stat) {
+				$data['input']['attacker']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['quantity'];
+				$data['input']['attacker'][$stat]+= $data['input']['attacker']['groups'][$key][$stat];
+			}
+
+			$totalResCapacity += $data['input']['attacker']['groups'][$key]['capacity'];
+		}
+		
+		// - Defender Availability
+		$node = new node();
+		$status = $node->get('id', $data['input']['defender']['nodeId']);
+		
+		if ($status == 'ok') {
+			$node->getResources();
+			
+			foreach($d13->getResource() as $resource) {
+				if ($resource['active'] && $resource['type'] == 'dynamic' && $resource['carryable']) {
+					if ($this->resources[$resource['id']]['value'] > 0) {
+
+						$resAvailable = $this->resources[$resource['id']]['value'] * ($resourceRatio/100);
+						$totalResAvailable += $resAvailable;
+						$resList[] = array('id'=>$this->resources[$resource['id']]['value'], 'value'=>$resAvailable);
+
+					}
+				}
+			}
+		
+		}
+
+		// ============================== Check existing Loot
+		$continue = true;
+		
+		while ($continue) {
+		
+		
+		
+			//set false when capacity reached
+			//set false when loot ratio depleted
+			$continue = false;
+		
+		}
+		
+		// ============================== Check virtual Loot
+		if ($d13->getGeneral('options', 'bonusLoot')) {
+		
+		
+		
+		
+		}
+		
+		
+		// ============================== Process Data
+		/*
+		$d13->dbQuery('start transaction');
+		
+		$d13->dbQuery('update resources set value="' . $this->resources[$resource['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $resource['id'] . '"');
+
+		
+		if ($ok) {
+			$d13->dbQuery('commit');
+		}
+		else {
+			$d13->dbQuery('rollback');
+		}
+		*/
+		
+		// ============================== Return Data
+	
+	}
+	
+	
 	
 	// ----------------------------------------------------------------------------------------
 	// checkCombat
@@ -277,33 +414,37 @@ class d13_combat
 		}
 
 		// - - - - - Report Attacker
-
+		$name = $attackerNode->data['name'];
+		
 		foreach($data['output']['attacker']['groups'] as $key => $group) {
 			
-			$name = $d13->getLangGL('units', $attackerNode->data['faction'], $group['unitId'], 'name');
-			$class = $d13->getLangGL('classes', $d13->getUnit($attackerNode->data['faction'], $group['unitId'], 'class'));
-			$label = "(".$group['quantity']."/".$data['input']['attacker']['groups'][$key]['quantity'].")";
-			$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $attackerNode->data['faction'] . '/' . $d13->getUnit($attackerNode->data['faction'], $group['unitId'], 'image');
+			if ($data['input']['attacker']['groups'][$key]['quantity']) {
+			
+				$name = $d13->getLangGL('units', $attackerNode->data['faction'], $group['unitId'], 'name');
+				$class = $d13->getLangGL('classes', $d13->getUnit($attackerNode->data['faction'], $group['unitId'], 'class'));
+				$label = "(".$group['quantity']."/".$data['input']['attacker']['groups'][$key]['quantity'].")";
+				$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $attackerNode->data['faction'] . '/' . $d13->getUnit($attackerNode->data['faction'], $group['unitId'], 'image');
 					
-			$vars = array();
-			$vars['tvar_entryImage'] = $image;
-			$vars['tvar_entryName'] = $name;
-			$vars['tvar_entryClass'] = $class;
-			$vars['tvar_entryLabel'] = $label;
+				$vars = array();
+				$vars['tvar_entryImage'] = $image;
+				$vars['tvar_entryName'] = $name;
+				$vars['tvar_entryClass'] = $class;
+				$vars['tvar_entryLabel'] = $label;
 		
-			$html .= $d13->templateParse($d13->templateGet("sub.msg.entry") , $vars);
+				$html .= $d13->templateSubpage("sub.msg.entry", $tvars);
+			
+			}
 		}
 
 		if (!$other) {
-			$tvars['tvar_msgSelf'] = '';
 			$tvars['tvar_msgSelfRow'] = $html;
 		} else {
-			$tvars['tvar_msgOther'] = '';
 			$tvars['tvar_msgOtherRow'] = $html;
 		}
 
 		// - - - - - Report Defender
 		$html = '';
+		$name = $defenderNode->data['name'];
 	
 		foreach($data['output']['defender']['groups'] as $key => $group) {
 
@@ -311,19 +452,16 @@ class d13_combat
 				// - - - - - Unit
 				if ($data['input']['defender']['groups'][$key]['quantity']) {
 				
-					
 					$name = $d13->getLangGL('units', $defenderNode->data['faction'], $group['unitId'], 'name');
-					$class = $d13->getLangGL('classes', $d13->getUnit($defenderNode->data['faction'], $group['unitId'], 'class'));
 					$label = "(".$group['quantity']."/".$data['input']['defender']['groups'][$key]['quantity'].")";
 					$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $defenderNode->data['faction'] . '/' . $d13->getUnit($defenderNode->data['faction'], $group['unitId'], 'image');
 					
 					$vars = array();
 					$vars['tvar_entryImage'] = $image;
 					$vars['tvar_entryName'] = $name;
-					$vars['tvar_entryClass'] = $class;
+					$vars['tvar_entryClass'] = $owner;
 					$vars['tvar_entryLabel'] = $label;
-		
-					$html .= $d13->templateParse($d13->templateGet("sub.msg.entry") , $vars);
+					$html .= $d13->templateSubpage("sub.msg.entry", $vars);
 				
 				}
 
@@ -339,28 +477,24 @@ class d13_combat
 					$vars['tvar_entryImage'] = $image;
 					$vars['tvar_entryName'] = $name;
 					$vars['tvar_entryLabel'] = $label;
-		
-					$html .= $d13->templateParse($d13->templateGet("sub.msg.entry") , $vars);
+					$html .= $d13->templateSubpage("sub.msg.entry", $vars);
 				
 				}
 			}
 		}
 
 		if (!$other) {
-			$tvars['tvar_msgOther'] = '';
 			$tvars['tvar_msgOtherRow'] = $html;
 		} else {
-			$tvars['tvar_msgSelf'] = '';
 			$tvars['tvar_msgSelfRow'] = $html;
 		}
 
 		// - - - - Report Resources etc.
 
-		$tvars['tvar_msgSelfRes'] = '';
 		$tvars['tvar_msgSelfResRow'] = '';
 					
 		// - - - - - Return Report
-		$html = $d13->templateParse($d13->templateGet("msg.combat") , $tvars);
+		$html = $d13->templateSubpage("msg.combat", $tvars);
 		$html = $d13->dbRealEscapeString($html);
 		
 		return $html;

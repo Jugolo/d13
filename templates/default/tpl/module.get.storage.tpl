@@ -4,7 +4,7 @@
 
 <div class="d13-node" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/nodeBackground.png);">
 
-	<div class="card card-shadow">
+	<div class="card large-card card-shadow">
 
 		<div class="card-header">
 			<div class="d13-heading">{{tvar_moduleName}} {{tvar_levelLabel}}</div>
@@ -41,7 +41,7 @@
 					<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
 					<div class="item-inner">
 					<div class="item-title">{{tvar_ui_ratio}}</div>
-					<div class="item-after"><span class="badge">{{tvar_moduleRatio}}</span></div>
+					<div class="item-after"><span class="badge">{{tvar_base_Ratio}} [+{{tvar_plus_Ratio}}]</span></div>
 					</div>
 				</li>
 			

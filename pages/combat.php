@@ -197,11 +197,11 @@ if (isset($node)) {
 			$tvars['tvar_unitId'] = $id;
 			$tvars['tvar_unitAmount'] = $unit['value'];
 			$tvars['tvar_unitLevel'] = $unit['level'];
-			$tvars['tvar_unitsHTML'].= $d13->templateParse($d13->templateGet("sub.combat.unit") , $tvars);
+			$tvars['tvar_unitsHTML'].= $d13->templateSubpage("sub.combat.unit", $tvars);
 		}
 	}
 
-	$d13->templateInject($d13->templateParse($d13->templateGet("sub.swiper.horizontal") , $tvars));
+	$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
 
 	// - - - - Available Enemies
 	$tvars['tvar_nodeList'] = '<option>...</option>';

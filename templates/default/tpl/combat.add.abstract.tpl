@@ -1,5 +1,5 @@
 <div class="d13-node" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/nodeBackground.png);">
-	<div class="card card-shadow">
+	<div class="card large-card card-shadow">
 
   		<div class="card-header">
   			<div class="left">{{tvar_ui_combat}}: {{tvar_combatType}}</div>

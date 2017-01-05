@@ -145,6 +145,7 @@ $page = "message";
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 	switch ($_GET['action']) {
 	
+	// - - - - - Read Message
 	case 'get':
 		if (isset($msg->data['recipient'])) {
 			$tvars['tvar_senderName'] = $msg->data['senderName'];
@@ -155,7 +156,8 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		}
 
 		break;
-
+		
+	// - - - - - New Message
 	case 'add':
 		$recipient = $subject = $body = '';
 		if (isset($msg->data['id'])) {
@@ -201,8 +203,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			$vars['tvar_listImage'] = '<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/'.$new.'">';
 			$vars['tvar_listLabel'] = '<input type="checkbox" name="messageId[]" value="' . $message->data['id'] . '"> <a class="external" href="index.php?p=message&action=get&messageId=' . $message->data['id'] . '"' . $new . '>' . $message->data['subject'] . '</a>';
 			$vars['tvar_listAmount'] = $hours . ' {{tvar_ui_hours}} {{tvar_ui_ago}} <a class="external" href="?p=message&action=remove&messageId=' . $message->data['id'] . '"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
-			$html = $d13->templateParse($d13->templateGet("sub.module.listcontent") , $vars);
-			$tvars['tvar_messages'] .= $html;
+			$tvars['tvar_messages'] .= $d13->templateSubpage("sub.module.listcontent", $vars);
 		}
 
 		if (count($messages['messages'])) {
@@ -210,8 +211,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			$vars['tvar_listImage'] = '';
 			$vars['tvar_listLabel'] = '<a class="external" href="javascript: document.getElementById(\'messageList\').submit()">' . $d13->getLangUI("remove") . ' ' . $d13->getLangUI("selected") . '</a>';
 			$vars['tvar_listAmount'] = '<a class="external" href="javascript: document.getElementById(\'messageList\').submit()"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
-			$html = $d13->templateParse($d13->templateGet("sub.module.listcontent") , $vars);
-			$tvars['tvar_remove'] = $html;
+			$tvars['tvar_remove'] = $d13->templateSubpage("sub.module.listcontent", $vars);
 		}
 
 		if ($pageCount > 1) {
@@ -250,7 +250,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 }
 
 // ----------------------------------------------------------------------------------------
-// Parse & Render Template
+// Render Template
 // ----------------------------------------------------------------------------------------
 
 $d13->templateRender($page, $tvars);

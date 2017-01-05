@@ -17,16 +17,12 @@
 
 		<div class="list-block">
 			<ul>
-					
-				
-   			
+
 			<form method="post" action="?p=message&action=remove" id="messageList">
 			{{tvar_messages}}
 			{{tvar_remove}}
 			</form>
-			
-   			{{tvar_controls}}
-					
+	
 			</ul>
 			
 		</div>
@@ -35,7 +31,8 @@
 	</div>
 
 	<div class="card-footer">
-		<div><a class="external" href="?p=message&action=add">{{tvar_ui_send}}</a>{{tvar_removeAll}}</div>
+		<div class="left"><a class="external" href="?p=message&action=add">{{tvar_ui_send}}</a>{{tvar_removeAll}}</div>
+		<div class="right">{{tvar_controls}}</div>
 	</div>
 	
 </div>

@@ -12,7 +12,7 @@
 	<div class="row">
     	
 			<div class="col-25">
-				<img src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/technologies/{{tvar_nodeFaction}}/{{tvar_tid}}.png" width="80">
+				<img src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/technologies/{{tvar_nodeFaction}}/{{tvar_image}}" width="80">
 				<p class="d13-italic">{{tvar_techDescription}}</p>
 			</div>
 			

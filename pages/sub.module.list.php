@@ -33,8 +33,7 @@ function sub_module_list($node, $message)
 	}
 
 	// - - - - Add Slider Initalize at bottom of the page
-
-	$d13->templateInject($d13->templateParse($d13->templateGet("sub.swiper.horizontal") , $tvars));
+	$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
 	$d13->templateRender("module.list", $tvars);
 }
 

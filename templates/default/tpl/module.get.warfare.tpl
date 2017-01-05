@@ -4,7 +4,7 @@
 
 <div class="d13-node" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/nodeBackground.png);">
 
-	<div class="card card-shadow">
+	<div class="card large-card card-shadow">
 
 		<div class="card-header">
 			<div class="d13-heading">{{tvar_moduleName}} {{tvar_levelLabel}}</div>

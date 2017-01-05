@@ -36,7 +36,8 @@
     "moduleDemolish": true,
     "moduleUpgrade": true,
     "unitAttackOnly": false,
-    "defensiveModuleDamage": true
+    "defensiveModuleDamage": true,
+    "bonusLoot": true
   },
   "factors": {
     "storage": 10,

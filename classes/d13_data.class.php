@@ -162,19 +162,20 @@ class d13_data
 	function loadFromJSON($url)
 	{
    		
-		$cacheFile = CONST_INCLUDE_PATH . 'cache' . DIRECTORY_SEPARATOR . md5($url) . ".cache.php";
+		$cacheFile = CONST_INCLUDE_PATH . 'cache/data' . DIRECTORY_SEPARATOR . 'dta_'.md5($url) . ".cache.php";
 		
 		if (is_file($cacheFile) && filemtime($url) < filemtime($cacheFile)) {
 			$classConstruct = require_once $cacheFile;
 			return $classConstruct;
 		}
+		
 		$jsonString = file_get_contents($url);
 		if (!$jsonString) {
 			throw  new Exception('Cannot read url: ' . $url);
 		}
 		$jsonData = json_decode($jsonString, true);
 		
-		$name = md5($url);
+		$name = "dta_".md5($url);
 		$vars = var_export($jsonData, true);
 
 		$cacheFileData = '';

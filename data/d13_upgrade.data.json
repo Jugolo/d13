@@ -1412,6 +1412,179 @@
           "value": 0.5
         }
       ]
+    },
+        {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+        {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+         {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "stats": [
+        
+      ]
+    },
+    
+    {
+      "active": true,
+      "type": "harvest",
+      "id": 100,
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.5
+        }
+      ]
     }
+    
   ]
 ]

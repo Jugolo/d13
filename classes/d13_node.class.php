@@ -273,6 +273,7 @@ class node
 
 		foreach($d13->getAllResources() as $resource) {
 			$this->production[$resource['id']] = 0;
+			$this->production[$resource['id']] += $d13->getResourceByID($resource['id'], 'autoproduction');
 			$this->storage[$resource['id']] = $d13->getResourceByID($resource['id'], 'storage');
 			$this->resources[$resource['id']] = $tmp_resources[$resource['id']];
 		}
@@ -1335,7 +1336,7 @@ class node
 		$elapsed = ($time - strtotime($this->data['lastCheck'])) / 3600;
 		$ok = 1;
 		foreach($d13->getResource() as $resource) {
-			if ($resource['type'] == 'dynamic') {
+			if ($resource['active'] && $resource['type'] == 'dynamic') {
 				$this->resources[$resource['id']]['value']+= $this->production[$resource['id']] * $elapsed;
 				if ($this->storage[$resource['id']]) {
 				
@@ -1681,7 +1682,7 @@ class node
 
 						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - COMBAT AFTERMATH
 
-						$captureNode = true;
+						$overkill = true;
 						$$nodes['defender']->getResources();
 
 						// - - - - - Defender Groups
@@ -1708,7 +1709,7 @@ class node
 								}
 
 								if ($group['quantity']) {
-									$captureNode = false;
+									$overkill = false;
 								}
 
 								// - - - - - Modules
@@ -1724,7 +1725,7 @@ class node
 								// no lost count for modules
 
 								if ($group['input']) {
-									$captureNode = false;
+									$overkill = false;
 								}
 							}
 						}
@@ -1746,14 +1747,29 @@ class node
 							$ok = 0;
 						}
 
-
-						// $scout
-						// $raid
-						// $raze
-
-
+						// scout
+						// -> trigger scout report without harm if 'scout check' passed
+						// -> otherwise trigger battle
+						
+						// raid
+						// -> gain resources
+						// -> gain no resources
+						
+						// sabotage
+						// -> trigger special effect if scout check passed
+						// -> otherwise trigger battle
+						
+						// skirmish
+						// -> deal damage without harm if scout check passed
+						// -> otherwise trigger battle
+						
+						// raze
+						if ($combat['type'] == 'raze' && $overkill) {
+							$this->remove($$nodes['defender']->data['id']);
+						}
+						
 						// conquer
-						if ($combat['type'] == 'conquer' && $captureNode) {
+						if ($combat['type'] == 'conquer' && $overkill) {
 							$d13->dbQuery('update nodes set user="' . $$nodes['attacker']->data['user'] . '" where id="' . $$nodes['defender']->data['id'] . '"');
 						}
 
@@ -1771,7 +1787,7 @@ class node
 								$msg->data['sender'] = $attackerUser->data['name'];
 								$msg->data['recipient'] = $attackerUser->data['name'];
 								$msg->data['subject'] = $d13->getLangUI("combatReport") . ' - ' . $$nodes['defender']->data['name'];
-								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type']); #$msgBody;
+								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type']);
 								$msg->data['viewed'] = 0;
 								$msg->add();
 							}
@@ -1787,13 +1803,11 @@ class node
 								$msg->data['sender'] = $defenderUser->data['name'];
 								$msg->data['recipient'] = $defenderUser->data['name'];
 								$msg->data['subject'] = $d13->getLangUI("combatReport") . ' - ' . $$nodes['defender']->data['name'];
-								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type'], true); #$msgBody;
+								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type'], true);
 								$msg->data['viewed'] = 0;
 								$msg->add();
 							}
 						}
-
-						// \send reports
 
 					}
 				}

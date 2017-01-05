@@ -169,7 +169,7 @@ class d13
 
 	function templateSubpage($template, $vars = "")
 	{
-		return $this->tpl->render_subpage($template, $vars);
+		return $this->tpl->render($template, $vars);
 	}
 
 	public

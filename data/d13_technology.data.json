@@ -155,18 +155,29 @@
     {
       "id": 5,
       "image": "0.png",
-      "active": false,
+      "active": true,
       "priority": -1,
-      "duration": 0,
-      "maxLevel": 0,
+      "duration": 5,
+      "maxLevel": 1,
       "cost": [
-        
+        {
+          "resource": 0,
+          "value": 200
+        },
+        {
+          "resource": 1,
+          "value": 400
+        }
       ],
       "requirements": [
-        
+        {
+          "type": "technologies",
+          "id": 0,
+          "level": 3
+        }
       ],
       "upgrades": [
-        
+        100
       ]
     },
     {

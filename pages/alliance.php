@@ -390,7 +390,7 @@ if ($alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
 	$tvars['tvar_allianceRemove'] = '<a class="external" href="index.php?p=alliance&action=remove">' . $d13->getLangUI("remove") . '</a>';
 }
 
-$tvars['tvar_tpl_allianceMenu'] = $d13->templateParse($d13->templateGet("alliance.menu") , $tvars);
+$tvars['tvar_tpl_allianceMenu'] = $d13->templateSubpage("alliance.menu", $tvars);
 
 // - - - -
 

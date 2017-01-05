@@ -33,7 +33,7 @@ define("CONST_BASE_PATH", 			"http://www.".CONST_DOMAIN.CONST_DIRECTORY);
 define("CONST_EMAIL", 				"support@yourdomain.com");				// reply address shown when sending email
 
 //- - - - - OTHER SETTINGS
-define("CONST_FLAG_PROFILER", 		TRUE);
+define("CONST_FLAG_PROFILER", 		FALSE);
 define("CONST_SESSION_LIFETIME", 	2592000);
 define("CONST_COOKIE_LIFETIME", 	2592000);
 
