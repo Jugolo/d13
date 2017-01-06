@@ -372,15 +372,7 @@ class d13_combat
 	
 	
 	}
-	
-	#function assembleReport
-	#function assembleReportScout
-	#function assembleReportSkirmish
-	#function assembleReportRaid
-	#function assembleReportSabotage
-	#function assembleReportConquer
-	#function assembleReportRaze
-	
+
 	// ----------------------------------------------------------------------------------------
 	// assembleReport
 	// ----------------------------------------------------------------------------------------
@@ -399,53 +391,52 @@ class d13_combat
 
 		if (!$other) {
 			if ($data['output']['attacker']['winner']) {
-				$tvars['tvar_msgHeader'] = $d13->getLangUI("won");
+				$tvars['tvar_msgHeader'] = $d13->getLangUI($type) . ' ' . $d13->getLangUI("won");
 			}
 			else {
-				$tvars['tvar_msgHeader'] = $d13->getLangUI("lost");
+				$tvars['tvar_msgHeader'] = $d13->getLangUI($type) . ' ' . $d13->getLangUI("lost");
 			}
 		} else {
 			if ($data['output']['defender']['winner']) {
-				$tvars['tvar_msgHeader'] = $d13->getLangUI("won");
+				$tvars['tvar_msgHeader'] = $d13->getLangUI($type) . ' ' . $d13->getLangUI("won");
 			}
 			else {
-				$tvars['tvar_msgHeader'] = $d13->getLangUI("lost");
+				$tvars['tvar_msgHeader'] = $d13->getLangUI($type) . ' ' . $d13->getLangUI("lost");
 			}
 		}
 
 		// - - - - - Report Attacker
-		$name = $attackerNode->data['name'];
+		$html = '';
 		
 		foreach($data['output']['attacker']['groups'] as $key => $group) {
 			
 			if ($data['input']['attacker']['groups'][$key]['quantity']) {
 			
 				$name = $d13->getLangGL('units', $attackerNode->data['faction'], $group['unitId'], 'name');
-				$class = $d13->getLangGL('classes', $d13->getUnit($attackerNode->data['faction'], $group['unitId'], 'class'));
-				$label = "(".$group['quantity']."/".$data['input']['attacker']['groups'][$key]['quantity'].")";
+				$label = $data['input']['attacker']['groups'][$key]['quantity'].$group['quantity'];
 				$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $attackerNode->data['faction'] . '/' . $d13->getUnit($attackerNode->data['faction'], $group['unitId'], 'image');
 					
 				$vars = array();
-				$vars['tvar_entryImage'] = $image;
-				$vars['tvar_entryName'] = $name;
-				$vars['tvar_entryClass'] = $class;
-				$vars['tvar_entryLabel'] = $label;
+				$vars['tvar_listImage'] = '<img class="d13-resource" src="'.$image.'">';
+				$vars['tvar_listLabel'] = $name;
+				$vars['tvar_listAmount'] = $label;
 		
-				$html .= $d13->templateSubpage("sub.msg.entry", $tvars);
+				$html .= $d13->templateSubpage("sub.module.listcontent", $vars);
 			
 			}
 		}
 
 		if (!$other) {
+			$tvars['tvar_msgSelfRowName'] = $attackerNode->data['name'];
 			$tvars['tvar_msgSelfRow'] = $html;
 		} else {
+			$tvars['tvar_msgOtherRowName'] = $attackerNode->data['name'];
 			$tvars['tvar_msgOtherRow'] = $html;
 		}
 
 		// - - - - - Report Defender
 		$html = '';
-		$name = $defenderNode->data['name'];
-	
+		
 		foreach($data['output']['defender']['groups'] as $key => $group) {
 
 			if ($group['type'] == 'unit') {
@@ -453,15 +444,14 @@ class d13_combat
 				if ($data['input']['defender']['groups'][$key]['quantity']) {
 				
 					$name = $d13->getLangGL('units', $defenderNode->data['faction'], $group['unitId'], 'name');
-					$label = "(".$group['quantity']."/".$data['input']['defender']['groups'][$key]['quantity'].")";
+					$label = $data['input']['defender']['groups'][$key]['quantity']."/".$group['quantity'];
 					$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $defenderNode->data['faction'] . '/' . $d13->getUnit($defenderNode->data['faction'], $group['unitId'], 'image');
 					
 					$vars = array();
-					$vars['tvar_entryImage'] = $image;
-					$vars['tvar_entryName'] = $name;
-					$vars['tvar_entryClass'] = $owner;
-					$vars['tvar_entryLabel'] = $label;
-					$html .= $d13->templateSubpage("sub.msg.entry", $vars);
+					$vars['tvar_listImage'] = '<img class="d13-resource" src="'.$image.'">';
+					$vars['tvar_listLabel'] = $name;
+					$vars['tvar_listAmount'] = $label;
+					$html .= $d13->templateSubpage("sub.module.listcontent", $vars);
 				
 				}
 
@@ -470,28 +460,37 @@ class d13_combat
 				if ($data['input']['defender']['groups'][$key]['input']) {
 				
 					$name = $d13->getLangGL($defenderNode->data['faction'], $group['unitId'], 'name');
-					$label = "(".$group['input']."/".$data['input']['defender']['groups'][$key]['input'].")";
+					$label = $data['input']['defender']['groups'][$key]['input']."/".$group['input'];
 					$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $defenderNode->data['faction'] . '/' . $d13->getUnit($defenderNode->data['faction'], $group['unitId'], 'image');
 					
 					$vars = array();
-					$vars['tvar_entryImage'] = $image;
-					$vars['tvar_entryName'] = $name;
-					$vars['tvar_entryLabel'] = $label;
-					$html .= $d13->templateSubpage("sub.msg.entry", $vars);
+					$vars['tvar_listImage'] = '<img class="d13-resource" src="'.$image.'">';
+					$vars['tvar_listLabel'] = $name;
+					$vars['tvar_listAmount'] = $label;
+					$html .= $d13->templateSubpage("sub.module.listcontent", $vars);
 				
 				}
 			}
 		}
 
 		if (!$other) {
+			$tvars['tvar_msgOtherRowName'] = $defenderNode->data['name'];
 			$tvars['tvar_msgOtherRow'] = $html;
 		} else {
+			$tvars['tvar_msgSelfRowName'] = $defenderNode->data['name'];
 			$tvars['tvar_msgSelfRow'] = $html;
 		}
 
 		// - - - - Report Resources etc.
-
+		
+		$tvars['tvar_msgSelfResRowName'] = $d13->getLangUI("loot") . '' . $d13->getLangUI("resource");
 		$tvars['tvar_msgSelfResRow'] = '';
+		
+		// - - - - Report Scouting etc.
+
+		$tvars['tvar_msgSelfOtherRowName'] = '';
+		$tvars['tvar_msgSelfOtherRow'] = '';
+
 					
 		// - - - - - Return Report
 		$html = $d13->templateSubpage("msg.combat", $tvars);

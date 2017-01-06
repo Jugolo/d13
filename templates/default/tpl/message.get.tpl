@@ -11,17 +11,14 @@
 	</div>
 	
 	<div class="card-content">
-    	<div class="card-content-inner">
-		
-		<div class="content-block">
+    	
 		{{tvar_body}}
-		</div>
 		
 	</div>
   
   	<div class="card-footer">
 		<div class="left"><a class="external" href="?p=message&action=add&messageId={{tvar_id}}">{{tvar_ui_reply}}</a></div>
-		<div class="right">{{tvar_senderName}}</div>
+		<div class="right">{{tvar_ui_from}} {{tvar_senderName}}</div>
 	</div>
   
   

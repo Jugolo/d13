@@ -271,7 +271,7 @@ class d13_unit
 			}
 		}
 
-		// - - - - - - - - - - - - - - - STATS Component Upgrades
+		// - - - - - - - - - - - - - - - Component Upgrades
 
 		$unit_comp = array();
 		foreach($this->data['requirements'] as $requirement) {
@@ -283,7 +283,7 @@ class d13_unit
 			}
 		}
 
-		// - - - - - - - - - - - - - - - STATS Technology Upgrades
+		// - - - - - - - - - - - - - - - Technology Upgrades
 
 		$unit_upgrades = array();
 		foreach($this->node->technologies as $technology) {
@@ -298,7 +298,7 @@ class d13_unit
 					}
 				}
 
-				// - - - - - - - - - - - - - - - STATS Technology Upgrades
+				// - - - - - - - - - - - - - - - Technology Upgrades
 
 				$unit_upgrades[] = array(
 					'id' => $technology['id'],
@@ -308,12 +308,12 @@ class d13_unit
 			}
 		}
 
-		// - - - - - - - - - - - - - - - STATS Apply Upgrades
+		// - - - - - - - - - - - - - - - Apply Upgrades
 
 		foreach($unit_upgrades as $technology) {
 			foreach($technology['upgrades'] as $upgrade) {
-				if ($d13->getUpgrade($this->node->data['faction']) [$upgrade]['id'] == $this->data['unitId']) {
-					foreach($d13->getUpgrade($this->node->data['faction']) [$upgrade]['stats'] as $stats) {
+				if ($d13->getUpgrade($this->node->data['faction'], $upgrade, 'id') == $this->data['unitId'] && $d13->getUpgrade($this->node->data['faction'], $upgrade, 'type') == $this->data['type']) {
+					foreach($d13->getUpgrade($this->node->data['faction'], $upgrade, 'attributes') as $stats) {
 						if ($stats['stat'] == 'all') {
 							foreach($d13->getGeneral('stats') as $stat) {
 								$this->data['upgrade_' . $stat] = floor(misc::percentage($stats['value'] * $technology['level'], $this->data[$stat]));
@@ -398,10 +398,17 @@ class d13_unit
 		
 		$upgradeData = $this->getUpgrades();
 		
-		$tvars['tvar_unitId'] = $this->data['id'];
-		$tvars['tvar_unitType'] = $this->data['type'];
-		$tvars['tvar_unitClass'] = $this->data['class'];
-				
+		foreach ($this->data as $key => $value) {
+			if (!is_array($value)) {
+				$tvars['tvar_'.$key] = $value;
+			}
+		}
+		
+		$tvars['tvar_id'] = $this->data['id'];
+		$tvars['tvar_type'] = $this->data['type'];
+		$tvars['tvar_class'] = $this->data['class'];
+		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
+		
 		foreach($d13->getGeneral('stats') as $stat) {
 			$tvars['tvar_unit'.$stat] 			= $this->data[$stat];
 			$tvars['tvar_unit'.$stat.'Plus'] 	= "[+".$this->data['upgrade_'.$stat]."]";
@@ -425,19 +432,12 @@ class d13_unit
 			$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
 		}
 		
-		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
-		$tvars['tvar_unitImage'] = $this->data['image'];
-		$tvars['tvar_uid'] = $this->data['unitId'];
-		$tvars['tvar_unitName'] = $this->data['name'];
-		$tvars['tvar_unitDescription'] = $this->data['description'];
+
 		$tvars['tvar_unitValue'] = $this->node->units[$this->data['unitId']]['value'];
-		$tvars['tvar_unitType'] = $this->data['type'];
-		$tvars['tvar_unitClass'] = $this->data['class'];
 		
 		$tvars['tvar_unitLimit'] = $this->getMaxProduction();
 		#$tvars['tvar_unitDuration'] = misc::time_format((($this->data['duration'] - $this->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'train')) * 60);
-		$tvars['tvar_unitUpkeep'] = $this->data['upkeep'];
-		$tvars['tvar_unitUpkeepResource'] = $this->data['upkeepResource'];
+
 		$tvars['tvar_unitUpkeepResourceName'] = $d13->getLangGL('resources', $this->data['upkeepResource'], 'name');
 		
 		return $tvars;

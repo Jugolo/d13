@@ -37,7 +37,9 @@ V013 	- !!! THIS REPRESENTS THE NEXT UPDATE CONTENTS !!!
 			- Conquer
 			- Sabotage
 
-V012	* Added caching of template files
+V012	* Lots of Bugfixes
+		* Optimized caching
+		* Added caching of template files
 
 V011 	
 		* Added new attributes for units (vision, capacity, critical)

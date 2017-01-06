@@ -185,6 +185,8 @@
   "raze": "raze",
   "skirmish": "skirmish",
   "sabotage": "sabotage",
+  "loot": "loot",
+  "from": "from",
   "loginDisabled": "login disabled",
   "registrationDisabled": "registration disabled",
   "ipBanned": "IP banned",

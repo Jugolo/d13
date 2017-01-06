@@ -4,7 +4,7 @@
 	<div class="card large-card">
 
 	  <div class="card-header">
-		<div class="d13-heading">{{tvar_moduleName}}</div>
+		<div class="d13-heading">{{tvar_name}}</div>
 		<a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 	  </div>
   
@@ -15,9 +15,9 @@
 			
 				<div class="col-40">
 					<div class="d13-module" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
-					<img class="d13-module-inner" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_moduleTrueImage}}">
+					<img class="d13-module-inner" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_trueimage}}">
 					</div>
-					<p class="d13-italic">{{tvar_moduleDescription}}</p>
+					<p class="d13-italic">{{tvar_description}}</p>
 					{{tvar_linkData}}
 				</div>
 
@@ -38,7 +38,7 @@
 						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_ratio}}</div>
-						<div class="item-after"><span class="badge">{{tvar_moduleRatio}}</span></div>
+						<div class="item-after"><span class="badge">{{tvar_ratio}}</span></div>
 						</div>
 					</li>
 				
@@ -46,7 +46,7 @@
 						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_maxInput}}</div>
-						<div class="item-after"><span class="badge">{{tvar_moduleMaxInput}}</span></div>
+						<div class="item-after"><span class="badge">{{tvar_maxinput}}</span></div>
 						</div>
 					</li>
 				
@@ -54,7 +54,7 @@
 						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_maxInstances}}</div>
-						<div class="item-after"><span class="badge">{{tvar_moduleMaxInstances}}</span></div>
+						<div class="item-after"><span class="badge">{{tvar_maxinstances}}</span></div>
 						</div>
 					</li>
 				
@@ -62,7 +62,7 @@
 						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_add}} {{tvar_ui_duration}}</div>
-						<div class="item-after"><span class="badge">{{tvar_moduleDuration}} {{tvar_ui_minutes}}</span></div>
+						<div class="item-after"><span class="badge">{{tvar_duration}} {{tvar_ui_minutes}}</span></div>
 						</div>
 					</li>
 				
@@ -70,7 +70,7 @@
 						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_salvage}} {{tvar_ui_cost}}</div>
-						<div class="item-after"><span class="badge">{{tvar_moduleSalvage}}</span></div>
+						<div class="item-after"><span class="badge">{{tvar_salvage}}</span></div>
 						</div>
 					</li>
 				
@@ -78,7 +78,7 @@
 						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_removeDuration}}</div>
-						<div class="item-after"><span class="badge">{{tvar_moduleRemoveDuration}} {{tvar_ui_minutes}}</span></div>
+						<div class="item-after"><span class="badge">{{tvar_removeduration}} {{tvar_ui_minutes}}</span></div>
 						</div>
 					</li>
 				

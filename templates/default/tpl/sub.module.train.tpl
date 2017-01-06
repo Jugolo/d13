@@ -2,15 +2,15 @@
 	<div class="card large-card">
 		<div class="card-header">
 			<div class="d13-heading">
-				{{tvar_unitName}} ({{tvar_unitValue}})
+				{{tvar_name}} ({{tvar_unitValue}})
 			</div><a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 		</div>
 		<div class="card-content">
 			<div class="card-content-inner">
 				<div class="row">
 					<div class="col-25">
-						<img src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/units/{{tvar_nodeFaction}}/{{tvar_uid}}.png" width="80">
-						<p class="d13-italic">{{tvar_unitDescription}}</p>
+						<img src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/units/{{tvar_nodeFaction}}/{{tvar_image}}" width="80">
+						<p class="d13-italic">{{tvar_description}}</p>
 					</div>
 					<div class="col-75">
 						<div class="list-block">
@@ -19,12 +19,12 @@
 								<li class="item-content">
 									<div class="item-inner">
 										<div class="item-after">
-											{{tvar_ui_type}}: {{tvar_unitType}}
+											{{tvar_ui_type}}: {{tvar_type}}
 										</div>
 									</div>
 									<div class="item-inner">
 										<div class="item-after">
-											{{tvar_ui_class}}: {{tvar_unitClass}}
+											{{tvar_ui_class}}: {{tvar_class}}
 										</div>
 									</div>
 								</li>
@@ -36,16 +36,16 @@
 											{{tvar_ui_duration}}:
 										</div>
 										<div class="item-after">
-											<span class="badge">{{tvar_unitDuration}}</span>
+											<span class="badge">{{tvar_duration}}</span>
 										</div>
 									</div>
-									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_unitUpkeepResource}}.png" title="{{tvar_unitUpkeepResource}}"></div>
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_upkeepResource}}.png" title="{{tvar_upkeepResource}}"></div>
 									<div class="item-inner">
 										<div class="item-title">
 											{{tvar_ui_upkeep}}:
 										</div>
 										<div class="item-after">
-											<span class="badge">{{tvar_unitUpkeep}}</span>
+											<span class="badge">{{tvar_upkeep}}</span>
 										</div>
 									</div>
 								</li>

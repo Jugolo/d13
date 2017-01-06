@@ -151,7 +151,7 @@ class d13_tpl
 		}
 
 		// - - - Setup Mailbox
-
+/*
 		if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 			$umcl = "";
 			$umc = message::getUnreadCount($_SESSION[CONST_PREFIX . 'User']['id']);
@@ -165,6 +165,7 @@ class d13_tpl
 		else {
 			$tvars["tvar_global_umcl"] = "";
 		}
+*/
 
 		return $tvars;
 	}
@@ -185,16 +186,18 @@ class d13_tpl
 		$tvars = array_merge($tvars, $this->global_vars($vars));
 		$tvars = array_merge($tvars, $this->merge_ui_vars());
 
-		if (!empty($tvars)) {
-			
-			$id = 'n_';
-			if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
-				$id = $_SESSION[CONST_PREFIX . 'User']['id'] . "_";
-			}
+		$id = 'n_';
+		#if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
+		#		$id = $_SESSION[CONST_PREFIX . 'User']['id'] . "_";
+		#	}
 		
-			$name = 'tpl_' . $id . md5(serialize($vars)) . ".".$template.".tpl";
+		$name = 'tpl_' . $id . md5(serialize($vars)) . ".".$template.".tpl";
 	
-			$cacheFile = CONST_INCLUDE_PATH . 'cache/templates' . DIRECTORY_SEPARATOR . $name;
+		$cacheFile = CONST_INCLUDE_PATH . 'cache/templates' . DIRECTORY_SEPARATOR . $name;
+
+
+		if (!empty($tvars) && CONST_FLAG_CACHE) {
+			
 
 			if (is_file($cacheFile)) {
 				return file_get_contents($cacheFile);
@@ -204,14 +207,15 @@ class d13_tpl
 
 		$cacheFileData = $this->parse($this->get($template) , $tvars);
 		
-		if (!empty($tvars) && $cache) {
+		if (!empty($tvars) && CONST_FLAG_CACHE && $cache) {
 			file_put_contents($cacheFile, $cacheFileData);
 		}
 		
 		// Give a 5% chance of cache to be checked
-
-		if (rand(1, 100) <= 5) {
-			self::clear_cache();
+		if (CONST_FLAG_CACHE) {
+			if (rand(1, 100) <= 5) {
+				self::clear_cache();
+			}
 		}
 		
 		return $cacheFileData;

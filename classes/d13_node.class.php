@@ -709,16 +709,22 @@ class node
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						}
 						
-						$this->resources[$tmp_module->data['inputResource']]['value'] -= $input;
-						$d13->dbQuery('update resources set value="' . $this->resources[$tmp_module->data['inputResource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
-						if ($d13->dbAffectedRows() == - 1) $ok = 0;
-						$d13->dbQuery('update modules set input=input+"' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
-						if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						
+						if ($input != $this->modules[$slotId]['input']) {
+								
+							$status = $this->setModule($slotId, 0);
+							if ($status == 'done') {
+								$status = $this->setModule($slotId, $input);
+							}
+							
+							#$this->resources[$tmp_module->data['inputResource']]['value'] += ($this->modules[$slotId]['input'] - $input);
+							#$d13->dbQuery('update resources set value="' . $this->resources[$tmp_module->data['inputResource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
+							#if ($d13->dbAffectedRows() == - 1) $ok = 0;
+							#$d13->dbQuery('update modules set input=input-"' . ($this->modules[$slotId]['input'] - $input) . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+							#if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						
+						}
 
-						$this->getQueue('build');
-						#$lastBuild = count($this->queue['build']) - 1;
-						#if ($lastBuild > - 1) $start = strftime('%Y-%m-%d %H:%M:%S', $this->queue['build'][$lastBuild]['start'] + floor($this->queue['build'][$lastBuild]['duration'] * 60));
-						#else $start = strftime('%Y-%m-%d %H:%M:%S', time());
 						$start = strftime('%Y-%m-%d %H:%M:%S', time());
 						$duration = ceil(($tmp_module->data['duration'] * $d13->getGeneral('users', 'speed', 'build')) / $input);
 						
@@ -1340,7 +1346,7 @@ class node
 				$this->resources[$resource['id']]['value']+= $this->production[$resource['id']] * $elapsed;
 				if ($this->storage[$resource['id']]) {
 				
-					if ($resource['storage'] == true && $this->resources[$resource['id']]['value'] > $this->storage[$resource['id']]) {
+					if ($resource['limited'] == true && $this->resources[$resource['id']]['value'] > $this->storage[$resource['id']]) {
 						$this->resources[$resource['id']]['value'] = $this->storage[$resource['id']];
 					}
 

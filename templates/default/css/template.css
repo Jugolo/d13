@@ -16,17 +16,25 @@ img {
 }
 
 .large-card {
-	width: 97%;
-	height: auto;
+	width: 99%;
+	
 	border-radius: 10px;
 	text-align: center;
 	margin: auto;
+	padding: auto;
 }
 
 .tiny-card {
-	width: 240px;
-	height: 240px;
+	width: auto;
+	height: auto;
 	border-radius: 5px;
+	font-size: 9pt;
+	margin: auto;
+	padding: auto;
+
+}
+
+.tiny-card-header {
 	font-size: 9pt;
 }
 
@@ -62,7 +70,7 @@ img {
 
 .page-content {
 	text-align: center;
-	padding: 0 auto;
+	padding: 0;
 }
 
 .row {
@@ -93,13 +101,14 @@ img {
     filter: drop-shadow(2px 2px 2px #222);
 }
 
-.swiper-wrapper,  {
+.swiper-wrapper, .swiper-container, {
 	width: 100%;
-	height: 98%;
+	height: 100%;
 }
 
-.swiper-container, .swiper-slide {
-
+ .swiper-slide {
+	height: 100%,
+	width: auto;
 }
 
 .swiper-pagination-bullet {
@@ -319,6 +328,16 @@ p.d13-bold {
 	z-index:1000;
 	font-size:9pt;
 	top: 7%;
+	text-align:left;
+}
+
+div.cell
+{
+white-space: nowrap;
+ display: inline-block;
+ padding: 2px;
+ vertical-align: middle;
+ text-align:left;
 }
 
 .queue-1 {
@@ -335,16 +354,6 @@ p.d13-bold {
 
 .queue-4 {
 	right: 0%;
-}
-
-
-div.cell
-{
-white-space: nowrap;
- display: inline-block;
- padding: 2px;
- vertical-align: middle;
- text-align:left;
 }
 
 img.resource

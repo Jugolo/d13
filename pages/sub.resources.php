@@ -62,7 +62,9 @@ function sub_resources($node)
 						$tvars['tvar_resTooltip'] .= ' [+' . round($node->production[$resource['id']]) . $d13->getLangUI('perHour') . ']';
 					}
 					else {
-						$tvars['tvar_resTooltip'] .= ' [' . $d13->getLangUI("full") . ']';
+						if ($d13->getResourceByID($resource['id'], 'limited')) {
+							$tvars['tvar_resTooltip'] .= ' [' . $d13->getLangUI("full") . ']';
+						}
 					}
 				}
 

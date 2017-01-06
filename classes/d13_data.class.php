@@ -58,17 +58,14 @@ class d13_collection implements IteratorAggregate
 		}
 	}
 
-	public
-
-	function getByID($id, $field)
+	function getByID($id, $field="")
 	{
 		foreach($this->data as $entry) {
 			if ($entry['id'] == $id) {
-				if (isset($entry[$field])) {
+				if ($field = "" || !isset($entry[$field])) {
+					return $entry;
+				} else {
 					return $entry[$field];
-				}
-				else {
-					return NULL;
 				}
 			}
 		}

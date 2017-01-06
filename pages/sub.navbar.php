@@ -40,13 +40,32 @@ function sub_navbar($node)
 	foreach($d13->getGeneral('navigation') as $nav) {
 		if ($nav['active']) {
 			if (($nav['login'] && isset($_SESSION[CONST_PREFIX . 'User']['id'])) || (!$nav['login'] && !isset($_SESSION[CONST_PREFIX . 'User']['id']))) {
-				$pass = true;
+				
 				$nodeId = 0;
-				$html = '<a class="tooltip-bottom link external" data-tooltip="' . $d13->getLangUI($nav['name']) . '" href="index.php?p=' . $nav['link'] . '&nodeId=' . $nodeId . '"><span><img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/' . $nav['icon'] . '.png"></span></a>';
+				
+				//- - - No Trigger
+				if ($nav['trigger'] == '') {
+					$icon = $nav['images'][0]['image'];
+					$class = $nav['images'][0]['class'];
+					
+				//- - - Message Trigger
+				} else if ($nav['trigger'] == 'messages' && isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
+				
+					$umc = message::getUnreadCount($_SESSION[CONST_PREFIX . 'User']['id']);
+					if ($umc <= 0) {
+						$icon = $nav['images'][0]['image'];
+						$class = $nav['images'][0]['class'];
+					} else {
+						$icon = $nav['images'][1]['image'];
+						$class = $nav['images'][1]['class'];
+					}
+					
+				}
+				
+				$html = '<a class="tooltip-bottom link external" data-tooltip="' . $d13->getLangUI($nav['name']) . '" href="index.php?p=' . $nav['link'] . '&nodeId=' . $nodeId . '"><span><img class="'.$class.' resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/' . $icon . '"></span></a>';
 				if ($nav['class'] == 'left') {
 					$html_left.= $html;
-				}
-				else {
+				} else {
 					$html_right.= $html;
 				}
 			}

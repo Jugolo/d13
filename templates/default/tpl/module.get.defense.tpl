@@ -7,7 +7,7 @@
 	<div class="card large-card card-shadow">
 
 		<div class="card-header">
-			<div class="d13-heading">{{tvar_moduleName}} {{tvar_levelLabel}}</div>
+			<div class="d13-heading">{{tvar_name}} {{tvar_levelLabel}}</div>
 			<a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 		</div>
 
@@ -18,9 +18,9 @@
 	
 			<div class="col-40">
 				<div class="d13-module" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
-				<img class="d13-module-inner" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_moduleImage}}">
+				<img class="d13-module-inner" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_image}}">
 				</div>
-				<p class="d13-italic">{{tvar_moduleDescription}}</p>
+				<p class="d13-italic">{{tvar_description}}</p>
 				{{tvar_linkData}}
 			</div>
 		
@@ -33,7 +33,7 @@
 					<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
 					<div class="item-inner">
 					<div class="item-title">{{tvar_ui_maxInput}}</div>
-					<div class="item-after"><span class="badge">{{tvar_moduleMaxInput}}</span></div>
+					<div class="item-after"><span class="badge">{{tvar_base_maxinput}} [+{{tvar_upgrade_maxinput}}]</span></div>
 					</div>
 				</li>
 			
@@ -63,7 +63,16 @@
 					<div class="item-after">{{tvar_ui_critical}}: {{tvar_unitCritical}} {{tvar_unitCriticalPlus}}</div>
 					</div>
 				</li>
-			
+				
+				<li class="item-content">
+					<div class="item-inner">
+					<div class="item-after">{{tvar_ui_vision}}: {{tvar_unitVision}} {{tvar_unitVisionPlus}}</div>
+					</div>
+					<div class="item-inner">
+					<div class="item-after"></div>
+					</div>
+				</li>
+				
 				<li class="item-content">
 					<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
 					<div class="item-inner">

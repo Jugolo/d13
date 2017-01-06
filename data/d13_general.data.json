@@ -40,7 +40,7 @@
     "bonusLoot": true
   },
   "factors": {
-    "storage": 10,
+    "storage": 1,
     "production": 1,
     "movement": 10
   },
@@ -52,7 +52,19 @@
       "class": "left",
       "name": "home",
       "link": "index",
-      "icon": "home"
+      "trigger": "",
+      "images": [
+      	 {
+          "level": 0,
+          "image": "home.png",
+          "class": ""
+        },
+        {
+          "level": 1,
+          "image": "home.png",
+          "class": ""
+        }
+      ]
     },
     {
       "active": true,
@@ -61,7 +73,19 @@
       "class": "left",
       "name": "login",
       "link": "login&action=login",
-      "icon": "exitRight"
+      "trigger": "",
+      "images": [
+      	 {
+          "level": 0,
+          "image": "exitRight.png",
+          "class": ""
+        },
+        {
+          "level": 1,
+          "image": "exitRight.png",
+          "class": ""
+        }
+      ]
     },
     {
       "active": true,
@@ -70,7 +94,19 @@
       "class": "left",
       "name": "register",
       "link": "register",
-      "icon": "key"
+      "trigger": "",
+      "images": [
+      	 {
+          "level": 0,
+          "image": "key.png",
+          "class": ""
+        },
+        {
+          "level": 1,
+          "image": "key.png",
+          "class": ""
+        }
+      ]
     },
     {
       "active": true,
@@ -79,7 +115,19 @@
       "class": "right",
       "name": "terms",
       "link": "terms",
-      "icon": "buttonX"
+      "trigger": "",
+      "images": [
+      	 {
+          "level": 0,
+          "image": "buttonX.png",
+          "class": ""
+        },
+        {
+          "level": 1,
+          "image": "buttonX.png",
+          "class": ""
+        }
+      ]
     },
     {
       "active": true,
@@ -88,7 +136,19 @@
       "class": "right",
       "name": "credits",
       "link": "credits",
-      "icon": "buttonY"
+      "trigger": "",
+      "images": [
+      	 {
+          "level": 0,
+          "image": "buttonY.png",
+          "class": ""
+        },
+        {
+          "level": 1,
+          "image": "buttonY.png",
+          "class": ""
+        }
+      ]
     },
     {
       "active": true,
@@ -97,7 +157,19 @@
       "class": "left",
       "name": "nodes",
       "link": "node&action=list",
-      "icon": "home"
+      "trigger": "",
+      "images": [
+      	 {
+          "level": 0,
+          "image": "home.png",
+          "class": ""
+        },
+        {
+          "level": 1,
+          "image": "home.png",
+          "class": ""
+        }
+      ]
     },
     {
       "active": true,
@@ -106,7 +178,19 @@
       "class": "left",
       "name": "messages",
       "link": "message&action=list",
-      "icon": "message{{tvar_global_umcl}}"
+      "trigger": "messages",
+      "images": [
+      	 {
+          "level": 0,
+          "image": "message_off.png",
+          "class": ""
+        },
+        {
+          "level": 1,
+          "image": "message_on.png",
+          "class": "animated wobble"
+        }
+      ]
     },
     {
       "active": true,
@@ -115,7 +199,19 @@
       "class": "left",
       "name": "account",
       "link": "account",
-      "icon": "wrench"
+      "trigger": "",
+      "images": [
+      	 {
+          "level": 0,
+          "image": "wrench.png",
+          "class": ""
+        },
+        {
+          "level": 1,
+          "image": "wrench.png",
+          "class": ""
+        }
+      ]
     },
     {
       "active": true,
@@ -124,7 +220,19 @@
       "class": "right",
       "name": "logout",
       "link": "logout",
-      "icon": "door"
+      "trigger": "",
+      "images": [
+      	 {
+          "level": 0,
+          "image": "door.png",
+          "class": ""
+        },
+        {
+          "level": 1,
+          "image": "door.png",
+          "class": ""
+        }
+      ]
     }
   ],
   "factions": [
@@ -367,7 +475,10 @@
     "speed",
     "vision",
     "capacity",
-    "critical"
+    "critical",
+    "maxinput",
+    "ratio",
+    "duration"
   ],
   "userstats": {
     "level": {

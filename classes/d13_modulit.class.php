@@ -296,7 +296,7 @@ class d13_modulit
 
 				// - - - - - - - - - - - - - - - STATS by level
 
-				if (isset($upgrade['stats']) && $this->data['level'] > 1) {
+				if (isset($upgrade['attributes']) && $this->data['level'] > 1) {
 					$unit_upgrades[] = array(
 						'id' => $upgrade['id'],
 						'level' => $this->data['level'],
@@ -349,7 +349,7 @@ class d13_modulit
 		foreach($unit_upgrades as $technology) {
 			foreach($technology['upgrades'] as $upgrade) {
 				if ($d13->getUpgrade($this->node->data['faction']) [$upgrade]['id'] == $this->data['moduleId']) {
-					foreach($d13->getUpgrade($this->node->data['faction']) [$upgrade]['stats'] as $stats) {
+					foreach($d13->getUpgrade($this->node->data['faction']) [$upgrade]['attributes'] as $stats) {
 						if ($stats['stat'] == 'all') {
 							foreach($d13->getGeneral('stats') as $stat) {
 								$this->data['upgrade_' . $stat] = floor(misc::percentage($stats['value'] * $technology['level'], $this->data[$stat]));
@@ -363,6 +363,31 @@ class d13_modulit
 			}
 		}
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getTemplateVariables
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getTemplateVariables()
+	{
+		global $d13;
+		$tvars = array();
+		$tvars = $this->getStats();
+		
+		foreach ($this->data as $key => $value) {
+			if (!is_array($value)) {
+				$tvars['tvar_'.$key] = $value;
+			}
+		}
+		
+		return $tvars;	
+	}
+
+
 }
 
 // =====================================================================================EOF

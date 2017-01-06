@@ -7,7 +7,7 @@
 	<div class="card large-card card-shadow">
 
 		<div class="card-header">
-			<div class="d13-heading">{{tvar_moduleName}} {{tvar_levelLabel}}</div>
+			<div class="d13-heading">{{tvar_name}} {{tvar_levelLabel}}</div>
 			<a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 		</div>
 
@@ -18,9 +18,9 @@
 	
 			<div class="col-40">
 				<div class="d13-module" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
-				<img class="d13-module-inner" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_moduleImage}}">
+				<img class="d13-module-inner" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_image}}">
 				</div>
-				<p class="d13-italic">{{tvar_moduleDescription}}</p>
+				<p class="d13-italic">{{tvar_description}}</p>
 				{{tvar_linkData}}
 			</div>
 			
