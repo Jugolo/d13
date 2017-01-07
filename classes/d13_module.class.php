@@ -611,7 +611,7 @@ class d13_module
 		if ($d13->getGeneral('options', 'moduleUpgrade') && $this->data['level'] < $this->data['maxLevel']) {
 			
 			foreach($this->data['cost'] as $key => $cost) {
-				$html.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div><div class="cell">' . $cost['value'] . '</div>';
+				$html.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div><div class="cell">' . $cost['value'] . '</div>';
 			}
 		}
 
@@ -658,7 +658,7 @@ class d13_module
 					$image = $requirement['id'];
 				}
 
-				$html.= '<div class="cell">' . $value . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $tooltip . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div>';
+				$html.= '<div class="cell">' . $value . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $tooltip . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div>';
 			}
 		}
 
@@ -842,7 +842,7 @@ class d13_module_warfare extends d13_module
 			foreach($this->node->units as $uid => $unit) {
 				
 				if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
-					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
+					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
 					$tvars['tvar_listLabel'] = $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'];
 					$tvars['tvar_listAmount'] = $unit['value'];
 					$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
@@ -853,11 +853,11 @@ class d13_module_warfare extends d13_module
 			if ($i>0) {
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $d13->getLangUI("unit") . " " . $d13->getLangUI("inventory") . '</a>';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			} else {
 				$html.= '<p class="buttons-row theme-gray">';
-				$html.= '<a href="#" class="button">' . $d13->getLangUI("unit") . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '<a href="#" class="button">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
 				$html.= '</p>';
 			}
 		}
@@ -1120,7 +1120,7 @@ class d13_module_storage extends d13_module
 			
 			foreach($this->node->resources as $uid => $unit) {
 				if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
-					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $uid . '.png" title="' . $d13->getLangGL('resources', $uid, 'name') . '">';
+					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $uid . '.png" title="' . $d13->getLangGL('resources', $uid, 'name') . '">';
 					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $uid, 'name');
 					$tvars['tvar_listAmount'] = floor($unit['value']);
 					$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
@@ -1133,11 +1133,11 @@ class d13_module_storage extends d13_module
 			if ($i > 0) {
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $d13->getLangUI("resource") . " " . $d13->getLangUI("inventory") . '</a>';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			} else {
 				$html.= '<p class="buttons-row theme-gray">';
-				$html.= '<a href="#" class="button">' . $d13->getLangUI("resource") . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '<a href="#" class="button">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
 				$html.= '</p>';
 			}
 		
@@ -1200,7 +1200,7 @@ class d13_module_storage extends d13_module
 		if (isset($this->data['storedResource'])) {
 			foreach($this->data['storedResource'] as $res) {
 				if ($d13->getResource($res, 'active')) {
-					$html.= $d13->getLangUI('storage') . '<a class="tooltip-left" data-tooltip="' . $d13->getLangUI('storage') . ' ' . $d13->getLangGL("resources", $res, "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $d13->getLangGL("resources", $res, "name") . '"></a>';
+					$html.= $d13->getLangUI('storage') . '<a class="tooltip-left" data-tooltip="' . $d13->getLangUI('storage') . ' ' . $d13->getLangGL("resources", $res, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $d13->getLangGL("resources", $res, "name") . '"></a>';
 				}
 			}
 		}
@@ -1256,7 +1256,7 @@ class d13_module_harvest extends d13_module
 			
 			foreach($this->node->resources as $rid => $res) {
 				if ($d13->getResource($res['id'], 'active') && $res['value'] > 0) {
-					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
+					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
 					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $rid, 'name');
 					$tvars['tvar_listAmount'] = floor($res['value']);
 					$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
@@ -1266,11 +1266,11 @@ class d13_module_harvest extends d13_module
 			if ($i>0) {
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $d13->getLangUI("resource") . " " . $d13->getLangUI("inventory") . '</a>';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			} else {
 				$html.= '<p class="buttons-row theme-gray">';
-				$html.= '<a href="#" class="button">' . $d13->getLangUI("resource") . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '<a href="#" class="button">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
 				$html.= '</p>';
 			}
 		}
@@ -1332,7 +1332,7 @@ class d13_module_harvest extends d13_module
 		if (isset($this->data['outputResource'])) {
 			foreach($this->data['outputResource'] as $res) {
 				if ($d13->getResource($res, 'active')) {
-					$html.= '' . $d13->getLangUI('production') . '<a class="tooltip-left" data-tooltip="' . $d13->getLangUI('production') . " " . $d13->getLangGL("resources", $res, "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $d13->getLangGL("resources", $res, "name") . '"></a>';
+					$html.= '' . $d13->getLangUI('production') . '<a class="tooltip-left" data-tooltip="' . $d13->getLangUI('production') . " " . $d13->getLangGL("resources", $res, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $d13->getLangGL("resources", $res, "name") . '"></a>';
 				}
 			}
 		}
@@ -1377,7 +1377,7 @@ class d13_module_craft extends d13_module
 				if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
 					if ($unit['value'] > 0) {
 						
-						$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'] . '">';
+						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'] . '">';
 						$tvars['tvar_listLabel'] = $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'];
 						$tvars['tvar_listAmount'] = $unit['value'];
 						$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
@@ -1388,11 +1388,11 @@ class d13_module_craft extends d13_module
 			if ($i>0) {
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $d13->getLangUI("component") . " " . $d13->getLangUI("inventory") . '</a>';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			} else {
 				$html.= '<p class="buttons-row theme-gray">';
-				$html.= '<a href="#" class="button">' . $d13->getLangUI("component") . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '<a href="#" class="button">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
 				$html.= '</p>';
 			}
 		}
@@ -1433,7 +1433,7 @@ class d13_module_craft extends d13_module
 			if ($component['active'] && in_array($cid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
 				$costData = '';
 				foreach($component['cost'] as $key => $cost) {
-					$costData.= '<div class="cell">' . ($cost['value'] * $d13->getGeneral('users', 'cost', 'craft')) . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div>';
+					$costData.= '<div class="cell">' . ($cost['value'] * $d13->getGeneral('users', 'cost', 'craft')) . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div>';
 				}
 
 				if (!count($component['requirements'])) {
@@ -1442,7 +1442,7 @@ class d13_module_craft extends d13_module
 				else {
 					$requirementsData = '';
 					foreach($component['requirements'] as $key => $requirement) {
-						$requirementsData.= '<div class="cell">' . $requirement['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $requirement['id'] . '.png" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div>';
+						$requirementsData.= '<div class="cell">' . $requirement['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $requirement['id'] . '.png" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div>';
 					}
 				}
 
@@ -1543,7 +1543,7 @@ class d13_module_craft extends d13_module
 					$remaining = misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
 					$tvars = array();;
-					$tvars['tvar_listImage'] 	= '<img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $item['component'] . '.png">';
+					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $item['component'] . '.png">';
 					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $d13->getLangGL("components", $this->node->data['faction'], $item['component'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="craft_' . $item['id'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("craft_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelComponent&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&craftId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 				
@@ -1608,7 +1608,7 @@ class d13_module_craft extends d13_module
 		if (isset($this->data['components'])) {
 			foreach($this->data['components'] as $component) {
 				if ($d13->getComponent($this->node->data['faction'], $component, 'active')) {
-					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("components", $this->node->data['faction'], $component) ["name"] . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $component . '.png" title="' . $d13->getLangGL("components", $this->node->data['faction'], $component) ["name"] . '"></a>';
+					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("components", $this->node->data['faction'], $component) ["name"] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $component . '.png" title="' . $d13->getLangGL("components", $this->node->data['faction'], $component) ["name"] . '"></a>';
 				}
 			}
 		}
@@ -1652,7 +1652,7 @@ class d13_module_train extends d13_module
 			foreach($this->node->units as $uid => $unit) {
 				if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'units'))) {
 					if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
-						$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
+						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
 						$tvars['tvar_listLabel'] = $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'];
 						$tvars['tvar_listAmount'] = $unit['value'];
 						$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
@@ -1663,11 +1663,11 @@ class d13_module_train extends d13_module
 			if ($i>0) {
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $d13->getLangUI("unit") . " " . $d13->getLangUI("inventory") . '</a>';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			} else {
 				$html.= '<p class="buttons-row theme-gray">';
-				$html.= '<a href="#" class="button">' . $d13->getLangUI("unit") . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '<a href="#" class="button">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
 				$html.= '</p>';
 			}
 		}
@@ -1760,7 +1760,7 @@ class d13_module_train extends d13_module
 					$remaining = misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
 					$tvars = array();;
-					$tvars['tvar_listImage'] 	= '<img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $item['unit'] . '.png">';
+					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $item['unit'] . '.png">';
 					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $d13->getLangGL("units", $this->node->data['faction'], $item['unit'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="train_' . $item['id'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("train_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelUnit&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&trainId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 				
@@ -1825,7 +1825,7 @@ class d13_module_train extends d13_module
 		if (isset($this->node->data['units'])) {
 			foreach($this->node->data['units'] as $unit) {
 				if ($d13->getUnit($this->node->data['faction'], $unit, 'active')) {
-					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("units", $this->node->data['faction'], $unit) ["name"] . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $unit . '.png" title="' . $d13->getLangGL("units", $this->node->data['faction'], $unit) ["name"] . '"></a>';
+					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("units", $this->node->data['faction'], $unit) ["name"] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $unit . '.png" title="' . $d13->getLangGL("units", $this->node->data['faction'], $unit) ["name"] . '"></a>';
 				}
 			}
 		}
@@ -1868,7 +1868,7 @@ class d13_module_research extends d13_module
 			foreach($d13->getTechnology($this->node->data['faction']) as $tid => $tech) {
 				if ($tech['active'] && in_array($tid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'technologies'))) {
 					if ($this->node->technologies[$tid]['level'] > 0) {
-						$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $tid . '.png" title="' . $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['name'] . '">';
+						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $tid . '.png" title="' . $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['name'] . '">';
 						$tvars['tvar_listLabel'] = $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['name'];
 						$tvars['tvar_listAmount'] = $d13->getLangUI("level") . " " . $this->node->technologies[$tid]['level'];
 						$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
@@ -1879,11 +1879,11 @@ class d13_module_research extends d13_module
 			if ($i>0) {
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $d13->getLangUI("technology") . " " . $d13->getLangUI("inventory") . '</a>';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			}else {
 				$html.= '<p class="buttons-row theme-gray">';
-				$html.= '<a href="#" class="button">' . $d13->getLangUI("technology") . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '<a href="#" class="button">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
 				$html.= '</p>';
 			}
 		}
@@ -1927,7 +1927,7 @@ class d13_module_research extends d13_module
 
 				$costData = '';
 				foreach($technology['cost'] as $key => $cost) {
-					$costData.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div><div class="cell">' . ($cost['value'] * $d13->getGeneral('users', 'cost', 'research')) . '</div>';
+					$costData.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div><div class="cell">' . ($cost['value'] * $d13->getGeneral('users', 'cost', 'research')) . '</div>';
 				}
 
 				if (!count($technology['requirements'])) {
@@ -1936,7 +1936,7 @@ class d13_module_research extends d13_module
 				else {
 					$requirementsData = '';
 					foreach($technology['requirements'] as $key => $requirement) {
-						$requirementsData.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $requirement['id'] . '.png" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div><div class="cell">' . $requirement['level'] . '</div>';
+						$requirementsData.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $requirement['id'] . '.png" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div><div class="cell">' . $requirement['level'] . '</div>';
 					}
 				}
 
@@ -2019,7 +2019,7 @@ class d13_module_research extends d13_module
 					$remaining = ($item['start'] + $item['duration'] ) - time();
 					
 					$tvars = array();;
-					$tvars['tvar_listImage'] 	= '<img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $d13->getTechnology($this->node->data['faction'], $item['technology'], 'image') .'">';
+					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $d13->getTechnology($this->node->data['faction'], $item['technology'], 'image') .'">';
 					$tvars['tvar_listLabel'] 	= $d13->getLangGL("technologies", $this->node->data['faction'], $item['technology'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="research_' . $item['technology'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("research_' . $item['technology'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelTechnology&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&technologyId=' . $item['technology'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 				
@@ -2083,7 +2083,7 @@ class d13_module_research extends d13_module
 		if (isset($this->data['technologies'])) {
 			foreach($this->data['technologies'] as $technology) {
 				if ($d13->getTechnology($this->node->data['faction'], $technology, 'active')) {
-					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology) ["name"] . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $technology . '.png" title="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology) ["name"] . '"></a>';
+					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology) ["name"] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $technology . '.png" title="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology) ["name"] . '"></a>';
 				}
 			}
 		}
@@ -2268,7 +2268,7 @@ class d13_module_command extends d13_module
 			
 			foreach($this->node->resources as $rid => $res) {
 				if ($d13->getResource($res['id'], 'active') && $res['value'] > 0) {
-					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
+					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
 					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $rid, 'name');
 					$tvars['tvar_listAmount'] = floor($res['value']);
 					$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
@@ -2278,11 +2278,11 @@ class d13_module_command extends d13_module
 			if ($i>0) {
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $d13->getLangUI("resource") . " " . $d13->getLangUI("inventory") . '</a>';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			} else {
 				$html.= '<p class="buttons-row theme-gray">';
-				$html.= '<a href="#" class="button">' . $d13->getLangUI("resource") . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '<a href="#" class="button">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
 				$html.= '</p>';
 			}
 		}
@@ -2738,7 +2738,7 @@ class d13_module_storvest extends d13_module
 			
 			foreach($this->node->resources as $uid => $unit) {
 				if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
-					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $uid . '.png" title="' . $d13->getLangGL('resources', $uid, 'name') . '">';
+					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $uid . '.png" title="' . $d13->getLangGL('resources', $uid, 'name') . '">';
 					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $uid, 'name');
 					$tvars['tvar_listAmount'] = floor($unit['value']);
 					$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
@@ -2748,11 +2748,11 @@ class d13_module_storvest extends d13_module
 			if ($i > 0) {
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $d13->getLangUI("resource") . " " . $d13->getLangUI("inventory") . '</a>';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			} else {
 				$html.= '<p class="buttons-row theme-gray">';
-				$html.= '<a href="#" class="button">' . $d13->getLangUI("resource") . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
+				$html.= '<a href="#" class="button">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
 				$html.= '</p>';
 			}
 		
@@ -2815,8 +2815,8 @@ class d13_module_storvest extends d13_module
 		if (isset($this->data['storedResource'])) {
 			foreach($this->data['storedResource'] as $res) {
 				if ($d13->getResource($res, 'active')) {
-					$html.= $d13->getLangUI('production') . '<a class="tooltip-left" data-tooltip="' . $d13->getLangUI('production') . ' ' . $d13->getLangGL("resources", $res, "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $d13->getLangGL("resources", $res, "name") . '"></a>';
-					$html.= ' ' . $d13->getLangUI('storage') . '<a class="tooltip-left" data-tooltip="' . $d13->getLangUI('storage') . ' ' . $d13->getLangGL("resources", $res, "name") . '"><img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $d13->getLangGL("resources", $res, "name") . '"></a>';
+					$html.= $d13->getLangUI('production') . '<a class="tooltip-left" data-tooltip="' . $d13->getLangUI('production') . ' ' . $d13->getLangGL("resources", $res, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $d13->getLangGL("resources", $res, "name") . '"></a>';
+					$html.= ' ' . $d13->getLangUI('storage') . '<a class="tooltip-left" data-tooltip="' . $d13->getLangUI('storage') . ' ' . $d13->getLangGL("resources", $res, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $d13->getLangGL("resources", $res, "name") . '"></a>';
 				}
 			}
 		}

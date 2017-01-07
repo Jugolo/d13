@@ -5,7 +5,7 @@
 
 	  <div class="card-header">
 		<div class="d13-heading">{{tvar_name}}</div>
-		<a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
+		<a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 	  </div>
   
 	  <div class="card-content">
@@ -25,25 +25,18 @@
 				
 					<div class="list-block">
 					<ul>
-				
+					
 					<li class="item-content">
-						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
+						<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
 						<div class="item-inner">
-						<div class="item-title">{{tvar_ui_input}}</div>
-						<div class="item-after"><span class="badge">{{tvar_moduleInputName}}</span></div>
+						<div class="item-title">{{tvar_ui_maxInstances}}</div>
+						<div class="item-after"><span class="badge">{{tvar_maxinstances}}</span></div>
 						</div>
 					</li>
-				
+
+					
 					<li class="item-content">
-						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
-						<div class="item-inner">
-						<div class="item-title">{{tvar_ui_ratio}}</div>
-						<div class="item-after"><span class="badge">{{tvar_ratio}}</span></div>
-						</div>
-					</li>
-				
-					<li class="item-content">
-						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
+						<div class="item-media"><a href="#" class="tooltip" data-tooltip="{{tvar_moduleInputName}}"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></a></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_maxInput}}</div>
 						<div class="item-after"><span class="badge">{{tvar_maxinput}}</span></div>
@@ -51,37 +44,23 @@
 					</li>
 				
 					<li class="item-content">
-						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
+						<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
 						<div class="item-inner">
-						<div class="item-title">{{tvar_ui_maxInstances}}</div>
-						<div class="item-after"><span class="badge">{{tvar_maxinstances}}</span></div>
+						<div class="item-title">{{tvar_ui_ratio}}</div>
+						<div class="item-after"><span class="badge">{{tvar_ratio}}</span></div>
 						</div>
 					</li>
 				
+				
+				
 					<li class="item-content">
-						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
+						<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_add}} {{tvar_ui_duration}}</div>
 						<div class="item-after"><span class="badge">{{tvar_duration}} {{tvar_ui_minutes}}</span></div>
 						</div>
 					</li>
-				
-					<li class="item-content">
-						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
-						<div class="item-inner">
-						<div class="item-title">{{tvar_ui_salvage}} {{tvar_ui_cost}}</div>
-						<div class="item-after"><span class="badge">{{tvar_salvage}}</span></div>
-						</div>
-					</li>
-				
-					<li class="item-content">
-						<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
-						<div class="item-inner">
-						<div class="item-title">{{tvar_ui_removeDuration}}</div>
-						<div class="item-after"><span class="badge">{{tvar_removeduration}} {{tvar_ui_minutes}}</span></div>
-						</div>
-					</li>
-				
+							
 					<li class="item-content">
 						<div class="item-media">{{tvar_costIcon}}</div>
 						<div class="item-inner">

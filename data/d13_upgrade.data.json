@@ -32,6 +32,23 @@
       "active": true,
       "type": "unit",
       "id": 1,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -43,6 +60,23 @@
       "active": true,
       "type": "unit",
       "id": 2,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -54,6 +88,23 @@
       "active": true,
       "type": "unit",
       "id": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -65,6 +116,23 @@
       "active": true,
       "type": "unit",
       "id": 4,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -76,6 +144,23 @@
       "active": true,
       "type": "unit",
       "id": 5,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -87,6 +172,23 @@
       "active": true,
       "type": "unit",
       "id": 6,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -98,6 +200,23 @@
       "active": true,
       "type": "unit",
       "id": 7,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -109,6 +228,23 @@
       "active": true,
       "type": "unit",
       "id": 8,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -120,6 +256,23 @@
       "active": true,
       "type": "unit",
       "id": 9,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -131,6 +284,23 @@
       "active": true,
       "type": "unit",
       "id": 10,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -142,6 +312,23 @@
       "active": true,
       "type": "unit",
       "id": 11,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -153,6 +340,23 @@
       "active": true,
       "type": "unit",
       "id": 12,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -164,6 +368,23 @@
       "active": true,
       "type": "unit",
       "id": 13,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -175,6 +396,23 @@
       "active": true,
       "type": "unit",
       "id": 14,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -186,6 +424,23 @@
       "active": true,
       "type": "unit",
       "id": 15,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -197,6 +452,23 @@
       "active": true,
       "type": "unit",
       "id": 16,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",

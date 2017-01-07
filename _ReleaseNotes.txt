@@ -22,10 +22,6 @@ V013 	- !!! THIS REPRESENTS THE NEXT UPDATE CONTENTS !!!
 		* Marching units now shown in the Warfare type building as well
 		* Players can send one army marching per Warfare building they have, multiple only
 		  possible with multiple warfare buildings
-		* All active tasks (craft/train/research/armies) an now be cancelled, either from
-		  the queue overview in the town view or directly from the building itself. buildings
-		  and building upgrades can also be cancelled - but only from the main town view.
-		* Some resources are now automagically produced if the admin wants to.
 		
 		* Basic Combat System implemented
 		
@@ -37,12 +33,16 @@ V013 	- !!! THIS REPRESENTS THE NEXT UPDATE CONTENTS !!!
 			- Conquer
 			- Sabotage
 
-V012	* Indirect/Multi upgrades now possible
+V012	* All active tasks (craft/train/research/armies) an now be cancelled, either from
+		  the queue overview in the town view or directly from the building itself. buildings
+		  and building upgrades can also be cancelled - but only from the main town view.
+		* Some resources are now automagically produced if the admin wants to.
+		* Indirect/Multi upgrades now possible
 			(each technology can now affect an upgrade, that upgrade can affect either
 			 one or more units or one or more buildings)
 		* Lots of Bugfixes
-		* Optimized/Optional templates caching
 		* Added caching of template files
+		* Optimized/Optional templates caching
 
 V011 	
 		* Added new attributes for units (vision, capacity, critical)

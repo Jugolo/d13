@@ -7,7 +7,7 @@
     	prevButton: '.swiper-button-prev',
     	pagination: '.swiper-pagination',
         paginationClickable: true,
-        preloadImage: false,
+        preloadImage: true,
         slidesPerView: 'auto',
         lazyLoading: true
 	});

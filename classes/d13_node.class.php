@@ -1376,7 +1376,7 @@ class node
 		$this->getQueue('research');
 		$ok = 1;
 		foreach($this->queue['research'] as $entry) {
-			$entry['end'] = $entry['start'] + floor($entry['duration'] * 60);
+			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			if ($entry['end'] <= $time) {
 				$this->technologies[$entry['technology']]['level']++;
 				$d13->dbQuery('update technologies set level="' . $this->technologies[$entry['technology']]['level'] . '" where node="' . $this->data['id'] . '" and id="' . $entry['technology'] . '"');
@@ -1406,7 +1406,7 @@ class node
 		$this->getQueue('build');
 		$ok = 1;
 		foreach($this->queue['build'] as $entry) {
-			$entry['end'] = $entry['start'] + floor($entry['duration'] * 60);
+			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			if ($entry['end'] <= $time) {
 
 				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - BUILD
@@ -1492,7 +1492,7 @@ class node
 		$this->getQueue('craft');
 		$ok = 1;
 		foreach($this->queue['craft'] as $entry) {
-			$entry['end'] = $entry['start'] + floor($entry['duration'] * 60);
+			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			if ($entry['end'] <= $time) {
 				if (!$entry['stage']) {
 					$this->components[$entry['component']]['value']+= $entry['quantity'];
@@ -1546,7 +1546,7 @@ class node
 		$this->getQueue('train');
 		$ok = 1;
 		foreach($this->queue['train'] as $entry) {
-			$entry['end'] = $entry['start'] + floor($entry['duration'] * 60);
+			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			if ($entry['end'] <= $time) {
 				if (!$entry['stage']) {
 					$this->units[$entry['unit']]['value']+= $entry['quantity'];
@@ -1598,7 +1598,7 @@ class node
 		$ok = 1;
 		
 		foreach($this->queue['combat'] as $combat) {
-			$combat['end'] = $combat['start'] + floor($combat['duration'] * 60);
+			$combat['end'] = $combat['start'] + floor($combat['duration']);
 			if ($combat['end'] <= $time) {
 				$otherNode = new node();
 				if ($combat['sender'] == $this->data['id']) {

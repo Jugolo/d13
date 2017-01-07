@@ -62,7 +62,7 @@ function sub_navbar($node)
 					
 				}
 				
-				$html = '<a class="tooltip-bottom link external" data-tooltip="' . $d13->getLangUI($nav['name']) . '" href="index.php?p=' . $nav['link'] . '&nodeId=' . $nodeId . '"><span><img class="'.$class.' resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/' . $icon . '"></span></a>';
+				$html = '<a class="tooltip-bottom link external" data-tooltip="' . $d13->getLangUI($nav['name']) . '" href="index.php?p=' . $nav['link'] . '&nodeId=' . $nodeId . '"><span><img class="'.$class.' d13-icon" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/' . $icon . '"></span></a>';
 				if ($nav['class'] == 'left') {
 					$html_left.= $html;
 				} else {

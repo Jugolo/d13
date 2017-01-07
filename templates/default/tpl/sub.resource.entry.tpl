@@ -1,7 +1,7 @@
 <a class="tooltip-bottom" data-tooltip="{{tvar_resTooltip}}">
 	<div class="chip">
     	<div class="chip-media">
-        	<img src="templates/{{tvar_global_template}}/images/resources/{{tvar_resImage}}">
+        	<img class="d13-resource" src="templates/{{tvar_global_template}}/images/resources/{{tvar_resImage}}">
     	</div>
     	<div class="chip-label">
     		<b>{{tvar_resValue}}</b>
