@@ -37,7 +37,7 @@ function sub_navbar($node)
 	}
 	
 	// - - - Place all Navigation Options
-	foreach($d13->getGeneral('navigation') as $nav) {
+	foreach($d13->getNavigation() as $nav) {
 		if ($nav['active']) {
 			if (($nav['login'] && isset($_SESSION[CONST_PREFIX . 'User']['id'])) || (!$nav['login'] && !isset($_SESSION[CONST_PREFIX . 'User']['id']))) {
 				

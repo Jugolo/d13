@@ -67,80 +67,6 @@ class d13
 	}
 
 	// ========================================================================================
-	//								DATA WRAPPER METHODS
-	// ========================================================================================
-
-	public
-
-	function getResource()
-	{
-		return $this->data->resources->get(func_get_args());
-	}
-
-	public
-
-	function getResourceByKey($key, $field)
-	{
-		return $this->data->resources->getByKey($key, $field);
-	}
-
-	public
-
-	function getResourceByID($id, $field)
-	{
-		return $this->data->resources->getByID($id, $field);
-	}
-
-	public
-
-	function getAllResources()
-	{
-		return $this->data->resources->getAll();
-	}
-
-	public
-
-	function getGeneral()
-	{
-		return $this->data->general->get(func_get_args());
-	}
-
-	public
-
-	function getUpgrade()
-	{
-		return $this->data->upgrades->get(func_get_args());
-	}
-
-	public
-
-	function getModule()
-	{
-		return $this->data->modules->get(func_get_args());
-	}
-
-	public
-
-	function getComponent()
-	{
-		return $this->data->components->get(func_get_args());
-	}
-
-	public
-
-	function getTechnology()
-	{
-		return $this->data->technologies->get(func_get_args());
-	}
-
-	public
-
-	function getUnit()
-	{
-		return $this->data->units->get(func_get_args());
-	}
-
-	// ========================================================================================
 	//								TEMPLATE WRAPPER METHODS
 	// ========================================================================================
 
@@ -212,8 +138,72 @@ class d13
 	}
 
 	// ========================================================================================
-	//								... WRAPPER METHODS
+	//								DATA WRAPPER METHODS
 	// ========================================================================================
+
+	public
+
+	function getResource()
+	{
+		return $this->data->resources->get(func_get_args());
+	}
+
+	public
+
+	function getGeneral()
+	{
+		return $this->data->general->get(func_get_args());
+	}
+
+	public
+
+	function getNavigation()
+	{
+		return $this->data->navigation->get(func_get_args());
+	}
+
+	public
+
+	function getFaction()
+	{
+		return $this->data->factions->get(func_get_args());
+	}
+
+	public
+
+	function getUpgrade()
+	{
+		return $this->data->upgrades->get(func_get_args());
+	}
+
+	public
+
+	function getModule()
+	{
+		return $this->data->modules->get(func_get_args());
+	}
+
+	public
+
+	function getComponent()
+	{
+		return $this->data->components->get(func_get_args());
+	}
+
+	public
+
+	function getTechnology()
+	{
+		return $this->data->technologies->get(func_get_args());
+	}
+
+	public
+
+	function getUnit()
+	{
+		return $this->data->units->get(func_get_args());
+	}
+
 	// ========================================================================================
 	//								OTHER WRAPPER METHODS
 	// ========================================================================================

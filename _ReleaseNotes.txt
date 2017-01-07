@@ -37,8 +37,11 @@ V013 	- !!! THIS REPRESENTS THE NEXT UPDATE CONTENTS !!!
 			- Conquer
 			- Sabotage
 
-V012	* Lots of Bugfixes
-		* Optimized caching
+V012	* Indirect/Multi upgrades now possible
+			(each technology can now affect an upgrade, that upgrade can affect either
+			 one or more units or one or more buildings)
+		* Lots of Bugfixes
+		* Optimized/Optional templates caching
 		* Added caching of template files
 
 V011 	

@@ -271,98 +271,96 @@ class d13_modulit
 	// ----------------------------------------------------------------------------------------
 
 	public
-
+	
 	function checkUpgrades()
 	{
 		global $d13;
-		$unit_upgrades = array();
-
-		// - - - - - - - - - - - - - - - COST & ATTRIBUTES
-
-		foreach($d13->getUpgrade($this->node->data['faction']) as $upgrade) {
-			if ($upgrade['type'] == $this->data['type'] && $upgrade['id'] == $this->data['moduleId']) {
-
-				// - - - - - - - - - - - - - - - COST
-
-				if (isset($upgrade['cost'])) {
-					$this->data['cost_upgrade'] = $upgrade['cost'];
-				}
-
-				// - - - - - - - - - - - - - - - ATTRIBUTES
-
-				if (isset($upgrade['attributes'])) {
-					$this->data['attributes_upgrade'] = $upgrade['attributes'];
-				}
-
-				// - - - - - - - - - - - - - - - STATS by level
-
-				if (isset($upgrade['attributes']) && $this->data['level'] > 1) {
-					$unit_upgrades[] = array(
-						'id' => $upgrade['id'],
-						'level' => $this->data['level'],
-						'upgrades' => array(
-							$upgrade['id']
-						)
-					);
+		
+		$my_upgrades = array();
+				
+		// - - - - - - - - - - - - - - - MODULE UPGRADES
+		if (!empty($this->data['upgrades']) && $this->data['type'] != 'unit' && $this->data['level'] > 1) {
+			foreach ($this->data['upgrades'] as $upgrade_id) {
+				$tmp_upgrade = $d13->getUpgrade($this->node->data['faction'], $upgrade_id);
+				if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $this->data['upgrades'])) {
+					$tmp_upgrade['level'] = $this->data['level'];
+					$my_upgrades[] = $tmp_upgrade;
 				}
 			}
 		}
-
-		// - - - - - - - - - - - - - - - STATS Component Upgrades
-
-		$unit_comp = array();
-		foreach($this->data['requirements'] as $requirement) {
-			if ($requirement['type'] == 'components' && $requirement['active']) {
-				$unit_comp[] = array(
-					'id' => $requirement['id'],
-					'amount' => $requirement['value']
-				);
-			}
-		}
-
-		// - - - - - - - - - - - - - - - STATS Technology Upgrades
-
+		
+		#print_r($my_upgrades);
+		
+		// - - - - - - - - - - - - - - - TECHNOLOGY UPGRADES
+		$tmp_list = array();
 		foreach($this->node->technologies as $technology) {
 			if ($technology['level'] > 0) {
-				foreach($unit_comp as $component) {
-					if ($component['id'] == $technology['id']) {
-						$unit_upgrades[] = array(
-							'id' => $technology['id'],
-							'level' => $technology['level'] * $component['amount'],
-							'upgrades' => $d13->getTechnology($this->node->data['faction'], $technology['id'], 'upgrades')
-						);
-					}
+				$tmp_technology = $d13->getTechnology($this->node->data['faction'], $technology['id']);
+				foreach ($tmp_technology['upgrades'] as $tmp_upgrade) {
+					$tmp_levels[$tmp_upgrade] = $technology['level'];
+					$tmp_list[] = $tmp_upgrade;
 				}
-
-				// - - - - - - - - - - - - - - - STATS Technology Upgrades
-
-				$unit_upgrades[] = array(
-					'id' => $technology['id'],
-					'level' => $technology['level'],
-					'upgrades' => $d13->getTechnology($this->node->data['faction'], $technology['id'], 'upgrades')
-				);
 			}
 		}
-
-		// - - - - - - - - - - - - - - - STATS Apply Upgrades
-
-		foreach($unit_upgrades as $technology) {
-			foreach($technology['upgrades'] as $upgrade) {
-				if ($d13->getUpgrade($this->node->data['faction']) [$upgrade]['id'] == $this->data['moduleId']) {
-					foreach($d13->getUpgrade($this->node->data['faction']) [$upgrade]['attributes'] as $stats) {
-						if ($stats['stat'] == 'all') {
-							foreach($d13->getGeneral('stats') as $stat) {
-								$this->data['upgrade_' . $stat] = floor(misc::percentage($stats['value'] * $technology['level'], $this->data[$stat]));
-							}
-						}
-						else {
-							$this->data['upgrade_' . $stats['stat']] = floor(misc::percentage($stats['value'] * $technology['level'], $this->data[$stats['stat']]));
-						}
+		
+		if (!empty($tmp_list)) {
+			foreach ($d13->getUpgrade($this->node->data['faction']) as $tmp_upgrade) {
+				if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $tmp_list)) {
+					
+					
+					$pass = false;
+					if (empty($tmp_upgrade['targets']) && ($tmp_upgrade['type'] == $this->data['type'])) {
+						$pass = true;
+					} else if (!empty($tmp_upgrade['targets']) && in_array($this->data['id'], $tmp_upgrade['targets'])) {
+						$pass = true;
+					}
+					
+					
+					
+					if ($pass) {
+						$tmp_upgrade['level'] = $tmp_levels[$tmp_upgrade['id']];
+						$my_upgrades[] = $tmp_upgrade;
+						unset($tmp_list[$tmp_upgrade['id']]);
 					}
 				}
 			}
 		}
+		
+		// - - - - - - - - - - - - - - - APPLY UPGRADES
+		if (!empty($my_upgrades)) {
+			foreach ($my_upgrades as $upgrade) {
+			
+				//- - - Cost Upgrade
+				if (isset($upgrade['cost'])) {
+					$this->data['upgrade_cost'] = $upgrade['cost'];
+				}
+		
+				//- - - Requirements Upgrade
+				if (isset($upgrade['requirements'])) {
+					$this->data['upgrade_requirements'] = $upgrade['requirements'];
+				}
+				
+				//- - - Attributes Upgrade
+				foreach ($upgrade['attributes'] as $attribute) {
+					
+					if ($attribute['stat'] == 'all' && ($this->data['type'] == 'unit' || $this->data['type'] == 'defense')) {
+						foreach($d13->getGeneral('stats') as $stat) {
+							$value = $attribute['value'] * $upgrade['level'];
+							#$this->data[$stat] += $value;
+							$this->data['upgrade_' . strtolower($stat)] += $value;
+						}
+					} else if ($attribute['stat'] != 'all') {
+						$value = $attribute['value'] * $upgrade['level'];
+						$this->data[$attribute['stat']] += $value;
+						$this->data['upgrade_' . strtolower($attribute['stat'])] += $value;
+					}
+				}
+		
+			}
+		}
+	
 	}
+
 	
 	// ----------------------------------------------------------------------------------------
 	// getTemplateVariables

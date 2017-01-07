@@ -33,7 +33,7 @@
 							<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
 							<div class="item-inner">
 							<div class="item-title">{{tvar_ui_duration}}</div>
-							<div class="item-after"><span class="badge">{{tvar_techDuration}}</span></div>
+							<div class="item-after"><span class="badge">{{tvar_Duration}}</span></div>
 							</div>
 						</li>
 

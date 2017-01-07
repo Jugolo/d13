@@ -150,23 +150,6 @@ class d13_tpl
 			$tvars["tpl_pvar_message"] = "";
 		}
 
-		// - - - Setup Mailbox
-/*
-		if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
-			$umcl = "";
-			$umc = message::getUnreadCount($_SESSION[CONST_PREFIX . 'User']['id']);
-			if ($umc > 0) {
-				$tvars["tvar_global_umcl"] = "_on";
-			}
-			else {
-				$tvars["tvar_global_umcl"] = "_off";
-			}
-		}
-		else {
-			$tvars["tvar_global_umcl"] = "";
-		}
-*/
-
 		return $tvars;
 	}
 
@@ -195,10 +178,7 @@ class d13_tpl
 	
 		$cacheFile = CONST_INCLUDE_PATH . 'cache/templates' . DIRECTORY_SEPARATOR . $name;
 
-
 		if (!empty($tvars) && CONST_FLAG_CACHE) {
-			
-
 			if (is_file($cacheFile)) {
 				return file_get_contents($cacheFile);
 			}

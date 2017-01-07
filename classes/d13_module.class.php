@@ -106,7 +106,6 @@ class d13_module
 	{
 		$this->setNode($node);
 		$this->setAttributes($moduleId, $slotId, $type);
-		$this->getModuleImage();
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -137,19 +136,20 @@ class d13_module
 	function checkUpgrades()
 	{
 		global $d13;
-		$my_upgrades = array();
 		
+		$my_upgrades = array();
+				
 		// - - - - - - - - - - - - - - - MODULE UPGRADES
-		if ($this->data['type'] != 'unit' && $this->data['level'] > 1) {
+		if (!empty($this->data['upgrades']) && $this->data['type'] != 'unit' && $this->data['level'] > 1) {
 			foreach ($this->data['upgrades'] as $upgrade_id) {
 				$tmp_upgrade = $d13->getUpgrade($this->node->data['faction'], $upgrade_id);
-				if ($tmp_upgrade['active']) {
+				if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $this->data['upgrades'])) {
 					$tmp_upgrade['level'] = $this->data['level'];
 					$my_upgrades[] = $tmp_upgrade;
 				}
 			}
 		}
-
+		
 		// - - - - - - - - - - - - - - - TECHNOLOGY UPGRADES
 		$tmp_list = array();
 		foreach($this->node->technologies as $technology) {
@@ -161,17 +161,30 @@ class d13_module
 				}
 			}
 		}
-
+		
 		if (!empty($tmp_list)) {
 			foreach ($d13->getUpgrade($this->node->data['faction']) as $tmp_upgrade) {
 				if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $tmp_list)) {
-					$tmp_upgrade['level'] = $tmp_levels[$tmp_upgrade['id']];
-					$my_upgrades[] = $tmp_upgrade;
-					unset($tmp_list[$tmp_upgrade['id']]);
+					
+					
+					$pass = false;
+					if (empty($tmp_upgrade['targets']) && ($tmp_upgrade['type'] == $this->data['type'])) {
+						$pass = true;
+					} else if (!empty($tmp_upgrade['targets']) && in_array($this->data['id'], $tmp_upgrade['targets'])) {
+						$pass = true;
+					}
+					
+					
+					
+					if ($pass) {
+						$tmp_upgrade['level'] = $tmp_levels[$tmp_upgrade['id']];
+						$my_upgrades[] = $tmp_upgrade;
+						unset($tmp_list[$tmp_upgrade['id']]);
+					}
 				}
 			}
 		}
-
+		
 		// - - - - - - - - - - - - - - - APPLY UPGRADES
 		if (!empty($my_upgrades)) {
 			foreach ($my_upgrades as $upgrade) {
@@ -189,15 +202,13 @@ class d13_module
 				//- - - Attributes Upgrade
 				foreach ($upgrade['attributes'] as $attribute) {
 					
-					if ($attribute['stat'] == 'all' && ($this->data['type'] == 'unit' || $this->data['type'] == 'defense')) {
+					if ($attribute['stat'] == 'all' && ($this->data['type'] == 'unit')) {
 						foreach($d13->getGeneral('stats') as $stat) {
-							#$value = floor(misc::percentage($attribute['value'] * $upgrade['level'], $this->data[$stat]));
 							$value = $attribute['value'] * $upgrade['level'];
 							$this->data[$stat] += $value;
 							$this->data['upgrade_' . strtolower($stat)] += $value;
 						}
 					} else if ($attribute['stat'] != 'all') {
-						#$value = floor(misc::percentage($attribute['value'] * $upgrade['level'], $this->data[$attribute['stat']]));
 						$value = $attribute['value'] * $upgrade['level'];
 						$this->data[$attribute['stat']] += $value;
 						$this->data['upgrade_' . strtolower($attribute['stat'])] += $value;
@@ -232,13 +243,13 @@ class d13_module
 		$this->data['type'] = $type;
 		$this->data['level'] = 0;
 		$this->data['units'] = 0;
+		$this->data['totalIR'] = $this->node->modules[$slotId]['input'] * $this->data['ratio'];
 		$this->data['cost'] = $this->getCost();
 		
 		foreach($d13->getGeneral('stats') as $stat) {
 			$this->data['upgrade_' . $stat] = 0;
 		}
 		
-		// - - - - - - - - - - - - - - - APPLY ATTRIBUTE UPGRADES
 		if ($this->node->modules[$slotId]['level'] > 0) {
 			$this->data['level'] = $this->node->modules[$slotId]['level'];
 			$this->checkUpgrades();
@@ -248,7 +259,6 @@ class d13_module
 		$this->data['moduleImage'] = '';
 		$this->data['name'] = $d13->getLangGL('modules', $this->node->data['faction'], $this->data['moduleId'], 'name');
 		$this->data['description'] = $d13->getLangGL('modules', $this->node->data['faction'], $this->data['moduleId'], 'description');
-		$this->data['totalIR'] = $this->data['ratio'];
 		$this->data['inputLimit'] = floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'], $this->node->modules[$this->data['slotId']]['input'])); #floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'] + $this->node->modules[$this->data['slotId']]['input']));
 		$this->data['costData'] = $this->node->checkCost($this->data['cost'], 'build');
 		$this->data['reqData'] = $this->node->checkRequirements($this->data['requirements']);
@@ -257,7 +267,6 @@ class d13_module
 			$this->data['moduleInput'] = $this->data['inputResource'];
 			$this->data['moduleInputName'] = $d13->getLangGL('resources', $this->data['inputResource'], 'name');
 			$this->data['moduleSlotInput'] = $this->node->modules[$slotId]['input'];
-			$this->data['totalIR'] = $this->node->modules[$slotId]['input'] * $this->data['ratio'];
 		}
 
 		if (isset($this->data['outputResource'])) {
@@ -279,6 +288,9 @@ class d13_module
 				$i++;
 			}
 		}
+		
+		$this->getModuleImage();
+		
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -309,15 +321,23 @@ class d13_module
 		$tvars['tvar_inventoryLink'] 		= $this->getInventory();
 		$tvars['tvar_linkData'] 			= $this->getModuleUpgrade();
 		$tvars['tvar_moduleItemContent'] 	= $this->getOptions();
+		$tvars['tvar_image'] = $this->data['image'];
 		
 		if ($this->data['level'] > 0) {
 			$tvars['tvar_queue'] = $this->getQueue();
 			$tvars['tvar_popup'] = $this->getPopup();
+			
+			if ($this->node->resources[$this->data['inputResource']]['value'] < $this->data['maxInput']) {
+				$max = $this->node->modules[$this->data['slotId']]['input']+$this->node->resources[$this->data['inputResource']]['value'];
+			} else {
+				$max = $this->data['maxInput'];
+			}
+
 			$tvars['tvar_inputSlider'] = $this->getInputSlider(
 				"?p=module&action=set&nodeId=".$this->node->data['id']."&slotId=".$this->data['slotId'], 
 				$this->data['slotId'].'_'.$this->data['moduleId'], 
 				0, 
-				$this->data['maxInput'], 
+				floor($max), 
 				$this->node->modules[$this->data['slotId']]['input'], 
 				$this->data['busy']);
 		}
@@ -373,7 +393,7 @@ class d13_module
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// getImage
+	// getModuleImage
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
@@ -391,7 +411,6 @@ class d13_module
 			}
 			if ($image['level'] == 1) {
 				$this->data['trueimage'] = $image['image'];
-				break;
 			}
 		}
 	}
@@ -494,6 +513,12 @@ class d13_module
 		
 		} else {
 		
+			if ($this->node->resources[$this->data['inputResource']]['value'] < $this->data['maxInput']) {
+				$max = $this->node->modules[$this->data['slotId']]['input']+$this->node->resources[$this->data['inputResource']]['value'];
+			} else {
+				$max = $this->data['maxInput'];
+			}
+		
 			if ($this->data['level'] <= 0) {
 		
 				if (($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput']) > 0 && $this->data['costData']['ok'] && $this->data['reqData']['ok'] && ($this->node->getModuleCount($this->data['slotId'], $this->data['moduleId']) < $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'maxInstances'))) {
@@ -512,8 +537,8 @@ class d13_module
 						'?p=module&action=add&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'], 
 						'b'.$this->data['slotId'].'_'.$this->data['moduleId'], 
 						1, 
-						$this->data['maxInput'], 
-						$this->node->modules[$this->data['slotId']]['input']);
+						floor($max), 
+						0);
 
 					$d13->templateInject($d13->templateSubpage("sub.popup.build" , $tvars));
 			
@@ -546,7 +571,8 @@ class d13_module
 						$tvars['tvar_inputSlider']		= $this->getInputSlider(
 							'?p=module&action=upgrade&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'], 
 							'u'.$this->data['slotId'].'_'.$this->data['moduleId'], 
-							1, $this->data['maxInput'], 
+							1, 
+							floor($max), 
 							$this->node->modules[$this->data['slotId']]['input']);
 				
 						$d13->templateInject($d13->templateSubpage("sub.popup.build" , $tvars));
@@ -971,7 +997,7 @@ class d13_module_warfare extends d13_module
 						$stage = $d13->getLangUI('returning');
 					}
 					
-					$remaining = $item['start'] + $item['duration'] * 60 - time();
+					$remaining = ($item['start'] + $item['duration']) - time();
 					
 					$otherNode = new node();
 					if ($item['sender'] == $this->node->data['id']) {
@@ -1229,7 +1255,7 @@ class d13_module_harvest extends d13_module
 		if ($this->data['options']['inventoryList']) {
 			
 			foreach($this->node->resources as $rid => $res) {
-				if ($d13->getResourceByID($res['id'], 'active') && $res['value'] > 0) {
+				if ($d13->getResource($res['id'], 'active') && $res['value'] > 0) {
 					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
 					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $rid, 'name');
 					$tvars['tvar_listAmount'] = floor($res['value']);
@@ -1464,7 +1490,7 @@ class d13_module_craft extends d13_module
 				$tvars['tvar_cid'] = $cid;
 				$tvars['tvar_componentName'] = $d13->getLangGL("components", $this->node->data['faction'], $cid) ["name"];
 				$tvars['tvar_componentDescription'] = $d13->getLangGL("components", $this->node->data['faction'], $cid) ["description"];
-				$tvars['tvar_duration'] = misc::time_format((($component['duration'] - $component['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'craft')) * 60);
+				$tvars['tvar_duration'] = misc::sToHMS( (($component['duration'] - $component['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'craft')) * 60, true);
 				$tvars['tvar_compLimit'] = $limitData;
 				$tvars['tvar_compValue'] = $this->node->components[$cid]['value'];
 				$tvars['tvar_compStorage'] = $component['storage'];
@@ -1513,12 +1539,13 @@ class d13_module_craft extends d13_module
 					} else {
 						$stage = $d13->getLangUI('remove');
 					}
-					$remaining = $item['start'] + $item['duration'] * 60 - time();
+					
+					$remaining = misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
 					$tvars = array();;
 					$tvars['tvar_listImage'] 	= '<img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $item['component'] . '.png">';
 					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $d13->getLangGL("components", $this->node->data['faction'], $item['component'], "name");
-					$tvars['tvar_listAmount'] 	= '<span id="craft_' . $item['id'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("craft_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelComponent&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&craftId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
+					$tvars['tvar_listAmount'] 	= '<span id="craft_' . $item['id'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("craft_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelComponent&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&craftId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 				
 					$html = $d13->templateSubpage("sub.module.listcontent", $tvars);
 				
@@ -1684,8 +1711,8 @@ class d13_module_train extends d13_module
 				$vars = array();
 				$vars = $tmp_unit->getTemplateVariables();
 				
-				$vars['tvar_unitDuration'] = misc::time_format((($tmp_unit->data['duration'] - $tmp_unit->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'train')) * 60);
-				
+				$vars['tvar_duration'] = misc::sToHMS((($tmp_unit->data['duration'] - $tmp_unit->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'train')) * 60, true);
+				$vars['tvar_uid'] = $uid;
 				$vars['tvar_nodeId'] = $this->node->data['id'];
 				$vars['tvar_slotId'] = $this->data['slotId'];
 				$vars['tvar_sliderID'] 	= $uid;
@@ -1730,12 +1757,12 @@ class d13_module_train extends d13_module
 					} else {
 						$stage = $d13->getLangUI('remove');
 					}
-					$remaining = $item['start'] + $item['duration'] * 60 - time();
+					$remaining = misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
 					$tvars = array();;
 					$tvars['tvar_listImage'] 	= '<img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $item['unit'] . '.png">';
 					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $d13->getLangGL("units", $this->node->data['faction'], $item['unit'], "name");
-					$tvars['tvar_listAmount'] 	= '<span id="train_' . $item['id'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("train_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelUnit&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&trainId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
+					$tvars['tvar_listAmount'] 	= '<span id="train_' . $item['id'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("train_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelUnit&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&trainId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 				
 					$html = $d13->templateSubpage("sub.module.listcontent", $tvars);
 				
@@ -1955,7 +1982,7 @@ class d13_module_research extends d13_module
 				$tvars['tvar_techDescription'] = $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['description'];
 				$tvars['tvar_techTier'] = $this->node->technologies[$tid]['level'];
 				$tvars['tvar_techMaxTier'] = $technology['maxLevel'];
-				$tvars['tvar_techDuration'] = misc::time_format((($technology['duration'] - $technology['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'research')) * 60);
+				$tvars['tvar_duration'] = misc::sToHMS((($technology['duration'] - $technology['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'research')) * 60, true);
 				$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.research", $tvars);
 			}
 		}
@@ -1989,7 +2016,7 @@ class d13_module_research extends d13_module
 					$this->data['busy'] = true;
 					
 					
-					$remaining = $item['start'] + $item['duration'] * 60 - time();
+					$remaining = ($item['start'] + $item['duration'] ) - time();
 					
 					$tvars = array();;
 					$tvars['tvar_listImage'] 	= '<img class="resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $d13->getTechnology($this->node->data['faction'], $item['technology'], 'image') .'">';
@@ -2240,7 +2267,7 @@ class d13_module_command extends d13_module
 		if ($this->data['options']['inventoryList']) {
 			
 			foreach($this->node->resources as $rid => $res) {
-				if ($d13->getResourceByID($res['id'], 'active') && $res['value'] > 0) {
+				if ($d13->getResource($res['id'], 'active') && $res['value'] > 0) {
 					$tvars['tvar_listImage'] = '<img class="resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
 					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $rid, 'name');
 					$tvars['tvar_listAmount'] = floor($res['value']);

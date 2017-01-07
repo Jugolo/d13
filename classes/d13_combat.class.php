@@ -413,7 +413,7 @@ class d13_combat
 			if ($data['input']['attacker']['groups'][$key]['quantity']) {
 			
 				$name = $d13->getLangGL('units', $attackerNode->data['faction'], $group['unitId'], 'name');
-				$label = $data['input']['attacker']['groups'][$key]['quantity'].$group['quantity'];
+				$label = $data['input']['attacker']['groups'][$key]['quantity']."/".$group['quantity'];
 				$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $attackerNode->data['faction'] . '/' . $d13->getUnit($attackerNode->data['faction'], $group['unitId'], 'image');
 					
 				$vars = array();
@@ -421,7 +421,7 @@ class d13_combat
 				$vars['tvar_listLabel'] = $name;
 				$vars['tvar_listAmount'] = $label;
 		
-				$html .= $d13->templateSubpage("sub.module.listcontent", $vars);
+				$html .= $d13->templateSubpage("msg.combat.entry", $vars);
 			
 			}
 		}
@@ -451,7 +451,7 @@ class d13_combat
 					$vars['tvar_listImage'] = '<img class="d13-resource" src="'.$image.'">';
 					$vars['tvar_listLabel'] = $name;
 					$vars['tvar_listAmount'] = $label;
-					$html .= $d13->templateSubpage("sub.module.listcontent", $vars);
+					$html .= $d13->templateSubpage("msg.combat.entry", $vars);
 				
 				}
 
@@ -459,7 +459,7 @@ class d13_combat
 				// - - - - - Module
 				if ($data['input']['defender']['groups'][$key]['input']) {
 				
-					$name = $d13->getLangGL($defenderNode->data['faction'], $group['unitId'], 'name');
+					$name = $d13->getLangGL('units', $defenderNode->data['faction'], $group['unitId'], 'name');
 					$label = $data['input']['defender']['groups'][$key]['input']."/".$group['input'];
 					$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $defenderNode->data['faction'] . '/' . $d13->getUnit($defenderNode->data['faction'], $group['unitId'], 'image');
 					
@@ -467,7 +467,7 @@ class d13_combat
 					$vars['tvar_listImage'] = '<img class="d13-resource" src="'.$image.'">';
 					$vars['tvar_listLabel'] = $name;
 					$vars['tvar_listAmount'] = $label;
-					$html .= $d13->templateSubpage("sub.module.listcontent", $vars);
+					$html .= $d13->templateSubpage("msg.combat.entry", $vars);
 				
 				}
 			}

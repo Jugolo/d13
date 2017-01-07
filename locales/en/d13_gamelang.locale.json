@@ -62,9 +62,18 @@
         "description": "Allows the exchange of resources."
       },
       "5": {
-        "name": "Iron Mining",
-        "description": "Allows accelerated mining of iron."
+        "name": "Advanced Gold Mining",
+        "description": "Allows accelerated mining of gold in mines."
       },
+      "6": {
+        "name": "Advanced Wood Cutting",
+        "description": "Allows accelerated wood cutting for lumber jacks."
+      },
+      "7": {
+        "name": "Advanced Iron Mining",
+        "description": "Allows accelerated mining of iron in mines."
+      },
+      
       "100": {
         "name": "Spearman Training",
         "description": "Increases fighting power of your Spearman units."

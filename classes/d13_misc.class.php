@@ -26,6 +26,7 @@ class misc
 	function time_format($secs = 0)
 	{
 		if ($secs > 0) {
+			$secs = ceil($secs);
 			$dtF = new DateTime('@0');
 			$dtT = new DateTime('@' . floor($secs));
 			$time = $dtF->diff($dtT)->format('%ad %hh %im %ss');
@@ -110,16 +111,19 @@ class misc
 
 	public static
 
-	function sToHMS($seconds)
+	function sToHMS($seconds, $asString=false)
 	{
 		$h = floor($seconds / 3600);
 		$m = floor($seconds % 3600 / 60);
 		$s = $seconds % 3600 % 60;
-		return array(
-			$h,
-			$m,
-			$s
-		);
+		$t = array($h,$m,$s);
+		
+		if ($asString) {
+			return implode(":", $t);
+		} else {
+			return $t;
+		}
+		
 	}
 
 	// ----------------------------------------------------------------------------------------

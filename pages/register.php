@@ -12,16 +12,12 @@
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
-// ----------------------------------------------------------------------------------------
-//
-// ----------------------------------------------------------------------------------------
 
 global $d13;
 $message = NULL;
 $d13->dbQuery('start transaction');
-$flags = $d13->flags->get('name');
 
-if ($flags['register']) {
+if ($d13->getGeneral('options', 'enabledRegister')) {
 	if (isset($_POST['email'], $_POST['name'], $_POST['password'])) {
 		
 		if (!empty($_POST['email']) && !empty($_POST['name']) && !empty($_POST['password'])) {
@@ -31,7 +27,7 @@ if ($flags['register']) {
 					$user->data['name'] = $_POST['name'];
 					$user->data['email'] = $_POST['email'];
 					$user->data['password'] = sha1($_POST['password']);
-					if ($flags['activation']) {
+					if ($d13->GetGeneral('activationRequired')) {
 						$user->data['access'] = 0;
 					}
 					else {
@@ -46,7 +42,7 @@ if ($flags['register']) {
 					$user->data['locale'] = CONST_DEFAULT_LOCALE;
 					$status = $user->add();
 					$message = $d13->getLangUI($status);
-					if ($flags['activation']) {
+					if ($d13->GetGeneral('activationRequired')) {
 						if ($status == 'done') {
 							include (CONST_INCLUDE_PATH . "api/email.api.php");
 

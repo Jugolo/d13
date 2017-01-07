@@ -56,7 +56,7 @@ class node
 	{
 		global $d13;
 		$this->getResources();
-		$setCost = $d13->getGeneral('factions', $this->data['faction'], 'costs') ['set'];
+		$setCost = $d13->getFactions($this->data['faction'], 'costs', 'set');
 		$setCostData = $this->checkCost($setCost, 'set');
 		if ($setCostData['ok']) {
 			$node = new node();
@@ -108,7 +108,7 @@ class node
 					$query = array();
 					$nr = count($d13->getResource());
 					for ($i = 0; $i < $nr; $i++) {
-						$query[$i] = '("' . $this->data['id'] . '", "' . $d13->getResourceByID($i, 'id') . '", "' . $d13->getResource($i, 'storage') . '")';
+						$query[$i] = '("' . $this->data['id'] . '", "' . $d13->getResource($i, 'id') . '", "' . $d13->getResource($i, 'storage') . '")';
 					}
 					$d13->dbQuery('insert into resources (node, id, value) values ' . implode(', ', $query));
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
@@ -271,10 +271,10 @@ class node
 			$tmp_resources[$i] = $row;
 		}
 
-		foreach($d13->getAllResources() as $resource) {
+		foreach($d13->getResource() as $resource) {
 			$this->production[$resource['id']] = 0;
-			$this->production[$resource['id']] += $d13->getResourceByID($resource['id'], 'autoproduction');
-			$this->storage[$resource['id']] = $d13->getResourceByID($resource['id'], 'storage');
+			$this->production[$resource['id']] += $d13->getResource($resource['id'], 'autoproduction');
+			$this->storage[$resource['id']] = $d13->getResource($resource['id'], 'storage');
 			$this->resources[$resource['id']] = $tmp_resources[$resource['id']];
 		}
 
@@ -445,15 +445,17 @@ class node
 								if ($d13->dbAffectedRows() == - 1) $ok = 0;
 							}
 
-							$this->getQueue('research', 'technology', $d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'technologies'));
-							$lastResearch = count($this->queue['research']) - 1;
-							if ($lastResearch > - 1) $start = strftime('%Y-%m-%d %H:%M:%S', $this->queue['research'][$lastResearch]['start'] + floor($this->queue['research'][$lastResearch]['duration'] * 60));
-							else $start = strftime('%Y-%m-%d %H:%M:%S', time());
+							#$this->getQueue('research', 'technology', $d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'technologies'));
+							#$lastResearch = count($this->queue['research']) - 1;
+							#if ($lastResearch > - 1) $start = strftime('%Y-%m-%d %H:%M:%S', $this->queue['research'][$lastResearch]['start'] + floor($this->queue['research'][$lastResearch]['duration'] * 60));
+							#else $start = strftime('%Y-%m-%d %H:%M:%S', time());
+							
+							$start = strftime('%Y-%m-%d %H:%M:%S', time());
 							$totalIR = 0;
 							foreach($this->modules as $key => $item)
 							if ($item['module'] == $this->modules[$slotId]['module']) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
 							$duration = $d13->getTechnology($this->data['faction'],$technologyId,'duration');
-							$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'research');
+							$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'research') * 60;
 							$d13->dbQuery('insert into research (node, technology, start, duration, slot) values ("' . $this->data['id'] . '", "' . $technologyId . '", "' . $start . '", "' . $duration . '", "' . $slotId . '")');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 							if ($ok) $status = 'done';
@@ -540,7 +542,7 @@ class node
 			$result = $d13->dbQuery('select * from resources where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
 			$resource = $d13->dbFetch($result);
 			if ($resource['value'] + $module['input'] >= $this->modules[$slotId]['input'])
-			if ($this->modules[$slotId]['input'] <= $tmp_module->data['maxInput']) //$d13->getModule($this->data['faction'], $module['module'])['maxInput'])
+			if ($this->modules[$slotId]['input'] <= $tmp_module->data['maxInput'])
 			{
 				$ok = 1;
 				$this->resources[$resource['id']]['value']+= $module['input'] - $input;
@@ -632,14 +634,11 @@ class node
 							$d13->dbQuery('update modules set input=input+"' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 							
-							$this->getQueue('build');
-							#$lastBuild = count($this->queue['build']) - 1;
-							#if ($lastBuild > - 1) $start = strftime('%Y-%m-%d %H:%M:%S', $this->queue['build'][$lastBuild]['start'] + floor($this->queue['build'][$lastBuild]['duration'] * 60));
-							#else $start = strftime('%Y-%m-%d %H:%M:%S', time());
-							$start = strftime('%Y-%m-%d %H:%M:%S', time());
-							$duration = ceil(($tmp_module->data['duration'] * $d13->getGeneral('users', 'speed', 'build')) / $input);
 							
-
+							
+							$start = strftime('%Y-%m-%d %H:%M:%S', time());
+							$duration = ceil( ($tmp_module->data['duration'] * $d13->getGeneral('users', 'speed', 'build') * 60 ) / $input);
+							
 							$d13->dbQuery('insert into build (node, slot, module, start, duration, action) values ("' . $this->data['id'] . '", "' . $slotId . '", "' . $moduleId . '", "' . $start . '", "' . $duration . '", "build")');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 							if ($ok) {
@@ -709,24 +708,15 @@ class node
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						}
 						
-						
 						if ($input != $this->modules[$slotId]['input']) {
-								
 							$status = $this->setModule($slotId, 0);
 							if ($status == 'done') {
 								$status = $this->setModule($slotId, $input);
 							}
-							
-							#$this->resources[$tmp_module->data['inputResource']]['value'] += ($this->modules[$slotId]['input'] - $input);
-							#$d13->dbQuery('update resources set value="' . $this->resources[$tmp_module->data['inputResource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
-							#if ($d13->dbAffectedRows() == - 1) $ok = 0;
-							#$d13->dbQuery('update modules set input=input-"' . ($this->modules[$slotId]['input'] - $input) . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
-							#if ($d13->dbAffectedRows() == - 1) $ok = 0;
-						
 						}
 
 						$start = strftime('%Y-%m-%d %H:%M:%S', time());
-						$duration = ceil(($tmp_module->data['duration'] * $d13->getGeneral('users', 'speed', 'build')) / $input);
+						$duration = ceil( ($tmp_module->data['duration'] * $d13->getGeneral('users', 'speed', 'build') * 60 ) / $input);
 						
 						$d13->dbQuery('insert into build (node, slot, module, start, duration, action) values ("' . $this->data['id'] . '", "' . $slotId . '", "' . $moduleId . '", "' . $start . '", "' . $duration . '", "upgrade")');
 						if ($d13->dbAffectedRows() == - 1) $ok = 0;
@@ -888,19 +878,20 @@ class node
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						}
 
-						$this->getQueue('craft', 'component', $d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'components'));
-						$lastCraft = count($this->queue['craft']) - 1;
-						if ($lastCraft > - 1) $start = strftime('%Y-%m-%d %H:%M:%S', $this->queue['craft'][$lastCraft]['start'] + floor($this->queue['craft'][$lastCraft]['duration'] * 60));
-						else $start = strftime('%Y-%m-%d %H:%M:%S', time());
+						#$this->getQueue('craft', 'component', $d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'components'));
+						#$lastCraft = count($this->queue['craft']) - 1;
+						#if ($lastCraft > - 1) $start = strftime('%Y-%m-%d %H:%M:%S', $this->queue['craft'][$lastCraft]['start'] + floor($this->queue['craft'][$lastCraft]['duration'] * 60));
+						#else $start = strftime('%Y-%m-%d %H:%M:%S', time());
+						
+						$start = strftime('%Y-%m-%d %H:%M:%S', time());
 						$totalIR = 0;
 						foreach($this->modules as $key => $item)
 						if ($item['module'] == $this->modules[$slotId]['module']) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
 						$duration = $d13->getComponent($this->data['faction'], $componentId, 'duration') * $quantity;
-						$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'craft');
-						$result = $d13->dbQuery('select max(id) as id from craft where node="' . $this->data['id'] . '"');
-						$row = $d13->dbFetch($result);
-						$id = $row['id'] + 1;
-						$d13->dbQuery('insert into craft (id, node, component, quantity, stage, start, duration, slot) values ("' . $id . '", "' . $this->data['id'] . '", "' . $componentId . '", "' . $quantity . '", 0, "' . $start . '", "' . $duration . '", "' . $slotId . '")');
+						$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'craft') * 60;
+						#$result = $d13->dbQuery('select max(id) as id from craft where node="' . $this->data['id'] . '"');
+						#$row = $d13->dbFetch($result);
+						$d13->dbQuery('insert into craft (node, component, quantity, stage, start, duration, slot) values ("' . $this->data['id'] . '", "' . $componentId . '", "' . $quantity . '", 0, "' . $start . '", "' . $duration . '", "' . $slotId . '")');
 						if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						if ($ok) $status = 'done';
 						else $status = 'error';
@@ -946,12 +937,12 @@ class node
 			$totalIR = 0;
 			foreach($this->modules as $key => $item)
 			if ($item['module'] == $moduleId) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
-			$duration = $d13->getComponent($this->data['faction'], $componentId, 'removeDuration') * $quantity;
+			$duration = $d13->getComponent($this->data['faction'], $componentId, 'removeDuration') * $quantity * 60;
 			$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'craft');
-			$result = $d13->dbQuery('select max(id) as id from craft where node="' . $this->data['id'] . '"');
-			$row = $d13->dbFetch($result);
-			$id = $row['id'] + 1;
-			$d13->dbQuery('insert into craft (id, node, component, quantity, stage, start, duration) values ("' . $id . '", "' . $this->data['id'] . '", "' . $componentId . '", "' . $quantity . '", 1, "' . $start . '", "' . $duration . '")');
+			#$result = $d13->dbQuery('select max(id) as id from craft where node="' . $this->data['id'] . '"');
+			#$row = $d13->dbFetch($result);
+			
+			$d13->dbQuery('insert into craft (node, component, quantity, stage, start, duration) values ("' . $this->data['id'] . '", "' . $componentId . '", "' . $quantity . '", 1, "' . $start . '", "' . $duration . '")');
 			if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			if ($ok) $status = 'done';
 			else $status = 'error';
@@ -1079,12 +1070,12 @@ class node
 						$totalIR = 0;
 						foreach($this->modules as $key => $item)
 						if ($item['module'] == $this->modules[$slotId]['module']) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
-						$duration = $d13->getUnit($this->data['faction'], $unitId, 'duration') * $quantity;
+						$duration = $d13->getUnit($this->data['faction'], $unitId, 'duration') * $quantity * 60;
 						$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'train');
-						$result = $d13->dbQuery('select max(id) as id from train where node="' . $this->data['id'] . '"');
-						$row = $d13->dbFetch($result);
-						$id = $row['id'] + 1;
-						$d13->dbQuery('insert into train (id, node, unit, quantity, stage, start, duration, slot) values ("' . $id . '", "' . $this->data['id'] . '", "' . $unitId . '", "' . $quantity . '", 0, "' . $start . '", "' . $duration . '", "' . $slotId . '")');
+						#$result = $d13->dbQuery('select max(id) as id from train where node="' . $this->data['id'] . '"');
+						#$row = $d13->dbFetch($result);
+						#$id = $row['id'] + 1;
+						$d13->dbQuery('insert into train (node, unit, quantity, stage, start, duration, slot) values ("' . $this->data['id'] . '", "' . $unitId . '", "' . $quantity . '", 0, "' . $start . '", "' . $duration . '", "' . $slotId . '")');
 						if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						if ($ok) $status = 'done';
 						else $status = 'error';
@@ -1131,12 +1122,12 @@ class node
 			$totalIR = 0;
 			foreach($this->modules as $key => $item)
 			if ($item['module'] == $moduleId) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
-			$duration = $d13->getUnit($this->data['faction'], $unitId, 'removeDuration') * $quantity;
+			$duration = $d13->getUnit($this->data['faction'], $unitId, 'removeDuration') * $quantity * 60;
 			$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'train');
-			$result = $d13->dbQuery('select max(id) as id from train where node="' . $this->data['id'] . '"');
-			$row = $d13->dbFetch($result);
-			$id = $row['id'] + 1;
-			$d13->dbQuery('insert into train (id, node, unit, quantity, stage, start, duration) values ("' . $id . '", "' . $this->data['id'] . '", "' . $unitId . '", "' . $quantity . '", 1, "' . $start . '", "' . $duration . '")');
+			#$result = $d13->dbQuery('select max(id) as id from train where node="' . $this->data['id'] . '"');
+			#$row = $d13->dbFetch($result);
+			#$id = $row['id'] + 1;
+			$d13->dbQuery('insert into train (node, unit, quantity, stage, start, duration) values ("' . $this->data['id'] . '", "' . $unitId . '", "' . $quantity . '", 1, "' . $start . '", "' . $duration . '")');
 			if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			if ($ok) $status = 'done';
 			else $status = 'error';
@@ -1261,7 +1252,7 @@ class node
 			}
 		}
 		
-		$combatCost = $d13->getGeneral('factions', $this->data['id'], 'costs', $type);
+		$combatCost = $d13->getFactions($this->data['id'], 'costs', $type);
 		$okCombatCost = $this->checkCost($combatCost, 'combat');
 		
 		if ($okUnits)
@@ -2220,7 +2211,7 @@ class node
 		$this->getModules();
 		$this->getResources();
 		$this->getLocation();
-		$moveCost = $d13->getGeneral('factions', $this->data['faction'], 'costs') ['move'];
+		$moveCost = $d13->getFactions($this->data['faction'], 'costs', 'move');
 		$distance = ceil(sqrt(pow($this->location['x'] - $x, 2) + pow($this->location['y'] - $y, 2)));
 		$moveCostData = $this->checkCost($moveCost, 'move');
 		if ($moveCostData['ok']) {

@@ -1,0 +1,198 @@
+[
+    {
+      "id": 0,
+      "active": true,
+      "costs": {
+        "move": [
+          {
+            "resource": 0,
+            "value": 100
+          }
+        ],
+        "set": [
+          {
+            "resource": 0,
+            "value": 100
+          }
+        ],
+        "alliance": [
+          {
+            "resource": 0,
+            "value": 2000
+          }
+        ],
+        "scout": [
+          {
+            "resource": 0,
+            "value": 501
+          }
+        ],
+		"skirmish": [
+          {
+            "resource": 0,
+            "value": 502
+          }
+        ],
+		"raid": [
+          {
+            "resource": 0,
+            "value": 503
+          },
+          {
+            "resource": 1,
+            "value": 103
+          }
+        ],
+		"sabotage": [
+          {
+            "resource": 0,
+            "value": 504
+          },
+          {
+            "resource": 1,
+            "value": 104
+          }
+        ],
+		"raze": [
+          {
+            "resource": 0,
+            "value": 505
+          },
+          {
+            "resource": 1,
+            "value": 105
+          }
+        ],
+		"conquer": [
+          {
+            "resource": 0,
+            "value": 506
+          },
+          {
+            "resource": 1,
+            "value": 106
+          }
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "active": false,
+      "costs": {
+        "move": [
+          {
+            "resource": 0,
+            "value": 100
+          }
+        ],
+        "set": [
+          {
+            "resource": 0,
+            "value": 100
+          }
+        ],
+        "alliance": [
+          {
+            "resource": 0,
+            "value": 2000
+          }
+        ],
+        "scout": [
+          {
+            "resource": 0,
+            "value": 501
+          }
+        ],
+		"skirmish": [
+          {
+            "resource": 0,
+            "value": 502
+          }
+        ],
+		"raid": [
+          {
+            "resource": 0,
+            "value": 503
+          }
+        ],
+		"sabotage": [
+          {
+            "resource": 0,
+            "value": 504
+          }
+        ],
+		"raze": [
+          {
+            "resource": 0,
+            "value": 505
+          }
+        ],
+		"conquer": [
+          {
+            "resource": 0,
+            "value": 506
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "active": false,
+      "costs": {
+        "move": [
+          {
+            "resource": 0,
+            "value": 100
+          }
+        ],
+        "set": [
+          {
+            "resource": 0,
+            "value": 100
+          }
+        ],
+        "alliance": [
+          {
+            "resource": 0,
+            "value": 2000
+          }
+        ],
+        "scout": [
+          {
+            "resource": 0,
+            "value": 501
+          }
+        ],
+		"skirmish": [
+          {
+            "resource": 0,
+            "value": 502
+          }
+        ],
+		"raid": [
+          {
+            "resource": 0,
+            "value": 503
+          }
+        ],
+		"sabotage": [
+          {
+            "resource": 0,
+            "value": 504
+          }
+        ],
+		"raze": [
+          {
+            "resource": 0,
+            "value": 505
+          }
+        ],
+		"conquer": [
+          {
+            "resource": 0,
+            "value": 506
+          }
+        ]
+      }
+    }
+]

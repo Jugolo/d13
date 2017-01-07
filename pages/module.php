@@ -40,7 +40,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 			// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 		case 'get':
-			
+			/*
 			$mid = $node->modules[$_GET['slotId']]['module'];
 			$sid = $node->modules[$_GET['slotId']]['slot'];
 			if ($mid > - 1) $module = $d13->getModule($node->data['faction'], $mid);
@@ -69,7 +69,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 			else {
 				$message = 'emptySlot';
 			}
-
+			*/
 			break;
 
 			// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =

@@ -211,7 +211,7 @@ if (isset($node)) {
 	}
 
 	// - - - - Combat Cost
-	$cost = $d13->getGeneral('factions', $node->data['faction'], 'costs', $_GET['type']);
+	$cost = $d13->getFactions($node->data['faction'], 'costs', $_GET['type']);
 	$tvars['tvar_costData'] = '';
 	foreach ($cost as $res) {
 		$resource = $res['resource'];

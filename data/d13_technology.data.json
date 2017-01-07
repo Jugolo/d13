@@ -154,7 +154,7 @@
     },
     {
       "id": 5,
-      "image": "0.png",
+      "image": "5.png",
       "active": true,
       "priority": -1,
       "duration": 5,
@@ -177,43 +177,69 @@
         }
       ],
       "upgrades": [
-        100
+        200
       ]
     },
     {
       "id": 6,
-      "image": "0.png",
-      "active": false,
+      "image": "6.png",
+      "active": true,
       "priority": -1,
-      "duration": 0,
-      "maxLevel": 0,
+      "duration": 5,
+      "maxLevel": 5,
       "cost": [
-        
+        {
+          "resource": 0,
+          "value": 200
+        },
+        {
+          "resource": 1,
+          "value": 400
+        }
       ],
       "requirements": [
-        
+        {
+          "type": "technologies",
+          "id": 0,
+          "level": 3
+        }
       ],
       "upgrades": [
-        
+        201
       ]
     },
     {
       "id": 7,
-      "image": "0.png",
-      "active": false,
+      "image": "7.png",
+      "active": true,
       "priority": -1,
-      "duration": 0,
-      "maxLevel": 0,
+      "duration": 5,
+      "maxLevel": 5,
       "cost": [
-        
+        {
+          "resource": 0,
+          "value": 200
+        },
+        {
+          "resource": 1,
+          "value": 400
+        }
       ],
       "requirements": [
-        
+        {
+          "type": "technologies",
+          "id": 0,
+          "level": 3
+        }
       ],
       "upgrades": [
-        
+        202
       ]
     },
+    
+    
+    
+    
     {
       "id": 8,
       "image": "0.png",
@@ -1803,7 +1829,7 @@
         
       ],
       "upgrades": [
-        0
+        100
       ]
     },
     {
@@ -1831,7 +1857,7 @@
         
       ],
       "upgrades": [
-        1
+        101
       ]
     },
     {
@@ -1859,7 +1885,7 @@
         
       ],
       "upgrades": [
-        2
+        102
       ]
     },
     {
@@ -1887,7 +1913,7 @@
         
       ],
       "upgrades": [
-        3
+        103
       ]
     },
     {
@@ -1915,7 +1941,7 @@
         
       ],
       "upgrades": [
-        4
+        104
       ]
     },
     {
@@ -1943,7 +1969,7 @@
         
       ],
       "upgrades": [
-        5
+        105
       ]
     },
     {
@@ -1971,7 +1997,7 @@
         
       ],
       "upgrades": [
-        6
+        106
       ]
     },
     {
@@ -1999,7 +2025,7 @@
         
       ],
       "upgrades": [
-        7
+        107
       ]
     },
     {
@@ -2027,7 +2053,7 @@
         
       ],
       "upgrades": [
-        8
+        108
       ]
     },
     {
@@ -2055,7 +2081,7 @@
         
       ],
       "upgrades": [
-        9
+        109
       ]
     },
     {
@@ -2083,7 +2109,7 @@
         
       ],
       "upgrades": [
-        10
+        110
       ]
     },
     {
@@ -2111,7 +2137,7 @@
         
       ],
       "upgrades": [
-        11
+        111
       ]
     },
     {
@@ -2139,7 +2165,7 @@
         
       ],
       "upgrades": [
-        12
+        112
       ]
     },
     {
@@ -2167,7 +2193,7 @@
         
       ],
       "upgrades": [
-        13
+        113
       ]
     },
     {
@@ -2195,7 +2221,7 @@
         
       ],
       "upgrades": [
-        14
+        114
       ]
     },
     {
@@ -2223,7 +2249,7 @@
         
       ],
       "upgrades": [
-        15
+        115
       ]
     },
     {
@@ -2251,7 +2277,7 @@
         
       ],
       "upgrades": [
-        16
+        116
       ]
     }
   ]

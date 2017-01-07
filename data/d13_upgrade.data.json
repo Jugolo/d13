@@ -4,6 +4,23 @@
       "active": true,
       "type": "unit",
       "id": 0,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 10
+        }
+      ],
       "attributes": [
         {
           "stat": "all",
@@ -1570,6 +1587,49 @@
       "attributes": [
         
       ]
+    },
+    
+    {
+      "active": true,
+      "type": "module",
+      "id": 200,
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.1
+        }
+    	],
+    	"targets": [
+    		0
+    	]
+    },
+    {
+      "active": true,
+      "type": "module",
+      "id": 201,
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.1
+        }
+    	],
+    	"targets": [
+    		1
+    	]
+    },
+    {
+      "active": true,
+      "type": "module",
+      "id": 202,
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.1
+        }
+    	],
+    	"targets": [
+    		2
+    	]
     }
     
   ]

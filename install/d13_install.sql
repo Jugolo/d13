@@ -64,13 +64,14 @@ CREATE TABLE IF NOT EXISTS `blocklist` (
 --
 
 CREATE TABLE IF NOT EXISTS `build` (
+	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `node` int(10) unsigned NOT NULL,
   `slot` int(10) unsigned NOT NULL,
   `module` int(10) unsigned NOT NULL,
   `action` varchar(16) COLLATE utf8_bin NOT NULL,
   `start` datetime NOT NULL,
   `duration` float unsigned NOT NULL,
-  PRIMARY KEY (`node`,`slot`),
+  PRIMARY KEY (`id`,`slot`),
   KEY `start` (`start`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -81,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `build` (
 --
 
 CREATE TABLE IF NOT EXISTS `combat` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `sender` int(10) unsigned NOT NULL,
   `slot` int(10) unsigned NOT NULL,
   `recipient` int(10) unsigned NOT NULL,
@@ -129,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `components` (
 --
 
 CREATE TABLE IF NOT EXISTS `craft` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `node` int(10) unsigned NOT NULL,
   `slot` int(10) unsigned NOT NULL,
   `component` int(10) unsigned NOT NULL,
@@ -163,9 +164,7 @@ INSERT INTO `flags` (`name`, `value`) VALUES
 ('build', '1'),
 ('combat', '1'),
 ('craft', '1'),
-('login', '1'),
 ('messages', '1'),
-('register', '1'),
 ('research', '1'),
 ('trade', '1'),
 ('train', '1'),
@@ -281,12 +280,13 @@ CREATE TABLE IF NOT EXISTS `preferences` (
 --
 
 CREATE TABLE IF NOT EXISTS `research` (
+	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `node` int(10) unsigned NOT NULL,
   `slot` int(10) unsigned NOT NULL,
   `technology` int(10) unsigned NOT NULL,
   `start` datetime NOT NULL,
   `duration` float unsigned NOT NULL,
-  PRIMARY KEY (`node`,`technology`),
+  PRIMARY KEY (`id`,`node`),
   KEY `start` (`start`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -323,7 +323,7 @@ CREATE TABLE IF NOT EXISTS `technologies` (
 --
 
 CREATE TABLE IF NOT EXISTS `trade` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `distance` int(10) unsigned NOT NULL,
   `node` int(10) unsigned NOT NULL,
   `slot` int(10) unsigned NOT NULL,
@@ -351,7 +351,7 @@ CREATE TABLE IF NOT EXISTS `trade` (
 --
 
 CREATE TABLE IF NOT EXISTS `train` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `node` int(10) unsigned NOT NULL,
   `slot` int(10) unsigned NOT NULL,
   `unit` int(10) unsigned NOT NULL,

@@ -41,7 +41,7 @@ class alliance
 			$node = new node();
 			if ($node->get('id', $nodeId) == 'done') {
 				$node->getResources();
-				$setCost = $d13->getGeneral('factions', $node->data['faction'], 'costs') ['alliance'];
+				$setCost = $d13->getFactions($node->data['faction'], 'costs', 'alliance');
 				$setCostData = $node->checkCost($setCost, 'alliance');
 				if ($setCostData['ok']) {
 					$ok = 1;
@@ -75,7 +75,7 @@ class alliance
 			$node = new node();
 			if ($node->get('id', $nodeId) == 'done') {
 				$node->checkResources(time());
-				$addCost = $d13->getGeneral('factions', $node->data['faction'], 'costs') ['alliance'];
+				$addCost = $d13->getFactions($node->data['faction'], 'costs', 'alliance');
 				$addCostData = $node->checkCost($addCost, 'alliance');
 				if ($addCostData['ok']) {
 					$ok = 1;

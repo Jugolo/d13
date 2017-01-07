@@ -12,14 +12,10 @@
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
-// ----------------------------------------------------------------------------------------
-//
-// ----------------------------------------------------------------------------------------
 
 global $d13;
 $message = NULL;
 $d13->dbQuery('start transaction');
-$flags = $d13->flags->get('name');
 
 if (isset($_GET['action'])) {
 	switch ($_GET['action']) {
@@ -42,7 +38,7 @@ if (isset($_GET['action'])) {
 			$user = new user();
 			$status = $user->get('name', $name);
 			if ($status == 'done')
-			if (($flags['login']) || ($user->data['access'] == 3))
+			if ($d13->getGeneral('options', 'enabledLogin') || $user->data['access'] == 3)
 			if ($user->data['password'] == $pass)
 			if ($user->data['access']) {
 				$user->data['ip'] = $_SERVER['REMOTE_ADDR'];
@@ -111,9 +107,8 @@ $tvars['tvar_global_message'] = $message;
 
 if (isset($_GET['action'])) {
 	switch ($_GET['action']) {
+	
 	case 'sit':
-
-		// - - - - Inject Window Code at page bottom
 
 		$d13->templateInject($d13->templateSubpage("sub.assist", $tvars));
 		$d13->templateRender("login", $tvars);
@@ -121,16 +116,16 @@ if (isset($_GET['action'])) {
 
 	case 'login':
 
-		// - - - - Inject Window Code at page bottom
-
 		$d13->templateInject($d13->templateSubpage("sub.login", $tvars));
 		$d13->templateRender("login", $tvars);
 		break;
 	}
-}
-else {
+	
+} else {
+
 	$d13->templateInject($d13->templateSubpage("sub.login", $tvars));
 	$d13->templateRender("login", $tvars);
+	
 }
 
 // =====================================================================================EOF
