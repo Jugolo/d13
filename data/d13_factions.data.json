@@ -2,6 +2,7 @@
     {
       "id": 0,
       "active": true,
+      "shield": 0,
       "costs": {
         "move": [
           {
@@ -78,6 +79,7 @@
     {
       "id": 1,
       "active": false,
+      "shield": 0,
       "costs": {
         "move": [
           {
@@ -138,6 +140,7 @@
     {
       "id": 2,
       "active": false,
+      "shield": 0,
       "costs": {
         "move": [
           {

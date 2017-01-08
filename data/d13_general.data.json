@@ -42,6 +42,15 @@
     "defensiveModuleDamage": true,
     "bonusLoot": true
   },
+  "queues": [
+  	"research",
+  	"build",
+  	"craft",
+  	"train",
+  	"shield",
+  	"combat",
+  	"trade"
+  ],
   "factors": {
     "storage": 1,
     "production": 1,
@@ -90,9 +99,22 @@
     "vision",
     "capacity",
     "critical",
+    "stealth",
     "maxinput",
     "ratio",
     "duration"
+  ],
+  "attackTypes": [
+  	"melee",
+  	"missile",
+  	"artillery",
+  	"magic"
+  ],
+  "armorTypes": [
+  	"light",
+  	"medium",
+  	"heavy",
+  	"fortified"
   ],
   "userstats": {
     "level": {

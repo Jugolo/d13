@@ -144,6 +144,7 @@
   "trade": "trade",
   "combat": "combat",
   "invite": "invite",
+  "to": "to",
   "goToWar": "go to war",
   "invitations": "invitations",
   "wars": "wars",
@@ -160,6 +161,7 @@
   "incoming": "incoming",
   "returning": "returning",
   "technology": "technology",
+  "shield": "shield",
   "tier": "tier",
   "tiers": "tiers",
   "active": "active",
@@ -262,7 +264,9 @@
   "battle": "battle",
   "power": "power",
   "army": "army",
-  "size": "size"
-  
+  "size": "size",
+  "stealth": "stealth",
+  "attack": "attack type",
+  "defense": "armor type"
   
 }

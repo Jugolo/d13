@@ -121,7 +121,7 @@ class d13_collection implements IteratorAggregate
 class d13_data
 
 {
-	public $resources, $modules, $technologies, $units, $upgrades, $components, $general, $navigation, $factions, $bw, $gl, $ui;
+	public $resources, $modules, $technologies, $units, $upgrades, $components, $general, $navigation, $shields, $factions, $bw, $gl, $ui;
 
 	// ----------------------------------------------------------------------------------------
 	// construct
@@ -147,6 +147,7 @@ class d13_data
 		$this->units 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_unit.data.json");
 		$this->navigation 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_navigation.data.json");
 		$this->factions 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_factions.data.json");
+		$this->shields 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_shields.data.json");
 				
 	}
 
@@ -192,30 +193,6 @@ class d13_data
 		$classConstruct = require_once $cacheFile;
 		return $classConstruct;
 		
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// record_sort
-	//
-	// @
-	// ----------------------------------------------------------------------------------------
-
-	private
-	
-	function record_sort($records, $field, $reverse = false)
-	{
-		$hash = array();
-		foreach($records as $key => $record) {
-			$hash[$record[$field] . $key] = $record;
-		}
-
-		($reverse) ? krsort($hash) : ksort($hash);
-		$records = array();
-		foreach($hash as $record) {
-			$records[] = $record;
-		}
-
-		return $records;
 	}
 
 }

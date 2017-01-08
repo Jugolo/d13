@@ -242,7 +242,8 @@ class d13_tpl
 		}
 		
 		$tvars["tpl_pvar_name"] = $template;
-
+		$tvars["tpl_page_leftPanel"] = '';
+		$tvars["tpl_page_rightPanel"] = '';
 		// - - - - - Setup the top Navbar
 		require_once(CONST_INCLUDE_PATH . "pages/sub.navbar.php");
 		$tvars["tpl_page_navbar"] = sub_navbar($node);
@@ -257,6 +258,10 @@ class d13_tpl
 			if (!empty($subnavbar)) {
 				$tvars["tpl_pvar_subnavbar"] = "with-subnavbar";
 			}
+			
+			$tvars["tpl_page_leftPanel"] = $node->getUserStats();
+			$tvars["tpl_page_rightPanel"] = $node->queues->getQueuesList();
+			
 		}
 
 		$tvars["tpl_page_subbar"] = $subnavbar;

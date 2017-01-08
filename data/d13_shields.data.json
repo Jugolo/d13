@@ -1,0 +1,16 @@
+[
+  {
+    "id": 0,
+    "image": "shield.png",
+    "active": true,
+    "priority": 5,
+    "duration": 60,
+    "cannotAttack": true,
+    "scout": true,
+    "sabotage": true,
+    "raid": true,
+    "conquer": true,
+    "raze": true,
+    "skirmish": true
+  }
+]

@@ -30,6 +30,7 @@ include(CONST_INCLUDE_PATH."classes/d13_blacklist.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_flags.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_grid.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_message.class.php");
+include(CONST_INCLUDE_PATH."classes/d13_queue.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_misc.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_node.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_unit.class.php");
@@ -41,9 +42,6 @@ include(CONST_INCLUDE_PATH."classes/d13_logger.class.php");
 
 //- - - - - CREATE ENGINE
 $d13 = new d13();
-
-//- - - - - INCLUDE TEMPLATE DEFINITIONS
-include(CONST_INCLUDE_PATH."templates/".$_SESSION[CONST_PREFIX.'User']['template']."/template.php");
 
 //=====================================================================================EOF
 

@@ -67,12 +67,11 @@ CREATE TABLE IF NOT EXISTS `build` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `node` int(10) unsigned NOT NULL,
   `slot` int(10) unsigned NOT NULL,
-  `module` int(10) unsigned NOT NULL,
+  `obj_id` int(10) unsigned NOT NULL,
   `action` varchar(16) COLLATE utf8_bin NOT NULL,
   `start` datetime NOT NULL,
   `duration` float unsigned NOT NULL,
-  PRIMARY KEY (`id`,`slot`),
-  KEY `start` (`start`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -133,42 +132,29 @@ CREATE TABLE IF NOT EXISTS `craft` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `node` int(10) unsigned NOT NULL,
   `slot` int(10) unsigned NOT NULL,
-  `component` int(10) unsigned NOT NULL,
+  `obj_id` int(10) unsigned NOT NULL,
   `quantity` int(10) unsigned NOT NULL,
   `stage` tinyint(3) unsigned NOT NULL,
   `start` datetime NOT NULL,
   `duration` float unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `start` (`start`),
-  KEY `nodeComponent` (`node`,`component`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
+
 --
--- Table structure for table `flags`
+-- Table structure for table `shield`
 --
 
-CREATE TABLE IF NOT EXISTS `flags` (
-  `name` varchar(32) COLLATE utf8_bin NOT NULL,
-  `value` varchar(64) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`name`)
+CREATE TABLE IF NOT EXISTS `shield` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `node` int(10) unsigned NOT NULL,
+  `obj_id` int(10) unsigned NOT NULL,
+  `start` datetime NOT NULL,
+  `duration` float unsigned NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `flags`
---
-
-INSERT INTO `flags` (`name`, `value`) VALUES
-('activation', '0'),
-('build', '1'),
-('combat', '1'),
-('craft', '1'),
-('messages', '1'),
-('research', '1'),
-('trade', '1'),
-('train', '1'),
-('upgrade', '1');
 
 -- --------------------------------------------------------
 
@@ -283,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `research` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `node` int(10) unsigned NOT NULL,
   `slot` int(10) unsigned NOT NULL,
-  `technology` int(10) unsigned NOT NULL,
+  `obj_id` int(10) unsigned NOT NULL,
   `start` datetime NOT NULL,
   `duration` float unsigned NOT NULL,
   PRIMARY KEY (`id`,`node`),
@@ -354,14 +340,12 @@ CREATE TABLE IF NOT EXISTS `train` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `node` int(10) unsigned NOT NULL,
   `slot` int(10) unsigned NOT NULL,
-  `unit` int(10) unsigned NOT NULL,
+  `obj_id` int(10) unsigned NOT NULL,
   `quantity` int(10) unsigned NOT NULL,
   `stage` tinyint(3) unsigned NOT NULL,
   `start` datetime NOT NULL,
   `duration` float unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `start` (`start`),
-  KEY `nodeUnit` (`node`,`unit`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------

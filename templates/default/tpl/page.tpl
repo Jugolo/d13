@@ -5,6 +5,17 @@
 	</head>
 	
 	<body class="theme-{{tvar_global_color}}">
+	
+		<div class="panel-overlay"></div>
+ 
+    	<div class="panel panel-left panel-cover" onClick="myApp.closePanel()">
+       		{{tpl_page_leftPanel}}
+    	</div>
+ 
+    	<div class="panel panel-right panel-cover" onClick="myApp.closePanel()">
+       		{{tpl_page_rightPanel}}
+    	</div>
+	
 	  <div class="views">
 		<div class="view view-main">
 		  <div class="pages">

@@ -2,7 +2,7 @@
 
 <div class="card large-card">
 	<div class="card-header">
-		<div class="d13-heading">{{tvar_unitName}} ({{tvar_unitValue}})</div>
+		<div class="d13-heading">{{tvar_Name}} [{{tvar_Class}}] ({{tvar_unitValue}})</div>
 		<a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 	</div>
 
@@ -12,8 +12,8 @@
 <div class="row">
 	
 		<div class="col-25">
-			<img src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/units/{{tvar_nodeFaction}}/{{tvar_unitImage}}" width="80">
-			<p class="d13-italic">{{tvar_unitDescription}}</p>
+			<img src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/units/{{tvar_nodeFaction}}/{{tvar_Image}}" width="80">
+			<p class="d13-italic">{{tvar_Description}}</p>
 		</div>
 		
 		<div class="col-75">
@@ -23,10 +23,10 @@
 
 					<li class="item-content">
 						<div class="item-inner">
-						<div class="item-after">{{tvar_ui_type}}: {{tvar_unitType}}</div>
+						<div class="item-after">{{tvar_ui_attack}}: {{tvar_AttackType}}</div>
 						</div>
 						<div class="item-inner">
-						<div class="item-after">{{tvar_ui_class}}: {{tvar_unitClass}}</div>
+						<div class="item-after">{{tvar_ui_defense}}: {{tvar_ArmorType}}</div>
 						</div>
 					</li>
 					
@@ -83,13 +83,13 @@
 											<span class="badge">{{tvar_unitCritical}} {{tvar_unitCriticalPlus}}</span>
 										</div>
 									</div>
-									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_other.png"></div>
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_capacity.png"></div>
 									<div class="item-inner">
 										<div class="item-title">
-											
+											{{tvar_ui_capacity}}:
 										</div>
 										<div class="item-after">
-											
+											 <span class="badge">{{tvar_unitCapacity}} {{tvar_unitCapacityPlus}}</span>
 										</div>
 									</div>
 								</li>
@@ -107,10 +107,10 @@
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_capacity.png"></div>
 									<div class="item-inner">
 										<div class="item-title">
-											{{tvar_ui_capacity}}:
+											{{tvar_ui_stealth}}:
 										</div>
 										<div class="item-after">
-											 <span class="badge">{{tvar_unitCapacity}} {{tvar_unitCapacityPlus}}</span>
+											 <span class="badge">{{tvar_unitStealth}} {{tvar_unitStealthPlus}}</span>
 										</div>
 									</div>
 								</li>

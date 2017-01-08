@@ -32,11 +32,10 @@ img {
 }
 
 .tiny-card {
-	width: auto;
-	height: auto;
 	border-radius: 5px;
 	font-size: 9pt;
-	
+	height: 97%;
+	width: 97%;
 	vertical-align: middle;
 }
 
@@ -90,6 +89,21 @@ img {
 	height: 2%;
 }
 
+.panel {
+	background: transparent;
+	overflow: hidden;
+	font-size: 9pt;
+}
+
+.card-content {
+	min-height: 75%;
+	height: auto;
+}
+
+.card-header {
+	height: 2%;
+}
+
 .card-footer {
 	height: 2%;
 }
@@ -105,7 +119,7 @@ img {
 	padding: 2%;
 	width: 75%;
 	height: auto;
-	max-height: 75%;
+	max-height: 95%;
 	 -webkit-filter: drop-shadow(2px 2px 2px #222);
     filter: drop-shadow(2px 2px 2px #222);
 }
@@ -118,14 +132,29 @@ img {
     filter: drop-shadow(2px 2px 2px #222);
 }
 
-.swiper-wrapper, .swiper-container, .swiper-container-horizontal {
+.swiper-wrapper {
 	width: 100%;
 	height: 100%;
 }
 
- .swiper-slide {
-	height: 100%,
+.swiper-container{
 	width: 100%;
+	height: 100%;
+}
+
+.swiper-container-horizontal {
+	width: 100%;
+	height: 100%;
+}
+
+.swiper-slide {
+	height: 100%;
+	width: 100%;
+}
+
+ .swiper-slide-list {
+	height: 100%;
+	width: auto;
 }
 
 .swiper-pagination-bullet {
@@ -147,8 +176,156 @@ img {
 	background-color: hsla(0, 0%, 0%, 0.5);
 }
 
+.chip-label{
+	font-size:9pt;
+}
+
 .size-16 { font-size: 16px }
 .size-24 { font-size: 24px }
+
+/* -- D13 CSS --------------------------------------------------------------------------*/
+
+.d13-image {
+	max-width: 100%;
+	height: auto;
+	border: 0;
+	vertical-align: middle;
+}
+
+.d13-node {
+ width: 100%;
+ height: 100%;
+ background-repeat: repeat;
+ text-align: center;
+ position: relative;
+ vertical-align: middle;
+ padding: auto;
+ margin: auto;
+}
+
+.d13-module
+{
+	width: 100%;
+ 	height: auto;
+ 	padding: 1%;
+ 	background-repeat: no-repeat;
+}
+
+.d13-module-inner {
+	min-width: 33%;
+    width: 66%;
+    height: auto;
+}
+
+.d13-micron {
+	min-width: 6px;
+	max-width: 12px;
+	height: auto;
+	padding: 0;
+	margin: 0;
+	vertical-align: middle;
+}
+
+.d13-icon {
+	min-width: 16px;
+	max-width: 30px;
+	height: auto;
+	padding: auto;
+	margin: auto;
+	vertical-align: middle;
+}
+
+img.d13-resource
+{
+	width: 24px;
+	height: auto;
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+img.d13-item
+{
+	min-width: 40px;
+ 	max-width: 80px;
+ 	height: auto;
+ 	border: 0px;
+ 	margin: 0px;
+	padding: 0px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+p.d13-italic {
+	font-style: italic;
+}
+
+p.d13-bold {
+	font-weight: bold;
+}
+
+.d13-heading {
+	font-size: 12pt;
+	font-variant: small-caps;
+	text-align: center;
+}
+
+.d13-queue {
+	font-size:9pt;
+	overflow: visible;
+	position: absolute;
+	bottom: 1%;
+	right: 1%;
+}
+
+div.d13-cell
+{
+white-space: nowrap;
+ display: inline-block;
+ vertical-align: middle;
+ text-align:left;
+ font-size: 9pt;
+}
+
+div.cell
+{
+white-space: nowrap;
+ display: inline-block;
+ padding: 2px;
+ vertical-align: middle;
+ text-align:left;
+}
+
+div.sector
+   {
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    width: 5px;
+    height: 5px;
+    border: 1px solid transparent;
+    padding: 0;
+   }
+
+div.sector:hover
+{
+	border: 1px solid black;
+}
+
+/* ---CSS3 Animations --------------------------------------------------------------*/
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 3s infinite linear;
+}
+
 
 /* -- PURE Overwrite Styling -----------------------------------------------------------*/
 
@@ -267,150 +444,5 @@ input[type=range]:focus::-ms-fill-upper {
   background: #367ebd;
 }
 
-/* -- D13 CSS --------------------------------------------------------------------------*/
-
-.d13-image {
-	max-width: 100%;
-	height: auto;
-	border: 0;
-	vertical-align: middle;
-}
-
-.d13-node {
- width: 100%;
- height: 100%;
- background-repeat: repeat;
- text-align: center;
- position: relative;
- vertical-align: middle;
- padding: auto;
- margin: auto;
-}
-
-.d13-module
-{
-	width: 100%;
- 	height: auto;
- 	padding: 1%;
- 	background-repeat: no-repeat;
-}
-
-.d13-module-inner {
-	min-width: 33%;
-    width: 66%;
-    height: auto;
-}
-
-.d13-icon {
-	min-width: 16px;
-	max-width: 30px;
-	height: auto;
-	padding: auto;
-	margin: auto;
-	vertical-align: middle;
-}
-
-img.d13-resource
-{
-	width: 24px;
-	height: auto;
-	border: 0px;
-	margin: 0px;
-	padding: 0px;
-	vertical-align: middle;
-	text-align: center;
-}
-
-img.d13-item
-{
-	min-width: 40px;
- 	max-width: 80px;
- 	height: auto;
- 	border: 0px;
- 	margin: 0px;
-	padding: 0px;
-	vertical-align: middle;
-	text-align: center;
-}
-
-p.d13-italic {
-	font-style: italic;
-}
-
-p.d13-bold {
-	font-weight: bold;
-}
-
-.d13-heading {
-	font-variant: small-caps;
-	text-align: center;
-}
-
-.d13-queue{
-	position: absolute;
-	background-color: #000;
-	background-color: hsla(0, 0%, 100%, 0.7);
-	padding: 5px;
-	margin: 5px;
-	border-radius: 5px;
-	width: 23%;
-	z-index:1000;
-	font-size:9pt;
-	top: 7%;
-	text-align:left;
-}
-
-div.cell
-{
-white-space: nowrap;
- display: inline-block;
- padding: 2px;
- vertical-align: middle;
- text-align:left;
-}
-
-.queue-1 {
-	left: 0%;
-}
-
-.queue-2 {
-	left: 25%;
-}
-
-.queue-3 {
-	right: 25%;
-}
-
-.queue-4 {
-	right: 0%;
-}
-
-div.sector
-   {
-    display: inline-block;
-    white-space: nowrap;
-    cursor: pointer;
-    width: 5px;
-    height: 5px;
-    border: 1px solid transparent;
-    padding: 0;
-   }
-
-div.sector:hover
-{
-	border: 1px solid black;
-}
-
-/* ---CSS3 Animations --------------------------------------------------------------*/
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.spinner {
-  animation: spin 3s infinite linear;
-}
 
 /* -----------------------------------------------------------------*/

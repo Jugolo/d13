@@ -17,25 +17,28 @@ class misc
 
 {
 
+
 	// ----------------------------------------------------------------------------------------
-	// time_format
+	// record_sort
+	//
 	// ----------------------------------------------------------------------------------------
 
 	public static
-
-	function time_format($secs = 0)
+	
+	function record_sort($records, $field, $reverse = false)
 	{
-		if ($secs > 0) {
-			$secs = ceil($secs);
-			$dtF = new DateTime('@0');
-			$dtT = new DateTime('@' . floor($secs));
-			$time = $dtF->diff($dtT)->format('%ad %hh %im %ss');
-			$time = str_replace("0d", "", $time);
-			$time = str_replace("0h", "", $time);
-			$time = str_replace("0m", "", $time);
-			$time = str_replace("0s", "", $time);
-			return $time;
+		$hash = array();
+		foreach($records as $key => $record) {
+			$hash[$record[$field] . $key] = $record;
 		}
+
+		($reverse) ? krsort($hash) : ksort($hash);
+		$records = array();
+		foreach($hash as $record) {
+			$records[] = $record;
+		}
+
+		return $records;
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -113,9 +116,9 @@ class misc
 
 	function sToHMS($seconds, $asString=false)
 	{
-		$h = floor($seconds / 3600);
-		$m = floor($seconds % 3600 / 60);
-		$s = $seconds % 3600 % 60;
+		$h = sprintf('%02d', floor($seconds / 3600));
+		$m = sprintf('%02d', floor($seconds % 3600 / 60));
+		$s = sprintf('%02d', floor($seconds % 3600 % 60));
 		$t = array($h,$m,$s);
 		
 		if ($asString) {

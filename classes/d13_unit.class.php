@@ -406,7 +406,9 @@ class d13_unit
 		
 		$tvars['tvar_id'] = $this->data['id'];
 		$tvars['tvar_type'] = $this->data['type'];
-		$tvars['tvar_class'] = $this->data['class'];
+		$tvars['tvar_class'] = $d13->getLangGL('classes', $this->data['class']);
+		$tvars['tvar_attackType'] = $d13->getLangGL('attackTypes', $this->data['attackType']);
+		$tvars['tvar_armorType'] = $d13->getLangGL('armorTypes', $this->data['armorType']);
 		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
 		
 		foreach($d13->getGeneral('stats') as $stat) {
@@ -436,7 +438,6 @@ class d13_unit
 		$tvars['tvar_unitValue'] = $this->node->units[$this->data['unitId']]['value'];
 		
 		$tvars['tvar_unitLimit'] = $this->getMaxProduction();
-		#$tvars['tvar_unitDuration'] = misc::time_format((($this->data['duration'] - $this->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'train')) * 60);
 
 		$tvars['tvar_unitUpkeepResourceName'] = $d13->getLangGL('resources', $this->data['upkeepResource'], 'name');
 		

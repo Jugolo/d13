@@ -25,6 +25,13 @@
       "description": "Units require food."
     }
   ],
+  "shields": [
+    {
+      "name": "newbie protection",
+      "description": "Your town is protected from all attacks for some time."
+    }
+    
+  ],
   "factions": [
     {
       "name": "Empire",
@@ -665,12 +672,24 @@
     ]
   ],
   "classes": {
-    "spearman": "spearman",
-    "swordsman": "swordsman",
+    "spearman": "lancer",
+    "swordsman": "warrior",
     "duelist": "duelist",
     "archer": "archer",
     "cavalry": "cavalry",
     "static": "static"
+  },
+  "attackTypes": {
+  	"melee": "melee",
+  	"missile": "missile",
+  	"artillery": "artillery",
+  	"magic": "magic"
+  },
+  "armorTypes": {
+  	"light": "light",
+  	"medium": "medium",
+  	"heavy": "heavy",
+  	"fortified": "fortified"
   },
   "units": [
     [

@@ -171,6 +171,13 @@ class d13
 
 	public
 
+	function getShield()
+	{
+		return $this->data->shields->get(func_get_args());
+	}
+
+	public
+
 	function getUpgrade()
 	{
 		return $this->data->upgrades->get(func_get_args());

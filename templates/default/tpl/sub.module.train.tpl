@@ -2,7 +2,7 @@
 	<div class="card large-card">
 		<div class="card-header">
 			<div class="d13-heading">
-				{{tvar_name}} ({{tvar_unitValue}})
+				{{tvar_name}} [{{tvar_Class}}] ({{tvar_unitValue}})
 			</div><a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 		</div>
 		<div class="card-content">
@@ -19,12 +19,12 @@
 								<li class="item-content">
 									<div class="item-inner">
 										<div class="item-after">
-											{{tvar_ui_type}}: {{tvar_type}}
+											{{tvar_ui_attack}}: {{tvar_attackType}}
 										</div>
 									</div>
 									<div class="item-inner">
 										<div class="item-after">
-											{{tvar_ui_class}}: {{tvar_class}}
+											{{tvar_ui_defense}}: {{tvar_armorType}}
 										</div>
 									</div>
 								</li>
@@ -102,13 +102,13 @@
 											<span class="badge">{{tvar_unitCritical}} {{tvar_unitCriticalPlus}}</span>
 										</div>
 									</div>
-									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_other.png"></div>
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_capacity.png"></div>
 									<div class="item-inner">
 										<div class="item-title">
-											
+											{{tvar_ui_capacity}}:
 										</div>
 										<div class="item-after">
-											
+											 <span class="badge">{{tvar_unitCapacity}} {{tvar_unitCapacityPlus}}</span>
 										</div>
 									</div>
 								</li>
@@ -126,10 +126,10 @@
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_capacity.png"></div>
 									<div class="item-inner">
 										<div class="item-title">
-											{{tvar_ui_capacity}}:
+											{{tvar_ui_stealth}}:
 										</div>
 										<div class="item-after">
-											 <span class="badge">{{tvar_unitCapacity}} {{tvar_unitCapacityPlus}}</span>
+											 <span class="badge">{{tvar_unitStealth}} {{tvar_unitStealthPlus}}</span>
 										</div>
 									</div>
 								</li>

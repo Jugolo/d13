@@ -204,14 +204,22 @@ if (isset($node)) {
 	$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
 
 	// - - - - Available Enemies
-	$tvars['tvar_nodeList'] = '<option>...</option>';
+	$tvars['tvar_nodeList'] = '<option disabled>...</option>';
 	$nodes = node::getList($_SESSION[CONST_PREFIX . 'User']['id'], TRUE);
 	foreach($nodes as $node) {
-		$tvars['tvar_nodeList'].= '<option value="'.$node->data['id'].'">' . $node->data['name'] . '</option>';
+		$disabled = '';
+		$text = '';
+		
+		if ($node->getShield($_GET['type'])) {
+			$disabled = 'disabled';
+			$text = ' (shielded)';
+		}
+		
+		$tvars['tvar_nodeList'].= '<option value="'.$node->data['id'].'" '.$disabled.'>' . $node->data['name'] . $text . '</option>';
 	}
 
 	// - - - - Combat Cost
-	$cost = $d13->getFactions($node->data['faction'], 'costs', $_GET['type']);
+	$cost = $d13->getFaction($node->data['faction'], 'costs', $_GET['type']);
 	$tvars['tvar_costData'] = '';
 	foreach ($cost as $res) {
 		$resource = $res['resource'];

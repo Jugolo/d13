@@ -19,10 +19,6 @@ RELEASE CANDIDATE 0
 
 V013 	- !!! THIS REPRESENTS THE NEXT UPDATE CONTENTS !!!
 		
-		* Marching units now shown in the Warfare type building as well
-		* Players can send one army marching per Warfare building they have, multiple only
-		  possible with multiple warfare buildings
-		
 		* Basic Combat System implemented
 		
 		* Six different types of attacking an enemy:
@@ -33,7 +29,14 @@ V013 	- !!! THIS REPRESENTS THE NEXT UPDATE CONTENTS !!!
 			- Conquer
 			- Sabotage
 
-V012	* All active tasks (craft/train/research/armies) an now be cancelled, either from
+V012	* Added randomized terrain tiles to the city view
+		* Marching units now shown in the Warfare type building as well
+		* Players can send one army marching per Warfare building they have, multiple only
+		  possible with multiple warfare buildings
+		* Shield system and Newbie Protection system implemented
+		  (inclusive configuration options for various shield types)
+		* Refactored all build queues into own class
+		* All active tasks (craft/train/research/armies) an now be cancelled, either from
 		  the queue overview in the town view or directly from the building itself. buildings
 		  and building upgrades can also be cancelled - but only from the main town view.
 		* Some resources are now automagically produced if the admin wants to.

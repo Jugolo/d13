@@ -5,7 +5,7 @@
     	</div>
     	<div class="chip-label">
     		<b>{{tvar_resValue}}</b>
-    		<div class="progressbar" data-progress="{{tvar_resPercentage}}">
+    		<div class="progressbar color-{{tvar_resColor}}" data-progress="{{tvar_resPercentage}}" style="height:4px;">
     			<span></span>
 			</div>
     	</div>
