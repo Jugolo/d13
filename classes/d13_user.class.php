@@ -16,7 +16,23 @@
 class user
 
 {
+	
 	public $data, $preferences, $blocklist;
+	
+
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------	
+	public
+	
+	function __construct($id=0)
+	{
+		if (!empty($id) && $id > 0) {
+		
+			$status = $this->get('id', $id);
+		}
+		
+	}
 	
 	// ----------------------------------------------------------------------------------------
 	//
@@ -146,6 +162,10 @@ class user
 		else $status = 'noUser';
 		return $status;
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
 
 	public static
 
@@ -184,6 +204,9 @@ class user
 			'removed' => $removedCount
 		);
 	}
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
 
 	public
 
@@ -201,6 +224,9 @@ class user
 		else $status = 'wrongEmail';
 		return $status;
 	}
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
 
 	public
 
@@ -214,6 +240,9 @@ class user
 		else
 		for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->preferences[$i] = $row;
 	}
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
 
 	public
 
@@ -226,6 +255,9 @@ class user
 		return $status;
 	}
 
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
 	public
 
 	function getBlocklist()
@@ -240,6 +272,9 @@ class user
 			else $this->blocklist[$i]['senderName'] = '[x]';
 		}
 	}
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
 
 	public
 
@@ -250,6 +285,10 @@ class user
 		$row = $d13->dbFetch($result);
 		return $row['count'];
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
 
 	public
 
@@ -268,6 +307,116 @@ class user
 		else $status = 'noUser';
 		return $status;
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// setStat
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function setStat($stat, $value)	
+	{
+	
+		global $d13;
+
+		$status = 0;
+		$tmp_stat = $d13->getGeneral('userstats', $stat);
+		
+		if (!empty($tmp_stat)) {
+		
+			$this->data[$tmp_stat['name']] += $value;
+			
+			if ($tmp_stat['isExp']) {
+				if ($this->data[$tmp_stat['name']] >= misc::nextlevelexp($this->data['level'])) {
+					$this->setStat('level', 1);
+				}
+			}
+			
+			$d13->dbQuery('update users set '.$tmp_stat['name'].'="'.$this->data[$tmp_stat['name']].'" where id="' . $this->data['id'] . '"');
+			
+			if ($d13->dbAffectedRows() > - 1) {
+				$status = 1;
+			}
+			
+		}
+		
+		return $status;
+	
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function gainExperience($cost, $level)
+	{
+	
+		global $d13;
+		
+		$status = 0;
+		$value = 0;
+		$i = 0;
+		
+		foreach ($cost as $entry) {
+			$value += $entry['value'];
+			$i++;
+		}
+		
+		$value = floor((($value/$i)*$level)/$d13->getGeneral('factors', 'experience'));
+	
+		$status = $this->setStat('experience', $value);
+		
+		return $status;
+		
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getTemplateVariables
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getTemplateVariables()
+	{
+	
+		global $d13;
+				
+		$tvars = array();
+	
+		//- - - - - Player Name & Avatar
+		$tvars['tvar_userName'] 		= $this->data['name'];
+		$tvars['tvar_userImage'] 		= $this->data['avatar'];
+		
+		//- - - - - Player Alliance
+		
+		
+		//- - - - - Player League
+		$league = array();
+		$league = $d13->getGeneral('leagues', misc::getLeague($this->data['level'], $this->data['trophies']));
+		
+		$tvars['tvar_userLeague']		= $d13->getLangGL('leagues', $league['id'], 'name');
+		$tvars['tvar_userImageLeague'] 	= $league['image'];
+		
+		//- - - - - Player Stats
+	
+		foreach($d13->getGeneral("userstats") as $stat) {
+			if ($stat['active']) {
+				$tvars['tvar_userImage'.$stat['name']] 		= $stat['image'];
+				$tvars['tvar_userPercentage'.$stat['name']] = '';
+				if ($stat['isExp']) {
+				$tvars['tvar_user'.$stat['name']] 			= $this->data[$stat['value']] . '/' . misc::nextlevelexp($this->data['level']);
+				$tvars['tvar_userPercentage'.$stat['name']] = misc::percentage(floor($this->data[$stat['value']]), misc::nextlevelexp($this->data['level']));
+				$tvars['tvar_userColor'] 					= $stat['color'];
+				} else {
+				$tvars['tvar_user'.$stat['name']] 			= $this->data[$stat['value']];
+				}
+				
+			}
+		}
+
+		return $tvars;
+	
+	}
+	
 }
 
 // =====================================================================================EOF

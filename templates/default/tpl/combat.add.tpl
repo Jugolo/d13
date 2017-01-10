@@ -10,13 +10,11 @@
   
   		<div class="card-content">
     		
-    
-				
 				<div class="swiper-container">
 					<div class="swiper-wrapper">
-						<div style="height:100%;">
+						
 						 {{tvar_unitsHTML}}
-						 </div>
+						 
 					</div>
 					<div class="swiper-button-prev"></div>
 					<div class="swiper-button-next"></div>
@@ -25,14 +23,16 @@
 				</div>
 				
 				<input type="hidden" name="type" value="{{tvar_type}}">
-				
-			
-
-	
+				<input type="hidden" name="fuelFactor" id="fuelFactor" value="{{tvar_fuelfactor}}">
+				<input type="hidden" name="fuelResource" id="fuelResource" value="{{tvar_fuelResource}}">
 	</div>
 		
 		<div class="card-footer">
-  			<div class="left">{{tvar_ui_army}} {{tvar_ui_size}}: <span id="size" class="badge">0/0</span></div>
+  			<div class="left">
+  			{{tvar_ui_speed}}: <span id="totalSpeed" class="badge">0</span>
+  			{{tvar_ui_damage}}: <span id="totalDamage" class="badge">0</span>
+  			{{tvar_ui_vision}}: <span id="totalVision" class="badge">0</span>
+  			</div>
   			
   			<div class="right">
   			{{tvar_ui_target}}: <select name="id">{{tvar_nodeList}}</select> {{tvar_ui_cost}}: {{tvar_costData}} <input class="pure-button" type="submit" value="{{tvar_combatType}}!">

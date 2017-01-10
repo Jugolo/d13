@@ -29,13 +29,20 @@ V013 	- !!! THIS REPRESENTS THE NEXT UPDATE CONTENTS !!!
 			- Conquer
 			- Sabotage
 
-V012	* Added randomized terrain tiles to the city view
+V012	* player accounts now gain experience through building, upgrades & researches
+		* player accounts now level up - this affects league ranking
+		* player accounts are now divided into leagues to measure their power
+		* Added player status and league pages
+		* Total Army stats now shown during army setup
+		* Added optional Fuel resource cost to army movement
+		* Added randomized terrain tiles to the city view
 		* Marching units now shown in the Warfare type building as well
 		* Players can send one army marching per Warfare building they have, multiple only
 		  possible with multiple warfare buildings
 		* Shield system and Newbie Protection system implemented
 		  (inclusive configuration options for various shield types)
 		* Refactored all build queues into own class
+		* Restyled the representation of queues utilizing a overlay panel
 		* All active tasks (craft/train/research/armies) an now be cancelled, either from
 		  the queue overview in the town view or directly from the building itself. buildings
 		  and building upgrades can also be cancelled - but only from the main town view.
@@ -44,8 +51,8 @@ V012	* Added randomized terrain tiles to the city view
 			(each technology can now affect an upgrade, that upgrade can affect either
 			 one or more units or one or more buildings)
 		* Lots of Bugfixes
-		* Added caching of template files
 		* Optimized/Optional templates caching
+		* Added caching of template files
 
 V011 	
 		* Added new attributes for units (vision, capacity, critical)

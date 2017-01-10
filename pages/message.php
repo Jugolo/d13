@@ -29,7 +29,9 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		'messageId'
 	))) $_GET[$key] = misc::clean($value, 'numeric');
 	else $_GET[$key] = misc::clean($value);
+	
 	switch ($_GET['action']) {
+	
 	case 'get':
 		if (isset($_GET['messageId'])) {
 			$msg = new message();
@@ -118,7 +120,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		break;
 
 	case 'list':
-		$limit = 10;
+		$limit = 8;
 		if (isset($_GET['page'])) $offset = $limit * $_GET['page'];
 		else $offset = 0;
 		$messages = message::getList($_SESSION[CONST_PREFIX . 'User']['id'], $limit, $offset);
@@ -210,7 +212,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			$vars = array();
 			$vars['tvar_listImage'] = '';
 			$vars['tvar_listLabel'] = '<a class="external" href="javascript: document.getElementById(\'messageList\').submit()">' . $d13->getLangUI("remove") . ' ' . $d13->getLangUI("selected") . '</a>';
-			$vars['tvar_listAmount'] = '<a class="external" href="javascript: document.getElementById(\'messageList\').submit()"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
+			$vars['tvar_listAmount'] = '';
 			$tvars['tvar_remove'] = $d13->templateSubpage("sub.module.listcontent", $vars);
 		}
 

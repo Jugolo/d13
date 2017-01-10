@@ -373,6 +373,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `name` varchar(32) COLLATE utf8_bin NOT NULL,
   `password` varchar(128) COLLATE utf8_bin NOT NULL,
   `email` varchar(32) COLLATE utf8_bin NOT NULL,
+  `avatar` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT 'avatar.png',
   `access` tinyint(3) unsigned NOT NULL,
   `level` int(10) unsigned NOT NULL,
   `experience` int(10) unsigned NOT NULL,

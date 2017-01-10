@@ -53,9 +53,9 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 	// - - - - - Colors
 	global $template;
 	$colors = '<option value="' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">' . $_SESSION[CONST_PREFIX . 'User']['color'] . '</option>';
-	foreach($template['colors-ios'] as $color) {
-		if ($_SESSION[CONST_PREFIX . 'User']['color'] != $color['name']) {
-			$colors.= '<option value="' . $color['name'] . '">' . $color['name'] . '</option>';
+	foreach($d13->getGeneral('colors') as $color) {
+		if ($_SESSION[CONST_PREFIX . 'User']['color'] != $color) {
+			$colors.= '<option value="' . $color . '">' . $color . '</option>';
 		}
 	}
 

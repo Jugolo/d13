@@ -25,53 +25,73 @@
         "scout": [
           {
             "resource": 0,
-            "value": 501
+            "value": 501,
+            "isFuel": false
+          },
+          {
+            "resource": 1,
+            "value": 103,
+            "isFuel": true
           }
         ],
 		"skirmish": [
           {
             "resource": 0,
-            "value": 502
+            "value": 502,
+            "isFuel": false
+          },
+          {
+            "resource": 1,
+            "value": 103,
+            "isFuel": true
           }
         ],
 		"raid": [
           {
             "resource": 0,
-            "value": 503
+            "value": 503,
+            "isFuel": false
           },
           {
             "resource": 1,
-            "value": 103
+            "value": 103,
+            "isFuel": true
           }
         ],
 		"sabotage": [
           {
             "resource": 0,
-            "value": 504
+            "value": 504,
+            "isFuel": false
           },
           {
             "resource": 1,
-            "value": 104
+            "value": 104,
+            "isFuel": true
           }
         ],
 		"raze": [
           {
             "resource": 0,
-            "value": 505
+            "value": 505,
+            "isFuel": false
           },
           {
             "resource": 1,
-            "value": 105
+            "value": 105,
+            "isFuel": true
           }
         ],
 		"conquer": [
           {
             "resource": 0,
-            "value": 506
+            "value": 506,
+            "isFuel": false
           },
           {
             "resource": 1,
-            "value": 106
+            "value": 106,
+            "isFuel": true
           }
         ]
       }
@@ -102,37 +122,43 @@
         "scout": [
           {
             "resource": 0,
-            "value": 501
+            "value": 501,
+            "isFuel": false
           }
         ],
 		"skirmish": [
           {
             "resource": 0,
-            "value": 502
+            "value": 502,
+            "isFuel": false
           }
         ],
 		"raid": [
           {
             "resource": 0,
-            "value": 503
+            "value": 503,
+            "isFuel": false
           }
         ],
 		"sabotage": [
           {
             "resource": 0,
-            "value": 504
+            "value": 504,
+            "isFuel": false
           }
         ],
 		"raze": [
           {
             "resource": 0,
-            "value": 505
+            "value": 505,
+            "isFuel": false
           }
         ],
 		"conquer": [
           {
             "resource": 0,
-            "value": 506
+            "value": 506,
+            "isFuel": false
           }
         ]
       }
@@ -163,37 +189,43 @@
         "scout": [
           {
             "resource": 0,
-            "value": 501
+            "value": 501,
+            "isFuel": false
           }
         ],
 		"skirmish": [
           {
             "resource": 0,
-            "value": 502
+            "value": 502,
+            "isFuel": false
           }
         ],
 		"raid": [
           {
             "resource": 0,
-            "value": 503
+            "value": 503,
+            "isFuel": false
           }
         ],
 		"sabotage": [
           {
             "resource": 0,
-            "value": 504
+            "value": 504,
+            "isFuel": false
           }
         ],
 		"raze": [
           {
             "resource": 0,
-            "value": 505
+            "value": 505,
+            "isFuel": false
           }
         ],
 		"conquer": [
           {
             "resource": 0,
-            "value": 506
+            "value": 506,
+            "isFuel": false
           }
         ]
       }

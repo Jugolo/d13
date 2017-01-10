@@ -12,9 +12,6 @@
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
 // ========================================================================================
-// ----------------------------------------------------------------------------------------
-// PROCESS MODEL
-// ----------------------------------------------------------------------------------------
 
 global $d13;
 $message = "";
@@ -180,7 +177,7 @@ if (isset($node)) {
 		$tvars['tvar_slotId'] 		= $_GET['slotId'];
 	}
 
-	// - - - - Available Units
+	// - - - - Available Units List
 
 	$tvars['tvar_units'] = "";
 	$tvars['tvar_unitsHTML'] = "";
@@ -193,51 +190,61 @@ if (isset($node)) {
 		
 			$d13->templateInject($d13->templateSubpage("sub.popup.unit", $tmp_unit->getTemplateVariables()));
 		
-			$tvars['tvar_unitName'] = $d13->getLangGL('units', $node->data['faction'], $id) ['name'];
-			$tvars['tvar_unitId'] = $id;
-			$tvars['tvar_unitAmount'] = $unit['value'];
-			$tvars['tvar_unitLevel'] = $unit['level'];
-			$tvars['tvar_unitsHTML'].= $d13->templateSubpage("sub.combat.unit", $tvars);
+			$tvars['tvar_unitName'] 	= $d13->getLangGL('units', $node->data['faction'], $id) ['name'];
+			$tvars['tvar_unitId'] 		= $id;
+			$tvars['tvar_unitAmount'] 	= $unit['value'];			
+			$tvars['tvar_unitDamage'] 	= $tmp_unit->data['damage'];
+			$tvars['tvar_unitSpeed'] 	= $tmp_unit->data['speed'];
+			$tvars['tvar_unitVision'] 	= $tmp_unit->data['vision'];
+			$tvars['tvar_unitFuel'] 	= $tmp_unit->data['fuel'];
+			$tvars['tvar_unitsHTML']	.= $d13->templateSubpage("sub.combat.unit", $tvars);
 		}
 	}
 
 	$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
 
-	// - - - - Available Enemies
+	// - - - - Available Enemies List
+	$showAll = true;
 	$tvars['tvar_nodeList'] = '<option disabled>...</option>';
-	$nodes = node::getList($_SESSION[CONST_PREFIX . 'User']['id'], TRUE);
-	foreach($nodes as $node) {
+	$target_nodes = node::getList($_SESSION[CONST_PREFIX . 'User']['id'], TRUE);
+	$node->getLocation();
+	
+	foreach($target_nodes as $target_node) {
 		$disabled = '';
 		$text = '';
+		$target_node->getLocation();
+		$distance = ceil(sqrt(pow(abs($node->location['x'] - $target_node->location['x']) , 2) + pow(abs($node->location['y'] - $target_node->location['y']) , 2)));
 		
-		if ($node->getShield($_GET['type'])) {
+		if ($target_node->getShield($_GET['type'])) {
 			$disabled = 'disabled';
 			$text = ' (shielded)';
 		}
 		
-		$tvars['tvar_nodeList'].= '<option value="'.$node->data['id'].'" '.$disabled.'>' . $node->data['name'] . $text . '</option>';
+		if ($showAll || empty($disabled))  {
+			$tvars['tvar_nodeList'].= '<option value="'.$target_node->data['id'].'" '.$disabled.'>' . $target_node->data['name'] . ' [' . $distance . $d13->getLangUI('miles') . '] ' .$text . '</option>';
+		}
 	}
 
-	// - - - - Combat Cost
+	// - - - - Combat Cost & Fuel
 	$cost = $d13->getFaction($node->data['faction'], 'costs', $_GET['type']);
 	$tvars['tvar_costData'] = '';
 	foreach ($cost as $res) {
 		$resource = $res['resource'];
 		$cost =  $res['value'];
-		$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'image') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '">'.$cost . '</span>';
+		if ($res['isFuel']) {
+			$id = "id='totalFuel'";
+			$cost = 0;
+			$tvars['tvar_fuelFactor'] = floor($res['value']);
+			$tvars['tvar_fuelResource'] = floor($node->resources[$res['resource']]['value']);
+		}
+		$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'image') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '"><span '.$id.'>'.$cost . '</span></span>';
 	}
 	
-	// - - - - Template according to map system
+	// - - - - Template 
 	if (isset($node->data['id'])) {
 		switch ($_GET['action']) {
 		case 'add':
-			if ($d13->getGeneral('options', 'gridSystem') > 0) {
-				$page = "combat.add.map";
-			}
-			else {
-				$page = "combat.add.abstract";
-			}
-
+			$page = "combat.add";
 			break;
 		}
 	}

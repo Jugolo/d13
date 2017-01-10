@@ -5,8 +5,10 @@
     	scrollbar: '.swiper-scrollbar',
     	nextButton: '.swiper-button-next',
     	prevButton: '.swiper-button-prev',
-    	pagination: '.swiper-pagination',
-        paginationClickable: true,
+    	//pagination: '.swiper-pagination',
+        //paginationClickable: true,
+        scrollbarDraggable: true,
+        scrollbarSnapOnRelease: true,
         preloadImage: true,
         slidesPerView: 'auto',
         lazyLoading: true

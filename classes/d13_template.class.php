@@ -259,7 +259,7 @@ class d13_tpl
 				$tvars["tpl_pvar_subnavbar"] = "with-subnavbar";
 			}
 			
-			$tvars["tpl_page_leftPanel"] = $node->getUserStats();
+			$tvars["tpl_page_leftPanel"] = '';
 			$tvars["tpl_page_rightPanel"] = $node->queues->getQueuesList();
 			
 		}

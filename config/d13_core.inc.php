@@ -37,6 +37,7 @@ include(CONST_INCLUDE_PATH."classes/d13_unit.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_modulit.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_combat.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_user.class.php");
+include(CONST_INCLUDE_PATH."classes/d13_notes.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_module.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_logger.class.php");
 

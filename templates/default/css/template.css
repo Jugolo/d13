@@ -34,7 +34,7 @@ img {
 .tiny-card {
 	border-radius: 5px;
 	font-size: 9pt;
-	height: 97%;
+	height: 100%;
 	width: 97%;
 	vertical-align: middle;
 }
@@ -72,6 +72,7 @@ img {
 }
 
 .subnavbar {
+	left: 0;
 	font-size: 9pt;
 }
 
@@ -132,27 +133,14 @@ img {
     filter: drop-shadow(2px 2px 2px #222);
 }
 
-.swiper-wrapper {
+.swiper-container, .swiper-container-horizontal,   {
 	width: 100%;
 	height: 100%;
 }
 
-.swiper-container{
-	width: 100%;
-	height: 100%;
-}
-
-.swiper-container-horizontal {
-	width: 100%;
-	height: 100%;
-}
-
-.swiper-slide {
-	height: 100%;
-	width: 100%;
-}
-
- .swiper-slide-list {
+.swiper-slide-list
+ {
+ 	min-height: 100%;
 	height: 100%;
 	width: auto;
 }
@@ -174,6 +162,10 @@ img {
 .badge{
 	background-color: #000000;
 	background-color: hsla(0, 0%, 0%, 0.5);
+}
+
+.chip{
+	z-index: 1;
 }
 
 .chip-label{
@@ -224,6 +216,7 @@ img {
 	padding: 0;
 	margin: 0;
 	vertical-align: middle;
+	z-index: 1;
 }
 
 .d13-icon {
@@ -233,6 +226,7 @@ img {
 	padding: auto;
 	margin: auto;
 	vertical-align: middle;
+	z-index: 1;
 }
 
 img.d13-resource
@@ -244,6 +238,7 @@ img.d13-resource
 	padding: 0px;
 	vertical-align: middle;
 	text-align: center;
+	z-index: 1;
 }
 
 img.d13-item
@@ -272,13 +267,23 @@ p.d13-bold {
 	text-align: center;
 }
 
-.d13-queue {
+.d13-queue-right {
 	font-size:9pt;
 	overflow: visible;
 	position: absolute;
-	bottom: 1%;
+	bottom: 2%;
 	right: 1%;
 }
+
+.d13-queue-left {
+	text-align: left;
+	font-size:9pt;
+	overflow: visible;
+	position: absolute;
+	bottom: 2%;
+	left: 1%;
+}
+
 
 div.d13-cell
 {

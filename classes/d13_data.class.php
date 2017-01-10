@@ -162,7 +162,7 @@ class d13_data
 	function loadFromJSON($url)
 	{
    		
-		$cacheFile = CONST_INCLUDE_PATH . 'cache/data' . DIRECTORY_SEPARATOR . 'dta_'.md5($url) . ".cache.php";
+		$cacheFile = CONST_INCLUDE_PATH . 'cache/data' . DIRECTORY_SEPARATOR . 'dta_'.md5($url) . ".".basename($url).".php";
 		
 		if (is_file($cacheFile) && filemtime($url) < filemtime($cacheFile)) {
 			$classConstruct = require_once $cacheFile;

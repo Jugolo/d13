@@ -46,6 +46,88 @@
       "description": "The military power."
     }
   ],
+  "leagues": [
+  	{
+  		"name": "Unranked",
+  		"description": ""
+  	},
+  	{
+  		"name": "Bronze I",
+  		"description": ""
+  	},
+  	{
+  		"name": "Bronze II",
+  		"description": ""
+  	},
+  	{
+  		"name": "Bronze III",
+  		"description": ""
+  	},
+  	{
+  		"name": "Silver I",
+  		"description": ""
+  	},
+  	{
+  		"name": "Silver II",
+  		"description": ""
+  	},
+  	{
+  		"name": "Silver III",
+  		"description": ""
+  	},
+  	{
+  		"name": "Gold I",
+  		"description": ""
+  	},
+  	{
+  		"name": "Gold II",
+  		"description": ""
+  	},
+  	{
+  		"name": "Gold III",
+  		"description": ""
+  	},
+  	{
+  		"name": "Champion I",
+  		"description": ""
+  	},
+  	{
+  		"name": "Champion II",
+  		"description": ""
+  	},
+  	{
+  		"name": "Champion III",
+  		"description": ""
+  	},
+  	{
+  		"name": "Hero I",
+  		"description": ""
+  	},
+  	{
+  		"name": "Hero II",
+  		"description": ""
+  	},
+  	{
+  		"name": "Hero III",
+  		"description": ""
+  	},
+  	{
+  		"name": "Master I",
+  		"description": ""
+  	},
+  	{
+  		"name": "Master II",
+  		"description": ""
+  	},
+  	{
+  		"name": "Master III",
+  		"description": ""
+  	},
+  	{
+  		"name": "Legendary",
+  		"description": ""
+  	}
+  ],
   "technologies": [
     {
       "0": {
@@ -923,7 +1005,7 @@
       },
       {
         "name": "Wall",
-        "description": "Between a rock and a hard place."
+        "description": "Safe between bricks and stone."
       }
     ]
   ]

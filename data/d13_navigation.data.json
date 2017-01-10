@@ -151,6 +151,38 @@
       "login": true,
       "node": false,
       "class": "left",
+      "name": "status",
+      "link": "status",
+      "trigger": "",
+      "images": [
+      	 {
+          "level": 0,
+          "image": "status.png",
+          "class": ""
+        }
+      ]
+    },
+	{
+      "active": true,
+      "login": true,
+      "node": false,
+      "class": "left",
+      "name": "ranking",
+      "link": "ranking",
+      "trigger": "",
+      "images": [
+      	 {
+          "level": 0,
+          "image": "trophy.png",
+          "class": ""
+        }
+      ]
+    },
+    {
+      "active": true,
+      "login": true,
+      "node": false,
+      "class": "left",
       "name": "account",
       "link": "account",
       "trigger": "",

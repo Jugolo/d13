@@ -2,7 +2,7 @@
    var timerIds=new Array();
 </script>
 
-<div class="d13-queue">
+<div class="d13-queue-left">
 
     {{tvar_queueItems}}
  

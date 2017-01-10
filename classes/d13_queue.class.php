@@ -36,6 +36,25 @@ class d13_queue
 	
 	public
 	
+	function getQueueCount()
+	{
+		global $d13;
+		
+		$i = 0;
+		foreach ($d13->getGeneral('queues') as $queues) {
+			$this->node->getQueue($queues);
+			$i += count($this->node->queue[$queues]);
+		}
+		return $i;
+	
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	// ----------------------------------------------------------------------------------------
+	
+	public
+	
 	function getQueueExpireNext()
 	{
 	
@@ -49,10 +68,16 @@ class d13_queue
 			foreach($this->node->queue[$queues] as $item) {
 				$data = array();
 				$item['type'] = $queues;
-				$data['obj_id'] = $item['obj_id'];
 				$data['remaining'] = $item['start'] + $item['duration']  - time();
 				$data['type'] =	$queues; 
 				$data['item'] = $item;
+				
+				if (!isset($item['obj_id'])) {
+				$data['obj_id'] = $item['id'];
+				} else {
+				$data['obj_id'] = $item['obj_id'];
+				}
+				
 				$tmp_queues[] = $data;
 			}
 		}
@@ -138,7 +163,9 @@ class d13_queue
 				$action = '';
 				$cancel = '';
 				$status = '';
-				
+				$icon 	= '/icon/armies.png';
+				$item['node'] = $item['sender'];
+				$name = '';
 				$otherNode = new node();
 				if ($item['sender'] == $this->node->data['id']) {
 					$status = $otherNode->get('id', $item['recipient']);
@@ -156,7 +183,6 @@ class d13_queue
 					} else {
 						$action = $d13->getLangUI('returning') . " " . $d13->getLangUI("army") . " " . $d13->getLangUI("from") . ": " . $otherNode->data['name'];
 					}
-					$icon 	= '/icon/armies.png';
 				}
 				break;
 			/*
@@ -207,7 +233,7 @@ class d13_queue
 		}
 		
 		if (!empty($tvars['tvar_queueItems'])) {
-			$tvars['tvar_activeQueues'] .= $d13->templateSubpage("sub.queue", $tvars);
+			$tvars['tvar_activeQueues'] .= $d13->templateSubpage("sub.queue.right", $tvars);
 		}
 	
 		return $tvars['tvar_activeQueues'];

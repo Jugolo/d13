@@ -17,6 +17,59 @@ class misc
 
 {
 
+	//----------------------------------------------------------------------------------------
+	// 
+	//----------------------------------------------------------------------------------------
+	public static
+	
+	function getLeague($level, $trophies) {
+		
+		global $d13;
+		
+		$my_league = 0;
+		
+		foreach ($d13->getGeneral('leagues') as $league) {
+		
+			#if ($league['']) {
+		
+			#}
+		
+		}
+
+		return $my_league;
+		
+	}
+	
+	//----------------------------------------------------------------------------------------
+	// gq_percent_difference
+	//----------------------------------------------------------------------------------------
+	public static
+	
+	function percent_difference($value1, $value2) {
+	
+		$percentage = (max($value1, $value2) - min($value1, $value2))/(max($value1,$value2)*100);
+		return $percentage;
+		
+	}
+	
+	//----------------------------------------------------------------------------------------
+	// gq_nextlevelexp
+	// @ Returns the experience points required to reach the next level, depending on the current
+	//   level as well as the current grade. This formula can scale into infinite.
+	// 3.0
+	//----------------------------------------------------------------------------------------
+	public static
+	
+	function nextlevelexp($level, $grade=1) {
+	
+		global $d13;
+		$factor = $d13->getGeneral('factors', 'experience');
+		$modifier = ceil($grade/4);													// !important - modifier is quarter of the grade
+		$level++;																	// because we want next level
+		$required_exp = ($level * ($grade * $factor)) * ($level * $modifier) * $factor;
+		return ceil($required_exp);
+		
+	}
 
 	// ----------------------------------------------------------------------------------------
 	// record_sort

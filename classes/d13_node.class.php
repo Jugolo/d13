@@ -915,10 +915,7 @@ class node
 			$result = $d13->dbQuery('select count(*) as count from build where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
 			$row = $d13->dbFetch($result);
 			if (!$row['count']) {
-				$this->getQueue('build');
-				$lastBuild = count($this->queue['build']) - 1;
-				if ($lastBuild > - 1) $start = strftime('%Y-%m-%d %H:%M:%S', $this->queue['build'][$lastBuild]['start'] + floor($this->queue['build'][$lastBuild]['duration'] * 60));
-				else $start = strftime('%Y-%m-%d %H:%M:%S', time());
+				$start = strftime('%Y-%m-%d %H:%M:%S', time());
 				$ok = 1;
 				$d13->dbQuery('insert into build (node, slot, obj_id, start, duration, action) values ("' . $this->data['id'] . '", "' . $slotId . '", "' . $module['module'] . '", "' . $start . '", "' . ($d13->getModule($this->data['faction'], $module['module'], 'removeDuration') * $d13->getGeneral('users', 'speed', 'build')) . '", "remove")');
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
@@ -1314,6 +1311,7 @@ class node
 		$this->getUnits();
 		$this->getLocation();
 		$node = new node();
+		$node->get('id', $nodeId);
 		$okUnits = 1;
 		
 		$army = array();
@@ -1325,23 +1323,32 @@ class node
 			}
 		}
 		
+		//- - - - - - - - - - - - get lowest speed and fuel requirement
+		$totalFuel = 0;
 		$speed = 999999999;
 		foreach($this->units as $key => $group) {
 			if (isset($army[$key])) {
 				if ($army[$key] > $group['value']) {
 					$okUnits = 0;
-				}
-				if ($d13->getUnit($this->data['faction'], $key, 'speed') < $speed) {
-					$speed = $d13->getUnit($this->data['faction'], $key, 'speed');
+				} else {
+					$tmp_unit = new d13_unit($key, $node);
+					$totalFuel += $tmp_unit->data['fuel'] * $group['value'];
+					if ($tmp_unit->data['speed'] < $speed) {
+						$speed = $tmp_unit->data['speed'];
+					}
 				}
 			}
 		}
 		
-		$combatCost = $d13->getFaction($this->data['id'], 'costs', $type);
-		$okCombatCost = $this->checkCost($combatCost, 'combat');
-		$otherShield = $node->getShield($type);
-		$ownShield = $this->getShield('cannotAttack');
+		//- - - - - - - - - - - - check fixed costs and fuel cost
+		$combatCost = $d13->getFaction($this->data['faction'], 'costs', $type);
+		$okCombatCost 	= $this->checkCost($combatCost, 'combat', 1, $totalFuel);
 		
+		//- - - - - - - - - - - - check shields (own and other)
+		$otherShield 	= $node->getShield($type);
+		$ownShield 		= $this->getShield('cannotAttack');
+		
+		//- - - - - - - - - - - - 
 		if (!$otherShield && !$ownShield) {
 			if ($okUnits) {
 				if ($okCombatCost['ok']) {
@@ -1366,8 +1373,15 @@ class node
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						}
 
-						foreach($combatCost as $cost) {
-							$this->resources[$cost['resource']]['value']-= $cost['value'] * $d13->getGeneral('users', 'cost', 'combat');
+						foreach ($combatCost as $cost) {
+							$d13->logger("before".$totalFuel);
+							if ($cost['isFuel']) {
+								$d13->logger("after".$totalFuel);
+								$this->resources[$cost['resource']]['value'] -= $cost['value'] * $totalFuel * $d13->getGeneral('users', 'cost', 'combat');
+							} else {
+								$this->resources[$cost['resource']]['value'] -= $cost['value'] * $d13->getGeneral('users', 'cost', 'combat');
+							}
+							
 							$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						}
@@ -1516,6 +1530,10 @@ class node
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
 				$d13->dbQuery('delete from research where node="' . $this->data['id'] . '" and obj_id="' . $entry['obj_id'] . '"');
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
+				if ($ok) { #experience gain
+					$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+					$ok = $tmp_user->gainExperience($d13->getTechnology($this->data['faction'],  $entry['obj_id'], 'cost'), $this->technologies[$entry['obj_id']]['level']);
+				}
 			}
 		}
 
@@ -1538,6 +1556,9 @@ class node
 		$this->getComponents();
 		$this->getQueue('build');
 		$ok = 1;
+		
+		$d13->logger($_SESSION[CONST_PREFIX . 'User']['id']);
+		
 		foreach($this->queue['build'] as $entry) {
 			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			if ($entry['end'] <= $time) {
@@ -1548,21 +1569,25 @@ class node
 					$this->modules[$entry['slot']]['obj_id'] = $entry['obj_id'];
 					$d13->dbQuery('update modules set module="' . $entry['obj_id'] . '", level=1 where node="' . $this->data['id'] . '" and slot="' . $entry['slot'] . '"');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
-
+					if ($ok) { #experience gain
+						$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+						$ok = $tmp_user->gainExperience($d13->getModule($this->data['faction'],  $entry['obj_id'], 'cost'), 1);
+					}
+				
 					// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - UPGRADE
 
-				}
-				else
-				if ($entry['action'] == 'upgrade' && $this->modules[$entry['slot']]['module'] > - 1) {
+				} else if ($entry['action'] == 'upgrade' && $this->modules[$entry['slot']]['module'] > - 1) {
 					$this->modules[$entry['slot']]['obj_id'] = $entry['obj_id'];
 					$d13->dbQuery('update modules set module="' . $entry['obj_id'] . '", level=level+1 where node="' . $this->data['id'] . '" and slot="' . $entry['slot'] . '"');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
-
+					if ($ok) { #experience gain
+						$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+						$ok = $tmp_user->gainExperience($d13->getModule($this->data['faction'],  $entry['obj_id'], 'cost'), $this->modules[$entry['obj_id']]['level']+1);
+					}
+				
 					// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - REMOVE
 
-				}
-				else
-				if ($entry['action'] == 'remove') {
+				} else if ($entry['action'] == 'remove') {
 					foreach($d13->getModule($this->data['faction'], $entry['obj_id'], 'cost') as $cost) {
 						$this->resources[$cost['resource']]['value']+= $cost['value'] * $d13->getGeneral('users', 'cost', 'build') * $d13->getModule($this->data['faction'], $entry['obj_id'], 'salvage');
 						$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
@@ -1594,6 +1619,12 @@ class node
 						$this->checkModuleDependencies($entry['obj_id'], $entry['slot']);
 						$d13->dbQuery('update modules set module="-1", input="0" where node="' . $this->data['id'] . '" and slot="' . $entry['slot'] . '"');
 						if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						
+						if ($ok) { #experience loss
+							$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+							$ok = $tmp_user->gainExperience($d13->getModule($this->data['faction'],  $entry['obj_id'], 'cost'), -$this->modules[$entry['obj_id']]['level']);
+						}
+						
 					}
 				}
 
@@ -2108,15 +2139,24 @@ class node
 
 	public
 
-	function checkCost($cost, $costType, $quantity = 1)
+	function checkCost($cost, $costType, $quantity=1, $fuel=1)
 	{
 		global $d13;
+		
+		
 		$data = array(
 			'ok' => 1,
 			'cost' => $cost
 		);
+		
 		foreach($data['cost'] as $key => $cost) {
-			if ($this->resources[$cost['resource']]['value'] < $cost['value'] * $quantity * $d13->getGeneral('users', 'cost', $costType)) {
+			
+			if (isset($cost['isFuel']) && $cost['isFuel']) {
+				$tmp_quantity = $quantity * $fuel;
+			} else {
+				$tmp_quantity = $quantity;
+			}
+			if ($this->resources[$cost['resource']]['value'] < $cost['value'] * $tmp_quantity * $d13->getGeneral('users', 'cost', $costType)) {
 				$data['cost'][$key]['ok'] = 0;
 				$data['ok'] = 0;
 			}
@@ -2376,40 +2416,6 @@ class node
 		else $status = 'notEnoughResources';
 		return $status;
 	}
-	
-	
-	// ----------------------------------------------------------------------------------------
-	// getUserStats
-	// ----------------------------------------------------------------------------------------
-	
-	
-	public
-	
-	function getUserStats()
-	{
-	
-		global $d13;
-		
-		$tvars['tvar_resEntry'] = '';
-			//- - - - - Player Stats
-		$user = new user();
-		$status = $user->get('id', $_SESSION[CONST_PREFIX . 'User']['id']);
-		if ($status == 'done') {
-			foreach($d13->getGeneral("userstats") as $stat) {
-				if ($stat['active'] && $stat['visible']) {
-					$tvars['tvar_resImage'] 		= $stat['image'];
-					$tvars['tvar_resValue'] 		= $user->data[$stat['value']];
-					$tvars['tvar_resPercentage'] 	= 0;
-					$tvars['tvar_resTooltip'] 		= $d13->getLangUI($stat['name']);
-					$tvars['tvar_resEntry']			.= $d13->templateSubpage("sub.resource.entry", $tvars);
-				}
-			}
-		}
-	
-		return $tvars['tvar_resEntry'];
-	
-	}
-
 	
 }
 

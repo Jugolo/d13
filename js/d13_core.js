@@ -15,6 +15,53 @@ function change_maximum(id, value, form, formvalue) {
     document.getElementById(form).action= formvalue;
 }
 
+function armyValue(id, newValue)
+{
+
+	document.getElementById(id).innerHTML=newValue;
+	document.getElementById('attackerAmount_'+id).value=newValue;
+	
+	var fuelFactor		= document.getElementById('fuelFactor').value;
+	
+	var totalAmount 	= 0;
+	var totalDamage 	= 0;
+	var totalSpeed 		= 0;
+	var totalVision 	= 0;
+	var totalFuel 		= 0;
+	
+	var unitAmount 		= document.getElementsByName('attackerAmount[]');
+	var unitDamage 		= document.getElementsByName('attackerDamage[]');
+	var unitSpeed 		= document.getElementsByName('attackerSpeed[]');
+	var unitVision 		= document.getElementsByName('attackerVision[]');
+	var unitFuel 		= document.getElementsByName('attackerFuel[]');
+	
+	for(key=0; key < unitDamage.length; key++)  {
+		totalAmount = parseInt(unitAmount[key].value);
+    	totalDamage += parseInt(unitDamage[key].value) * totalAmount;
+	}
+	
+	for(key=0; key < unitSpeed.length; key++)  {
+		totalAmount = parseInt(unitAmount[key].value);
+    	totalSpeed += parseInt(unitSpeed[key].value) * totalAmount;
+	}
+	
+	for(key=0; key < unitVision.length; key++)  {
+		totalAmount = parseInt(unitAmount[key].value);
+    	totalVision += parseInt(unitVision[key].value) * totalAmount;
+	}
+
+	for(key=0; key < unitFuel.length; key++)  {
+		totalAmount = parseInt(unitAmount[key].value);
+    	totalFuel += parseInt(unitFuel[key].value) * totalAmount * fuelFactor;
+	}
+	
+	document.getElementById('totalDamage').innerHTML = totalDamage;
+	document.getElementById('totalSpeed').innerHTML = totalSpeed;
+	document.getElementById('totalVision').innerHTML = totalVision;
+	document.getElementById('totalFuel').innerHTML = totalFuel;
+
+}
+
 function moreLess(divContentID, aMoreLessID)
 {
 	
@@ -34,6 +81,55 @@ function moreLess(divContentID, aMoreLessID)
 }
 
 /* -- D13 JS -------------------------------------------------------------------*/
+
+function timedJump(objectId, url)
+{
+	object=document.getElementById(objectId);
+	var time=(object.innerHTML).split(":");
+ 	var done=0;
+	if (time[2] > 0) time[2]--;
+	else
+	{
+		time[2]=59;
+		if (time[1] > 0) time[1]--;
+		else
+		{
+			time[1]=59;
+			if (time[0] > 0) time[0]--;
+			else
+   			{
+    			clearTimeout(timerIds[objectId]);
+   				window.location.href=url;
+   				done=1;
+   			}
+		}
+	}
+	if (!done)
+	{
+  	if (String(time[1]).length==1) time[1]="0"+String(time[1]);
+  	if (String(time[2]).length==1) time[2]="0"+String(time[2]);
+		object.innerHTML=time[0]+":"+time[1]+":"+time[2];
+		timerIds[objectId]=setTimeout("timedJump('"+objectId+"', '"+url+"')", 1000);
+	}
+}
+
+function isset(variable)
+{
+ if ((typeof(variable)!="undefined")&&(variable!==null)) return true;
+ else return false;
+}
+function indexOfSelectValue(object, value)
+{
+ var index=-1;
+ for (var i=0, done=false; ((i<object.length)&&(!done)); i++)
+  if (object.options[i].value==value)
+  {
+   index=i;
+   done=true;
+  }
+ return index;
+}
+
 
 
 function jumpToSector()
@@ -108,54 +204,6 @@ function fetch(link, vars)
   xmlHttp.open("GET", link, true);
   xmlHttp.send(null);
  }
-}
-
-function timedJump(objectId, url)
-{
-	object=document.getElementById(objectId);
-	var time=(object.innerHTML).split(":");
- 	var done=0;
-	if (time[2] > 0) time[2]--;
-	else
-	{
-		time[2]=59;
-		if (time[1] > 0) time[1]--;
-		else
-		{
-			time[1]=59;
-			if (time[0] > 0) time[0]--;
-			else
-   			{
-    			clearTimeout(timerIds[objectId]);
-   				window.location.href=url;
-   				done=1;
-   			}
-		}
-	}
-	if (!done)
-	{
-  	if (String(time[1]).length==1) time[1]="0"+String(time[1]);
-  	if (String(time[2]).length==1) time[2]="0"+String(time[2]);
-		object.innerHTML=time[0]+":"+time[1]+":"+time[2];
-		timerIds[objectId]=setTimeout("timedJump('"+objectId+"', '"+url+"')", 1000);
-	}
-}
-
-function isset(variable)
-{
- if ((typeof(variable)!="undefined")&&(variable!==null)) return true;
- else return false;
-}
-function indexOfSelectValue(object, value)
-{
- var index=-1;
- for (var i=0, done=false; ((i<object.length)&&(!done)); i++)
-  if (object.options[i].value==value)
-  {
-   index=i;
-   done=true;
-  }
- return index;
 }
 
 var position=new Array(0, 0);
