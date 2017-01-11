@@ -47,8 +47,13 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				$status = $user->get('id', $msg->data['sender']);
 				if ($status == 'done') $msg->data['senderName'] = $user->data['name'];
 				else $msg->data['senderName'] = $d13->getLangUI("game");
-				$msg->data['body'] = str_replace("\r\n", "<br />", $msg->data['body']);
-				$msg->data['body'] = str_replace("\n", "<br />", $msg->data['body']);
+				
+				
+				$msg->data['body'] =  nl2br($msg->data['body']);
+				#$msg->data['body'] = str_replace("\r\n", "<br />", $msg->data['body']);
+				#$msg->data['body'] = str_replace("\n", "<br />", $msg->data['body']);
+				$msg->data['body'] =  htmlspecialchars_decode($msg->data['body']);
+
 			}
 			else $message = $d13->getLangUI("accessDenied");
 			else $message = $d13->getLangUI($status);

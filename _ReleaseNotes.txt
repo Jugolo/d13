@@ -20,7 +20,8 @@ RELEASE CANDIDATE 0
 V013 	- !!! THIS REPRESENTS THE NEXT UPDATE CONTENTS !!!
 		
 		* Basic Combat System implemented
-		
+		* Critical Damage implemented
+		* Defending Modules implemented
 		* Six different types of attacking an enemy:
 			- Scout
 			- Skirmish

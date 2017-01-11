@@ -52,8 +52,7 @@ class d13_tpl
 			foreach($vars as $a => $b) {
 				$template = str_ireplace("{{{$a}}}", $b, $template);
 			}
-		}
-
+		}		
 		return $template;
 	}
 

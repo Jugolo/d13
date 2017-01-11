@@ -12,9 +12,7 @@
     		
 				<div class="swiper-container">
 					<div class="swiper-wrapper">
-						
 						 {{tvar_unitsHTML}}
-						 
 					</div>
 					<div class="swiper-button-prev"></div>
 					<div class="swiper-button-next"></div>
@@ -29,9 +27,23 @@
 		
 		<div class="card-footer">
   			<div class="left">
-  			{{tvar_ui_speed}}: <span id="totalSpeed" class="badge">0</span>
-  			{{tvar_ui_damage}}: <span id="totalDamage" class="badge">0</span>
-  			{{tvar_ui_vision}}: <span id="totalVision" class="badge">0</span>
+  			
+  			<span class="badge">
+  				{{tvar_ui_amount}}: <span id="totalAmount">0</span>
+  			</span>
+  			
+  			<span class="badge" data-tooltip="{{tvar_ui_army}} {{tvar_ui_speed}}">
+  				<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_speed.png"> <span id="totalSpeed">0</span>
+  			</span>
+  			
+  			<span class="badge" data-tooltip="{{tvar_ui_army}} {{tvar_ui_damage}}">
+  				<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_damage.png"> <span id="totalDamage">0</span>
+  			</span>
+  			
+  			<span class="badge" data-tooltip="{{tvar_ui_army}} {{tvar_ui_stealth}}">
+  				<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_stealth.png"> <span id="totalStealth"">0</span>
+  			</span>
+
   			</div>
   			
   			<div class="right">

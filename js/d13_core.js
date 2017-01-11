@@ -23,21 +23,23 @@ function armyValue(id, newValue)
 	
 	var fuelFactor		= document.getElementById('fuelFactor').value;
 	
+	var grandAmount		= 0;
 	var totalAmount 	= 0;
 	var totalDamage 	= 0;
 	var totalSpeed 		= 0;
-	var totalVision 	= 0;
+	var totalStealth 	= 0;
 	var totalFuel 		= 0;
 	
 	var unitAmount 		= document.getElementsByName('attackerAmount[]');
 	var unitDamage 		= document.getElementsByName('attackerDamage[]');
 	var unitSpeed 		= document.getElementsByName('attackerSpeed[]');
-	var unitVision 		= document.getElementsByName('attackerVision[]');
+	var unitStealth 	= document.getElementsByName('attackerStealth[]');
 	var unitFuel 		= document.getElementsByName('attackerFuel[]');
 	
 	for(key=0; key < unitDamage.length; key++)  {
 		totalAmount = parseInt(unitAmount[key].value);
     	totalDamage += parseInt(unitDamage[key].value) * totalAmount;
+    	
 	}
 	
 	for(key=0; key < unitSpeed.length; key++)  {
@@ -45,19 +47,23 @@ function armyValue(id, newValue)
     	totalSpeed += parseInt(unitSpeed[key].value) * totalAmount;
 	}
 	
-	for(key=0; key < unitVision.length; key++)  {
+	for(key=0; key < unitStealth.length; key++)  {
 		totalAmount = parseInt(unitAmount[key].value);
-    	totalVision += parseInt(unitVision[key].value) * totalAmount;
+    	totalStealth += parseInt(unitStealth[key].value) * totalAmount;
 	}
 
 	for(key=0; key < unitFuel.length; key++)  {
 		totalAmount = parseInt(unitAmount[key].value);
     	totalFuel += parseInt(unitFuel[key].value) * totalAmount * fuelFactor;
+    	grandAmount += totalAmount;
 	}
 	
+	
+	
+	document.getElementById('totalAmount').innerHTML = grandAmount;
 	document.getElementById('totalDamage').innerHTML = totalDamage;
 	document.getElementById('totalSpeed').innerHTML = totalSpeed;
-	document.getElementById('totalVision').innerHTML = totalVision;
+	document.getElementById('totalStealth').innerHTML = totalStealth;
 	document.getElementById('totalFuel').innerHTML = totalFuel;
 
 }

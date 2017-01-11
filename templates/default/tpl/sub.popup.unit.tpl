@@ -104,7 +104,7 @@
 											 <span class="badge">{{tvar_unitVision}} {{tvar_unitVisionPlus}}</span>
 										</div>
 									</div>
-									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_capacity.png"></div>
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_stealth.png"></div>
 									<div class="item-inner">
 										<div class="item-title">
 											{{tvar_ui_stealth}}:

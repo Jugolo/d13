@@ -20,7 +20,7 @@
 			<input type="hidden" id="attackerAmount_sliderRange{{tvar_unitId}}" name="attackerAmount[]" value="0">
 			<input type="hidden" name="attackerDamage[]" value="{{tvar_unitDamage}}">
 			<input type="hidden" name="attackerSpeed[]" value="{{tvar_unitSpeed}}">
-			<input type="hidden" name="attackerVision[]" value="{{tvar_unitVision}}">
+			<input type="hidden" name="attackerStealth[]" value="{{tvar_unitStealth}}">
 			<input type="hidden" name="attackerFuel[]" value="{{tvar_unitFuel}}">
 			
     	</div>

@@ -168,8 +168,6 @@ class node
 					$shieldId = $d13->getFaction($this->data['faction'], 'shield');
 					$ok = $this->setShield($shieldId);
 					
-					$d13->logger("sid:".$shieldId." ok:".$ok);
-
 					if ($ok) {
 						$status = "done";
 					}
@@ -1330,9 +1328,9 @@ class node
 			if (isset($army[$key])) {
 				if ($army[$key] > $group['value']) {
 					$okUnits = 0;
-				} else {
+				} else if ($army[$key] > 0) {
 					$tmp_unit = new d13_unit($key, $node);
-					$totalFuel += $tmp_unit->data['fuel'] * $group['value'];
+					$totalFuel += $tmp_unit->data['fuel'] * $army[$key];
 					if ($tmp_unit->data['speed'] < $speed) {
 						$speed = $tmp_unit->data['speed'];
 					}
@@ -1341,13 +1339,12 @@ class node
 		}
 		
 		//- - - - - - - - - - - - check fixed costs and fuel cost
-		$combatCost = $d13->getFaction($this->data['faction'], 'costs', $type);
+		$combatCost 	= $d13->getFaction($this->data['faction'], 'costs', $type);
 		$okCombatCost 	= $this->checkCost($combatCost, 'combat', 1, $totalFuel);
-		
 		//- - - - - - - - - - - - check shields (own and other)
 		$otherShield 	= $node->getShield($type);
 		$ownShield 		= $this->getShield('cannotAttack');
-		
+
 		//- - - - - - - - - - - - 
 		if (!$otherShield && !$ownShield) {
 			if ($okUnits) {
@@ -1374,9 +1371,7 @@ class node
 						}
 
 						foreach ($combatCost as $cost) {
-							$d13->logger("before".$totalFuel);
 							if ($cost['isFuel']) {
-								$d13->logger("after".$totalFuel);
 								$this->resources[$cost['resource']]['value'] -= $cost['value'] * $totalFuel * $d13->getGeneral('users', 'cost', 'combat');
 							} else {
 								$this->resources[$cost['resource']]['value'] -= $cost['value'] * $d13->getGeneral('users', 'cost', 'combat');
@@ -1556,9 +1551,7 @@ class node
 		$this->getComponents();
 		$this->getQueue('build');
 		$ok = 1;
-		
-		$d13->logger($_SESSION[CONST_PREFIX . 'User']['id']);
-		
+
 		foreach($this->queue['build'] as $entry) {
 			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			if ($entry['end'] <= $time) {
@@ -1938,7 +1931,7 @@ class node
 							$ok = 0;
 						}
 
-						// - - - - -
+						// - - - - - Attacker Report
 
 						$attackerUser = new user();
 						if ($attackerUser->get('id', $$nodes['attacker']->data['user']) == 'done') {
@@ -1947,14 +1940,14 @@ class node
 								$msg = new message();
 								$msg->data['sender'] = $attackerUser->data['name'];
 								$msg->data['recipient'] = $attackerUser->data['name'];
-								$msg->data['subject'] = $d13->getLangUI("combatReport") . ' - ' . $$nodes['defender']->data['name'];
+								$msg->data['subject'] = $d13->getLangUI('out') . ' ' . $d13->getLangUI($combat['type']) . ' ' . $d13->getLangUI("report") . ' vs ' . $$nodes['defender']->data['name'];
 								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type']);
 								$msg->data['viewed'] = 0;
 								$msg->add();
 							}
 						}
 
-						// - - - - -
+						// - - - - - Defender Report
 
 						$defenderUser = new user();
 						if ($defenderUser->get('id', $$nodes['defender']->data['user']) == 'done') {
@@ -1963,7 +1956,7 @@ class node
 								$msg = new message();
 								$msg->data['sender'] = $defenderUser->data['name'];
 								$msg->data['recipient'] = $defenderUser->data['name'];
-								$msg->data['subject'] = $d13->getLangUI("combatReport") . ' - ' . $$nodes['defender']->data['name'];
+								$msg->data['subject'] = $d13->getLangUI('in') . ' ' . $d13->getLangUI($combat['type']) . ' ' . $d13->getLangUI("report") . ' vs ' . $$nodes['attacker']->data['name'];
 								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type'], true);
 								$msg->data['viewed'] = 0;
 								$msg->add();
@@ -1971,8 +1964,9 @@ class node
 						}
 
 					}
-				}
-				else {
+					
+				//- - - - - Recalculate Resource Requirements and Units
+				} else {
 					$$nodes['attacker']->getResources();
 					$result = $d13->dbQuery('select * from combat_units where combat="' . $combat['id'] . '"');
 					while ($group = $d13->dbFetch($result)) {
@@ -2005,8 +1999,7 @@ class node
 
 		if ($ok) {
 			$d13->dbQuery('commit');
-		}
-		else {
+		} else {
 			$d13->dbQuery('rollback');
 		}
 	}
@@ -2136,31 +2129,28 @@ class node
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkCost($cost, $costType, $quantity=1, $fuel=1)
 	{
+	
 		global $d13;
-		
 		
 		$data = array(
 			'ok' => 1,
 			'cost' => $cost
 		);
 		
-		foreach($data['cost'] as $key => $cost) {
-			
-			if (isset($cost['isFuel']) && $cost['isFuel']) {
+		foreach($data['cost'] as $key => $thecost) {
+			if (isset($thecost['isFuel']) && $thecost['isFuel']) {
 				$tmp_quantity = $quantity * $fuel;
 			} else {
 				$tmp_quantity = $quantity;
 			}
-			if ($this->resources[$cost['resource']]['value'] < $cost['value'] * $tmp_quantity * $d13->getGeneral('users', 'cost', $costType)) {
+			if ($this->resources[$thecost['resource']]['value'] < ($thecost['value'] * $tmp_quantity * $d13->getGeneral('users', 'cost', $costType))) {
 				$data['cost'][$key]['ok'] = 0;
 				$data['ok'] = 0;
-			}
-			else {
+			} else {
 				$data['cost'][$key]['ok'] = 1;
 			}
 		}

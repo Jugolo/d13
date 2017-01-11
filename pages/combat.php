@@ -195,7 +195,7 @@ if (isset($node)) {
 			$tvars['tvar_unitAmount'] 	= $unit['value'];			
 			$tvars['tvar_unitDamage'] 	= $tmp_unit->data['damage'];
 			$tvars['tvar_unitSpeed'] 	= $tmp_unit->data['speed'];
-			$tvars['tvar_unitVision'] 	= $tmp_unit->data['vision'];
+			$tvars['tvar_unitStealth'] 	= $tmp_unit->data['stealth'];
 			$tvars['tvar_unitFuel'] 	= $tmp_unit->data['fuel'];
 			$tvars['tvar_unitsHTML']	.= $d13->templateSubpage("sub.combat.unit", $tvars);
 		}

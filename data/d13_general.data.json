@@ -55,6 +55,7 @@
     "storage": 1,
     "production": 1,
     "movement": 10,
+    "critical": 2,
     "experience": 10
   },
   "types": {

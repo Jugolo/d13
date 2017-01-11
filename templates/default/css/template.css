@@ -26,6 +26,7 @@ img {
 .large-card {
 	width: 97%;
 	height: 97%;
+	top: 1%;
 	border-radius: 10px;
 	text-align: center;
 	vertical-align: middle;
@@ -60,8 +61,6 @@ img {
 .navbar, .toolbar, .subnavbar, .buttons-row, .item-content, .navbar-inner {
 	font-size: 10pt;
 	background: transparent;
-	margin: auto;
-	padding: auto;
 }
 
 .navbar:before, .subnavar:before, .navbar:after, .subnavbar:after {
