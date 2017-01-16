@@ -456,85 +456,99 @@ class d13_combat
 		
 		$totalResCapacity	= 0;
 		$totalResAvailable	= 0;
-		$resList = array();
+		$resList 			= array();
+		$realResList		= array();
 		
 		// - Attacker Capacity
-		foreach($data['input']['attacker']['groups'] as $key => $group) {
-			$unit = new d13_unit($group['unitId'], $node);
-			$stats = $unit->getStats();
-			$upgrades = $unit->getUpgrades();
+		$attackerNode = new node();
+		$status = $attackerNode->get('id', $data['input']['attacker']['nodeId']);
+		
+		if ($status == 'done') {
+		
+			foreach($data['input']['attacker']['groups'] as $key => $group) {
+				$unit = new d13_unit($group['unitId'], $attackerNode);
+				$stats = $unit->getStats();
+				$upgrades = $unit->getUpgrades();
 			
-			foreach($d13->getGeneral('stats') as $stat) {
-				$data['input']['attacker']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['quantity'];
-				$data['input']['attacker'][$stat]+= $data['input']['attacker']['groups'][$key][$stat];
-			}
+				foreach($d13->getGeneral('stats') as $stat) {
+					$data['input']['attacker']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['quantity'];
+					$data['input']['attacker'][$stat]+= $data['input']['attacker']['groups'][$key][$stat];
+				}
 
-			$totalResCapacity += $data['input']['attacker']['groups'][$key]['capacity'];
+				$totalResCapacity += $data['input']['attacker']['groups'][$key]['capacity'];
+			}
+		
 		}
 		
 		// - Defender Availability
-		$node = new node();
-		$status = $node->get('id', $data['input']['defender']['nodeId']);
+		$defenderNode = new node();
+		$status = $defenderNode->get('id', $data['input']['defender']['nodeId']);
 		
-		if ($status == 'ok') {
-			$node->getResources();
+		if ($status == 'done') {
+			$defenderNode->getResources();
+
+			foreach ($defenderNode->resources as $resource) {
 			
-			foreach($d13->getResource() as $resource) {
-				if ($resource['active'] && $resource['type'] == 'dynamic' && $resource['carryable']) {
-					if ($this->resources[$resource['id']]['value'] > 0) {
-
-						$resAvailable = $this->resources[$resource['id']]['value'] * ($resourceRatio/100);
+				$tmp_res = $d13->getResource($resource['id']);
+			
+				if ($tmp_res['active'] && $tmp_res['type'] == 'dynamic' && $tmp_res['carryable'] && $resource['value'] > 0) {
+					
+						$resAvailable = $resource['value'] * ($resourceRatio/100);
 						$totalResAvailable += $resAvailable;
-						$resList[] = array('id'=>$this->resources[$resource['id']]['value'], 'value'=>$resAvailable);
-
-					}
+						$resList[] = array('resource'=>$resource['id'], 'value'=>$resAvailable);
+						$realResList[] = array('resource'=>$resource['id'], 'value'=>0);
+					
 				}
 			}
 		
 		}
-
+		
+		$totalResCapacity = floor($totalResCapacity);
+		$totalResAvailable = floor($totalResAvailable);
+		
+		
 		// ============================== Check existing Loot
 		$continue = true;
 		
-		while ($continue) {
+		if (!empty($resList)) {
+		
+			while ($continue) {
 			
-			/*
-				$totalResCapacity
+				// - select random from available resources
+				$key = array_rand($resList);	
+			
+				// - choose 1/10 from available resources
+				$value = floor($resList[$key]['value']/10);
+							
+				$totalResCapacity -= $value;
+				$totalResAvailable -= $value;
+				$resList[$key]['value'] -= $value;
+				$realResList[$key]['value'] += $value;
+				
+			
+				// - stop when either capacity or resources are depleted
+				if ($totalResCapacity <= 0 || $totalResAvailable <= 0) {
+					$continue = false;
+				}
 		
-				$totalResAvailable
-				$resList[]
-			*/
-		
-			//set false when capacity reached
-			//set false when loot ratio depleted
-			$continue = false;
+			}
 		
 		}
 		
 		// ============================== Check virtual Loot
 		if ($d13->getGeneral('options', 'bonusLoot')) {
-		
-		
-		
-		
+
 		}
-		
-		
+				
 		// ============================== Process Data
-		
 		$d13->dbQuery('start transaction');
 		
-		// - - - - Update Attacker Resources
+		$data['output']['defender']['resources'] = $realResList;
+		$ok = $defenderNode->setResources($realResList);
 		
-		$d13->dbQuery('update resources set value="' . $this->resources[$resource['id']]['value'] . '" where node="' . $data['input']['attacker']['nodeId'] . '" and id="' . $resource['id'] . '"');
+		$data['output']['attacker']['resources'] = $realResList;
+		$ok = $attackerNode->setResources($realResList, 1);
 
-		
-		// - - - - Update Defender Resources
-		
-		
-		$d13->dbQuery('update resources set value="' . $this->resources[$resource['id']]['value'] . '" where node="' . $data['input']['defender']['nodeId'] . '" and id="' . $resource['id'] . '"');
-
-		
 		if ($ok) {
 			$d13->dbQuery('commit');
 		}
@@ -544,7 +558,7 @@ class d13_combat
 		
 		// ============================== Return Data
 		
-		
+		return $data;
 	
 	}
 	
@@ -606,6 +620,7 @@ class d13_combat
 		$totalStealth 	= 0;
 		$limit = 7;
 		$i = 0;
+		$open = false;
 		
 		// - - - - - 
 		foreach($data['output']['attacker']['groups'] as $key => $group) {
@@ -629,13 +644,16 @@ class d13_combat
 				$vars['tvar_listLabel'] = $name;
 				$vars['tvar_listAmount'] = $label;
 				
-				if ($i == 0) { $html .= '<div class="row">'; }
+				if ($i == 0) {
+					$html .= '<div class="row">';
+					$open = true;
+				}
 		
 				$html .= $d13->templateSubpage("msg.combat.entry", $vars);
 				
 				if ($i == $limit) {
 					$html .= '</div>';
-					$i = 0;
+					$open = false;
 				}
 				
 				$i++;
@@ -643,9 +661,14 @@ class d13_combat
 			}
 		}
 		
-		if ($i != $limit) {
+		if ($open) {
 			$html .= '</div>';
 		}
+		
+		if (empty($html)) {
+			$html = '<div class="row"><div class="col-auto">' . $d13->getLangUI('none') . '</div></div>';
+		}
+		
 		
 		// - - - - - Army Stats
 		
@@ -678,6 +701,7 @@ class d13_combat
 		$totalVision 	= 0;
 		$totalStealth 	= 0;
 		$i = 0;
+		$open = false;
 		
 		// - - - - - 
 		foreach($data['output']['defender']['groups'] as $key => $group) {
@@ -698,13 +722,16 @@ class d13_combat
 					$vars['tvar_listLabel'] = $name;
 					$vars['tvar_listAmount'] = $label;
 					
-					if ($i == 0) { $html .= '<div class="row">'; }
+					if ($i == 0) {
+						$html .= '<div class="row">';
+						$open = true;
+					}
 					
 					$html .= $d13->templateSubpage("msg.combat.entry", $vars);
 					
 					if ($i == $limit) {
 						$html .= '</div>';
-						$i = 0;
+						$open = false;
 					}
 					
 					$i++;
@@ -727,13 +754,16 @@ class d13_combat
 					$vars['tvar_listLabel'] = $name;
 					$vars['tvar_listAmount'] = $label;
 					
-					if ($i == 0) { $html .= '<div class="row">'; }
+					if ($i == 0) {
+						$html .= '<div class="row">';
+						$open = true;
+					}
 					
 					$html .= $d13->templateSubpage("msg.combat.entry", $vars);
 					
 					if ($i == $limit) {
 						$html .= '</div>';
-						$i = 0;
+						$open = false;
 					}
 					
 					$i++;
@@ -742,8 +772,12 @@ class d13_combat
 			}
 		}
 		
-		if ($i != $limit) {
+		if ($open) {
 			$html .= '</div>';
+		}
+		
+		if (empty($html)) {
+			$html = '<div class="row"><div class="col-auto">' . $d13->getLangUI('none') . '</div></div>';
 		}
 		
 		// - - - - - Army Stats
@@ -772,8 +806,58 @@ class d13_combat
 		
 		$tvars['tvar_msgSelfResRowName'] = $d13->getLangUI("loot") . ' ' . $d13->getLangUI("resource");
 		$tvars['tvar_msgSelfResRow'] = '';
+		$html = '';
+		$i = 0;
+		
+		if (!$other) {
+		
+			foreach ($data['output']['attacker']['resources'] as $resource) {
+			
+				$vars = array();
+				$vars['tvar_listImage'] = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource['resource'], 'image');
+				$vars['tvar_listLabel'] = $d13->getLangGL('resources', $resource['resource'], 'name');
+				$vars['tvar_listAmount'] = '+'.$resource['value'];
+				
+				if ($i == 0) { $html .= '<div class="row">'; }
+		
+				$html .= $d13->templateSubpage("msg.combat.resource", $vars);
+				
+				if ($i == $limit) {
+					$html .= '</div>';
+					$i = 0;
+				}
+				
+				$i++;
+
+			}
 		
 		
+		} else {
+			
+			foreach ($data['output']['defender']['resources'] as $resource) {
+			
+				$vars = array();
+				$vars['tvar_listImage'] = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource['resource'], 'image');
+				$vars['tvar_listLabel'] = $d13->getLangGL('resources', $resource['resource'], 'name');
+				$vars['tvar_listAmount'] = '-'.$resource['value'];
+				
+				if ($i == 0) { $html .= '<div class="row">'; }
+		
+				$html .= $d13->templateSubpage("msg.combat.resource", $vars);
+				
+				if ($i == $limit) {
+					$html .= '</div>';
+					$i = 0;
+				}
+				
+				$i++;
+				
+			}
+		
+			
+		}
+		
+		$tvars['tvar_msgSelfResRow'] = $html;
 					
 		// - - - - - Return Report
 		$html = $d13->templateSubpage("msg.combat", $tvars);

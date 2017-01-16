@@ -36,14 +36,12 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 	
 	$users = array();
 	
-	$result = $d13->dbQuery('select * from users order by level desc limit ' . $limit . ' offset ' . $offset);
+	$result = $d13->dbQuery('select * from users order by trophies desc, level desc limit ' . $limit . ' offset ' . $offset);
 	for ($i = 0; $row = $d13->dbFetch($result); $i++) {
 			$row['league'] = misc::getLeague($row['level'], $row['trophies']);
 			$users[] = $row;	
 	}
-	
-	$users = misc::record_sort($users, 'league');
-	
+		
 	foreach ($users as $user) {
 		$vars = array();
 		$vars['tvar_listAvatar'] 	= $user['avatar'];

@@ -307,27 +307,31 @@ if (isset($node)) {
 	foreach ($cost as $res) {
 	
 		if (isset($res['resource'])) {
-	
+			$id = "";
 			$resource = $res['resource'];
 			$cost =  $res['value'];
+			
 			if (isset($res['isFuel']) && $res['isFuel']) {
 				$id = "id='totalFuel'";
 				$cost = 0;
 				$tvars['tvar_fuelFactor'] = floor($res['value']);
 				$tvars['tvar_fuelResource'] = floor($node->resources[$res['resource']]['value']);
 			}
+			
 			$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'image') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '"><span '.$id.'>'.$cost . '</span></span>';
 	
 		} else if (isset($res['component'])) {
-	
+			$id = "";
 			$resource = $res['component'];
 			$cost =  $res['value'];
+			
 			if (isset($res['isFuel']) && $res['isFuel']) {
 				$id = "id='totalFuel'";
 				$cost = 0;
 				$tvars['tvar_fuelFactor'] = floor($res['value']);
 				$tvars['tvar_fuelResource'] = floor($node->components[$res['resource']]['value']);
 			}
+			
 			$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $node->data['faction'] . "/" . $d13->getComponent($node->data['faction'], $resource, 'image') . '" title="' . $d13->getLangGL('components', $resource, 'name') . '"><span '.$id.'>'.$cost . '</span></span>';
 	
 		}

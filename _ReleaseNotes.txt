@@ -23,8 +23,7 @@ V014	--- UPCOMING UPDATE ---
 		
 			- Scout Reports
 			- Scout Checks
-			- Resource Raiding
-
+			
 
 V013 	* Basic Combat System implemented, this covers:
 
@@ -33,6 +32,7 @@ V013 	* Basic Combat System implemented, this covers:
 			- Raze
 			- Conquer
 		* Gain/Lose Trophies when attacking/defending / Gain Experience via Attacks
+		* Resource Raiding: Gain/Lose Resourcen when attacking/defending
 		* Conquer (capture) enemy towns implemented
 		* Raze (destroy) enemy towns implemented
 		* Leader (hero) units implemented
@@ -44,7 +44,7 @@ V013 	* Basic Combat System implemented, this covers:
 			(some units can grant a special bonus to the whole army)
 		* Flexible attack types implemented
 			(the admin can define new and unique attack types, the basic game comes
-			with 6 different attack types).
+			with several different attack types).
 		* Units feature a movement type (ex: ground, sea, air) and combat types can
 		  be limited to certain movement types as well.
 		* Players can now optionally gain experience by crafting components or training

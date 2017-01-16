@@ -328,6 +328,31 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
+	// setResources
+	// ----------------------------------------------------------------------------------------
+	public
+
+	function setResources($resources, $add=-1)
+	{
+		global $d13;
+		
+		$ok = 1;
+		
+		$this->getResources();
+
+		foreach ($resources as $res) {
+				
+			$this->resources[$res['resource']]['value'] += ($res['value']*$add);
+			$d13->dbQuery('update resources set value="' . $this->resources[$res['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $res['resource'] . '"');
+			if ($d13->dbAffectedRows() == - 1) $ok = 0;
+				
+		}
+		
+		return $ok;
+	
+	}
+
+	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
 
@@ -1967,7 +1992,7 @@ class node
 						// -> gain no resources
 						if ($data['output']['attacker']['winner'] && $combatData['lootAttacker']) {
 						
-							$status = $battle->doStealResources($data);
+							$data = $battle->doStealResources($data);
 							
 						}
 						

@@ -1916,7 +1916,7 @@ class d13_module_research extends d13_module
 				}
 				else {
 					$linkData.= '<p class="buttons-row theme-gray">';
-					$linkData.= '<a href="#" class="button active">' . $d13->getLangUI("research") . '</a>';
+					$linkData.= '<a href="#" class="button">' . $d13->getLangUI("research") . '</a>';
 					$linkData.= '</p>';
 				}
 

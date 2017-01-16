@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// SUB.NAVBAR
+// NAVBAR.CONTROLLER
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)

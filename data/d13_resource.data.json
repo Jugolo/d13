@@ -95,7 +95,7 @@
     "visible": true,
     "rarity": 50,
     "limited": true,
-    "carryable": true,
+    "carryable": false,
     "tradeable": true,
     "buyable": true,
     "lootable": true
