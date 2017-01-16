@@ -19,6 +19,7 @@ class misc
 
 	//----------------------------------------------------------------------------------------
 	// 
+	// level ca. 1-999 / trophies ca. 1-9999
 	//----------------------------------------------------------------------------------------
 	public static
 	
@@ -27,12 +28,15 @@ class misc
 		global $d13;
 		
 		$my_league = 0;
+		$my_value = ceil(($level*100)+$trophies)/2;
 		
-		foreach ($d13->getGeneral('leagues') as $league) {
+		foreach ($d13->getLeague() as $league) {
 		
-			#if ($league['']) {
-		
-			#}
+			if ($league['min'] <= $my_value) {
+				$my_league = $league['id'];
+			} else {
+				break;
+			}
 		
 		}
 
@@ -46,8 +50,14 @@ class misc
 	public static
 	
 	function percent_difference($value1, $value2) {
-	
-		$percentage = (max($value1, $value2) - min($value1, $value2))/(max($value1,$value2)*100);
+		
+		$percentage = 0;
+		
+		$value1++;
+		$value2++;
+		
+		$percentage = floor(max($value1, $value2) - min($value1, $value2))/(max($value1,$value2)*100);
+		
 		return $percentage;
 		
 	}

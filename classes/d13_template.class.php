@@ -243,9 +243,10 @@ class d13_tpl
 		$tvars["tpl_pvar_name"] = $template;
 		$tvars["tpl_page_leftPanel"] = '';
 		$tvars["tpl_page_rightPanel"] = '';
+		
 		// - - - - - Setup the top Navbar
-		require_once(CONST_INCLUDE_PATH . "pages/sub.navbar.php");
-		$tvars["tpl_page_navbar"] = sub_navbar($node);
+		$navBar = new d13_navBarController($node);
+		$tvars["tpl_page_navbar"] = $navBar->getTemplate();
 
 		// - - - - - Setup the Resource Bar only if accessing a Node
 		$subnavbar = "";

@@ -22,7 +22,7 @@ $message = "";
 $d13->dbQuery('start transaction');
 
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId'], $_GET['slotId'])) {
-	$flags = $d13->flags->get('name');
+	#$flags = $d13->flags->get('name');
 	$node = new node();
 	
 	$status = $node->get('id', $_GET['nodeId']);
@@ -90,38 +90,38 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 			// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 		case 'add':
-			if ($flags['build']) {
+			#if ($flags['build']) {
 				if (isset($_GET['moduleId'])) {
 					$status = $node->addModule($_GET['slotId'], $_GET['moduleId'], $_POST['input']);
 					if ($status == 'done') header('Location: index.php?p=node&action=get&nodeId=' . $node->data['id']);
 					else $message = $d13->getLangUI($status);
 				}
-			}
+			#}
 			else $message = $d13->getLangUI("featureDisabled");
 			break;
 
 			// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 		case 'upgrade':
-			if ($flags['upgrade']) {
+			#if ($flags['upgrade']) {
 				if (isset($_GET['slotId']) && isset($_GET['moduleId'])) {
 					$status = $node->upgradeModule($_GET['slotId'], $_GET['moduleId'], $_POST['input']);
 					if ($status == 'done') header('Location: index.php?p=node&action=get&nodeId=' . $node->data['id']);
 					else $message = $d13->getLangUI($status);
 				}
-			}
+			#}
 			else $message = $d13->getLangUI("featureDisabled");
 			break;
 
 			// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 		case 'remove':
-			if ($flags['build']) {
+			#if ($flags['build']) {
 				$status = $node->removeModule($_GET['slotId']);
 				if ($status == 'done') header('Location: index.php?p=node&action=get&nodeId=' . $node->data['id']);
 				else $message = $d13->getLangUI($status);
-			}
-			else $message = $d13->getLangUI("featureDisabled");
+			#}
+			#else $message = $d13->getLangUI("featureDisabled");
 			break;
 
 			// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -145,7 +145,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 					else $message = $d13->getLangUI($status);
 				}
 			#}
-			else $message = $d13->getLangUI("featureDisabled");
+			#else $message = $d13->getLangUI("featureDisabled");
 			break;
 
 		case 'cancelTechnology':
@@ -167,7 +167,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 				}
 				else header('Location: index.php?p=module&action=get&nodeId=' . $node->data['id'] . '&slotId=' . $_GET['slotId']);
 			#}
-			else $message = $d13->getLangUI("featureDisabled");
+			#else $message = $d13->getLangUI("featureDisabled");
 			break;
 
 		case 'removeComponent':
@@ -178,7 +178,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 					else $message = $d13->getLangUI($status);
 				}
 			#}
-			else $message = $d13->getLangUI("featureDisabled");
+			#else $message = $d13->getLangUI("featureDisabled");
 			break;
 
 		case 'cancelComponent':
@@ -200,18 +200,18 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 				}
 				else header('Location: index.php?p=module&action=get&nodeId=' . $node->data['id'] . '&slotId=' . $_GET['slotId']);
 			#}
-			else $message = $d13->getLangUI("featureDisabled");
+			#else $message = $d13->getLangUI("featureDisabled");
 			break;
 
 		case 'removeUnit':
-			if ($flags['train']) {
+			#if ($flags['train']) {
 				if (isset($_GET['unitId'], $_POST['quantity'])) {
 					$status = $node->removeUnit($_GET['unitId'], $_POST['quantity'], $node->modules[$_GET['slotId']]['module']);
 					if ($status == 'done') header('Location: index.php?p=module&action=get&nodeId=' . $node->data['id'] . '&slotId=' . $_GET['slotId']);
 					else $message = $d13->getLangUI($status);
 				}
-			}
-			else $message = $d13->getLangUI("featureDisabled");
+			#}
+			#else $message = $d13->getLangUI("featureDisabled");
 			break;
 
 		case 'cancelUnit':

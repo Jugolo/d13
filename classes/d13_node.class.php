@@ -18,7 +18,6 @@ class node
 {
 
 	public $data, $resources, $production, $storage, $technologies, $modules, $components, $queues, $queue = array(
-
 		'research',
 		'build',
 		'craft',
@@ -40,9 +39,9 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// GET
+	// get
+	// Get all node data
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function get($idType, $id)
@@ -52,8 +51,7 @@ class node
 		$this->data = $d13->dbFetch($result);
 		if (isset($this->data['id'])) {
 			$status = 'done';
-		}
-		else {
+		} else {
 			$status = 'noNode';
 		}
 
@@ -61,9 +59,9 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// SET
+	// set
+	// Updates node data to new values
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function set()
@@ -96,9 +94,9 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// ADD
+	// add
+	// Add new node to the grid
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function add($userId)
@@ -114,13 +112,13 @@ class node
 					$ok = 1;
 					$this->data['id'] = misc::newId('nodes');
 					
-					//- - - - - Add 
+					//- - - - - Add to grid
 					$d13->dbQuery('insert into nodes (id, faction, user, name, focus, lastCheck) values ("' . $this->data['id'] . '", "' . $this->data['faction'] . '", "' . $this->data['user'] . '", "' . $this->data['name'] . '", "hp", now())');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					$d13->dbQuery('update grid set type="2", id="' . $this->data['id'] . '" where x="' . $this->location['x'] . '" and y="' . $this->location['y'] . '"');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					
-					//- - - - - Add 
+					//- - - - - Add to resources
 					$query = array();
 					$nr = count($d13->getResource());
 					for ($i = 0; $i < $nr; $i++) {
@@ -129,7 +127,7 @@ class node
 					$d13->dbQuery('insert into resources (node, id, value) values ' . implode(', ', $query));
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					
-					//- - - - - Add 
+					//- - - - - Add to technologies
 					$query = array();
 					$nr = count($d13->getTechnology($this->data['faction']));
 					for ($i = 0; $i < $nr; $i++) {
@@ -138,7 +136,7 @@ class node
 					$d13->dbQuery('insert into technologies (node, id, level) values ' . implode(', ', $query));
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					
-					//- - - - - Add 
+					//- - - - - Add to components
 					$query = array();
 					$nr = count($d13->getComponent($this->data['faction']));
 					for ($i = 0; $i < $nr; $i++) {
@@ -147,7 +145,7 @@ class node
 					$d13->dbQuery('insert into components (node, id, value) values ' . implode(', ', $query));
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					
-					//- - - - - Add 
+					//- - - - - Add to units
 					$query = array();
 					$nr = count($d13->getUnit($this->data['faction']));
 					for ($i = 0; $i < $nr; $i++) {
@@ -156,7 +154,7 @@ class node
 					$d13->dbQuery('insert into units (node, id, value, level) values ' . implode(', ', $query));
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					
-					//- - - - - Add 
+					//- - - - - Add to modules
 					$query = array();
 					for ($i = 0; $i < $d13->getGeneral('users', 'maxModules') * $d13->getGeneral('users', 'maxSectors'); $i++) {
 						$query[$i] = '("' . $this->data['id'] . '", "' . $i . '", "-1", "0", "0")';
@@ -164,7 +162,7 @@ class node
 					$d13->dbQuery('insert into modules (node, slot, module, input, level) values ' . implode(', ', $query));
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					
-					//- - - - - Add 
+					//- - - - - Add to shields
 					$shieldId = $d13->getFaction($this->data['faction'], 'shield');
 					$ok = $this->setShield($shieldId);
 					
@@ -191,9 +189,9 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// remove
+	// Remove node from grid
 	// ----------------------------------------------------------------------------------------
-
 	public static
 
 	function remove($id)
@@ -241,9 +239,9 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// getList
+	// 
 	// ----------------------------------------------------------------------------------------
-
 	public static
 
 	function getList($userId, $otherNode = FALSE)
@@ -266,7 +264,7 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// getLocation
 	// ----------------------------------------------------------------------------------------
 
 	public
@@ -465,12 +463,14 @@ class node
 	{
 		global $d13;
 		
-		$duration = $d13->getShield($shieldId, 'duration') * 60;
-		$start = strftime('%Y-%m-%d %H:%M:%S', time());
+		$ok 		= 1;
+		$duration 	= $d13->getShield($shieldId, 'duration') * 60;
+		$start 		= strftime('%Y-%m-%d %H:%M:%S', time());
 		
 		$d13->dbQuery('insert into shield (node, obj_id, start, duration) values ("' . $this->data['id'] . '", "' . $shieldId . '", "' . $start . '", "' . $duration . '")');
 		
 		if ($d13->dbAffectedRows() == - 1) $ok = 0;
+		
 		if ($ok) {
 			$status = 'done';
 		} else {
@@ -1369,16 +1369,34 @@ class node
 							$d13->dbQuery('update resources set value="' . $this->resources[$upkeepResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $upkeepResource . '"');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						}
-
+						
+						// - - - - deduct required resources
 						foreach ($combatCost as $cost) {
-							if ($cost['isFuel']) {
-								$this->resources[$cost['resource']]['value'] -= $cost['value'] * $totalFuel * $d13->getGeneral('users', 'cost', 'combat');
-							} else {
-								$this->resources[$cost['resource']]['value'] -= $cost['value'] * $d13->getGeneral('users', 'cost', 'combat');
-							}
+						
+							if (isset($cost['isFuel']) && isset($cost['resource'])) {
+						
+								if ($cost['isFuel']) {
+									$this->resources[$cost['resource']]['value'] -= $cost['value'] * $totalFuel * $d13->getGeneral('users', 'cost', 'combat');
+								} else {
+									$this->resources[$cost['resource']]['value'] -= $cost['value'] * $d13->getGeneral('users', 'cost', 'combat');
+								}
 							
-							$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
-							if ($d13->dbAffectedRows() == - 1) $ok = 0;
+								$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
+								if ($d13->dbAffectedRows() == - 1) $ok = 0;
+							
+							} else if (isset($cost['component'])) {
+									
+								if (isset($cost['isFuel']) && $cost['isFuel']) {
+									$this->components[$cost['component']]['value'] -= $cost['value'] * $totalFuel * $d13->getGeneral('users', 'cost', 'combat');
+								} else {
+									$this->components[$cost['component']]['value'] -= $cost['value'] * $d13->getGeneral('users', 'cost', 'combat');
+								}
+							
+								$d13->dbQuery('update components set value="' . $this->components[$cost['component']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['component'] . '"');
+								if ($d13->dbAffectedRows() == - 1) $ok = 0;
+
+									
+							}
 						}
 
 						$d13->dbQuery('insert into combat (id, sender, recipient, focus, stage, start, duration, type, slot) values ("' . $combatId . '", "' . $this->data['id'] . '", "' . $node->data['id'] . '", "' . $data['input']['attacker']['focus'] . '", "0", "' . strftime('%Y-%m-%d %H:%M:%S', time()) . '", "' . $duration . '", "' . $type . '", "' . $slotId . '")');
@@ -1505,9 +1523,8 @@ class node
 	}
 	
 	// ----------------------------------------------------------------------------------------
-	//
+	// checkResearch
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkResearch($time)
@@ -1539,7 +1556,6 @@ class node
 	// ----------------------------------------------------------------------------------------
 	// checkBuild
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkBuild($time)
@@ -1635,110 +1651,140 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// checkCraft
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkCraft($time)
 	{
 		global $d13;
+		
 		$d13->dbQuery('start transaction');
 		$this->getResources();
 		$this->getComponents();
 		$this->getQueue('craft');
 		$ok = 1;
+		
 		foreach($this->queue['craft'] as $entry) {
+		
 			$entry['end'] = $entry['start'] + floor($entry['duration']);
+			
 			if ($entry['end'] <= $time) {
 				if (!$entry['stage']) {
 					$this->components[$entry['obj_id']]['value']+= $entry['quantity'];
 					$d13->dbQuery('update components set value="' . $this->components[$entry['obj_id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $entry['obj_id'] . '"');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
-				}
-				else {
+				} else {
+				
 					foreach($d13->getComponent($this->data['faction'], $entry['obj_id'], 'cost') as $cost) {
 						$this->resources[$cost['resource']]['value']+= $cost['value'] * $entry['quantity'] * $d13->getGeneral('users', 'cost', 'craft') * $d13->getComponent($this->data['faction'], $entry['obj_id'], 'salvage');
 						$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
-						if ($d13->dbAffectedRows() == - 1) $ok = 0;
-					}
-
-					foreach($d13->getComponent($this->data['faction'], $entry['obj_id'], 'requirements') as $requirement)
-					if ($requirement['type'] == 'components') {
-						$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
-						$storage = $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $requirement['value'] * $entry['quantity'];
-						if ($this->resources[$storageResource]['value'] - $storage >= 0) {
-							$this->resources[$storageResource]['value']-= $storage;
-							$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
-							if ($d13->dbAffectedRows() == - 1) $ok = 0;
-							$this->components[$requirement['id']]['value']+= $requirement['value'] * $entry['quantity'];
-							$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
-							if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						if ($d13->dbAffectedRows() == - 1) {
+							$ok = 0;
 						}
 					}
-				}
 
+					foreach($d13->getComponent($this->data['faction'], $entry['obj_id'], 'requirements') as $requirement) {
+						if ($requirement['type'] == 'components') {
+							$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
+							$storage = $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $requirement['value'] * $entry['quantity'];
+							if ($this->resources[$storageResource]['value'] - $storage >= 0) {
+								$this->resources[$storageResource]['value']-= $storage;
+								$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
+								if ($d13->dbAffectedRows() == - 1) $ok = 0;
+								$this->components[$requirement['id']]['value']+= $requirement['value'] * $entry['quantity'];
+								$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
+								if ($d13->dbAffectedRows() == - 1) $ok = 0;
+							}
+						}
+					}
+					
+				}
+				
+				if ($ok && $d13->getComponent($this->data['faction'], $entry['obj_id'], 'gainExperience')) { #experience gain
+					$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+					$ok = $tmp_user->gainExperience($d13->getComponent($this->data['faction'],  $entry['obj_id'], 'cost'), $entry['quantity']);
+				}
+					
 				$d13->dbQuery('delete from craft where id="' . $entry['id'] . '"');
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			}
 		}
 
-		if ($ok) $d13->dbQuery('commit');
-		else $d13->dbQuery('rollback');
+		if ($ok) {
+			$d13->dbQuery('commit');
+		} else {
+			$d13->dbQuery('rollback');
+		}
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// checkTrain
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkTrain($time)
 	{
+	
 		global $d13;
+		
 		$d13->dbQuery('start transaction');
 		$this->getResources();
 		$this->getComponents();
 		$this->getUnits();
 		$this->getQueue('train');
 		$ok = 1;
+		
 		foreach($this->queue['train'] as $entry) {
+		
 			$entry['end'] = $entry['start'] + floor($entry['duration']);
+			
 			if ($entry['end'] <= $time) {
+			
 				if (!$entry['stage']) {
 					$this->units[$entry['obj_id']]['value']+= $entry['quantity'];
 					$d13->dbQuery('update units set value="' . $this->units[$entry['obj_id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $entry['obj_id'] . '"');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
-				}
-				else {
+				} else {
+				
 					foreach($d13->getUnit($this->data['faction'], $entry['obj_id'], 'cost') as $cost) {
 						$this->resources[$cost['resource']]['value']+= $cost['value'] * $entry['quantity'] * $d13->getGeneral('users', 'cost', 'train') * $d13->getUnit($this->data['faction'], $entry['obj_id'], 'salvage');
 						$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
 						if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					}
 
-					foreach($d13->getUnit($this->data['faction'], $entry['obj_id'], 'requirements') as $requirement)
-					if ($requirement['type'] == 'components') {
-						$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
-						$storage = $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $requirement['value'] * $entry['quantity'];
-						if ($this->resources[$storageResource]['value'] - $storage >= 0) {
-							$this->resources[$storageResource]['value']-= $storage;
-							$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
-							if ($d13->dbAffectedRows() == - 1) $ok = 0;
-							$this->components[$requirement['id']]['value']+= $requirement['value'] * $entry['quantity'];
-							$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
-							if ($d13->dbAffectedRows() == - 1) $ok = 0;
+					foreach($d13->getUnit($this->data['faction'], $entry['obj_id'], 'requirements') as $requirement) {
+						if ($requirement['type'] == 'components') {
+							$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
+							$storage = $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $requirement['value'] * $entry['quantity'];
+							if ($this->resources[$storageResource]['value'] - $storage >= 0) {
+								$this->resources[$storageResource]['value']-= $storage;
+								$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
+								if ($d13->dbAffectedRows() == - 1) $ok = 0;
+								$this->components[$requirement['id']]['value']+= $requirement['value'] * $entry['quantity'];
+								$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
+								if ($d13->dbAffectedRows() == - 1) $ok = 0;
+							}
 						}
 					}
-				}
 
+				}
+				
+				if ($ok && $d13->getUnit($this->data['faction'], $entry['obj_id'], 'gainExperience')) { #experience gain
+					$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+					$ok = $tmp_user->gainExperience($d13->getUnit($this->data['faction'],  $entry['obj_id'], 'cost'), $entry['quantity']);
+				}
+				
 				$d13->dbQuery('delete from train where id="' . $entry['id'] . '"');
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			}
 		}
 
-		if ($ok) $d13->dbQuery('commit');
-		else $d13->dbQuery('rollback');
+		if ($ok) {
+			$d13->dbQuery('commit');
+		} else {
+			$d13->dbQuery('rollback');
+		}
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -1779,10 +1825,11 @@ class node
 						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GATHER ATTACKER DATA
 
 						$data = array();
-						$data['input']['attacker']['groups'] = array();
-						$data['input']['attacker']['focus'] = $combat['focus'];
-						$data['input']['attacker']['faction'] = $$nodes['attacker']->data['faction'];
-						$data['input']['attacker']['nodeId'] = $$nodes['attacker']->data['id'];
+						$data['input']['attacker']['userId'] 	= $$nodes['attacker']->data['user'];
+						$data['input']['attacker']['groups'] 	= array();
+						$data['input']['attacker']['focus'] 	= $combat['focus'];
+						$data['input']['attacker']['faction'] 	= $$nodes['attacker']->data['faction'];
+						$data['input']['attacker']['nodeId'] 	= $$nodes['attacker']->data['id'];
 						$otherResult = $d13->dbQuery('select * from combat_units where combat="' . $combat['id'] . '"');
 						while ($group = $d13->dbFetch($otherResult)) {
 							$data['input']['attacker']['groups'][] = array(
@@ -1792,11 +1839,12 @@ class node
 						}
 
 						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GATHER DEFENDER DATA
-
-						$data['input']['defender']['groups'] = array();
-						$data['input']['defender']['focus'] = $$nodes['defender']->data['focus'];
-						$data['input']['defender']['faction'] = $$nodes['defender']->data['faction'];
-						$data['input']['defender']['nodeId'] = $$nodes['defender']->data['id'];
+						
+						$data['input']['defender']['userId'] 	= $$nodes['defender']->data['user'];
+						$data['input']['defender']['groups'] 	= array();
+						$data['input']['defender']['focus'] 	= $$nodes['defender']->data['focus'];
+						$data['input']['defender']['faction'] 	= $$nodes['defender']->data['faction'];
+						$data['input']['defender']['nodeId'] 	= $$nodes['defender']->data['id'];
 
 						// - - - - - DEFENDER UNITS
 
@@ -1833,6 +1881,8 @@ class node
 
 						$battle = new d13_combat();
 						$data = $battle->doCombat($data);
+						
+						$status = $battle->doAdjustLeague($data);
 
 						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - COMBAT AFTERMATH
 
@@ -1900,32 +1950,55 @@ class node
 						if ($d13->dbAffectedRows() == - 1) {
 							$ok = 0;
 						}
-
-						// scout
+						
+						$combatData = $d13->getCombat($combat['type']);
+						
+						
+						// ScoutReport
 						// -> trigger scout report without harm if 'scout check' passed
 						// -> otherwise trigger battle
+						if ($combatData['scoutReport']) {
 						
-						// raid
+						
+						}
+						
+						// lootAttacker
 						// -> gain resources
 						// -> gain no resources
+						if ($data['output']['attacker']['winner'] && $combatData['lootAttacker']) {
 						
-						// sabotage
+							$status = $battle->doStealResources($data);
+							
+						}
+						
+						// nodeDefenderConquer
+						if ($data['output']['attacker']['winner'] && $combatData['nodeDefenderConquer']) {
+							if ($combatData['requiresWipeout'] == false || $combatData['requiresWipeout'] && $overkill) {
+						
+								$d13->dbQuery('update nodes set user="' . $$nodes['attacker']->data['user'] . '" where id="' . $$nodes['defender']->data['id'] . '"');
+						
+							}
+						}
+						
+						
+						// nodeDefenderRemove
+						if ($data['output']['attacker']['winner'] && $combatData['nodeDefenderRemove']) {
+							if ($combatData['requiresWipeout'] == false || $combatData['requiresWipeout'] && $overkill) {
+						
+								$this->remove($$nodes['defender']->data['id']);
+						
+							}
+						}
+						
+						// sabotageDefender
 						// -> trigger special effect if scout check passed
 						// -> otherwise trigger battle
 						
-						// skirmish
+						// Skirmish
 						// -> deal damage without harm if scout check passed
 						// -> otherwise trigger battle
 						
-						// raze
-						if ($combat['type'] == 'raze' && $overkill) {
-							$this->remove($$nodes['defender']->data['id']);
-						}
-						
-						// conquer
-						if ($combat['type'] == 'conquer' && $overkill) {
-							$d13->dbQuery('update nodes set user="' . $$nodes['attacker']->data['user'] . '" where id="' . $$nodes['defender']->data['id'] . '"');
-						}
+
 
 						if ($d13->dbAffectedRows() == - 1) {
 							$ok = 0;
@@ -2005,9 +2078,8 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// checkAll
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkAll($time)
@@ -2028,7 +2100,6 @@ class node
 	// checkOptions
 	// Scan all modules on this node and determine if a specific option is available
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkOptions($option)
@@ -2046,9 +2117,8 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// checkRequirements
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkRequirements($requirements, $quantity = 1)
@@ -2061,8 +2131,7 @@ class node
 		foreach($data['requirements'] as $key => $requirement)
 		if (isset($requirement['value']) || isset($requirement['level'])) switch ($requirement['type']) {
 
-			// - - - - -
-
+		// - - - - -
 		case 'technologies':
 			if ($this->technologies[$requirement['id']]['level'] < $requirement['level']) {
 				$data['requirements'][$key]['ok'] = 0;
@@ -2074,8 +2143,7 @@ class node
 
 			break;
 
-			// - - - - -
-
+		// - - - - -
 		case 'modules':
 			if (isset($requirement['level'])) {
 				foreach($this->modules as $module) {
@@ -2112,8 +2180,7 @@ class node
 
 			break;
 
-			// - - - - -
-
+		// - - - - -
 		case 'components':
 			if ($this->components[$requirement['id']]['value'] < $requirement['value'] * $quantity) {
 				$data['requirements'][$key]['ok'] = 0;
@@ -2123,11 +2190,12 @@ class node
 			break;
 		}
 		else $data['requirements'][$key]['ok'] = 1;
+		
 		return $data;
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// checkCost
 	// ----------------------------------------------------------------------------------------
 	public
 
@@ -2147,11 +2215,21 @@ class node
 			} else {
 				$tmp_quantity = $quantity;
 			}
-			if ($this->resources[$thecost['resource']]['value'] < ($thecost['value'] * $tmp_quantity * $d13->getGeneral('users', 'cost', $costType))) {
-				$data['cost'][$key]['ok'] = 0;
-				$data['ok'] = 0;
-			} else {
-				$data['cost'][$key]['ok'] = 1;
+			
+			if (isset($thecost['resource'])) {
+				if ($this->resources[$thecost['resource']]['value'] < ($thecost['value'] * $tmp_quantity * $d13->getGeneral('users', 'cost', $costType))) {
+					$data['cost'][$key]['ok'] = 0;
+					$data['ok'] = 0;
+				} else {
+					$data['cost'][$key]['ok'] = 1;
+				}
+			} else if (isset($thecost['component'])) {
+				if ($this->components[$thecost['component']]['value'] < ($thecost['value'] * $tmp_quantity * $d13->getGeneral('users', 'cost', $costType))) {
+					$data['cost'][$key]['ok'] = 0;
+					$data['ok'] = 0;
+				} else {
+					$data['cost'][$key]['ok'] = 1;
+				}
 			}
 		}
 
@@ -2159,9 +2237,8 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// checkCostMax
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkCostMax($cost, $costType)
@@ -2203,9 +2280,8 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// checkRequirementsMax
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkRequirementsMax($cost)
@@ -2251,10 +2327,10 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// checkModuleDependencies
 	// ----------------------------------------------------------------------------------------
-
 	private
+	
 	function checkModuleDependencies($moduleId, $slotId, $useOldIR = 0)
 	{
 		global $d13;
@@ -2364,9 +2440,9 @@ class node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// move
+	// move node to new location on grid
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function move($x, $y)

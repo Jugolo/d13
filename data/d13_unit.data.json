@@ -7,8 +7,7 @@
       "priority": 0,
       "type": "unit",
       "class": "spearman",
-      "attackType": "melee",
-      "armorType": "medium",
+      "movementType": 0,
       "hp": 300,
       "damage": 100,
       "armor": 50,
@@ -23,6 +22,22 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        {
+          "stat": "damage",
+          "value": 0.5
+        }
+      ],
       "cost": [
         {
           "resource": 0,
@@ -39,21 +54,18 @@
       ],
       "requirements": [
         {
-          "active": true,
           "type": "components",
-          "id": 0,
+          "id": 1,
           "value": 1
         },
         {
-          "active": true,
+          "type": "components",
+          "id": 5,
+          "value": 1
+        },
+        {
           "type": "components",
           "id": 7,
-          "value": 1
-        },
-        {
-          "active": true,
-          "type": "components",
-          "id": 2,
           "value": 1
         }
       ],
@@ -68,8 +80,7 @@
       "priority": 1,
       "type": "unit",
       "class": "spearman",
-     "attackType": "melee",
-      "armorType": "medium",
+      "movementType": 0,
       "hp": 300,
       "damage": 110,
       "armor": 70,
@@ -77,13 +88,26 @@
       "vision": 1,
       "stealth": 0,
       "critical": 5,
- 	  "capacity": 5,
- 	  "fuel": 1,
+      "capacity": 5,
+      "fuel": 1,
       "duration": 1,
       "upkeepResource": 5,
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -100,13 +124,11 @@
       ],
       "requirements": [
         {
-          "active": true,
           "type": "components",
           "id": 1,
           "value": 1
         },
         {
-          "active": true,
           "type": "components",
           "id": 7,
           "value": 1
@@ -123,8 +145,7 @@
       "priority": 2,
       "type": "unit",
       "class": "duelist",
-      "attackType": "melee",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 250,
       "damage": 150,
       "armor": 30,
@@ -139,6 +160,19 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -155,13 +189,11 @@
       ],
       "requirements": [
         {
-          "active": true,
           "type": "components",
           "id": 0,
           "value": 1
         },
         {
-          "active": true,
           "type": "components",
           "id": 3,
           "value": 2
@@ -178,8 +210,7 @@
       "priority": 3,
       "type": "unit",
       "class": "swordsman",
-      "attackType": "melee",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 300,
       "damage": 120,
       "armor": 100,
@@ -194,6 +225,19 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -210,19 +254,16 @@
       ],
       "requirements": [
         {
-          "active": true,
           "type": "components",
           "id": 1,
           "value": 1
         },
         {
-          "active": true,
           "type": "components",
           "id": 3,
           "value": 1
         },
         {
-          "active": true,
           "type": "components",
           "id": 2,
           "value": 1
@@ -239,8 +280,7 @@
       "priority": 4,
       "type": "unit",
       "class": "swordsman",
-      "attackType": "melee",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 350,
       "damage": 130,
       "armor": 120,
@@ -255,6 +295,19 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -271,29 +324,21 @@
       ],
       "requirements": [
         {
-          "active": true,
-          "priority": -1,
           "type": "technologies",
           "id": 2,
           "level": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 1,
           "value": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 4,
           "value": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 2,
           "value": 1
@@ -310,8 +355,7 @@
       "priority": 5,
       "type": "unit",
       "class": "archer",
-      "attackType": "missile",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 250,
       "damage": 300,
       "armor": 30,
@@ -326,6 +370,19 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -342,15 +399,11 @@
       ],
       "requirements": [
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 0,
           "value": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 5,
           "value": 1
@@ -367,8 +420,7 @@
       "priority": 6,
       "type": "unit",
       "class": "archer",
-      "attackType": "missile",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 250,
       "damage": 400,
       "armor": 70,
@@ -383,6 +435,19 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -399,22 +464,16 @@
       ],
       "requirements": [
         {
-          "active": true,
-          "priority": -1,
           "type": "technologies",
           "id": 2,
           "level": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 0,
           "value": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 6,
           "value": 1
@@ -431,8 +490,7 @@
       "priority": 7,
       "type": "unit",
       "class": "cavalry",
-      "attackType": "melee",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 600,
       "damage": 140,
       "armor": 100,
@@ -447,6 +505,22 @@
       "upkeep": 2,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        {
+          "stat": "damage",
+          "value": 0.5
+        }
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -463,22 +537,16 @@
       ],
       "requirements": [
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 0,
           "value": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 1,
           "value": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 7,
           "value": 1
@@ -495,8 +563,7 @@
       "priority": 8,
       "type": "unit",
       "class": "cavalry",
-      "attackType": "melee",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 600,
       "damage": 130,
       "armor": 120,
@@ -511,6 +578,22 @@
       "upkeep": 2,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        {
+          "stat": "damage",
+          "value": 0.5
+        }
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -527,22 +610,16 @@
       ],
       "requirements": [
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 1,
           "value": 2
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 4,
           "value": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 2,
           "value": 1
@@ -559,8 +636,7 @@
       "priority": 9,
       "type": "unit",
       "class": "cavalry",
-      "attackType": "melee",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 700,
       "damage": 140,
       "armor": 150,
@@ -575,6 +651,22 @@
       "upkeep": 2,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        {
+          "stat": "damage",
+          "value": 0.5
+        }
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -591,29 +683,21 @@
       ],
       "requirements": [
         {
-          "active": true,
-          "priority": -1,
           "type": "technologies",
           "id": 2,
           "level": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 1,
           "value": 2
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 7,
           "value": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 2,
           "value": 1
@@ -628,10 +712,9 @@
       "image": "10.png",
       "active": true,
       "priority": 10,
-      "type": "hero",
+      "type": "unit",
       "class": "duelist",
-      "attackType": "melee",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 250,
       "damage": 100,
       "armor": 30,
@@ -646,6 +729,19 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -662,22 +758,16 @@
       ],
       "requirements": [
         {
-          "active": true,
-          "priority": -1,
           "type": "technologies",
           "id": 2,
           "level": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 0,
           "value": 1
         },
         {
-          "active": true,
-          "priority": -1,
           "type": "components",
           "id": 3,
           "value": 2
@@ -694,8 +784,7 @@
       "priority": 11,
       "type": "unit",
       "class": "spearman",
-      "attackType": "melee",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 200,
       "damage": 50,
       "armor": 10,
@@ -710,6 +799,22 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        {
+          "stat": "damage",
+          "value": 0.5
+        }
+      ],
       "cost": [
         {
           "resource": 0,
@@ -736,10 +841,9 @@
       "image": "12.png",
       "active": true,
       "priority": 12,
-      "type": "hero",
+      "type": "unit",
       "class": "duelist",
-      "attackType": "melee",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 250,
       "damage": 80,
       "armor": 20,
@@ -754,6 +858,22 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        {
+          "stat": "damage",
+          "value": "0.1"
+        }
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -780,10 +900,9 @@
       "image": "13.png",
       "active": true,
       "priority": 13,
-      "type": "hero",
+      "type": "unit",
       "class": "duelist",
-      "attackType": "melee",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 350,
       "damage": 120,
       "armor": 50,
@@ -798,6 +917,19 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -826,8 +958,7 @@
       "priority": 14,
       "type": "unit",
       "class": "archer",
-      "attackType": "missile",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 250,
       "damage": 150,
       "armor": 20,
@@ -842,6 +973,19 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -870,8 +1014,7 @@
       "priority": 15,
       "type": "unit",
       "class": "archer",
-      "attackType": "missile",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 300,
       "damage": 200,
       "armor": 50,
@@ -886,6 +1029,19 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -914,8 +1070,7 @@
       "priority": 16,
       "type": "unit",
       "class": "duelist",
-      "attackType": "melee",
-      "armorType": "medium",      
+      "movementType": 0,
       "hp": 250,
       "damage": 70,
       "armor": 20,
@@ -930,6 +1085,19 @@
       "upkeep": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -958,8 +1126,8 @@
       "priority": -1,
       "type": "unit",
       "class": "static",
-      "attackType": "missile",
-      "armorType": "fortified",      
+      "movementType": 0,
+      "armorType": "fortified",
       "hp": 1500,
       "damage": 500,
       "armor": 100,
@@ -974,6 +1142,19 @@
       "upkeep": 5,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -990,8 +1171,6 @@
       ],
       "requirements": [
         {
-          "active": true,
-          "priority": -1,
           "type": "technologies",
           "id": 2,
           "level": 1
@@ -1008,8 +1187,8 @@
       "priority": -1,
       "type": "unit",
       "class": "static",
-      "attackType": "melee",
-      "armorType": "fortified",      
+      "movementType": 0,
+      "armorType": "fortified",
       "hp": 3000,
       "damage": 100,
       "armor": 500,
@@ -1024,6 +1203,19 @@
       "upkeep": 5,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        
+      ],
+      "armyDefenseModifier": [
+        
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
       "cost": [
         {
           "resource": 0,
@@ -1040,12 +1232,178 @@
       ],
       "requirements": [
         {
-          "active": true,
-          "priority": -1,
           "type": "technologies",
           "id": 2,
           "level": 1
         }
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 19,
+      "image": "hero_0.png",
+      "active": true,
+      "priority": 13,
+      "type": "leader",
+      "class": "duelist",
+      "movementType": 0,
+      "hp": 3500,
+      "damage": 120,
+      "armor": 50,
+      "speed": 100,
+      "vision": 1,
+      "stealth": 0,
+      "critical": 5,
+      "capacity": 5,
+      "fuel": 1,
+      "duration": 1,
+      "upkeepResource": 5,
+      "upkeep": 1,
+      "salvage": 0.5,
+      "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        {
+          "stat": "damage",
+          "value": "0.2"
+        }
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
+      "cost": [
+        {
+          "resource": 0,
+          "value": 120
+        },
+        {
+          "resource": 1,
+          "value": 0
+        },
+        {
+          "resource": 2,
+          "value": 0
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 20,
+      "image": "hero_1.png",
+      "active": true,
+      "priority": 13,
+      "type": "leader",
+      "class": "wizard",
+      "movementType": 0,
+      "hp": 3500,
+      "damage": 120,
+      "armor": 50,
+      "speed": 100,
+      "vision": 1,
+      "stealth": 0,
+      "critical": 5,
+      "capacity": 5,
+      "fuel": 1,
+      "duration": 1,
+      "upkeepResource": 5,
+      "upkeep": 1,
+      "salvage": 0.5,
+      "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        {
+          "stat": "armor",
+          "value": "0.2"
+        }
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
+      "cost": [
+        {
+          "resource": 0,
+          "value": 120
+        },
+        {
+          "resource": 1,
+          "value": 0
+        },
+        {
+          "resource": 2,
+          "value": 0
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 21,
+      "image": "hero_2.png",
+      "active": true,
+      "priority": 13,
+      "type": "leader",
+      "class": "archer",
+      "movementType": 0,
+      "hp": 3500,
+      "damage": 120,
+      "armor": 50,
+      "speed": 100,
+      "vision": 1,
+      "stealth": 0,
+      "critical": 5,
+      "capacity": 5,
+      "fuel": 1,
+      "duration": 1,
+      "upkeepResource": 5,
+      "upkeep": 1,
+      "salvage": 0.5,
+      "removeDuration": 1,
+      "gainExperience": true,
+      "armyAttackModifier": [
+        {
+          "stat": "critical",
+          "value": "0.2"
+        }
+      ],
+      "attackModifier": [
+        
+      ],
+      "defenseModifier": [
+        
+      ],
+      "cost": [
+        {
+          "resource": 0,
+          "value": 120
+        },
+        {
+          "resource": 1,
+          "value": 0
+        },
+        {
+          "resource": 2,
+          "value": 0
+        }
+      ],
+      "requirements": [
+        
       ],
       "upgrades": [
         

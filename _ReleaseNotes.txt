@@ -17,19 +17,41 @@ CREDITS
 RELEASE CANDIDATE 0
 ------------------------------------------------------------------------------------------
 
-V013 	- !!! THIS REPRESENTS THE NEXT UPDATE CONTENTS !!!
+V014	--- UPCOMING UPDATE ---
+
+		* Expands existing combat system:
 		
-		* Basic Combat System implemented
-		* Critical Damage implemented
-		* Defending Modules implemented
-		* Six different types of attacking an enemy:
-			- Scout
-			- Skirmish
-			- Raid
+			- Scout Reports
+			- Scout Checks
+			- Resource Raiding
+
+
+V013 	* Basic Combat System implemented, this covers:
+
+		* Different types of attacking an enemy:
+			- Basic Attack (Resource Raiding in progress)
 			- Raze
 			- Conquer
-			- Sabotage
-
+		* Gain/Lose Trophies when attacking/defending / Gain Experience via Attacks
+		* Conquer (capture) enemy towns implemented
+		* Raze (destroy) enemy towns implemented
+		* Leader (hero) units implemented
+		* Leader required for certain attack types implemented
+		* Limited units implemented
+		* Critical Damage implemented
+		* Situational combat modifiers implemented
+			(units can now acquire special bonus when attacking/defending)
+			(some units can grant a special bonus to the whole army)
+		* Flexible attack types implemented
+			(the admin can define new and unique attack types, the basic game comes
+			with 6 different attack types).
+		* Units feature a movement type (ex: ground, sea, air) and combat types can
+		  be limited to certain movement types as well.
+		* Players can now optionally gain experience by crafting components or training
+		  units.
+		* Optional (Fuel) resource cost for armies can now also be a component (that
+		  must be crafted first).
+		
 V012	* player accounts now gain experience through building, upgrades & researches
 		* player accounts now level up - this affects league ranking
 		* player accounts are now divided into leagues to measure their power

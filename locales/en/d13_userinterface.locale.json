@@ -274,7 +274,14 @@
   "army": "army",
   "size": "size",
   "stealth": "stealth",
-  "attack": "attack type",
-  "defense": "armor type"
-  
+  "attackModifierDesc": "Grants this unit a bonus while attacking.",
+  "defenseModifierDesc": "Grants this unit a bonus while defending.",
+  "armyAttackModifierDesc": "Grants your whole army a bonus while attacking.",
+  "armyDefenseModifierDesc": "Grants your whole army a bonus while defending.",
+  "attackModifier": "unit attack",
+  "defenseModifier": "unit defense",
+  "armyAttackModifier": "army attack",
+  "armyDefenseModifier": "army defense",
+  "requiresLeader": "requiresLeader",
+  "requiresWipeout": "requiresWipeout"
 }

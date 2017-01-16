@@ -20,30 +20,22 @@ $d13->dbQuery('start transaction');
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId'])) {
 	$node = new node();
 	if ($node->get('id', $_GET['nodeId']) == 'done') {
-		$flags = $d13->flags->get('name');
+		#$flags = $d13->flags->get('name');
 		$node->checkAll(time());
 		
 		switch ($_GET['action']) {
 
-			// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 		case 'add':
 			
 			if (isset($_GET['type'], $_GET['slotId'])) {
 			
 				$pass = false;
-				if ($_GET['type'] == 'scout' && $node->checkOptions('combatScout')) {
+				
+				// - - - - Check if Node allows this combat type
+				if ($node->checkOptions($_GET['type'])) {
 					$pass = true;
-				} else if ($_GET['type'] == 'raid' && $node->checkOptions('combatRaid')) {
-					$pass = true;
-				} else if ($_GET['type'] == 'conquer' && $node->checkOptions('combatConquer')) {
-					$pass = true;
-				} else if ($_GET['type'] == 'skirmish' && $node->checkOptions('combatSkirmish')) {
-					$pass = true;
-				} else if ($_GET['type'] == 'sabotage' && $node->checkOptions('combatSabotage')) {
-					$pass = true;
-				} else if ($_GET['type'] == 'raze' && $node->checkOptions('combatRaze')) {
-					$pass = true;	
 				} else {
 					$message = $d13->getLangUI("featureDisabled");
 				}
@@ -52,6 +44,8 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 					
 					$target = new node();
 					if ($target->get('id', $_POST['id']) == 'done') {
+						
+						// - - - - Check Alliance Status
 						$targetUser = new user();
 						if ($targetUser->get('id', $target->data['user']) == 'done') {
 							$pass = true;
@@ -69,43 +63,79 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 							}
 
 							if ($pass) {
-								$gotStatic = false;
+								$gotIllegal = false;
+								$gotLeader = false;
+								$gotLimits = array();
+								
+								foreach ($d13->getGeneral('types') as $key => $type) {
+									$gotLimits[$key] = 0;
+								}
+								
 								$data = array();
 								$data['input']['attacker']['focus'] = $node->data['focus'] ;
 								$data['input']['attacker']['faction'] = $node->data['faction'];
+								
+								// - - - - Check for static, multiple leaders and limited units
+								
 								foreach($_POST['attackerGroupUnitIds'] as $key => $unitId) {
 									$data['input']['attacker']['groups'][$key] = array(
 										'unitId' => $unitId,
 										'quantity' => $_POST['attackerGroups'][$key]
 									);
 									if (!$d13->getUnit($node->data['faction'], $unitId, 'speed')) {
-										$gotStatic = true;
+										$gotIllegal = true;
+									}
+									if (!in_array($d13->getUnit($node->data['faction'], $key, 'movementType'), $d13->getCombat($_GET['type'], 'movementTypes') )) {
+										$gotIllegal = true;
+									}
+									
+									$type = $d13->getUnit($node->data['faction'], $unitId, 'type');
+									
+									if ($d13->getGeneral('types', $type, 'unique')) {
+										$gotLimits[$type] += $_POST['attackerGroups'][$key];
+									}
+									
+								}
+								
+								$pass = true;
+								
+								if ($gotIllegal) {
+									$pass = false;
+								}
+								
+								foreach ($gotLimits as $key => $limit) {
+									if ($limit > $d13->getGeneral('types', $key, 'limit')) {
+										$pass = false;
+									}
+									if ($key == 'leader' && $limit == 1) {
+										$gotLeader = true;
 									}
 								}
-
-								if (!$gotStatic) {
+								
+								if (!$gotLeader && $d13->getCombat($_GET['type'], 'requiresLeader')) {
+									$pass = false;
+								}
+								
+								if ($pass) {
 									$status = $node->addCombat($target->data['id'], $data, $_GET['type'], $_GET['slotId']);
 									header("location: ?p=node&action=list&nodeId=0");
 								} else {
-									$status = 'cannotSendStatic';
+									$status = 'error';
 								}
-
 								$message = $d13->getLangUI($status);
+								
 							}
-						}
-						else {
+						} else {
 							$message = $d13->getLangUI("noUser");
 						}
-					}
-					else {
+					} else {
 						$message = $d13->getLangUI("noNode");
 					}
 				}
-				
 			}
 			break;
 
-			// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 		case 'cancel':
 			if (isset($_GET['combatId'])) {
@@ -184,24 +214,55 @@ if (isset($node)) {
 
 	foreach($node->units as $key => $unit) {
 		if ($unit['value'] > 0 && $d13->getUnit($node->data['faction'], $key, 'speed') > 0) {
+			if ( in_array($d13->getUnit($node->data['faction'], $key, 'movementType'), $d13->getCombat($_GET['type'], 'movementTypes') )) {
+
+				$id = $d13->getUnit($node->data['faction'], $key, 'id');
+				$tmp_unit = new d13_unit($id, $node);
+		
+				$d13->templateInject($d13->templateSubpage("sub.popup.unit", $tmp_unit->getTemplateVariables()));
+		
+				$tvars['tvar_unitName'] 	= $d13->getLangGL('units', $node->data['faction'], $id, 'name');
+				$tvars['tvar_unitId'] 		= $id;
+				$tvars['tvar_unitImage']	= $tmp_unit->data['image'];
+				$tvars['tvar_unitType'] 	= $tmp_unit->data['type'];
+				$tvars['tvar_unitUnique'] 	= (int)$d13->getGeneral('types', $tmp_unit->data['type'], 'unique');
+				$tvars['tvar_unitAmount'] 	= min($unit['value'], $d13->getGeneral('types', $tmp_unit->data['type'], 'limit'));			
+				$tvars['tvar_unitFuel'] 	= $tmp_unit->data['fuel'];
 			
-			$id = $d13->getUnit($node->data['faction'], $key, 'id');
-			$tmp_unit = new d13_unit($id, $node);
+				$tvars['tvar_unitdamage'] 	= $tmp_unit->data['damage'] + $tmp_unit->data['upgrade_damage'];
+				$tvars['tvar_unitspeed'] 	= $tmp_unit->data['speed'] + $tmp_unit->data['upgrade_speed'];
+				$tvars['tvar_unitstealth'] 	= $tmp_unit->data['stealth'] + $tmp_unit->data['upgrade_stealth'];
+				$tvars['tvar_unithp'] 		= $tmp_unit->data['hp'] + $tmp_unit->data['upgrade_hp'];
+				$tvars['tvar_unitarmor'] 	= $tmp_unit->data['armor'] + $tmp_unit->data['upgrade_armor'];
+				$tvars['tvar_unitcritical'] = $tmp_unit->data['critical'] + $tmp_unit->data['upgrade_critical'];
+			
+				foreach ($tmp_unit->data['attackModifier'] as $modifier) {
+					$tvars['tvar_unit'.$modifier['stat']] += floor($d13->getUnit($node->data['faction'], $id, $modifier['stat']) * $modifier['value']);
+				}
+			
+				$modifiers = array();
+				foreach ($d13->getGeneral('stats') as $stat) {
+					$modifiers[$stat] = 0;
+				}
+			
+				foreach ($tmp_unit->data['armyAttackModifier'] as $modifier) {
+					$modifiers[$modifier['stat']] += $modifier['value'];
+				}
+			
+				foreach ($d13->getGeneral('stats') as $stat) {
+					$tvars['tvar_armyMod'.$stat] = $modifiers[$stat];
+				}
+			
+				$tvars['tvar_unitsHTML']	.= $d13->templateSubpage("sub.combat.unit", $tvars);
 		
-			$d13->templateInject($d13->templateSubpage("sub.popup.unit", $tmp_unit->getTemplateVariables()));
-		
-			$tvars['tvar_unitName'] 	= $d13->getLangGL('units', $node->data['faction'], $id) ['name'];
-			$tvars['tvar_unitId'] 		= $id;
-			$tvars['tvar_unitAmount'] 	= $unit['value'];			
-			$tvars['tvar_unitDamage'] 	= $tmp_unit->data['damage'];
-			$tvars['tvar_unitSpeed'] 	= $tmp_unit->data['speed'];
-			$tvars['tvar_unitStealth'] 	= $tmp_unit->data['stealth'];
-			$tvars['tvar_unitFuel'] 	= $tmp_unit->data['fuel'];
-			$tvars['tvar_unitsHTML']	.= $d13->templateSubpage("sub.combat.unit", $tvars);
+			}
 		}
 	}
 
 	$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
+	
+	
+	
 
 	// - - - - Available Enemies List
 	$showAll = true;
@@ -226,18 +287,51 @@ if (isset($node)) {
 	}
 
 	// - - - - Combat Cost & Fuel
+	
+	// - - - - Is a leader required?
+	$tvars['tvar_leaderRequired'] = '';
+	$tvars['tvar_leader'] = 0;
+	if ($d13->getCombat($_GET['type'], 'requiresLeader')) {
+		$tvars['tvar_leaderRequired'] = $d13->templateGet("sub.combat.leader");
+		$tvars['tvar_leader'] = 1;
+	}
+						
+	$tvars['tvar_wipeoutRequired'] = '';						
+	if ($d13->getCombat($_GET['type'], 'requiresWipeout')) {
+		$tvars['tvar_wipeoutRequired'] = $d13->templateGet("sub.combat.wipeout");
+	}
+						
+
 	$cost = $d13->getFaction($node->data['faction'], 'costs', $_GET['type']);
 	$tvars['tvar_costData'] = '';
 	foreach ($cost as $res) {
-		$resource = $res['resource'];
-		$cost =  $res['value'];
-		if ($res['isFuel']) {
-			$id = "id='totalFuel'";
-			$cost = 0;
-			$tvars['tvar_fuelFactor'] = floor($res['value']);
-			$tvars['tvar_fuelResource'] = floor($node->resources[$res['resource']]['value']);
+	
+		if (isset($res['resource'])) {
+	
+			$resource = $res['resource'];
+			$cost =  $res['value'];
+			if (isset($res['isFuel']) && $res['isFuel']) {
+				$id = "id='totalFuel'";
+				$cost = 0;
+				$tvars['tvar_fuelFactor'] = floor($res['value']);
+				$tvars['tvar_fuelResource'] = floor($node->resources[$res['resource']]['value']);
+			}
+			$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'image') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '"><span '.$id.'>'.$cost . '</span></span>';
+	
+		} else if (isset($res['component'])) {
+	
+			$resource = $res['component'];
+			$cost =  $res['value'];
+			if (isset($res['isFuel']) && $res['isFuel']) {
+				$id = "id='totalFuel'";
+				$cost = 0;
+				$tvars['tvar_fuelFactor'] = floor($res['value']);
+				$tvars['tvar_fuelResource'] = floor($node->components[$res['resource']]['value']);
+			}
+			$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $node->data['faction'] . "/" . $d13->getComponent($node->data['faction'], $resource, 'image') . '" title="' . $d13->getLangGL('components', $resource, 'name') . '"><span '.$id.'>'.$cost . '</span></span>';
+	
 		}
-		$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'image') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '"><span '.$id.'>'.$cost . '</span></span>';
+		
 	}
 	
 	// - - - - Template 

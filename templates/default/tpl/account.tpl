@@ -1,8 +1,8 @@
 <div class="d13-node" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/nodeBackground.png);">
 
-<div class="card large-card card-shadow">
+<div class="card no-border large-card card-shadow">
 
-  <div class="card-header">
+  <div class="card-header no-border">
   	{{tvar_ui_account}}
   	<a class="external" href="?p=node&action=list"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
   </div>

@@ -288,9 +288,7 @@ class d13_modulit
 				}
 			}
 		}
-		
-		#print_r($my_upgrades);
-		
+
 		// - - - - - - - - - - - - - - - TECHNOLOGY UPGRADES
 		$tmp_list = array();
 		foreach($this->node->technologies as $technology) {

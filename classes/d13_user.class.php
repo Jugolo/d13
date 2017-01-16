@@ -28,7 +28,6 @@ class user
 	function __construct($id=0)
 	{
 		if (!empty($id) && $id > 0) {
-		
 			$status = $this->get('id', $id);
 		}
 		
@@ -96,7 +95,7 @@ class user
 					if (!blacklist::check('email', $this->data['email'])) {
 						$ok = 1;
 						$this->data['id'] = misc::newId('users');
-						$d13->dbQuery('insert into users (id, name, password, email, access, joined, lastVisit, ip, template, color, locale) values ("' . $this->data['id'] . '", "' . $this->data['name'] . '", "' . $this->data['password'] . '", "' . $this->data['email'] . '", "' . $this->data['access'] . '", "' . $this->data['joined'] . '", "' . $this->data['lastVisit'] . '", "' . $this->data['ip'] . '", "' . $this->data['template'] . '", "' . $this->data['color'] . '", "' . $this->data['locale'] . '")');
+						$d13->dbQuery('insert into users (id, name, password, email, access, joined, lastVisit, ip, template, color, locale, trophies) values ("' . $this->data['id'] . '", "' . $this->data['name'] . '", "' . $this->data['password'] . '", "' . $this->data['email'] . '", "' . $this->data['access'] . '", "' . $this->data['joined'] . '", "' . $this->data['lastVisit'] . '", "' . $this->data['ip'] . '", "' . $this->data['template'] . '", "' . $this->data['color'] . '", "' . $this->data['locale'] . '", "500")');
 						if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						$preferences = array();
 						foreach($d13->getGeneral('users', 'preferences') as $key => $preference) $preferences[] = '("' . $this->data['id'] . '", "' . $key . '", "' . $preference . '")';
@@ -331,6 +330,10 @@ class user
 				}
 			}
 			
+			if ($this->data[$tmp_stat['name']] < 0) {
+				$this->data[$tmp_stat['name']] = 0;
+			}
+			
 			$d13->dbQuery('update users set '.$tmp_stat['name'].'="'.$this->data[$tmp_stat['name']].'" where id="' . $this->data['id'] . '"');
 			
 			if ($d13->dbAffectedRows() > - 1) {
@@ -391,7 +394,7 @@ class user
 		
 		//- - - - - Player League
 		$league = array();
-		$league = $d13->getGeneral('leagues', misc::getLeague($this->data['level'], $this->data['trophies']));
+		$league = $d13->getLeague(misc::getLeague($this->data['level'], $this->data['trophies']));
 		
 		$tvars['tvar_userLeague']		= $d13->getLangGL('leagues', $league['id'], 'name');
 		$tvars['tvar_userImageLeague'] 	= $league['image'];

@@ -121,7 +121,7 @@ class d13_collection implements IteratorAggregate
 class d13_data
 
 {
-	public $resources, $modules, $technologies, $units, $upgrades, $components, $general, $navigation, $shields, $factions, $bw, $gl, $ui;
+	public $resources, $modules, $technologies, $units, $upgrades, $components, $general, $navigation, $shields, $factions, $leagues, $combat, $bw, $gl, $ui;
 
 	// ----------------------------------------------------------------------------------------
 	// construct
@@ -148,7 +148,8 @@ class d13_data
 		$this->navigation 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_navigation.data.json");
 		$this->factions 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_factions.data.json");
 		$this->shields 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_shields.data.json");
-				
+		$this->leagues 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_leagues.data.json");
+		$this->combat 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_combat.data.json");
 	}
 
 	// ----------------------------------------------------------------------------------------

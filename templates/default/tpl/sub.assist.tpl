@@ -4,7 +4,7 @@
         <div class="page-content login-screen-content">
           <div class="login-screen-title">{{tvar_ui_sit}}</div>
           <form method="post" action="?p=login&action=sit" id="sit">
-            <div class="list-block">
+            <div class="list-block no-hairlines-between">
              
               
               <ul>
@@ -52,7 +52,7 @@
              
               
             </div>
-            <div class="list-block">
+            <div class="list-block no-hairlines-between">
               <ul>
                 <li>
                 	

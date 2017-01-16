@@ -8,6 +8,34 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
+
+
+--
+-- Table structure for table `flags`
+--
+
+CREATE TABLE IF NOT EXISTS `flags` (
+  `name` varchar(32) COLLATE utf8_bin NOT NULL,
+  `value` varchar(64) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Dumping data for table `flags`
+--
+
+INSERT INTO `flags` (`name`, `value`) VALUES
+('activation', '0'),
+('build', '1'),
+('combat', '1'),
+('craft', '1'),
+('login', '1'),
+('messages', '1'),
+('register', '1'),
+('research', '1'),
+('trade', '1'),
+('train', '1');
+
 --
 -- Table structure for table `activations`
 --
@@ -377,7 +405,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `access` tinyint(3) unsigned NOT NULL,
   `level` int(10) unsigned NOT NULL,
   `experience` int(10) unsigned NOT NULL,
-  `trophies` int(10) unsigned NOT NULL,
+  `trophies` int(10) unsigned NOT NULL DEFAULT '500',
   `joined` date NOT NULL,
   `lastVisit` datetime NOT NULL,
   `ip` varchar(23) COLLATE utf8_bin NOT NULL,

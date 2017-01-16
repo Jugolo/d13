@@ -9,7 +9,7 @@
 
           <div class="login-screen-title">{{tvar_ui_install}}</div>
           <form method="post" action="install.php" id="install">
-            <div class="list-block">
+            <div class="list-block no-hairlines-between">
              
               <ul>
 				
@@ -54,7 +54,7 @@
               </ul>
               
             </div>
-            <div class="list-block">
+            <div class="list-block no-hairlines-between">
               <ul>
                 <li>
                 	<input class="button button-big button-round active" type="submit" value="{{tvar_ui_install}}">

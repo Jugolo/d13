@@ -328,10 +328,12 @@ class d13_module
 			$tvars['tvar_popup'] = $this->getPopup();
 			
 			if ($this->node->resources[$this->data['inputResource']]['value'] < $this->data['maxInput']) {
-				$max = $this->node->modules[$this->data['slotId']]['input']+$this->node->resources[$this->data['inputResource']]['value'];
+				$max = $this->node->modules[$this->data['slotId']]['input'] + $this->node->resources[$this->data['inputResource']]['value'];
+				$max = min($max, $this->data['maxInput']);
 			} else {
 				$max = $this->data['maxInput'];
 			}
+			
 			
 			if ($this->node->resources[$this->data['inputResource']]['value'] < $this->node->storage[$this->data['inputResource']]) {
 				$min = $this->node->modules[$this->data['slotId']]['input'] - ($this->node->storage[$this->data['inputResource']] - $this->node->resources[$this->data['inputResource']]['value']);
@@ -428,7 +430,6 @@ class d13_module
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getPendingImage()
@@ -442,7 +443,6 @@ class d13_module
 		}
 		return NULL;
 	}
-
 
 	// ----------------------------------------------------------------------------------------
 	// getInputSlider
@@ -458,15 +458,15 @@ class d13_module
 		global $d13;
 
 		$vars = array();		
-		$vars['tvar_formAction'] 	= $action;
-		$vars['tvar_sliderID'] 	= $id;
-		$vars['tvar_sliderMin'] 	= $min;
-		$vars['tvar_sliderMax'] 	= $max;
-		$vars['tvar_disableData']	= '';
-		if ($disabled) {
+		$vars['tvar_formAction'] 		= $action;
+		$vars['tvar_sliderID'] 			= $id;
+		$vars['tvar_sliderMin'] 		= $min;
+		$vars['tvar_sliderMax'] 		= $max;
+		$vars['tvar_disableData']		= '';
+		if ($disabled || $max <= 0) {
 			$vars['tvar_disableData']	= 'disabled';
 		}
-		$vars['tvar_sliderValue'] 	= max($min, $value);
+		$vars['tvar_sliderValue'] 		= max($min, $value);
 		
 		return $d13->templateSubpage("sub.range.slider", $vars);
 				
@@ -850,7 +850,7 @@ class d13_module_warfare extends d13_module
 			foreach($this->node->units as $uid => $unit) {
 				
 				if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
-					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
+					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $d13->getUnit($this->node->data['faction'], $uid, 'image') . '" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
 					$tvars['tvar_listLabel'] = $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'];
 					$tvars['tvar_listAmount'] = $unit['value'];
 					$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
@@ -893,68 +893,22 @@ class d13_module_warfare extends d13_module
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 1;
 		
-		// - - - - Option: Scout
-		
-		if ($this->data['options']['combatScout'] && $this->data['moduleSlotInput'] > 0) {
-			$tvars['tvar_Label'] = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("scout");
-			$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'] . '&type=scout&slotId='.$this->data['slotId'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
-			$i++;
-		}
-
-		// - - - - Option: Raid
-
-		if ($this->data['options']['combatRaid'] && $this->data['moduleSlotInput'] > 0) {
-			$tvars['tvar_Label'] = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("raid");
-			$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'] . '&type=raid&slotId='.$this->data['slotId'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
-			$i++;
-		}
-
-		// - - - - Option: Conquer
-		
-		if ($this->data['options']['combatConquer'] && $this->data['moduleSlotInput'] > 0) {
-			$tvars['tvar_Label'] = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("conquer");
-			$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'] . '&type=conquer&slotId='.$this->data['slotId'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
-			$i++;
+		foreach ($d13->getCombat() as $key => $combatType) {
+			if ($combatType['active']) {
+				if (isset($this->data['options'][$key]) && $this->data['options'][$key]) {
+					if ($this->data['moduleSlotInput'] > 0 && $this->data['level'] >= $combatType['level']) {
+						$tvars['tvar_Label'] = $d13->getLangGL("combatTypes", $combatType['id'], "name");
+						$tvars['tvar_Description'] = $d13->getLangGL("combatTypes", $combatType['id'], "description");
+						$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'] . '&type='.$combatType['string'].'&slotId='.$this->data['slotId'];
+						$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
+						$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
+						$i++;
+					}
+				}
+			}
 		}
 		
-		// - - - - Option: Raze
-		
-		if ($this->data['options']['combatRaze'] && $this->data['moduleSlotInput'] > 0) {
-			$tvars['tvar_Label'] = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("raze");
-			$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'] . '&type=raze&slotId='.$this->data['slotId'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
-			$i++;
-		}
-		
-		// - - - - Option: Skirmish
-		
-		if ($this->data['options']['combatSkirmish'] && $this->data['moduleSlotInput'] > 0) {
-			$tvars['tvar_Label'] = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("skirmish");
-			$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'] . '&type=skirmish&slotId='.$this->data['slotId'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
-			$i++;
-		}
-		
-		// - - - - Option: Sabotage
-		
-		if ($this->data['options']['combatSabotage'] && $this->data['moduleSlotInput'] > 0) {
-			$tvars['tvar_Label'] = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("sabotage");
-			$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'] . '&type=sabotage&slotId='.$this->data['slotId'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
-			$i++;
-		}
-		
-		
-		if ($i>0) {
+		if ($i > 0) {
 			$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
 			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-1">' . $d13->getLangUI("launch") . " " . $d13->getLangUI("combat") . '</a>';
@@ -1660,7 +1614,7 @@ class d13_module_train extends d13_module
 			foreach($this->node->units as $uid => $unit) {
 				if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'units'))) {
 					if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
-						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
+						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $d13->getUnit($this->node->data['faction'], $uid, 'image') . '" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
 						$tvars['tvar_listLabel'] = $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'];
 						$tvars['tvar_listAmount'] = $unit['value'];
 						$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
@@ -1768,7 +1722,7 @@ class d13_module_train extends d13_module
 					$remaining = misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
 					$tvars = array();;
-					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $item['obj_id'] . '.png">';
+					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $d13->getUnit($this->node->data['faction'], $item['obj_id'], 'image') . '">';
 					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $d13->getLangGL("units", $this->node->data['faction'], $item['obj_id'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="train_' . $item['id'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("train_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelUnit&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&trainId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 				

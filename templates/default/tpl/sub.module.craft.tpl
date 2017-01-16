@@ -1,6 +1,6 @@
 <div class="swiper-slide">
-	<div class="card large-card">
-		<div class="card-header">
+	<div class="card no-border large-card">
+		<div class="card-header no-border">
 			<div class="d13-heading">
 				{{tvar_componentName}}
 			</div><a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
@@ -13,7 +13,7 @@
 						<p class="d13-italic">{{tvar_componentDescription}}</p>
 					</div>
 					<div class="col-75">
-						<div class="list-block">
+						<div class="list-block no-hairlines-between">
 							<ul>
 								<li class="item-content">
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_compResource}}.png" title="{{tvar_compResourceName}}"></div>
@@ -80,14 +80,15 @@
 				</div>
 			</div>
 		</div>
-		<div class="card-footer">
+		<div class="card-footer no-border">
 			<form action="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}" class="pure-form" id="componentForm" method="post" name="componentForm">
 				<select class="pure-input" onchange="change_maximum('input{{tvar_sliderID}}', {{tvar_compValue}}, 'componentForm', this.value)">
 					<option value="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">{{tvar_ui_craft}}</option>
 					<option value="?p=module&action=removeComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">{{tvar_ui_remove}}</option>
 				</select>
-				<span class="badge" id="sliderRangeCraft{{tvar_sliderID}}">{{tvar_sliderValue}}</span><input id="input{{tvar_sliderID}}" max="{{tvar_sliderMax}}" min="{{tvar_sliderMin}}" name="quantity" onchange="showValue('sliderRangeCraft{{tvar_sliderID}}', this.value)" oninput="showValue('sliderRangeCraft{{tvar_sliderID}}', this.value)" onmousedown="mySwiper.lockSwipes()" onmouseup="mySwiper.unlockSwipes()" step="1" type="range" value="{{tvar_sliderValue}}"><input class="pure-input pure-button pure-{{tvar_global_color}}" type="submit" value="{{tvar_ui_set}}">
+				<span class="badge" id="sliderRangeCraft{{tvar_sliderID}}">{{tvar_sliderValue}}</span><input id="input{{tvar_sliderID}}" max="{{tvar_sliderMax}}" min="{{tvar_sliderMin}}" name="quantity" onchange="showValue('sliderRangeCraft{{tvar_sliderID}}', this.value)" oninput="showValue('sliderRangeCraft{{tvar_sliderID}}', this.value)" onmousedown="mySwiper.lockSwipes()" onmouseup="mySwiper.unlockSwipes()" step="1" type="range" value="{{tvar_sliderValue}}"><input type="image" class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/submit.png" type="submit" {{tvar_disableData}} value="{{tvar_ui_set}}">
 			</form>
+			<br><br>
 		</div>
 	</div>
 </div>

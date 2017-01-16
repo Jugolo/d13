@@ -47,7 +47,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 	foreach ($users as $user) {
 		$vars = array();
 		$vars['tvar_listAvatar'] 	= $user['avatar'];
-		$vars['tvar_listLeague']	= $d13->getGeneral('leagues', $user['league'], 'image');
+		$vars['tvar_listLeague']	= $d13->getLeague($user['league'], 'image');
 		$vars['tvar_listName'] 		= $d13->getLangGL('leagues', $user['league'], 'name');
 		$vars['tvar_listLink']		= '?p=status&userId='.$user['id'];
 		$vars['tvar_listLabel'] 	= $user['name'];

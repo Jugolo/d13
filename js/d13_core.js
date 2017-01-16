@@ -23,67 +23,75 @@ function armyValue(id, newValue)
 	
 	var fuelFactor		= document.getElementById('fuelFactor').value;
 	
+	var totalFuel 		= 0;
 	var grandAmount		= 0;
+	
 	var totalAmount 	= 0;
 	var totalDamage 	= 0;
 	var totalSpeed 		= 0;
 	var totalStealth 	= 0;
-	var totalFuel 		= 0;
-	
-	var unitAmount 		= document.getElementsByName('attackerAmount[]');
-	var unitDamage 		= document.getElementsByName('attackerDamage[]');
-	var unitSpeed 		= document.getElementsByName('attackerSpeed[]');
-	var unitStealth 	= document.getElementsByName('attackerStealth[]');
-	var unitFuel 		= document.getElementsByName('attackerFuel[]');
-	
-	for(key=0; key < unitDamage.length; key++)  {
-		totalAmount = parseInt(unitAmount[key].value);
-    	totalDamage += parseInt(unitDamage[key].value) * totalAmount;
-    	
-	}
-	
-	for(key=0; key < unitSpeed.length; key++)  {
-		totalAmount = parseInt(unitAmount[key].value);
-    	totalSpeed += parseInt(unitSpeed[key].value) * totalAmount;
-	}
-	
-	for(key=0; key < unitStealth.length; key++)  {
-		totalAmount = parseInt(unitAmount[key].value);
-    	totalStealth += parseInt(unitStealth[key].value) * totalAmount;
-	}
+	var totalArmor		= 0;
+	var totalHealth		= 0;
+	var totalCritical	= 0;
 
-	for(key=0; key < unitFuel.length; key++)  {
+	var modDamage 		= 0.0;
+	var modSpeed 		= 0.0;
+	var modStealth 		= 0.0;
+	var modArmor		= 0.0;
+	var modHealth		= 0.0;
+	var modCritical		= 0.0;
+
+	var unitAmount 		= document.getElementsByName('unitAmount[]');
+	var unitFuel 		= document.getElementsByName('unitFuel[]');
+	
+	var unitDamage 		= document.getElementsByName('unitDamage[]');
+	var unitSpeed 		= document.getElementsByName('unitSpeed[]');
+	var unitStealth 	= document.getElementsByName('unitStealth[]');
+	var unitArmor 		= document.getElementsByName('unitArmor[]');
+	var unitHealth 		= document.getElementsByName('unitHP[]');
+	var unitCritical	= document.getElementsByName('unitCritical[]');
+
+	var armyModDamage 	= document.getElementsByName('armyModDamage[]');
+	var armyModSpeed 	= document.getElementsByName('armyModSpeed[]');
+	var armyModStealth  = document.getElementsByName('armyModStealth[]');
+	var armyModArmor	= document.getElementsByName('armyModArmor[]');
+	var armyModHealth	= document.getElementsByName('armyModHP[]');
+	var armyModCritical	= document.getElementsByName('armyModCritical[]');
+
+	for(key=0; key < unitAmount.length; key++)  {
 		totalAmount = parseInt(unitAmount[key].value);
+		
+    	totalDamage 	+= parseInt(unitDamage[key].value) * totalAmount;
+    	totalSpeed 		+= parseInt(unitSpeed[key].value) * totalAmount;
+    	totalStealth 	+= parseInt(unitStealth[key].value) * totalAmount;
+    	totalArmor 		+= parseInt(unitArmor[key].value) * totalAmount;
+    	totalHealth 	+= parseInt(unitHealth[key].value) * totalAmount;
+    	totalCritical 	+= parseInt(unitCritical[key].value) * totalAmount;
+    	
+    	tmpAmount = totalAmount!=0?1:0;
+    	
+    	modDamage 	+= Math.floor(totalDamage 		* (parseFloat(armyModDamage[key].value) * tmpAmount));
+   		modSpeed 	+= Math.floor(totalSpeed 		* (parseFloat(armyModSpeed[key].value) * tmpAmount));
+    	modStealth 	+= Math.floor(totalStealth 		* (parseFloat(armyModStealth[key].value) * tmpAmount));
+    	modArmor 	+= Math.floor(totalArmor 		* (parseFloat(armyModArmor[key].value) * tmpAmount));
+    	modHealth 	+= Math.floor(totalHealth 		* (parseFloat(armyModHealth[key].value) * tmpAmount));
+    	modCritical += Math.floor(totalCritical 	* (parseFloat(armyModCritical[key].value) * tmpAmount));
+    	
     	totalFuel += parseInt(unitFuel[key].value) * totalAmount * fuelFactor;
     	grandAmount += totalAmount;
 	}
 	
+	document.getElementById('totalAmount').innerHTML 	= grandAmount;
+	document.getElementById('totalFuel').innerHTML 		= totalFuel;
 	
+	document.getElementById('totalDamage').innerHTML 	= totalDamage 	+ ' [+' + modDamage + ']';
+	document.getElementById('totalSpeed').innerHTML 	= totalSpeed 	+ ' [+' + modSpeed + ']';
+	document.getElementById('totalStealth').innerHTML 	= totalStealth 	+ ' [+' + modStealth + ']';
+	document.getElementById('totalArmor').innerHTML 	= totalArmor 	+ ' [+' + modArmor + ']';
+	document.getElementById('totalHealth').innerHTML 	= totalHealth 	+ ' [+' + modHealth + ']';
+	document.getElementById('totalCritical').innerHTML 	= totalCritical + ' [+' + modCritical + ']';
 	
-	document.getElementById('totalAmount').innerHTML = grandAmount;
-	document.getElementById('totalDamage').innerHTML = totalDamage;
-	document.getElementById('totalSpeed').innerHTML = totalSpeed;
-	document.getElementById('totalStealth').innerHTML = totalStealth;
-	document.getElementById('totalFuel').innerHTML = totalFuel;
 
-}
-
-function moreLess(divContentID, aMoreLessID)
-{
-	
-	var divCont = document.getElementById(divContentID);
-	var aMoreLess = document.getElementById(aMoreLessID);
-
-	if(divCont.style.overflow == 'hidden')
-	{
-		divCont.style.overflow = 'visible';
-		divCont.style.height = 'auto';	
-	}
-	else
-	{
-		divCont.style.overflow = 'hidden';
-		divCont.style.height = '0px';
-	}
 }
 
 /* -- D13 JS -------------------------------------------------------------------*/
@@ -124,6 +132,7 @@ function isset(variable)
  if ((typeof(variable)!="undefined")&&(variable!==null)) return true;
  else return false;
 }
+
 function indexOfSelectValue(object, value)
 {
  var index=-1;
@@ -135,8 +144,6 @@ function indexOfSelectValue(object, value)
   }
  return index;
 }
-
-
 
 function jumpToSector()
 {
@@ -250,3 +257,5 @@ var position=new Array(0, 0);
     }
     position=new Array(x, y);
    }
+   
+/* -------------------------------------------------------------------------------------*/

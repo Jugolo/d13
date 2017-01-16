@@ -222,7 +222,8 @@
       "components": [
         0,
         1,
-        2
+        2,
+        8
       ]
     },
     {
@@ -1167,7 +1168,10 @@
         113,
         114,
         115,
-        116
+        116,
+        117,
+        118,
+        119
       ]
     },
     {
@@ -1220,13 +1224,70 @@
       ],
       "options": {
       	"inventoryList": true,
-        "combatRaid": true,
-        "combatConquer": true,
-        "combatScout": true,
-        "combatRaze": true,
-        "combatSkirmish": true,
-        "combatSabotage": true
+        "raid": true,
+        "conquer": true,
+        "scout": true,
+        "raze": true,
+        "skirmish": true,
+        "sabotage": true
       }
+    },
+    {
+      "id": 19,
+      "active": true,
+      "priority": 19,
+      "type": "train",
+      "maxLevel": 1,
+      "inputResource": 3,
+      "ratio": 0.05,
+      "maxInput": 10,
+      "duration": 10,
+      "salvage": 0.5,
+      "removeDuration": 1,
+      "maxInstances": 3,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "pending.png"
+        },
+        {
+          "level": 1,
+          "image": "module_herohall_0.png"
+        }
+      ],
+      "cost": [
+        {
+          "resource": 0,
+          "value": 1000
+        },
+        {
+          "resource": 1,
+          "value": 2000
+        },
+        {
+          "resource": 2,
+          "value": 1500
+        }
+      ],
+      "requirements": [
+        {
+          "active": true,
+          "type": "technologies",
+          "id": 4,
+          "level": 1
+        }
+      ],
+      "options": {
+        "inventoryList": true
+      },
+      "upgrades": [
+        
+      ],
+      "units": [
+        19,
+        20,
+        21
+      ]
     }
   ]
 ]

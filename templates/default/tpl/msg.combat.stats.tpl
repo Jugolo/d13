@@ -1,6 +1,6 @@
 <div class="col-auto">
 	<span class="badge">
-		{{tvar_ui_amount}}: {{tvar_leftAmount}}/{{tvar_totalAmount}}
+		{{tvar_leftAmount}}/{{tvar_totalAmount}}
 	</span>
 </div>
 

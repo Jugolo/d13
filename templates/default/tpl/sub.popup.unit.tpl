@@ -1,36 +1,21 @@
 <div class="popup popup-unit-{{tvar_unitId}}">
-
-<div class="card large-card">
-	<div class="card-header">
-		<div class="d13-heading">{{tvar_Name}} [{{tvar_Class}}] ({{tvar_unitValue}})</div>
-		<a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
-	</div>
-
-<div class="card-content">
-<div class="card-content-inner">
-
-<div class="row">
-	
-		<div class="col-25">
-			<img src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/units/{{tvar_nodeFaction}}/{{tvar_Image}}" width="80">
-			<p class="d13-italic">{{tvar_Description}}</p>
+	<div class="card no-border large-card">
+		<div class="card-header no-border">
+			<div class="d13-heading">
+				{{tvar_Name}} [{{tvar_Class}}] ({{tvar_unitValue}})
+			</div><a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 		</div>
-		
-		<div class="col-75">
+		<div class="card-content">
+			<div class="card-content-inner">
 			
-			<div class="list-block">
-				<ul>
-
-					<li class="item-content">
-						<div class="item-inner">
-						<div class="item-after">{{tvar_ui_attack}}: {{tvar_AttackType}}</div>
-						</div>
-						<div class="item-inner">
-						<div class="item-after">{{tvar_ui_defense}}: {{tvar_ArmorType}}</div>
-						</div>
-					</li>
-					
-					
+				<div class="row">
+					<div class="col-25">
+						<img class="d13-unit" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/units/{{tvar_nodeFaction}}/{{tvar_Image}}" width="80">
+					</div>
+					<div class="col-75">
+						<div class="list-block no-hairlines-between">
+							<ul>
+								
 								<li class="item-content">
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_hp.png"></div>
 									<div class="item-inner">
@@ -51,7 +36,6 @@
 										</div>
 									</div>
 								</li>
-								
 								<li class="item-content">
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_armor.png"></div>
 									<div class="item-inner">
@@ -72,7 +56,6 @@
 										</div>
 									</div>
 								</li>
-								
 								<li class="item-content">
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_critical.png"></div>
 									<div class="item-inner">
@@ -89,11 +72,10 @@
 											{{tvar_ui_capacity}}:
 										</div>
 										<div class="item-after">
-											 <span class="badge">{{tvar_unitCapacity}} {{tvar_unitCapacityPlus}}</span>
+											<span class="badge">{{tvar_unitCapacity}} {{tvar_unitCapacityPlus}}</span>
 										</div>
 									</div>
 								</li>
-								
 								<li class="item-content">
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_vision.png"></div>
 									<div class="item-inner">
@@ -101,7 +83,7 @@
 											{{tvar_ui_vision}}:
 										</div>
 										<div class="item-after">
-											 <span class="badge">{{tvar_unitVision}} {{tvar_unitVisionPlus}}</span>
+											<span class="badge">{{tvar_unitVision}} {{tvar_unitVisionPlus}}</span>
 										</div>
 									</div>
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_stealth.png"></div>
@@ -110,24 +92,82 @@
 											{{tvar_ui_stealth}}:
 										</div>
 										<div class="item-after">
-											 <span class="badge">{{tvar_unitStealth}} {{tvar_unitStealthPlus}}</span>
+											<span class="badge">{{tvar_unitStealth}} {{tvar_unitStealthPlus}}</span>
 										</div>
 									</div>
 								</li>
 								
+								
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+				
+				<hr>
+				
+				<div class="list-block no-hairlines-between">
+					<ul>
+					
+						<li class="item-content">
+							<div class="item-media">
+								<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/mod_atk.png">
+							</div>
+							<div class="item-inner">
+								<div class="item-title">
+									{{tvar_ui_attackModifier}}: 
+								</div>
+								<div class="item-after">
+									{{tvar_attackModifier}}
+								</div>
+							</div>
+							<div class="item-media">
+								<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/mod_def.png">
+							</div>
+							<div class="item-inner">
+								<div class="item-title">
+									{{tvar_ui_defenseModifier}}: 
+								</div>
+								<div class="item-after">
+									{{tvar_defenseModifier}}
+								</div>
+							</div>
+						</li>
+					
+						<li class="item-content">
+							<div class="item-media">
+								<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/mod_armyatk.png">
+							</div>
+							<div class="item-inner">
+								<div class="item-title">
+									{{tvar_ui_armyAttackModifier}}: 
+								</div>
+								<div class="item-after">
+									{{tvar_armyAttackModifier}}
+								</div>
+							</div>
+							<div class="item-media">
+								<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/mod_armydef.png">
+							</div>
+							<div class="item-inner">
+								<div class="item-title">
+									{{tvar_ui_armyDefenseModifier}}: 
+								</div>
+								<div class="item-after">
+									{{tvar_armyDefenseModifier}}
+								</div>
+							</div>
+						</li>
+					
 
-					
-					
-				</ul>
+					</ul>
+				</div>
+				
+				<hr>
+				
+				<p class="d13-italic">{{tvar_Description}}</p>
 				
 			</div>
 		</div>
-</div>
-
-
-</div>
-</div>
-
-</div>
-
+	</div>
 </div>

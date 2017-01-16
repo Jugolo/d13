@@ -11,6 +11,7 @@
       "storage": 3,
       "salvage": 0.5,
       "removeDuration": 1,
+      "gainExperience": true,
       "cost": [
         {
           "resource": 0,
@@ -43,6 +44,7 @@
       "storage": 3,
       "salvage": 0.5,
       "removeDuration": 1,
+	  "gainExperience": true,
       "cost": [
         {
           "resource": 0,
@@ -75,6 +77,7 @@
       "storage": 2,
       "salvage": 0.5,
       "removeDuration": 1,
+	  "gainExperience": true,
       "cost": [
         {
           "resource": 0,
@@ -107,6 +110,7 @@
       "storage": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+	  "gainExperience": true,
       "cost": [
         {
           "resource": 0,
@@ -139,6 +143,7 @@
       "storage": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+	  "gainExperience": true,
       "cost": [
         {
           "resource": 0,
@@ -171,6 +176,7 @@
       "storage": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+	  "gainExperience": true,
       "cost": [
         {
           "resource": 0,
@@ -203,6 +209,7 @@
       "storage": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+	  "gainExperience": true,
       "cost": [
         {
           "resource": 0,
@@ -235,6 +242,7 @@
       "storage": 1,
       "salvage": 0.5,
       "removeDuration": 1,
+	  "gainExperience": true,
       "cost": [
         {
           "resource": 0,
@@ -247,6 +255,39 @@
         {
           "resource": 2,
           "value": 4
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 8,
+      "image": "8.png",
+      "active": true,
+      "priority": -1,
+      "type": "component",
+      "duration": 1,
+      "storageResource": 4,
+      "storage": 2,
+      "salvage": 0.5,
+      "removeDuration": 1,
+	  "gainExperience": true,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "value": 10
         }
       ],
       "requirements": [

@@ -1,7 +1,7 @@
 <div class="swiper-slide">
 	
-	<div class="card large-card">
-		<div class="card-header">
+	<div class="card no-border large-card">
+		<div class="card-header no-border">
 			<div class="d13-heading">{{tvar_techName}}</div>
 			<a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 		</div>
@@ -18,7 +18,7 @@
 			
 			<div class="col-75">
 				
-				<div class="list-block">
+				<div class="list-block no-hairlines-between">
 					<ul>
 						
 						<li class="item-content">
@@ -70,7 +70,7 @@
 	</div>
 	</div>
 
-	<div class="card-footer">
+	<div class="card-footer no-border">
 	</div>
 
 	</div>

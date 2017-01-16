@@ -31,7 +31,7 @@ class d13
 	{
 		$this->db = new d13_db();
 		$this->tpl = new d13_tpl();
-		$this->flags = new d13_flags();
+		#$this->flags = new d13_flags();
 		$this->router = new d13_router();
 		$this->session = new d13_session();
 		$this->logger = new d13_logger();
@@ -155,6 +155,20 @@ class d13
 		return $this->data->general->get(func_get_args());
 	}
 
+	public
+
+	function getLeague()
+	{
+		return $this->data->leagues->get(func_get_args());
+	}
+
+	public
+
+	function getCombat()
+	{
+		return $this->data->combat->get(func_get_args());
+	}
+	
 	public
 
 	function getNavigation()

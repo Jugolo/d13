@@ -59,6 +59,16 @@ class d13_combat
 		$node = new node();
 		$status = $node->get('id', $data['input']['attacker']['nodeId']);
 		
+		$armyBonus = array();	
+		foreach($data['input']['attacker']['groups'] as $key => $group) {
+			$unit = new d13_unit($group['unitId'], $node);
+			if (!empty($unit->data['armyAttackModifier'])) {
+				foreach ($unit->data['armyAttackModifier'] as $modifier) {
+					$armyBonus[] = $modifier;
+				}
+			}
+		}
+		
 		foreach($data['input']['attacker']['groups'] as $key => $group) {
 			$unit = new d13_unit($group['unitId'], $node);
 			$stats = $unit->getStats();
@@ -66,7 +76,25 @@ class d13_combat
 			
 			foreach($d13->getGeneral('stats') as $stat) {
 				$data['input']['attacker']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['quantity'];
-				$data['input']['attacker'][$stat]+= $data['input']['attacker']['groups'][$key][$stat];
+				
+				if (!empty($armyBonus)) {
+					foreach ($armyBonus as $modifier) {
+						if ($modifier['stat'] == $stat) {
+							$data['input']['attacker']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
+						}
+					}
+				}
+				
+				if (!empty($unit->data['attackModifier'])) {
+					foreach ($unit->data['attackModifier'] as $modifier) {
+						if ($modifier['stat'] == $stat) {
+							$data['input']['attacker']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
+						}
+					}
+				}
+				
+				$data['input']['attacker'][$stat] += $data['input']['attacker']['groups'][$key][$stat];
+				
 			}
 			
 			$data['input']['attacker']['groups'][$key]['critdmg'] = 0;
@@ -86,6 +114,16 @@ class d13_combat
 		$node = new node();
 		$status = $node->get('id', $data['input']['defender']['nodeId']);
 		
+		$armyBonus = array();	
+		foreach($data['input']['defender']['groups'] as $key => $group) {
+			$unit = new d13_unit($group['unitId'], $node);
+			if (!empty($unit->data['armyDefenseModifier'])) {
+				foreach ($unit->data['armyDefenseModifier'] as $modifier) {
+					$armyBonus[] = $modifier;
+				}
+			}
+		}
+
 		foreach($data['input']['defender']['groups'] as $key => $group) {
 
 			// - - - - - UNITS
@@ -98,7 +136,25 @@ class d13_combat
 				
 				foreach($d13->getGeneral('stats') as $stat) {
 					$data['input']['defender']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['quantity'];
+					
+					if (!empty($armyBonus)) {
+						foreach ($armyBonus as $modifier) {
+							if ($modifier['stat'] == $stat) {
+								$data['input']['defender']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
+							}
+						}
+					}
+					
+					if (!empty($unit->data['defenseModifier'])) {
+						foreach ($unit->data['defenseModifier'] as $modifier) {
+							if ($modifier['stat'] == $stat) {
+								$data['input']['defender']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
+							}
+						}
+					}
+				
 					$data['input']['defender'][$stat] += $data['input']['defender']['groups'][$key][$stat];
+					
 				}
 				
 				$data['input']['defender']['groups'][$key]['critdmg'] = 0;
@@ -118,9 +174,26 @@ class d13_combat
 				$modulit = new d13_modulit($group['moduleId'], $group['level'], $group['input'], $group['unitId'], $node);
 				$stats = $modulit->getStats();
 				$upgrades = $modulit->getUpgrades();
+				
 				foreach($d13->getGeneral('stats') as $stat) {
 					$data['input']['defender']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['level'];
+					
+					foreach ($armyBonus as $modifier) {
+						if ($modifier['stat'] == $stat) {
+							$data['input']['defender']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
+						}
+					}
+				
+					if (!empty($unit->data['defenseModifier'])) {
+						foreach ($unit->data['defenseModifier'] as $modifier) {
+							if ($modifier['stat'] == $stat) {
+								$data['input']['defender']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
+							}
+						}
+					}
+
 					$data['input']['defender'][$stat]+= $data['input']['defender']['groups'][$key][$stat];
+
 				}
 
 				// - - - - - Special rule for Module HP
@@ -170,8 +243,9 @@ class d13_combat
 
 			$baseDamage = ceil($data['input']['defender']['trueDamage'] * $ratio);
 			$bonusDamage = 0;
-			foreach($d13->getGeneral('classes', $d13->getUnit($data['input']['attacker']['faction'], $group['unitId'], 'class')) as $classKey => $damageMod) {
-				$bonusDamage+= floor($baseDamage * $classes['defender'][$classKey] * $damageMod);
+			$class = $d13->getUnit($data['input']['defender']['faction'], $group['unitId'], 'class');
+			foreach($d13->getGeneral('classes', $class) as $classKey => $damageMod) {
+				$bonusDamage += floor($baseDamage * $classes['defender'][$classKey]) + floor($baseDamage * $damageMod);
 			}
 
 			$damage = $baseDamage + $bonusDamage;
@@ -200,8 +274,9 @@ class d13_combat
 
 			$baseDamage = ceil($data['input']['attacker']['trueDamage'] * $ratio);
 			$bonusDamage = 0;
-			foreach($d13->getGeneral('classes', $d13->getUnit($data['input']['defender']['faction'], $group['unitId'], 'class')) as $classKey => $damageMod) {
-				$bonusDamage+= floor($baseDamage * $classes['attacker'][$classKey] * $damageMod);
+			$class = $d13->getUnit($data['input']['attacker']['faction'], $group['unitId'], 'class');
+			foreach($d13->getGeneral('classes', $class) as $classKey => $damageMod) {
+				$bonusDamage+= floor($baseDamage * $classes['attacker'][$classKey]) * floor($baseDamage * $damageMod);
 			}
 
 			$damage = $baseDamage + $bonusDamage;
@@ -310,9 +385,64 @@ class d13_combat
 	}
 	
 	// ----------------------------------------------------------------------------------------
+	// doAdjustLeague
+	// ----------------------------------------------------------------------------------------
+	public static
+	
+	function doAdjustLeague($data)
+	{
+		global $d13;
+		
+		$exp_value = 0;
+		$attackerTrophies = $d13->getGeneral('factors', 'experience') + count($d13->getLeague());
+		$defenderTrophies = $d13->getGeneral('factors', 'experience') + count($d13->getLeague());
+		
+		$attackerUser = new user();
+		$status = $attackerUser->get('id', $data['input']['attacker']['userId']);
+		
+		$defenderUser = new user();
+		$status = $defenderUser->get('id', $data['input']['defender']['userId']);
+		
+		if ($status == 'done') {
+		
+			$exp_value 		= floor($data['input']['attacker']['trueDamage'] / $d13->getGeneral('factors', 'experience'));
+			$difference		= misc::percent_difference($attackerUser->data['trophies'], $defenderUser->data['trophies']) + 1;
+		
+			if ($attackerUser->data['trophies'] > $defenderUser->data['trophies']) {
+				$attackerTrophies -= ($difference/100)*$attackerTrophies;
+				$defenderTrophies += ($difference/100)*$defenderTrophies;
+			} else if ($attackerUser->data['trophies'] <= $defenderUser->data['trophies']) {
+				$attackerTrophies += ($difference/100)*$attackerTrophies;
+				$defenderTrophies -= ($difference/100)*$defenderTrophies;
+			}
+			
+			if ($data['output']['attacker']['winner']) {
+				$attackerTrophies = abs($attackerTrophies);
+				$defenderTrophies = $defenderTrophies * -1;
+			} else if ($data['output']['defender']['winner']) {
+				$attackerTrophies = $attackerTrophies * -1;
+				$defenderTrophies = abs($defenderTrophies);
+			}
+			
+			$attackerTrophies = floor($attackerTrophies);
+			$defenderTrophies = floor($defenderTrophies);
+		
+		}
+		
+		// - - - - - Attacker Stats
+		$status = $attackerUser->setStat('experience', $exp_value);
+		$status = $attackerUser->setStat('trophies', $attackerTrophies);
+		
+		// - - - - - Defender Stats
+		$status = $defenderUser->setStat('trophies', $defenderTrophies);
+		
+		return $status;
+		
+	}
+	
+	// ----------------------------------------------------------------------------------------
 	// doStealResources
 	// ----------------------------------------------------------------------------------------
-	
 	public static
 	
 	function doStealResources($data)
@@ -367,8 +497,13 @@ class d13_combat
 		$continue = true;
 		
 		while ($continue) {
+			
+			/*
+				$totalResCapacity
 		
-		
+				$totalResAvailable
+				$resList[]
+			*/
 		
 			//set false when capacity reached
 			//set false when loot ratio depleted
@@ -386,10 +521,18 @@ class d13_combat
 		
 		
 		// ============================== Process Data
-		/*
+		
 		$d13->dbQuery('start transaction');
 		
-		$d13->dbQuery('update resources set value="' . $this->resources[$resource['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $resource['id'] . '"');
+		// - - - - Update Attacker Resources
+		
+		$d13->dbQuery('update resources set value="' . $this->resources[$resource['id']]['value'] . '" where node="' . $data['input']['attacker']['nodeId'] . '" and id="' . $resource['id'] . '"');
+
+		
+		// - - - - Update Defender Resources
+		
+		
+		$d13->dbQuery('update resources set value="' . $this->resources[$resource['id']]['value'] . '" where node="' . $data['input']['defender']['nodeId'] . '" and id="' . $resource['id'] . '"');
 
 		
 		if ($ok) {
@@ -398,9 +541,10 @@ class d13_combat
 		else {
 			$d13->dbQuery('rollback');
 		}
-		*/
 		
 		// ============================== Return Data
+		
+		
 	
 	}
 	
@@ -455,11 +599,11 @@ class d13_combat
 		$html = '';
 		$totalAmount 	= 0;
 		$leftAmount 	= 0;
-		$totalSpeed 	= $data['input']['attacker']['speed'];
+		$totalSpeed 	= 0;
 		$totalDamage 	= $data['input']['attacker']['trueDamage'];
-		$totalArmor 	= $data['input']['attacker']['armor'];
-		$totalVision 	= $data['input']['attacker']['vision'];
-		$totalStealth 	= $data['input']['attacker']['stealth'];
+		$totalArmor 	= 0;
+		$totalVision 	= 0;
+		$totalStealth 	= 0;
 		$limit = 7;
 		$i = 0;
 		
@@ -528,11 +672,11 @@ class d13_combat
 		$html = '';
 		$totalAmount 	= 0;
 		$leftAmount 	= 0;
-		$totalSpeed 	= $data['input']['defender']['speed'];
+		$totalSpeed 	= 0;
 		$totalDamage 	= $data['input']['defender']['trueDamage'];
-		$totalArmor 	= $data['input']['defender']['armor'];
-		$totalVision 	= $data['input']['defender']['vision'];
-		$totalStealth 	= $data['input']['defender']['stealth'];
+		$totalArmor 	= 0;
+		$totalVision 	= 0;
+		$totalStealth 	= 0;
 		$i = 0;
 		
 		// - - - - - 

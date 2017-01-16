@@ -21,6 +21,13 @@ ob_start();
 
 require_once("config/d13_core.inc.php");
 
+function d13_error($errno, $errstr, $errfile, $errline) {
+	global $d13;
+  	$d13->logger(date("H:i:s")." <b>Error:</b> [$errno] $errstr [$errfile][$errline]<br>");
+}
+
+set_error_handler("d13_error");
+
 $d13->routerRoute();
 
 //=====================================================================================EOF

@@ -44,7 +44,9 @@ class d13_unit
 	function setNode($node)
 	{
 		$this->node = $node;
+		if (isset($node)) {
 		$this->node->getTechnologies();
+		}
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -61,7 +63,7 @@ class d13_unit
 		
 		$this->data = array();
 		$this->data = $d13->getUnit($this->node->data['faction'], $unitId);
-		$this->data['type'] = 'unit';
+		
 		$this->data['unitId'] = $unitId;
 		$this->data['name'] = $d13->getLangGL("units", $this->node->data['faction'], $this->data['unitId'], "name");
 		$this->data['description'] = $d13->getLangGL("units", $this->node->data['faction'], $this->data['unitId'], "description");
@@ -85,11 +87,11 @@ class d13_unit
 	{
 		global $d13;
 		
-		$costLimit = $this->node->checkCostMax($this->data['cost'], 'train');
-		$reqLimit = $this->node->checkRequirementsMax($this->data['requirements']);
-		$upkeepLimit = floor($this->node->resources[$d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeepResource') ]['value'] / $d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeep'));
-		$unitLimit = abs($this->node->units[$this->data['unitId']]['value'] - $d13->getGeneral('types', $this->data['type'], 'limit'));
-		$limitData = min($costLimit, $reqLimit, $upkeepLimit, $unitLimit);
+		$costLimit 		= $this->node->checkCostMax($this->data['cost'], 'train');
+		$reqLimit 		= $this->node->checkRequirementsMax($this->data['requirements']);
+		$upkeepLimit 	= floor($this->node->resources[$d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeepResource') ]['value'] / $d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeep'));
+		$unitLimit 		= abs($this->node->units[$this->data['unitId']]['value'] - $d13->getGeneral('types', $this->data['type'], 'limit'));
+		$limitData 		= min($costLimit, $reqLimit, $upkeepLimit, $unitLimit);
 
 		return $limitData;
 	}
@@ -275,7 +277,7 @@ class d13_unit
 
 		$unit_comp = array();
 		foreach($this->data['requirements'] as $requirement) {
-			if ($requirement['type'] == 'components' && $requirement['active']) {
+			if ($requirement['type'] == 'components') {
 				$unit_comp[] = array(
 					'id' => $requirement['id'],
 					'amount' => $requirement['value']
@@ -343,7 +345,9 @@ class d13_unit
 		
 		$costData = '';
 		foreach($get_costs as $cost) {
-			$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $cost['name'] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['icon'] . '" title="' . $cost['name'] . '"></a></div>';
+			if ($cost['value'] > 0) {
+				$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $cost['name'] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['icon'] . '" title="' . $cost['name'] . '"></a></div>';
+			}
 		}
 
 		return $costData;
@@ -404,12 +408,47 @@ class d13_unit
 			}
 		}
 		
-		$tvars['tvar_id'] = $this->data['id'];
-		$tvars['tvar_type'] = $this->data['type'];
-		$tvars['tvar_class'] = $d13->getLangGL('classes', $this->data['class']);
-		$tvars['tvar_attackType'] = $d13->getLangGL('attackTypes', $this->data['attackType']);
-		$tvars['tvar_armorType'] = $d13->getLangGL('armorTypes', $this->data['armorType']);
-		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
+		$tvars['tvar_id'] 				= $this->data['id'];
+		$tvars['tvar_type'] 			= $this->data['type'];
+		$tvars['tvar_class'] 			= $d13->getLangGL('classes', $this->data['class']);
+		$tvars['tvar_nodeFaction'] 		= $this->node->data['faction'];
+		
+		$tvars['tvar_attackModifier']		= '';
+		$tvars['tvar_defenseModifier']		= '';
+		$tvars['tvar_armyAttackModifier']	= '';
+		$tvars['tvar_armyDefenseModifier']	= '';
+		
+		if (!empty($this->data['attackModifier'])) {
+			foreach ($this->data['attackModifier'] as $modifier) {
+				$tvars['tvar_attackModifier'] 	.= $d13->getLangUI($modifier['stat']) . " +".($modifier['value']*100)."% ";
+			}
+		} else {
+			$tvars['tvar_attackModifier'] 	= $d13->getLangUI('none');
+		}
+		
+		if (!empty($this->data['defenseModifier'])) {
+			foreach ($this->data['defenseModifier'] as $modifier) {
+				$tvars['tvar_defenseModifier'] 	.= $d13->getLangUI($modifier['stat']) . " +".($modifier['value']*100)."% ";
+			}
+		} else {
+			$tvars['tvar_defenseModifier'] 	= $d13->getLangUI('none');
+		}
+		
+		if (!empty($this->data['armyAttackModifier'])) {
+			foreach ($this->data['armyAttackModifier'] as $modifier) {
+				$tvars['tvar_armyAttackModifier'] 	.= $d13->getLangUI($modifier['stat']) . " +".($modifier['value']*100)."% ";
+			}
+		} else {
+			$tvars['tvar_armyAttackModifier'] 	= $d13->getLangUI('none');
+		}
+		
+		if (!empty($this->data['armyDefenseModifier'])) {
+			foreach ($this->data['armyDefenseModifier'] as $modifier) {
+				$tvars['tvar_armyDefenseModifier'] 	.= $d13->getLangUI($modifier['stat']) . " +".($modifier['value']*100)."% ";
+			}
+		} else {
+			$tvars['tvar_armyDefenseModifier'] 	= $d13->getLangUI('none');
+		}
 		
 		foreach($d13->getGeneral('stats') as $stat) {
 			$tvars['tvar_unit'.$stat] 			= $this->data[$stat];

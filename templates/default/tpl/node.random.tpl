@@ -5,7 +5,7 @@
         <div class=" d13-window">
           <div class="login-screen-title">{{tvar_ui_choose}} {{tvar_ui_faction}}</div>
           
-            <div class="list-block">
+            <div class="list-block no-hairlines-between">
              
                <div class="swiper-container">
 		<div class="swiper-wrapper">

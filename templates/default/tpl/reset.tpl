@@ -5,7 +5,7 @@
         <div class=" d13-window">
           <div class="login-screen-title">{{tvar_ui_resetPassword}}</div>
           <form method="post" action="?p=reset" id="login">
-            <div class="list-block">
+            <div class="list-block no-hairlines-between">
              
               <ul>
 				
@@ -33,7 +33,7 @@
              
               
             </div>
-            <div class="list-block">
+            <div class="list-block no-hairlines-between">
               <ul>
                 <li>
                 	

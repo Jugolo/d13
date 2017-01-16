@@ -25,12 +25,37 @@
       "description": "Units require food."
     }
   ],
+  "combatTypes": [
+    {
+      "name": "Raid",
+      "description": "Attack to loot resources."
+    },
+    {
+      "name": "Conquer",
+      "description": "Attack to take over town if victorious."
+    },
+    {
+      "name": "Scout",
+      "description": ""
+    },
+    {
+      "name": "Raze",
+      "description": "Attack to destroy town if victorious."
+    },
+    {
+      "name": "Skirmish",
+      "description": ""
+    },
+    {
+      "name": "Sabotage",
+      "description": ""
+    }
+  ], 
   "shields": [
     {
       "name": "newbie protection",
       "description": "Your town is protected from all attacks for some time."
     }
-    
   ],
   "factions": [
     {
@@ -230,6 +255,19 @@
       "116": {
         "name": "Thief Training",
         "description": "Increases fighting power of your Thief units."
+      },
+      
+           "117": {
+        "name": "Warrior Hero Training",
+        "description": "Increases fighting power of your Warrior hero."
+      },
+      "118": {
+        "name": "Wizard Hero Training",
+        "description": "Increases fighting power of your Wizard hero."
+      },
+      "119": {
+        "name": "Ranger hero Training",
+        "description": "Increases fighting power of your Ranger hero."
       }
     },
     {
@@ -320,7 +358,22 @@
       "116": {
         "name": "Thief Training",
         "description": "Increases fighting power of your Thief units."
+      },
+      
+      "117": {
+        "name": "Warrior Hero Training",
+        "description": "Increases fighting power of your Warrior hero."
+      },
+      "118": {
+        "name": "Wizard Hero Training",
+        "description": "Increases fighting power of your Wizard hero."
+      },
+      "119": {
+        "name": "Ranger hero Training",
+        "description": "Increases fighting power of your Ranger hero."
       }
+      
+      
     },
     {
       "0": {
@@ -410,6 +463,19 @@
       "116": {
         "name": "Thief Training",
         "description": "Increases fighting power of your Thief units."
+      },
+      
+           "117": {
+        "name": "Warrior Hero Training",
+        "description": "Increases fighting power of your Warrior hero."
+      },
+      "118": {
+        "name": "Wizard Hero Training",
+        "description": "Increases fighting power of your Wizard hero."
+      },
+      "119": {
+        "name": "Ranger hero Training",
+        "description": "Increases fighting power of your Ranger hero."
       }
     }
   ],
@@ -490,6 +556,10 @@
       {
         "name": "Wargate",
         "description": "Required to attack other players with your troops."
+      },
+      {
+        "name": "Hall of Heroes",
+        "description": "Hire powerful and unique heroes of the land here."
       }
     ],
     [
@@ -568,6 +638,10 @@
       {
         "name": "Wargate",
         "description": "Required to attack other players with your troops."
+      },
+      {
+        "name": "Hall of Heroes",
+        "description": "Hire powerful and unique heroes of the land here."
       }
     ],
     [
@@ -646,6 +720,10 @@
       {
         "name": "Wargate",
         "description": "Required to attack other players with your troops."
+      },
+      {
+        "name": "Hall of Heroes",
+        "description": "Hire powerful and unique heroes of the land here."
       }
     ]
   ],
@@ -682,6 +760,10 @@
       {
         "name": "Spear",
         "description": "High damage melee weapon."
+      },
+      {
+        "name": "Attack Flag",
+        "description": "Required to use RAID attack on an enemy (test-item)."
       }
     ],
     [
@@ -759,19 +841,8 @@
     "duelist": "duelist",
     "archer": "archer",
     "cavalry": "cavalry",
-    "static": "static"
-  },
-  "attackTypes": {
-  	"melee": "melee",
-  	"missile": "missile",
-  	"artillery": "artillery",
-  	"magic": "magic"
-  },
-  "armorTypes": {
-  	"light": "light",
-  	"medium": "medium",
-  	"heavy": "heavy",
-  	"fortified": "fortified"
+    "static": "static",
+    "wizard": "wizard"
   },
   "units": [
     [
@@ -850,7 +921,20 @@
       {
         "name": "Wall",
         "description": "Between a rock and a hard place."
+      },
+      {
+        "name": "Warrior hero",
+        "description": "Limited to one unit at a time."
+      },
+      {
+        "name": "Wizard hero",
+        "description": "Limited to one unit at a time."
+      },
+      {
+        "name": "Ranger hero",
+        "description": "Limited to one unit at a time."
       }
+      
     ],
     [
       {
@@ -928,6 +1012,18 @@
       {
         "name": "Wall",
         "description": "Between a rock and a hard place."
+      },
+      {
+        "name": "Warrior hero",
+        "description": "Limited to one unit at a time."
+      },
+      {
+        "name": "Wizard hero",
+        "description": "Limited to one unit at a time."
+      },
+      {
+        "name": "Ranger hero",
+        "description": "Limited to one unit at a time."
       }
     ],
     [
@@ -1006,6 +1102,18 @@
       {
         "name": "Wall",
         "description": "Safe between bricks and stone."
+      },
+      {
+        "name": "Warrior hero",
+        "description": "Limited to one unit at a time."
+      },
+      {
+        "name": "Wizard hero",
+        "description": "Limited to one unit at a time."
+      },
+      {
+        "name": "Ranger hero",
+        "description": "Limited to one unit at a time."
       }
     ]
   ]

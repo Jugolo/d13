@@ -1,5 +1,5 @@
 <div class="content-block-title">{{tvar_msgHeader}}</div>
-<div class="list-block">
+<div class="list-block no-hairlines-between">
   <ul>
     <li class="accordion-item"><a href="#" class="item-content item-link">
         <div class="item-inner">

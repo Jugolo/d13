@@ -25,37 +25,41 @@
         "scout": [
           {
             "resource": 0,
-            "value": 501,
+            "value": 250,
             "isFuel": false
           },
           {
             "resource": 1,
-            "value": 103,
+            "value": 10,
             "isFuel": true
           }
         ],
 		"skirmish": [
           {
             "resource": 0,
-            "value": 502,
+            "value": 250,
             "isFuel": false
           },
           {
             "resource": 1,
-            "value": 103,
+            "value": 10,
             "isFuel": true
           }
         ],
 		"raid": [
           {
             "resource": 0,
-            "value": 503,
+            "value": 250,
             "isFuel": false
           },
           {
             "resource": 1,
-            "value": 103,
+            "value": 10,
             "isFuel": true
+          },
+          {
+          	"component": 8,
+          	"value": 1
           }
         ],
 		"sabotage": [
@@ -136,7 +140,7 @@
 		"raid": [
           {
             "resource": 0,
-            "value": 503,
+            "value": 250,
             "isFuel": false
           }
         ],
@@ -203,7 +207,7 @@
 		"raid": [
           {
             "resource": 0,
-            "value": 503,
+            "value": 250,
             "isFuel": false
           }
         ],

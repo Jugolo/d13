@@ -5,7 +5,7 @@
         <div class=" d13-window">
           <div class="login-screen-title">{{tvar_ui_register}}</div>
           <form method="post" action="?p=register&action=register" id="register">
-            <div class="list-block">
+            <div class="list-block no-hairlines-between">
              
               <ul>
 				
@@ -41,7 +41,7 @@
               </ul>
              
             </div>
-            <div class="list-block">
+            <div class="list-block no-hairlines-between">
               <ul>
                 <li>
                 	

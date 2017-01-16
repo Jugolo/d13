@@ -1829,7 +1829,7 @@
         
       ],
       "upgrades": [
-        100
+        0
       ]
     },
     {
@@ -1857,7 +1857,7 @@
         
       ],
       "upgrades": [
-        101
+        1
       ]
     },
     {
@@ -1885,7 +1885,7 @@
         
       ],
       "upgrades": [
-        102
+        2
       ]
     },
     {
@@ -1913,7 +1913,7 @@
         
       ],
       "upgrades": [
-        103
+        3
       ]
     },
     {
@@ -1941,7 +1941,7 @@
         
       ],
       "upgrades": [
-        104
+        4
       ]
     },
     {
@@ -1969,7 +1969,7 @@
         
       ],
       "upgrades": [
-        105
+        5
       ]
     },
     {
@@ -1997,7 +1997,7 @@
         
       ],
       "upgrades": [
-        106
+        6
       ]
     },
     {
@@ -2025,7 +2025,7 @@
         
       ],
       "upgrades": [
-        107
+        7
       ]
     },
     {
@@ -2053,7 +2053,7 @@
         
       ],
       "upgrades": [
-        108
+        8
       ]
     },
     {
@@ -2081,7 +2081,7 @@
         
       ],
       "upgrades": [
-        109
+        9
       ]
     },
     {
@@ -2109,7 +2109,7 @@
         
       ],
       "upgrades": [
-        110
+        10
       ]
     },
     {
@@ -2137,7 +2137,7 @@
         
       ],
       "upgrades": [
-        111
+        11
       ]
     },
     {
@@ -2165,7 +2165,7 @@
         
       ],
       "upgrades": [
-        112
+        12
       ]
     },
     {
@@ -2193,7 +2193,7 @@
         
       ],
       "upgrades": [
-        113
+        13
       ]
     },
     {
@@ -2221,7 +2221,7 @@
         
       ],
       "upgrades": [
-        114
+        14
       ]
     },
     {
@@ -2249,7 +2249,7 @@
         
       ],
       "upgrades": [
-        115
+        15
       ]
     },
     {
@@ -2277,8 +2277,96 @@
         
       ],
       "upgrades": [
-        116
+        16
+      ]
+    },
+    
+    
+    {
+      "id": 117,
+      "image": "hero_0.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        19
+      ]
+    },
+    {
+      "id": 118,
+      "image": "hero_1.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        20
+      ]
+    },
+    {
+      "id": 119,
+      "image": "hero_2.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        21
       ]
     }
+    
+    
   ]
 ]

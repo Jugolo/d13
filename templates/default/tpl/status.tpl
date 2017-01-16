@@ -4,9 +4,9 @@
 
 <div class="d13-node" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/nodeBackground.png);">
 
-<div class="card large-card card-shadow">
+<div class="card no-border large-card card-shadow">
 
-	<div class="card-header">
+	<div class="card-header no-border">
   		<div class="d13-heading">{{tvar_ui_user}} {{tvar_ui_status}}</div>
   		<a class="external" href="?p=node&action=list"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 	</div>
@@ -19,12 +19,11 @@
 	
 		<div class="col-25">
 			<img src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/avatars/{{tvar_userImage}}" width="80">
-			<p class="d13-italic">{{tvar_Description}}</p>
 		</div>
 		
 		<div class="col-75">
 			
-			<div class="list-block">
+			<div class="list-block no-hairlines-between">
 				<ul>
 
 					<li class="item-content">
@@ -94,7 +93,7 @@
 	</div>
 	</div>
 
-	<div class="card-footer">
+	<div class="card-footer no-border">
 		<div class="left"></div>
 		<div class="right"></div>
 	</div>
