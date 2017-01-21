@@ -2,7 +2,17 @@
 
 function showValue(id, newValue)
 {
+	if (newValue < 10) { newValue = "0"+newValue; }
 	document.getElementById(id).innerHTML=newValue;
+}
+
+function showMax(id, spanid)
+{
+	obj = document.getElementById(id);
+	newValue = obj.max
+	if (newValue < 10) { newValue = "0"+newValue; }
+	obj.value=newValue;
+	showValue(spanid, newValue);
 }
 
 function set_maximum(id, value) {
@@ -15,9 +25,48 @@ function change_maximum(id, value, form, formvalue) {
     document.getElementById(form).action= formvalue;
 }
 
-function armyValue(id, newValue)
+/* -- D13 JS -------------------------------------------------------------------*/
+
+function armyCheck()
 {
 
+	var armyCheck 		= false;
+	var leaderRequired  = 0;
+	var totalAmount 	= 0;
+	
+	var unitAmount 		= document.getElementsByName('unitAmount[]');
+	var unitType		= document.getElementsByName('unitType[]');
+	var unitUnique		= document.getElementsByName('unitUnique[]');
+	
+	leaderRequired = document.getElementsByName('leaderRequired');
+	
+	for(key=0; key < unitAmount.length; key++)  {
+					
+		if (leaderRequired > 0) {
+			if (unitType[key].value != "leader") {
+				armyCheck = true;
+			}
+		}
+			
+		totalAmount += (unitAmount[key].value);
+		
+	}
+	
+	
+	if (totalAmount <= 0) {
+		armyCheck = true;
+	}
+
+	document.getElementById('startCombat').disabled = armyCheck;
+
+}
+
+/* -- D13 JS -------------------------------------------------------------------*/
+
+function armyValue(id, newValue)
+{
+	
+	if (newValue < 10) { newValue = "0"+newValue; }
 	document.getElementById(id).innerHTML=newValue;
 	document.getElementById('attackerAmount_'+id).value=newValue;
 	
@@ -33,6 +82,7 @@ function armyValue(id, newValue)
 	var totalArmor		= 0;
 	var totalHealth		= 0;
 	var totalCritical	= 0;
+	var totalCapacity	= 0;
 
 	var modDamage 		= 0.0;
 	var modSpeed 		= 0.0;
@@ -40,6 +90,7 @@ function armyValue(id, newValue)
 	var modArmor		= 0.0;
 	var modHealth		= 0.0;
 	var modCritical		= 0.0;
+	var modCapacity		= 0.0;
 
 	var unitAmount 		= document.getElementsByName('unitAmount[]');
 	var unitFuel 		= document.getElementsByName('unitFuel[]');
@@ -50,6 +101,7 @@ function armyValue(id, newValue)
 	var unitArmor 		= document.getElementsByName('unitArmor[]');
 	var unitHealth 		= document.getElementsByName('unitHP[]');
 	var unitCritical	= document.getElementsByName('unitCritical[]');
+	var unitCapacity	= document.getElementsByName('unitCapacity[]');
 
 	var armyModDamage 	= document.getElementsByName('armyModDamage[]');
 	var armyModSpeed 	= document.getElementsByName('armyModSpeed[]');
@@ -57,6 +109,7 @@ function armyValue(id, newValue)
 	var armyModArmor	= document.getElementsByName('armyModArmor[]');
 	var armyModHealth	= document.getElementsByName('armyModHP[]');
 	var armyModCritical	= document.getElementsByName('armyModCritical[]');
+	var armyModCapacity	= document.getElementsByName('armyModCapacity[]');
 
 	for(key=0; key < unitAmount.length; key++)  {
 		totalAmount = parseInt(unitAmount[key].value);
@@ -67,6 +120,7 @@ function armyValue(id, newValue)
     	totalArmor 		+= parseInt(unitArmor[key].value) * totalAmount;
     	totalHealth 	+= parseInt(unitHealth[key].value) * totalAmount;
     	totalCritical 	+= parseInt(unitCritical[key].value) * totalAmount;
+    	totalCapacity 	+= parseInt(unitCapacity[key].value) * totalAmount;
     	
     	tmpAmount = totalAmount!=0?1:0;
     	
@@ -76,6 +130,7 @@ function armyValue(id, newValue)
     	modArmor 	+= Math.floor(totalArmor 		* (parseFloat(armyModArmor[key].value) * tmpAmount));
     	modHealth 	+= Math.floor(totalHealth 		* (parseFloat(armyModHealth[key].value) * tmpAmount));
     	modCritical += Math.floor(totalCritical 	* (parseFloat(armyModCritical[key].value) * tmpAmount));
+    	modCapacity += Math.floor(totalCapacity		* (parseFloat(armyModCapacity[key].value) * tmpAmount));
     	
     	totalFuel += parseInt(unitFuel[key].value) * totalAmount * fuelFactor;
     	grandAmount += totalAmount;
@@ -84,14 +139,16 @@ function armyValue(id, newValue)
 	document.getElementById('totalAmount').innerHTML 	= grandAmount;
 	document.getElementById('totalFuel').innerHTML 		= totalFuel;
 	
-	document.getElementById('totalDamage').innerHTML 	= totalDamage 	+ ' [+' + modDamage + ']';
-	document.getElementById('totalSpeed').innerHTML 	= totalSpeed 	+ ' [+' + modSpeed + ']';
-	document.getElementById('totalStealth').innerHTML 	= totalStealth 	+ ' [+' + modStealth + ']';
-	document.getElementById('totalArmor').innerHTML 	= totalArmor 	+ ' [+' + modArmor + ']';
-	document.getElementById('totalHealth').innerHTML 	= totalHealth 	+ ' [+' + modHealth + ']';
-	document.getElementById('totalCritical').innerHTML 	= totalCritical + ' [+' + modCritical + ']';
+	document.getElementById('totalDamage').innerHTML 	= totalDamage 	+ ' [+' + modDamage 	+ ']';
+	document.getElementById('totalSpeed').innerHTML 	= totalSpeed 	+ ' [+' + modSpeed 		+ ']';
+	document.getElementById('totalStealth').innerHTML 	= totalStealth 	+ ' [+' + modStealth 	+ ']';
+	document.getElementById('totalArmor').innerHTML 	= totalArmor 	+ ' [+' + modArmor 		+ ']';
+	document.getElementById('totalHealth').innerHTML 	= totalHealth 	+ ' [+' + modHealth 	+ ']';
+	document.getElementById('totalCritical').innerHTML 	= totalCritical + ' [+' + modCritical 	+ ']';
+	document.getElementById('totalCapacity').innerHTML 	= totalCapacity + ' [+' + modCapacity 	+ ']';
 	
-
+	armyCheck();
+	
 }
 
 /* -- D13 JS -------------------------------------------------------------------*/

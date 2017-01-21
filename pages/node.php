@@ -187,7 +187,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			if ($status == 'done') {
 				if (isset($_POST['x'], $_POST['y']))
 				if ($node->checkOptions('nodeMove') && $node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id'])
-				if ($d13->getFactions($node->data['faction'], 'costs', 'move', 0, 'resource') > - 1) $message = $d13->getLangUI($node->move($_POST['x'], $_POST['y']));
+				if ($d13->getFaction($node->data['faction'], 'costs', 'move', 0, 'resource') > - 1) $message = $d13->getLangUI($node->move($_POST['x'], $_POST['y']));
 				else $message = $d13->getLangUI("nodeMoveDisabled");
 				else $message = $d13->getLangUI("accessDenied");
 			}
@@ -262,64 +262,78 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			for ($sector = 1; $sector <= $d13->getGeneral('users', 'maxSectors'); $sector++) {
 
 				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Render Sector View
-
+				
+				$tvars['tvar_getHTMLNode'] = "";
+				
 				$offset_start = ($sector - 1) * $d13->getGeneral('users', 'maxModules');
 				$offset_end = $offset_start + $d13->getGeneral('users', 'maxModules');
 				$node->getModules();
+				
+				$add = true;
+				$limit = 4;
 				$i = 0;
-				$s = 5;
-				$tvars['tvar_getHTMLNode'] = "";
+				
 				foreach($node->modules as $module) {
 					if ($module['slot'] >= $offset_start && $module['slot'] <= $offset_end) {
 						
+						// - - - end current row
+						if ($i == $limit) {
+							$tvars['tvar_getHTMLNode'].= '</div>';
+							$i = 0;
+							if ($add) {
+								$limit++;
+								$add = false;
+							} else {
+								$limit--;
+								$add = true;
+							}
+						}
+						// - - - begin new row
+						if ($i == 0) {
+							$tvars['tvar_getHTMLNode'].= '<div class="row no-gutter">';
+						}
+	
+						// - - - Add modules to row
 						if ($module['module'] > - 1) {
 							$the_module = d13_module_factory::create($module['module'], $module['slot'], $node);
 						}
 						
-						if ($i == $s) {
-							$tvars['tvar_getHTMLNode'].= '</div>';
-							$i = 0;
-						}
-
-						if ($i == 0) {
-							$tvars['tvar_getHTMLNode'].= '<div class="row no-gutter">';
-						}
-
 						if ($buildQueue[$module['slot']]['check']) {
 							$tvars['tvar_moduleLink'] = "";
 							$tvars['tvar_moduleImage'] = $buildQueue[$module['slot']]['image'][0]['image'];
 							$tvars['tvar_moduleClass'] = '<img class="spinner resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/gear.png">';
 							$tvars['tvar_moduleLabel'] = $d13->getLangUI("underConstruction");
 							$tvars['tvar_getHTMLNode'].= $d13->templateSubpage("sub.node.module", $tvars);
-						}
-						else
-						if ($module['module'] > - 1) {
+						} else if ($module['module'] > - 1) {
 							$tvars['tvar_moduleLink'] = "index.php?p=module&action=get&nodeId=" . $node->data['id'] . "&slotId=" . $module['slot'];
 							$tvars['tvar_moduleImage'] = $the_module->data['image'];
 							if (($module['input'] <= 0 && $d13->getModule($node->data['faction'], $module['module'], 'maxInput') > 0) || ($d13->getModule($node->data['faction'], $module['module'], 'type') == 'defense' && $module['input'] < $d13->getModule($node->data['faction'], $module['module'], 'maxInput'))) {
 								$tvars['tvar_moduleClass'] = '<a href="#" class="tooltip-left" data-tooltip="' . $d13->getLangUI("no") . " " . $d13->getLangGL('resources', $the_module->data['inputResource'], 'name') . '"><img class="animated bounce resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/exclamation.png"></a>';
-							}
-							else {
+							} else {
 								$tvars['tvar_moduleClass'] = "";
 							}
 							if ($the_module->data['maxLevel'] > 1) {
-							$tvars['tvar_moduleLabel'] = $d13->getLangGL("modules", $node->data['faction'], $module['module'], "name") . " [L" . $module['level'] . "]";
+								$tvars['tvar_moduleLabel'] = $d13->getLangGL("modules", $node->data['faction'], $module['module'], "name") . " [L" . $module['level'] . "]";
 							} else {
-							$tvars['tvar_moduleLabel'] = $d13->getLangGL("modules", $node->data['faction'], $module['module'], "name");
+								$tvars['tvar_moduleLabel'] = $d13->getLangGL("modules", $node->data['faction'], $module['module'], "name");
 							}
 							$tvars['tvar_getHTMLNode'].= $d13->templateSubpage("sub.node.module", $tvars);
-						}
-						else {
+						} else {
 							$tvars['tvar_moduleLink'] = "index.php?p=module&action=list&nodeId=" . $node->data['id'] . "&slotId=" . $module['slot'];
 							mt_srand($module['slot']*$sector);
 							$imgid = mt_rand(0,9);
 							$tvars['tvar_moduleImage'] = "module_empty_".$imgid.".png";
 							$tvars['tvar_moduleClass'] = "";
-							$tvars['tvar_moduleLabel'] = $d13->getLangUI("emptySlot");
+							$tvars['tvar_moduleLabel'] = $d13->getLangUI("emptySlot") . ' ' . $d13->getLangUI("clickToBuild");
 							$tvars['tvar_getHTMLNode'].= $d13->templateSubpage("sub.node.module", $tvars);
 						}
 
-						$i++;
+						// - - - advance or new row
+						if ($i != $limit) {
+						
+							$i++;
+						}
+						
 						$offset_start++;
 						if ($offset_start == $offset_end) {
 							$i = 0;
@@ -328,19 +342,15 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					}
 				}
 
-				if ($i > 0 && $i < $s) {
-					$i = $s - $i;
-					for ($j = $i; $j <= $s; $j++) {
+				if ($i > 0 && $i < $limit) {
+					$i = $limit - $i;
+					for ($j = $i; $j <= $limit; $j++) {
 						$tvars['tvar_getHTMLNode'].= $d13->templateSubpage("sub.node.filler", $tvars);
 					}
-
+					$tvars['tvar_getHTMLNode'].= '</div>';
+				} else if ($i == 0) {
 					$tvars['tvar_getHTMLNode'].= '</div>';
 				}
-				else
-				if ($i == 0) {
-					$tvars['tvar_getHTMLNode'].= '</div>';
-				}
-
 				$tvars['tvar_getHTMLSectors'].= $d13->templateSubpage("sub.node.sector", $tvars);
 			}
 			
@@ -355,7 +365,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		if (isset($node->data['id'])) {
 			if ($node->checkOptions('nodeRemove')) {
 				$costData = '';
-				foreach($d13->getFactions($node->data['faction'], 'costs', 'set') as $key => $cost) {
+				foreach($d13->getFaction($node->data['faction'], 'costs', 'set') as $key => $cost) {
 					$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></div>';
 				}
 
@@ -446,7 +456,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		if (isset($node->data['id'])) {
 			if ($node->checkOptions('nodeMove')) {
 				$costData = '';
-				foreach($d13->getFactions($node->data['faction'], 'costs', 'move') as $key => $cost) {
+				foreach($d13->getFaction($node->data['faction'], 'costs', 'move') as $key => $cost) {
 					$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></div>';
 				}
 				$node->getLocation();
@@ -468,13 +478,9 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		// - - - - - - - - - - - - - - - - - - - - 0 towns - create new town
 
 		if ($t == 0) {
-			if ($d13->getGeneral('options', 'gridSystem') == 1) {
-				header("location: index.php?p=node&action=add");
-			}
-			else {
-				header("location: index.php?p=node&action=random");
-			}
-
+			
+			header("location: index.php?p=node&action=random");
+			
 			// - - - - - - - - - - - - - - - - - - - - 1 town - jump to town
 
 		}

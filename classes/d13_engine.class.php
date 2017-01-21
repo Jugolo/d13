@@ -93,16 +93,16 @@ class d13
 
 	public
 
-	function templateSubpage($template, $vars = "")
+	function templateSubpage($template, $vars = "", $cache=true, $cache_num=0)
 	{
-		return $this->tpl->render($template, $vars);
+		return $this->tpl->render($template, $vars, $cache, $cache_num);
 	}
 
 	public
 
-	function templateInject($content)
+	function templateInject($content, $cache=0)
 	{
-		$this->tpl->inject($content);
+		$this->tpl->inject($content, $cache);
 	}
 
 	// ========================================================================================

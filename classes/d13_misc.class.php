@@ -18,7 +18,29 @@ class misc
 {
 
 	//----------------------------------------------------------------------------------------
+	// toolTip
 	// 
+	//----------------------------------------------------------------------------------------
+	public static
+	
+	function toolTip($data, $cache=0) {
+		
+		global $d13;
+		
+		$id=md5($data);
+				
+		$tvars = array();
+		$tvars['tvar_tipContent'] = $data;
+		$tvars['tvar_tipID'] = $id;
+
+		$d13->templateInject($d13->templateSubpage("sub.tooltip", $tvars), $cache);
+		
+		return 'showTip tip_'.$id;
+
+	}
+
+	//----------------------------------------------------------------------------------------
+	// getLeague
 	// level ca. 1-999 / trophies ca. 1-9999
 	//----------------------------------------------------------------------------------------
 	public static
@@ -56,8 +78,8 @@ class misc
 		$value1++;
 		$value2++;
 		
-		$percentage = floor(max($value1, $value2) - min($value1, $value2))/(max($value1,$value2)*100);
-		
+		$percentage = floor( (max($value1, $value2) / min($value1, $value2)) * 100);
+				
 		return $percentage;
 		
 	}

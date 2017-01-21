@@ -721,7 +721,7 @@ class node
 		if ($module['module'] == - 1) {
 			$result = $d13->dbQuery('select count(*) as count from modules where node="' . $this->data['id'] . '" and module="' . $moduleId . '"');
 			$row = $d13->dbFetch($result);
-			if ($row['count'] < $d13->getModule($this->data['faction'], $moduleId) ['maxInstances']) {
+			if ($row['count'] < $d13->getModule($this->data['faction'], $moduleId, 'maxInstances')) {
 				$result = $d13->dbQuery('select count(*) as count from build where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
 				$row = $d13->dbFetch($result);
 				if (!$row['count']) {
@@ -1416,7 +1416,11 @@ class node
 								} else {
 									$this->components[$cost['component']]['value'] -= $cost['value'] * $d13->getGeneral('users', 'cost', 'combat');
 								}
-							
+								
+								$storageResource = $d13->getComponent($this->data['faction'], $cost['component'], 'storageResource');
+								$this->resources[$storageResource]['value']+= $d13->getComponent($this->data['faction'], $cost['component'], 'storage') * $cost['value'];
+								$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
+								
 								$d13->dbQuery('update components set value="' . $this->components[$cost['component']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['component'] . '"');
 								if ($d13->dbAffectedRows() == - 1) $ok = 0;
 
@@ -1622,6 +1626,7 @@ class node
 					// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - REMOVE
 
 				} else if ($entry['action'] == 'remove') {
+				
 					foreach($d13->getModule($this->data['faction'], $entry['obj_id'], 'cost') as $cost) {
 						$this->resources[$cost['resource']]['value']+= $cost['value'] * $d13->getGeneral('users', 'cost', 'build') * $d13->getModule($this->data['faction'], $entry['obj_id'], 'salvage');
 						$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
@@ -1649,24 +1654,25 @@ class node
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						}
 
-						$this->modules[$entry['slot']]['module'] = - 1;
-						$this->checkModuleDependencies($entry['obj_id'], $entry['slot']);
-						$d13->dbQuery('update modules set module="-1", input="0" where node="' . $this->data['id'] . '" and slot="' . $entry['slot'] . '"');
-						if ($d13->dbAffectedRows() == - 1) $ok = 0;
-						
-						if ($ok) { #experience loss
-							$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
-							$ok = $tmp_user->gainExperience($d13->getModule($this->data['faction'],  $entry['obj_id'], 'cost'), -$this->modules[$entry['obj_id']]['level']);
-						}
-						
 					}
+				
+					$this->modules[$entry['slot']]['module'] = - 1;
+					$this->checkModuleDependencies($entry['obj_id'], $entry['slot']);
+					$d13->dbQuery('update modules set module="-1", input="0", level="0" where node="' . $this->data['id'] . '" and slot="' . $entry['slot'] . '"');
+					if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						
+					if ($ok) { #experience loss
+						$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+						$ok = $tmp_user->gainExperience($d13->getModule($this->data['faction'],  $entry['obj_id'], 'cost'), -$this->modules[$entry['obj_id']]['level']);
+					}
+				
 				}
 
 				$d13->dbQuery('delete from build where node="' . $this->data['id'] . '" and slot="' . $entry['slot'] . '"');
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			}
 		}
-
+		
 		if ($ok) {
 			$d13->dbQuery('commit');
 		}
@@ -1828,6 +1834,7 @@ class node
 		foreach($this->queue['combat'] as $combat) {
 			$combat['end'] = $combat['start'] + floor($combat['duration']);
 			if ($combat['end'] <= $time) {
+			
 				$otherNode = new node();
 				if ($combat['sender'] == $this->data['id']) {
 					$nodes = array(
@@ -1850,11 +1857,16 @@ class node
 						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GATHER ATTACKER DATA
 
 						$data = array();
+
 						$data['input']['attacker']['userId'] 	= $$nodes['attacker']->data['user'];
 						$data['input']['attacker']['groups'] 	= array();
 						$data['input']['attacker']['focus'] 	= $combat['focus'];
 						$data['input']['attacker']['faction'] 	= $$nodes['attacker']->data['faction'];
 						$data['input']['attacker']['nodeId'] 	= $$nodes['attacker']->data['id'];
+						$data['output']['attacker']['resources'] = array();
+						
+						// - - - - - ATTACKER UNITS
+						
 						$otherResult = $d13->dbQuery('select * from combat_units where combat="' . $combat['id'] . '"');
 						while ($group = $d13->dbFetch($otherResult)) {
 							$data['input']['attacker']['groups'][] = array(
@@ -1870,7 +1882,8 @@ class node
 						$data['input']['defender']['focus'] 	= $$nodes['defender']->data['focus'];
 						$data['input']['defender']['faction'] 	= $$nodes['defender']->data['faction'];
 						$data['input']['defender']['nodeId'] 	= $$nodes['defender']->data['id'];
-
+						$data['output']['defender']['resources'] = array();
+						
 						// - - - - - DEFENDER UNITS
 
 						if (!$d13->getGeneral('options', 'unitAttackOnly')) {
@@ -2019,11 +2032,7 @@ class node
 						// -> trigger special effect if scout check passed
 						// -> otherwise trigger battle
 						
-						// Skirmish
-						// -> deal damage without harm if scout check passed
-						// -> otherwise trigger battle
 						
-
 
 						if ($d13->dbAffectedRows() == - 1) {
 							$ok = 0;
@@ -2040,6 +2049,7 @@ class node
 								$msg->data['recipient'] = $attackerUser->data['name'];
 								$msg->data['subject'] = $d13->getLangUI('out') . ' ' . $d13->getLangUI($combat['type']) . ' ' . $d13->getLangUI("report") . ' vs ' . $$nodes['defender']->data['name'];
 								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type']);
+								$msg->data['type'] = 'attack';
 								$msg->data['viewed'] = 0;
 								$msg->add();
 							}
@@ -2056,6 +2066,7 @@ class node
 								$msg->data['recipient'] = $defenderUser->data['name'];
 								$msg->data['subject'] = $d13->getLangUI('in') . ' ' . $d13->getLangUI($combat['type']) . ' ' . $d13->getLangUI("report") . ' vs ' . $$nodes['attacker']->data['name'];
 								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type'], true);
+								$msg->data['type'] = 'defense';
 								$msg->data['viewed'] = 0;
 								$msg->add();
 							}
@@ -2235,26 +2246,30 @@ class node
 		);
 		
 		foreach($data['cost'] as $key => $thecost) {
-			if (isset($thecost['isFuel']) && $thecost['isFuel']) {
-				$tmp_quantity = $quantity * $fuel;
-			} else {
-				$tmp_quantity = $quantity;
-			}
+			if ($thecost['value'] > 0) {
+				
+				if (isset($thecost['isFuel']) && $thecost['isFuel']) {
+					$tmp_quantity = $quantity * $fuel;
+				} else {
+					$tmp_quantity = $quantity;
+				}
 			
-			if (isset($thecost['resource'])) {
-				if ($this->resources[$thecost['resource']]['value'] < ($thecost['value'] * $tmp_quantity * $d13->getGeneral('users', 'cost', $costType))) {
-					$data['cost'][$key]['ok'] = 0;
-					$data['ok'] = 0;
-				} else {
-					$data['cost'][$key]['ok'] = 1;
+				if (isset($thecost['resource'])) {
+					if ($this->resources[$thecost['resource']]['value'] < ($thecost['value'] * $tmp_quantity * $d13->getGeneral('users', 'cost', $costType))) {
+						$data['cost'][$key]['ok'] = 0;
+						$data['ok'] = 0;
+					} else {
+						$data['cost'][$key]['ok'] = 1;
+					}
+				} else if (isset($thecost['component'])) {
+					if ($this->components[$thecost['component']]['value'] < ($thecost['value'] * $tmp_quantity * $d13->getGeneral('users', 'cost', $costType))) {
+						$data['cost'][$key]['ok'] = 0;
+						$data['ok'] = 0;
+					} else {
+						$data['cost'][$key]['ok'] = 1;
+					}
 				}
-			} else if (isset($thecost['component'])) {
-				if ($this->components[$thecost['component']]['value'] < ($thecost['value'] * $tmp_quantity * $d13->getGeneral('users', 'cost', $costType))) {
-					$data['cost'][$key]['ok'] = 0;
-					$data['ok'] = 0;
-				} else {
-					$data['cost'][$key]['ok'] = 1;
-				}
+				
 			}
 		}
 
@@ -2286,7 +2301,11 @@ class node
 			}
 
 			while ($finished == false) {
-				$limit+= 5;
+				if ($limit < 10) {
+					$limit++;
+				} else {
+					$limit+= 5;
+				}
 				$check = $this->checkCost($cost, $costType, $limit);
 				if (!$check['ok']) {
 					return $lastlimit;

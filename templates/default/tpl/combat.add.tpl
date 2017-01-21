@@ -60,12 +60,15 @@
 					<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_stealth.png"><span id="totalStealth">0</span>
 				</span>
 				
+				<span class="badge" data-tooltip="{{tvar_ui_army}} {{tvar_ui_capacity}}">
+					<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_capacity.png"><span id="totalCapacity">0</span>
+				</span>
 				
   			</div>
   			
   			<div class="content-block">
   				
-  				<select name="id">{{tvar_nodeList}}</select> {{tvar_costData}} {{tvar_leaderRequired}} {{tvar_wipeoutRequired}} <input class="pure-button" type="submit" value="{{tvar_combatType}}!">
+  				<select name="id">{{tvar_nodeList}}</select> {{tvar_costData}} {{tvar_leaderRequired}} {{tvar_wipeoutRequired}} <input id="startCombat" class="pure-button" type="submit" value="{{tvar_combatType}}!" disabled>
 				
 			</div>
 			

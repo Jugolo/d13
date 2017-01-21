@@ -76,7 +76,7 @@ class message
 				if (!$sender->isBlocked($recipient->data['id'])) {
 					$this->data['id'] = misc::newId('messages');
 					$sent = strftime('%Y-%m-%d %H:%M:%S', time());
-					$d13->dbQuery('insert into messages (id, sender, recipient, subject, body, sent, viewed) values ("' . $this->data['id'] . '", "' . $sender->data['id'] . '", "' . $recipient->data['id'] . '", "' . $this->data['subject'] . '", "' . $this->data['body'] . '", "' . $sent . '", "' . $this->data['viewed'] . '")');
+					$d13->dbQuery('insert into messages (id, sender, recipient, subject, body, sent, viewed, type) values ("' . $this->data['id'] . '", "' . $sender->data['id'] . '", "' . $recipient->data['id'] . '", "' . $this->data['subject'] . '", "' . $this->data['body'] . '", "' . $sent . '", "' . $this->data['viewed'] . '", "' . $this->data['type'] . '")');
 					if ($d13->dbAffectedRows() > - 1) {
 						$status = 'done';
 					}
@@ -154,7 +154,7 @@ class message
 
 	public static
 
-	function getList($recipient, $limit, $offset)
+	function getList($recipient, $limit, $offset, $type="all")
 	{
 		global $d13;
 		$messages = array();
@@ -162,7 +162,19 @@ class message
 		$result = $d13->dbQuery('select count(*) as count from messages where recipient="' . $recipient . '"');
 		$row = $d13->dbFetch($result);
 		$messages['count'] = $row['count'];
-		$result = $d13->dbQuery('select * from messages where recipient="' . $recipient . '" order by sent desc limit ' . $limit . ' offset ' . $offset);
+		
+		if ($type == "outbox") {
+			$type = "message";
+			$result = $d13->dbQuery('select * from messages where sender="' . $recipient . '" and type="' . $type . '" order by sent desc limit ' . $limit . ' offset ' . $offset);
+		
+		} else if ($type == "all" || $type == "") {
+			$result = $d13->dbQuery('select * from messages where recipient="' . $recipient . '" order by sent desc limit ' . $limit . ' offset ' . $offset);
+		} else {
+			$result = $d13->dbQuery('select * from messages where recipient="' . $recipient . '" and type="' . $type . '" order by sent desc limit ' . $limit . ' offset ' . $offset);
+		}
+		
+		
+		
 		for ($i = 0; $row = $d13->dbFetch($result); $i++) {
 			$messages['messages'][$i] = new message();
 			$messages['messages'][$i]->data = $row;

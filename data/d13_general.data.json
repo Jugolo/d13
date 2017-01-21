@@ -1,14 +1,15 @@
 {
   "users": {
     "maxNodes": 1,
-    "maxModules": 15,
-    "maxSectors": 3,
+    "maxModules": 13,
+    "maxSectors": 4,
     "idle": 5,
     "passwordResetIdle": 15,
     "preferences": {
       "allianceReports": 1,
       "combatReports": 1,
-      "tradeReports": 1
+      "tradeReports": 1,
+      "extendedTooltips": 1
     },
     "speed": {
       "research": 1,
@@ -42,6 +43,14 @@
     "defensiveModuleDamage": true,
     "bonusLoot": true
   },
+  "message": [
+  	"all",
+    "message",
+    "outbox",
+    "alliance",
+    "attack",
+    "defense"
+  ],
   "queues": [
   	"research",
   	"build",
@@ -87,7 +96,8 @@
     },
     "archer": {
       "cavalry": 0.5,
-      "duelist": 0.5
+      "duelist": 0.5,
+      "spearman": 0.5
     },
     "cavalry": {
       "spearman": 0.5
@@ -158,5 +168,12 @@
       	"image": "trophies.png",
       	"color": "yellow"
     }
-  }
+  },
+  "spionage": {
+  	"resources": 10,
+  	"modules": 40,
+  	"research": 60,
+  	"unit": 90
+  },
+  "sabotage": {}
 }

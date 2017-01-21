@@ -179,6 +179,22 @@
       ]
     },
     {
+      "active": false,
+      "login": true,
+      "node": false,
+      "class": "left",
+      "name": "map",
+      "link": "grid",
+      "trigger": "",
+      "images": [
+      	 {
+          "level": 0,
+          "image": "map.png",
+          "class": ""
+        }
+      ]
+    },
+    {
       "active": true,
       "login": true,
       "node": false,

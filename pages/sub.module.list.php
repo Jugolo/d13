@@ -24,11 +24,22 @@ function sub_module_list($node, $message)
 	$tvars['tvar_global_message'] = $message;
 	$tvars['tvar_nodeFaction'] = $node->data['faction'];
 	
+	
+	
+	
 	if (isset($node->modules[$_GET['slotId']])) {
 		foreach($d13->getModule($node->data['faction']) as $module) {
-			$tmp_module = NULL;
-			$tmp_module = d13_module_factory::create($module['id'], $_GET['slotId'], $node);
-			$tvars['tvar_sub_list'].= $d13->templateSubpage("sub.module.list", $tmp_module->getTemplateVariables());
+		
+		
+			$result = $d13->dbQuery('select count(*) as count from modules where node="' . $node->data['id'] . '" and module="' . $module['id'] . '"');
+			$row = $d13->dbFetch($result);
+			if ($row['count'] < $d13->getModule($node->data['faction'], $module['id'], 'maxInstances')) {
+		
+				$tmp_module = NULL;
+				$tmp_module = d13_module_factory::create($module['id'], $_GET['slotId'], $node);
+				$tvars['tvar_sub_list'].= $d13->templateSubpage("sub.module.list", $tmp_module->getTemplateVariables());
+			
+			}
 		}
 	}
 

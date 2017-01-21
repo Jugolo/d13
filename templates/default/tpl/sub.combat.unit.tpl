@@ -14,7 +14,10 @@
     	</div>
     	
     	<div class="card-footer no-border">
-			<div><span class="badge" id="sliderRange{{tvar_unitId}}">0</span><input type="range" name="attackerGroups[]" id="quantity{{tvar_unitId}}" min="0" max="{{tvar_unitAmount}}" value="0" step="1" onMouseDown="mySwiper.lockSwipes()" onMouseUp="mySwiper.unlockSwipes()" onInput="armyValue('sliderRange{{tvar_unitId}}', this.value)" onInput="armyValue('sliderRange{{tvar_unitId}}', this.value)" onChange="armyValue('sliderRange{{tvar_unitId}}', this.value, {{tvar_unitId}})"></div>
+			<div>
+			<span class="badge" id="sliderRange{{tvar_unitId}}">00</span>
+			<input type="range" name="attackerGroups[]" id="quantity{{tvar_unitId}}" min="0" max="{{tvar_unitAmount}}" value="0" step="1" ondblclick="showMax('quantity{{tvar_unitId}}', 'sliderRange{{tvar_unitId}}')" onMouseDown="mySwiper.lockSwipes()" onMouseUp="mySwiper.unlockSwipes()" onInput="armyValue('sliderRange{{tvar_unitId}}', this.value)" onInput="armyValue('sliderRange{{tvar_unitId}}', this.value)" onChange="armyValue('sliderRange{{tvar_unitId}}', this.value, {{tvar_unitId}})">
+			</div>
 			
 			<input type="hidden" name="attackerGroupUnitIds[]" value="{{tvar_unitId}}">
 			<input type="hidden" id="attackerAmount_sliderRange{{tvar_unitId}}" name="unitAmount[]" value="0">
@@ -28,6 +31,7 @@
 			<input type="hidden" name="unitArmor[]" value="{{tvar_unitArmor}}">
 			<input type="hidden" name="unitHP[]" value="{{tvar_unitHP}}">
 			<input type="hidden" name="unitCritical[]" value="{{tvar_unitCritical}}">
+			<input type="hidden" name="unitCapacity[]" value="{{tvar_unitCapacity}}">
 
 			<input type="hidden" name="armyModDamage[]" value="{{tvar_armyModDamage}}">
 			<input type="hidden" name="armyModSpeed[]" value="{{tvar_armyModSpeed}}">
@@ -35,6 +39,7 @@
 			<input type="hidden" name="armyModArmor[]" value="{{tvar_armyModArmor}}">
 			<input type="hidden" name="armyModHP[]" value="{{tvar_armyModhp}}">
 			<input type="hidden" name="armyModCritical[]" value="{{tvar_armyModCritical}}">
+			<input type="hidden" name="armyModCapacity[]" value="{{tvar_armyModCapacity}}">
 			
     	</div>
 	</div> 

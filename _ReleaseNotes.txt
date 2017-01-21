@@ -17,14 +17,35 @@ CREDITS
 RELEASE CANDIDATE 0
 ------------------------------------------------------------------------------------------
 
-V014	--- UPCOMING UPDATE ---
+V016	--- UPCOMING UPDATE ---
 
-		* Expands existing combat system:
+		* Map System
+
+V015	--- UPCOMING UPDATE ---
+		
+		* Finalize existing combat system:
 		
 			- Scout Reports
 			- Scout Checks
-			
+			- Sabotage Reports
+			- Sabotage Checks
+			- Frontend Checking of Army Integrity
 
+V014	* Added extended tooltip system
+		* Tweaked a few CSS styles
+		* Fixed a few minor bugs
+		* Minor GUI adjustments
+		* Minor Performance issue
+		* Messages now filterable in groups
+		* Sliders now disabled if you cannot craft/train anymore
+		* Double-click Slider to set it to the maximum amount
+		* Researches are removed from the build list if you have researched max level.
+		* Modules are removed from the build list if you have built max instances.
+		* Lots of combat system bug fixes
+		
+		* Preperations for next update
+		* Preperations for refactoring
+	
 V013 	* Basic Combat System implemented, this covers:
 
 		* Different types of attacking an enemy:

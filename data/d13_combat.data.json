@@ -20,7 +20,7 @@
   	},
     "conquer": {
     	"id": 1,
-    	"active": true,
+    	"active": false,
     	"level": 1,
   		"movementTypes": [
   		0,1,2
@@ -58,7 +58,7 @@
     },
 	"raze": {
 		"id": 3,
-		"active": true,
+		"active": false,
 		"level": 1,
   		"movementTypes": [
   		0,1,2

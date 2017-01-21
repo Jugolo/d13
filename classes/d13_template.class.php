@@ -57,43 +57,71 @@ class d13_tpl
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// tpl_inject
-	// @ Is used to manually inject markup at the bottom of the current page (like popups)
-	// 3.0
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function inject($content)
-	{
-		if (!empty($content)) {
-			if (!isset($GLOBALS["cache"])) {
-				$GLOBALS["cache"] = array();
-			}
-
-			$GLOBALS["cache"][] = $content;
-		}
-	}
-
-	// ----------------------------------------------------------------------------------------
 	// tpl_inject_get
 	// @ Returns the injected markup and clears the temporary page cache
 	// 3.0
 	// ----------------------------------------------------------------------------------------
-
 	private
-	function inject_get()
+	
+	function inject_get($cache_num=0)
 	{
 		$html = "";
-		if (isset($GLOBALS["cache"])) {
-			foreach($GLOBALS["cache"] as $cache) {
+		$cache_num = "cache-".$cache_num;
+		if (isset($GLOBALS[$cache_num])) {
+			foreach($GLOBALS[$cache_num] as $cache) {
 				$html.= $cache;
 				$html.= "\n";
 			}
+			unset($GLOBALS[$cache_num]);
 		}
-
-		unset($GLOBALS["cache"]);
 		return $html;
+	}
+	
+	
+	// ----------------------------------------------------------------------------------------
+	// tpl_inject_get_all
+	// @ Returns the injected markup and clears the temporary page cache
+	// 3.0
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function inject_get_all()
+	{
+		$html = "";
+		for ($i = 0; $i < 10; $i++) {
+			$cache_num = "cache-".$i;
+			if (isset($GLOBALS[$cache_num])) {
+				foreach($GLOBALS[$cache_num] as $cache) {
+					$html.= $cache;
+					$html.= "\n";
+				}
+			}
+			unset($GLOBALS[$cache_num]);
+		}
+		return $html;
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// tpl_inject
+	// @ Is used to manually inject markup at the bottom of the current page (like popups)
+	// 3.0
+	// ----------------------------------------------------------------------------------------
+	public
+
+	function inject($content, $cache_num=0)
+	{
+		if (!empty($content)) {
+			$cache = "cache-".$cache_num;
+			if (!isset($GLOBALS[$cache])) {
+				$GLOBALS[$cache] = array();
+			}
+			if (!in_array($content, $GLOBALS[$cache])) {
+				$GLOBALS[$cache][] = $content;
+				if ($cache_num > 0) {
+					$GLOBALS[$cache][] = $this->inject_get($cache_num);
+				}
+			}
+		}
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -101,8 +129,8 @@ class d13_tpl
 	// @
 	// 3.0
 	// ----------------------------------------------------------------------------------------
-
 	private
+	
 	function merge_ui_vars()
 	{
 		global $d13;
@@ -119,12 +147,13 @@ class d13_tpl
 	// @ Iterates and replaces all global template variables and components
 	// 3.0
 	// ----------------------------------------------------------------------------------------
-
 	private
-	function global_vars($vars = "")
+	
+	function global_vars($vars = "", $cache_num=0)
 	{
 		global $d13;
 		$tvars = array();
+		
 		$tvars["tvar_global_pagetitle"] = CONST_GAME_TITLE;
 		$tvars["tvar_global_directory"] = CONST_DIRECTORY;
 		$tvars["tvar_global_basepath"] = CONST_BASE_PATH;
@@ -148,6 +177,11 @@ class d13_tpl
 		else {
 			$tvars["tpl_pvar_message"] = "";
 		}
+		
+		// - - - Setup possible sub-cache
+		if ($cache_num > 0) {
+		$tvars["tpl_page_cache"]		= $this->inject_get($cache_num);
+		}
 
 		return $tvars;
 	}
@@ -157,31 +191,23 @@ class d13_tpl
 	// @ Renders a page according to the given template and variables or returns it from Cache
 	// 3.0
 	// ----------------------------------------------------------------------------------------
-
 	public
 	
-	function render($template, $vars="", $cache=TRUE)
+	function render($template, $vars="", $cache=TRUE, $cache_num=0)
 	{
 	
 		$tvars = array();
 		$tvars = array_merge($tvars, $vars);
-		$tvars = array_merge($tvars, $this->global_vars($vars));
+		$tvars = array_merge($tvars, $this->global_vars($vars, $cache_num));
 		$tvars = array_merge($tvars, $this->merge_ui_vars());
-
-		$id = 'n_';
-		#if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
-		#		$id = $_SESSION[CONST_PREFIX . 'User']['id'] . "_";
-		#	}
 		
-		$name = 'tpl_' . $id . md5(serialize($vars)) . ".".$template.".tpl";
-	
+		$name = 'tpl_' . md5(serialize($vars)) . ".".$template.".tpl";
 		$cacheFile = CONST_INCLUDE_PATH . 'cache/templates' . DIRECTORY_SEPARATOR . $name;
 
 		if (!empty($tvars) && CONST_FLAG_CACHE) {
 			if (is_file($cacheFile)) {
 				return file_get_contents($cacheFile);
 			}
-			
 		}
 
 		$cacheFileData = $this->parse($this->get($template) , $tvars);
@@ -270,7 +296,7 @@ class d13_tpl
 		$tvars["tpl_page_meta_header"] 	= $this->parse($this->get("meta.header") , $tvars);
 		$tvars["tpl_page_meta_footer"] 	= $this->parse($this->get("meta.footer") , $tvars);
 		$tvars["tpl_page_content"] 		= $this->render($template, $tvars);
-		$tvars["tpl_page_cache"]		= $this->inject_get();
+		$tvars["tpl_page_cache"]		= $this->inject_get_all();
 		
 		echo $this->render("page", $tvars);
 	}

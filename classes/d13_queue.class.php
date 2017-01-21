@@ -172,7 +172,7 @@ class d13_queue
 				} else {
 					$status = $otherNode->get('id', $item['sender']);
 				}
-				if ($status == 'ok') {
+				if ($status == 'done') {
 					if (!$item['stage']) {
 						if ($item['sender'] == $this->node->data['id']) {
 							$action = $d13->getLangUI('outgoing') . " " . $d13->getLangUI("army") . " " . $d13->getLangUI("to") . ": " . $otherNode->data['name'];

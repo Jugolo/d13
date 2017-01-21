@@ -1,6 +1,6 @@
 <div class="swiper-slide">
 	
-	<div class="card no-border large-card">
+	<div class="card no-border large-card card-shadow">
 		<div class="card-header no-border">
 			<div class="d13-heading">{{tvar_techName}}</div>
 			<a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
@@ -9,14 +9,24 @@
 	<div class="card-content">
     <div class="card-content-inner">
 	
-	<div class="row">
+			<div class="row">
     	
 			<div class="col-25">
 				<img src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/technologies/{{tvar_nodeFaction}}/{{tvar_image}}" width="80">
-				<p class="d13-italic">{{tvar_techDescription}}</p>
 			</div>
 			
 			<div class="col-75">
+				<p class="d13-italic">
+					{{tvar_techDescription}}
+				</p>
+			</div>
+				
+				
+			</div>
+							
+			<div class="row">
+			
+			<div class="col-100">
 				
 				<div class="list-block no-hairlines-between">
 					<ul>

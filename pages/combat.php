@@ -20,7 +20,6 @@ $d13->dbQuery('start transaction');
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId'])) {
 	$node = new node();
 	if ($node->get('id', $_GET['nodeId']) == 'done') {
-		#$flags = $d13->flags->get('name');
 		$node->checkAll(time());
 		
 		switch ($_GET['action']) {
@@ -63,6 +62,8 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 							}
 
 							if ($pass) {
+							
+								$gotNoArmy = true;
 								$gotIllegal = false;
 								$gotLeader = false;
 								$gotLimits = array();
@@ -82,6 +83,12 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 										'unitId' => $unitId,
 										'quantity' => $_POST['attackerGroups'][$key]
 									);
+									
+									if ($_POST['attackerGroups'][$key] > 0) {
+										$gotNoArmy = false;
+									}
+									
+									
 									if (!$d13->getUnit($node->data['faction'], $unitId, 'speed')) {
 										$gotIllegal = true;
 									}
@@ -99,7 +106,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 								
 								$pass = true;
 								
-								if ($gotIllegal) {
+								if ($gotIllegal || $gotNoArmy) {
 									$pass = false;
 								}
 								
@@ -235,7 +242,8 @@ if (isset($node)) {
 				$tvars['tvar_unithp'] 		= $tmp_unit->data['hp'] + $tmp_unit->data['upgrade_hp'];
 				$tvars['tvar_unitarmor'] 	= $tmp_unit->data['armor'] + $tmp_unit->data['upgrade_armor'];
 				$tvars['tvar_unitcritical'] = $tmp_unit->data['critical'] + $tmp_unit->data['upgrade_critical'];
-			
+				$tvars['tvar_unitcapacity'] = $tmp_unit->data['capacity'] + $tmp_unit->data['upgrade_capacity'];
+				
 				foreach ($tmp_unit->data['attackModifier'] as $modifier) {
 					$tvars['tvar_unit'.$modifier['stat']] += floor($d13->getUnit($node->data['faction'], $id, $modifier['stat']) * $modifier['value']);
 				}
@@ -288,6 +296,12 @@ if (isset($node)) {
 
 	// - - - - Combat Cost & Fuel
 	
+	
+	
+	
+	
+	
+	
 	// - - - - Is a leader required?
 	$tvars['tvar_leaderRequired'] = '';
 	$tvars['tvar_leader'] = 0;
@@ -307,7 +321,7 @@ if (isset($node)) {
 	foreach ($cost as $res) {
 	
 		if (isset($res['resource'])) {
-			$id = "";
+			$id = "r".$res['resource'];
 			$resource = $res['resource'];
 			$cost =  $res['value'];
 			
@@ -321,7 +335,7 @@ if (isset($node)) {
 			$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'image') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '"><span '.$id.'>'.$cost . '</span></span>';
 	
 		} else if (isset($res['component'])) {
-			$id = "";
+			$id = "c".$res['component'];
 			$resource = $res['component'];
 			$cost =  $res['value'];
 			

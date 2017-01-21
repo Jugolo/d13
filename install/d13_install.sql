@@ -232,6 +232,7 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `id` int(10) unsigned NOT NULL,
   `sender` int(10) unsigned NOT NULL,
   `recipient` int(10) unsigned NOT NULL,
+  `type` varchar(16) NOT NULL DEFAULT "message",
   `subject` varchar(64) COLLATE utf8_bin NOT NULL,
   `body` text COLLATE utf8_bin NOT NULL,
   `sent` datetime NOT NULL,

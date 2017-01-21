@@ -1,8 +1,8 @@
 <div class="swiper-slide">
-	<div class="card no-border large-card">
+	<div class="card no-border large-card card-shadow">
 		<div class="card-header no-border">
 			<div class="d13-heading">
-				{{tvar_name}} [{{tvar_Class}}] ({{tvar_unitValue}})
+				{{tvar_name}}
 			</div><a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 		</div>
 		<div class="card-content">
@@ -15,17 +15,26 @@
 					</div>
 					
 					<div class="col-75">
+						<p class="d13-italic">
+							{{tvar_unitDescription}}
+						</p>
+					</div>
+					
+				</div>
+				
+				<div class="row">
+					<div class="col-100">
 						<div class="list-block no-hairlines-between">
 							<ul>
 								
 								<li class="item-content">
-									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_upkeepResource}}.png" title="{{tvar_upkeepResource}}"></div>
 									<div class="item-inner">
 										<div class="item-title">
-											{{tvar_ui_duration}}:
+											{{tvar_ui_stationed}}:
 										</div>
 										<div class="item-after">
-											<span class="badge">{{tvar_duration}}</span>
+											<span class="badge">{{tvar_unitValue}}  / {{tvar_unitMaxValue}}</span>
 										</div>
 									</div>
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_upkeepResource}}.png" title="{{tvar_upkeepResource}}"></div>
@@ -37,8 +46,28 @@
 											<span class="badge">{{tvar_upkeep}}</span>
 										</div>
 									</div>
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
+									<div class="item-inner">
+										<div class="item-title">
+											{{tvar_ui_duration}}:
+										</div>
+										<div class="item-after">
+											<span class="badge">{{tvar_duration}}</span>
+										</div>
+									</div>
 								</li>
+								
 								<li class="item-content">
+									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat.png"></div>
+									<div class="item-inner">
+										<div class="item-title">
+											{{tvar_ui_class}}:
+										</div>
+										<div class="item-after">
+											<span class="badge">{{tvar_Class}}</span>
+										</div>
+									</div>
+									
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_hp.png"></div>
 									<div class="item-inner">
 										<div class="item-title">
@@ -58,6 +87,7 @@
 										</div>
 									</div>
 								</li>
+								
 								<li class="item-content">
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_armor.png"></div>
 									<div class="item-inner">
@@ -77,8 +107,6 @@
 											<span class="badge">{{tvar_unitSpeed}} {{tvar_unitSpeedPlus}}</span>
 										</div>
 									</div>
-								</li>
-								<li class="item-content">
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_critical.png"></div>
 									<div class="item-inner">
 										<div class="item-title">
@@ -88,6 +116,10 @@
 											<span class="badge">{{tvar_unitCritical}} {{tvar_unitCriticalPlus}}</span>
 										</div>
 									</div>
+									
+								</li>
+								
+								<li class="item-content">
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_capacity.png"></div>
 									<div class="item-inner">
 										<div class="item-title">
@@ -97,8 +129,6 @@
 											<span class="badge">{{tvar_unitCapacity}} {{tvar_unitCapacityPlus}}</span>
 										</div>
 									</div>
-								</li>
-								<li class="item-content">
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_vision.png"></div>
 									<div class="item-inner">
 										<div class="item-title">
@@ -125,9 +155,11 @@
 					
 				</div>
 				
-				<hr>
 				
-				<div class="list-block no-hairlines-between">
+				<div class="row">
+					<div class="col-100">
+				
+						<div class="list-block no-hairlines-between">
 					<ul>
 					
 						<li class="item-content">
@@ -210,10 +242,16 @@
 					</ul>
 				</div>
 				
+					</div>
+				</div>
+				
+				
 			</div>
 		</div>
+		
 		<div class="card-footer no-border">
-			<form action="?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}" class="pure-form" id="unitForm_{{tvar_uid}}" method="post" name="unitForm_{{tvar_uid}}">
+			
+			<form style="display: inline;" action="?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}" class="pure-form" id="unitForm_{{tvar_uid}}" method="post" name="unitForm_{{tvar_uid}}">
 				<select class="pure-input" onchange="change_maximum('input{{tvar_sliderID}}', {{tvar_unitValue}}, 'trainForm', this.value)">
 					<option value="index.php?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}">
 						{{tvar_ui_train}}
@@ -221,9 +259,14 @@
 					<option value="index.php?p=module&action=removeUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}">
 						{{tvar_ui_remove}}
 					</option>
-				</select> <span class="badge" id="sliderRangeTrain{{tvar_sliderID}}">{{tvar_sliderValue}}</span><input id="input{{tvar_sliderID}}" max="{{tvar_sliderMax}}" min="{{tvar_sliderMin}}" name="quantity" onchange="showValue('sliderRangeTrain{{tvar_sliderID}}', this.value)" oninput="showValue('sliderRangeTrain{{tvar_sliderID}}', this.value)" onmousedown="mySwiper.lockSwipes()" onmouseup="mySwiper.unlockSwipes()" step="1" type="range" value="{{tvar_sliderValue}}"><input class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/submit.png" type="image" value="{{tvar_ui_set}}">
-			</form><br>
-			<br>
+				</select>
+				
+				<input type="image" class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/submit.png"  value="{{tvar_ui_set}}" {{tvar_disableData}}>
+				<input id="input{{tvar_sliderID}}" max="{{tvar_sliderMax}}" min="{{tvar_sliderMin}}" name="quantity" ondblclick="showMax('input{{tvar_sliderID}}', 'sliderRangeTrain{{tvar_sliderID}}')" onchange="showValue('sliderRangeTrain{{tvar_sliderID}}', this.value)" oninput="showValue('sliderRangeTrain{{tvar_sliderID}}', this.value)" onmousedown="mySwiper.lockSwipes()" onmouseup="mySwiper.unlockSwipes()" step="1" type="range" value="{{tvar_sliderValue}}" {{tvar_disableData}}>
+				<span class="badge" id="sliderRangeTrain{{tvar_sliderID}}">{{tvar_sliderValue}}</span>
+				
+			</form>
+			
 		</div>
 	</div>
 </div>

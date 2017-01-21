@@ -89,8 +89,13 @@ class d13_unit
 		
 		$costLimit 		= $this->node->checkCostMax($this->data['cost'], 'train');
 		$reqLimit 		= $this->node->checkRequirementsMax($this->data['requirements']);
-		$upkeepLimit 	= floor($this->node->resources[$d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeepResource') ]['value'] / $d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeep'));
-		$unitLimit 		= abs($this->node->units[$this->data['unitId']]['value'] - $d13->getGeneral('types', $this->data['type'], 'limit'));
+		$upkeepLimit 	= floor($this->node->resources[$d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeepResource')]['value'] / $d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeep'));
+		if ($this->node->units[$this->data['unitId']]['value'] < $d13->getGeneral('types', $this->data['type'], 'limit')) {
+		$unitLimit 		= $d13->getGeneral('types', $this->data['type'], 'limit') - $this->node->units[$this->data['unitId']]['value'];
+		} else {
+		$unitLimit		= 0;
+		}
+		
 		$limitData 		= min($costLimit, $reqLimit, $upkeepLimit, $unitLimit);
 
 		return $limitData;

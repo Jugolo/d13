@@ -1,7 +1,7 @@
 <div class="swiper-slide">
 
 	
-	<div class="card no-border large-card">
+	<div class="card no-border large-card card-shadow">
 
 	  <div class="card-header no-border">
 		<div class="d13-heading">{{tvar_name}}</div>
@@ -14,10 +14,9 @@
 			<div class="row">
 			
 				<div class="col-40">
-					<div class="d13-module" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
+					<div class="d13-module  {{tvar_moduleDescription}}" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
 					<img class="d13-module-inner" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_trueimage}}">
 					</div>
-					<p class="d13-italic">{{tvar_description}}</p>
 					{{tvar_linkData}}
 				</div>
 

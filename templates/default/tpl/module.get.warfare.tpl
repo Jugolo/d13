@@ -17,10 +17,9 @@
 		<div class="row">
 	
 			<div class="col-40">
-				<div class="d13-module" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
+				<div class="d13-module-detail {{tvar_moduleDescription}}" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
 				<img class="d13-module-inner" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_image}}">
 				</div>
-				<p class="d13-italic">{{tvar_description}}</p>
 				{{tvar_linkData}}
 			</div>
 			
@@ -41,13 +40,7 @@
 					</div>
 				</li>	
 				
-				<li class="item-content">
-						<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/return.png"></div>
-						<div class="item-inner">
-						<div class="item-title">{{tvar_ui_active}} {{tvar_ui_task}}:</div>
-						</div>
-				</li>
-					
+
 				{{tvar_queue}}
 
 				</ul>

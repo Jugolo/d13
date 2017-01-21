@@ -473,7 +473,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		if (isset($alliance->data['id'])) {
 			if ($node->checkOptions('allianceSet')) {
 				$costData = '';
-				foreach($d13->getFactions($node->data['faction'], 'costs', 'alliance') as $key => $cost) {
+				foreach($d13->getFaction($node->data['faction'], 'costs', 'alliance') as $key => $cost) {
 					$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></div>';
 				}
 
@@ -494,7 +494,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		if (isset($nodeList)) {
 			if ($node->checkOptions('allianceAdd')) {
 				$costData = '';
-				foreach($d13->getFactions($node->data['faction'], 'costs', 'alliance') as $key => $cost) {
+				foreach($d13->getFaction($node->data['faction'], 'costs', 'alliance') as $key => $cost) {
 					$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></div>';
 				}
 
