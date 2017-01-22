@@ -63,7 +63,7 @@
   "factors": {
     "storage": 1,
     "production": 1,
-    "movement": 10,
+    "movement": 9,
     "critical": 2,
     "experience": 10
   },

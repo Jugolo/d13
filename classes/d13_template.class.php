@@ -279,8 +279,10 @@ class d13_tpl
 		$tvars["tpl_pvar_subnavbar"] = "";
 		$tvars["tpl_page_subbar"] = "";
 		if (!empty($node)) {
-			require_once(CONST_INCLUDE_PATH . "pages/sub.resources.php");
-			$subnavbar = sub_resources($node);
+			
+			$resBar = new d13_resBarController($node);
+			$tvars["tpl_page_subbar"] = $resBar->getTemplate();
+			
 			if (!empty($subnavbar)) {
 				$tvars["tpl_pvar_subnavbar"] = "with-subnavbar";
 			}
@@ -289,8 +291,6 @@ class d13_tpl
 			$tvars["tpl_page_rightPanel"] = $node->queues->getQueuesList();
 			
 		}
-
-		$tvars["tpl_page_subbar"] = $subnavbar;
 
 		// - - - - - Setup the rest
 		$tvars["tpl_page_meta_header"] 	= $this->parse($this->get("meta.header") , $tvars);

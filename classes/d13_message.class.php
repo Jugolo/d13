@@ -34,6 +34,7 @@ class message
 		global $d13;
 		$result = $d13->dbQuery('select * from messages where id="' . $id . '"');
 		$this->data = $d13->dbFetch($result);
+		$this->data['body'] = $this->textDecode($this->data['body']);
 		if (isset($this->data['id'])) $status = 'done';
 		else $status = 'noMessage';
 		return $status;
@@ -74,6 +75,7 @@ class message
 			$sender = new user();
 			if ($sender->get('name', $this->data['sender']) == 'done') {
 				if (!$sender->isBlocked($recipient->data['id'])) {
+					$this->data['body'] = $this->textEncode($this->data['body']);
 					$this->data['id'] = misc::newId('messages');
 					$sent = strftime('%Y-%m-%d %H:%M:%S', time());
 					$d13->dbQuery('insert into messages (id, sender, recipient, subject, body, sent, viewed, type) values ("' . $this->data['id'] . '", "' . $sender->data['id'] . '", "' . $recipient->data['id'] . '", "' . $this->data['subject'] . '", "' . $this->data['body'] . '", "' . $sent . '", "' . $this->data['viewed'] . '", "' . $this->data['type'] . '")');
@@ -197,6 +199,46 @@ class message
 		$row = $d13->dbFetch($result);
 		return $row['count'];
 	}
+	
+	
+	// ----------------------------------------------------------------------------------------
+	//
+	//
+	// ----------------------------------------------------------------------------------------
+
+	private
+	
+	function textEncode($text)
+	{	
+		global $d13;
+		
+		$text = htmlentities($text);
+		$text = $d13->dbRealEscapeString($text);
+		
+		
+		return $text;
+		
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	//
+	//
+	// ----------------------------------------------------------------------------------------
+
+	private
+	
+	function textDecode($text)
+	{
+	
+		global $d13;
+		
+		$text = html_entity_decode($text);
+		
+		return $text;
+	
+	}
+	
+	
 }
 
 // =====================================================================================EOF

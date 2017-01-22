@@ -762,8 +762,12 @@
         "description": "High damage melee weapon."
       },
       {
-        "name": "Attack Flag",
+        "name": "Red Flag",
         "description": "Required to use RAID attack on an enemy (test-item)."
+      },
+      {
+        "name": "Black Flag",
+        "description": "Required to use CONQUER or RAZE attack on an enemy (test-item)."
       }
     ],
     [

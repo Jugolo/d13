@@ -296,6 +296,39 @@
       "upgrades": [
         
       ]
+    },
+    {
+      "id": 9,
+      "image": "9.png",
+      "active": true,
+      "priority": -1,
+      "type": "component",
+      "duration": 1,
+      "storageResource": 4,
+      "storage": 2,
+      "salvage": 0.5,
+      "removeDuration": 1,
+	  "gainExperience": true,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 10
+        },
+        {
+          "resource": 1,
+          "value": 10
+        },
+        {
+          "resource": 2,
+          "value": 10
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
     }
   ]
 ]

@@ -294,14 +294,6 @@ if (isset($node)) {
 		}
 	}
 
-	// - - - - Combat Cost & Fuel
-	
-	
-	
-	
-	
-	
-	
 	// - - - - Is a leader required?
 	$tvars['tvar_leaderRequired'] = '';
 	$tvars['tvar_leader'] = 0;
@@ -315,38 +307,52 @@ if (isset($node)) {
 		$tvars['tvar_wipeoutRequired'] = $d13->templateGet("sub.combat.wipeout");
 	}
 						
-
+	// - - - - Combat Cost & Fuel
 	$cost = $d13->getFaction($node->data['faction'], 'costs', $_GET['type']);
 	$tvars['tvar_costData'] = '';
+	$tvars['tvar_resources'] = '';
+	
 	foreach ($cost as $res) {
 	
 		if (isset($res['resource'])) {
-			$id = "r".$res['resource'];
+			
+			$idv = "";
+			$idr = "";
+			#$idv = "rv".$res['resource'];						// available resource value
+			#$idr = "rr".$res['resource'];						// required resource value
 			$resource = $res['resource'];
 			$cost =  $res['value'];
 			
 			if (isset($res['isFuel']) && $res['isFuel']) {
-				$id = "id='totalFuel'";
+				$idv = "availableFuel";
+				$idr = "totalFuel";
 				$cost = 0;
 				$tvars['tvar_fuelFactor'] = floor($res['value']);
 				$tvars['tvar_fuelResource'] = floor($node->resources[$res['resource']]['value']);
 			}
 			
-			$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'image') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '"><span '.$id.'>'.$cost . '</span></span>';
+			$tvars['tvar_resources'] .= '<input type="hidden" name="availableRes[]" id="'.$idv.'" value="'.floor($node->resources[$resource]['value']).'">';
+			$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'image') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '"><span name="totalRes[]" id="'.$idr.'">'.$cost . '</span></span>';
 	
 		} else if (isset($res['component'])) {
-			$id = "c".$res['component'];
+			
+			$idv = "";
+			$idr = "";
+			#$idv = "cv".$res['component'];						// available component value
+			#$idr = "cr".$res['component'];						// required component value
 			$resource = $res['component'];
 			$cost =  $res['value'];
 			
 			if (isset($res['isFuel']) && $res['isFuel']) {
-				$id = "id='totalFuel'";
+				$idv = "availableFuel";
+				$idr = "totalFuel";
 				$cost = 0;
 				$tvars['tvar_fuelFactor'] = floor($res['value']);
 				$tvars['tvar_fuelResource'] = floor($node->components[$res['resource']]['value']);
 			}
 			
-			$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $node->data['faction'] . "/" . $d13->getComponent($node->data['faction'], $resource, 'image') . '" title="' . $d13->getLangGL('components', $resource, 'name') . '"><span '.$id.'>'.$cost . '</span></span>';
+			$tvars['tvar_resources'] .= '<input type="hidden" name="availableRes[]" id="'.$idv.'" value="'.floor($node->components[$resource]['value']).'">';
+			$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $node->data['faction'] . "/" . $d13->getComponent($node->data['faction'], $resource, 'image') . '" title="' . $d13->getLangGL('components', $resource, 'name') . '"><span name="totalRes[]" id="'.$idr.'">'.$cost . '</span></span>';
 	
 		}
 		

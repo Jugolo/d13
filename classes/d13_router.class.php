@@ -56,11 +56,15 @@ class d13_router
 				'x',
 				'y',
 				'faction'
-			))) {
+				))) {
 				$_POST[$key] = $this->clean($value, 'numeric');
 			}
 			else {
+				if (!in_array($key, array(
+				'msgbody'
+				))) {
 				$_POST[$key] = $this->clean($value);
+				}
 			}
 		}
 

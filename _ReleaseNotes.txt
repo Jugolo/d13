@@ -31,7 +31,8 @@ V015	--- UPCOMING UPDATE ---
 			- Sabotage Checks
 			- Frontend Checking of Army Integrity
 
-V014	* Added extended tooltip system
+V014	* Added CKEditor for messages
+		* Added extended tooltip system
 		* Tweaked a few CSS styles
 		* Fixed a few minor bugs
 		* Minor GUI adjustments

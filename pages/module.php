@@ -246,21 +246,21 @@ else {
 // ----------------------------------------------------------------------------------------
 
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId'], $_GET['slotId'])) {
+
 	switch ($_GET['action']) {
 
-		// - - - -
-
+	// - - - -
 	case 'get':
 		$the_module = d13_module_factory::create($node->modules[$_GET['slotId']]['module'], $_GET['slotId'], $node);
 		$d13->templateRender($the_module->getTemplate() , $the_module->getTemplateVariables());
 		break;
 
-		// - - - - -
-
+	// - - - - -
 	case 'list':
-		include ("sub.module.list.php");
-		sub_module_list($node, $message);
+		$moduleList = new d13_moduleListController($node, $_GET['slotId']);
+		$d13->templateRender($moduleList->getTemplate() , $moduleList->getTemplateVariables());
 		break;
+		
 	}
 }
 

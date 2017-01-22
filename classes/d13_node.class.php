@@ -1919,8 +1919,7 @@ class node
 
 						$battle = new d13_combat();
 						$data = $battle->doCombat($data);
-						
-						$status = $battle->doAdjustLeague($data);
+						$data = $battle->doAdjustLeague($data);
 
 						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - COMBAT AFTERMATH
 
@@ -2047,7 +2046,7 @@ class node
 								$msg = new message();
 								$msg->data['sender'] = $attackerUser->data['name'];
 								$msg->data['recipient'] = $attackerUser->data['name'];
-								$msg->data['subject'] = $d13->getLangUI('out') . ' ' . $d13->getLangUI($combat['type']) . ' ' . $d13->getLangUI("report") . ' vs ' . $$nodes['defender']->data['name'];
+								$msg->data['subject'] = $d13->getLangUI($combat['type']) . ' ' . $d13->getLangUI("report") . ' vs ' . $$nodes['defender']->data['name'];
 								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type']);
 								$msg->data['type'] = 'attack';
 								$msg->data['viewed'] = 0;
@@ -2064,7 +2063,7 @@ class node
 								$msg = new message();
 								$msg->data['sender'] = $defenderUser->data['name'];
 								$msg->data['recipient'] = $defenderUser->data['name'];
-								$msg->data['subject'] = $d13->getLangUI('in') . ' ' . $d13->getLangUI($combat['type']) . ' ' . $d13->getLangUI("report") . ' vs ' . $$nodes['attacker']->data['name'];
+								$msg->data['subject'] = $d13->getLangUI($combat['type']) . ' ' . $d13->getLangUI("report") . ' vs ' . $$nodes['attacker']->data['name'];
 								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type'], true);
 								$msg->data['type'] = 'defense';
 								$msg->data['viewed'] = 0;

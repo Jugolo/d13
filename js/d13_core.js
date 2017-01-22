@@ -30,34 +30,59 @@ function change_maximum(id, value, form, formvalue) {
 function armyCheck()
 {
 
-	var armyCheck 		= false;
-	var leaderRequired  = 0;
+	var armyDisabled	= false;
 	var totalAmount 	= 0;
+	var uniqueAmount	= {};
+	
+	var leaderRequired 	= document.getElementById('leaderRequired');
 	
 	var unitAmount 		= document.getElementsByName('unitAmount[]');
 	var unitType		= document.getElementsByName('unitType[]');
 	var unitUnique		= document.getElementsByName('unitUnique[]');
+	var availableRes	= document.getElementsByName('availableRes[]');
+	var totalRes		= document.getElementsByName('totalRes[]');
 	
-	leaderRequired = document.getElementsByName('leaderRequired');
+	for (key=0; key < unitAmount.length; key++)  {	
 	
-	for(key=0; key < unitAmount.length; key++)  {
-					
-		if (leaderRequired > 0) {
-			if (unitType[key].value != "leader") {
-				armyCheck = true;
+		if (unitUnique[key].value > 0) {
+			index = unitType[key].value;
+			if (uniqueAmount[index] === undefined) {
+				uniqueAmount[index] = parseInt(unitAmount[key].value);
+			} else {
+				uniqueAmount[index] += parseInt(unitAmount[key].value);
 			}
 		}
-			
+		
+		if (leaderRequired.value > 0) {
+			if (unitType[key].value != "leader") {
+				armyDisabled = true;
+			}
+		}
 		totalAmount += (unitAmount[key].value);
+	}
+	
+	if (totalAmount <= 0) {
+		armyDisabled = true;
+	}
+	
+	for (key=0; key < unitAmount.length; key++)  {	
+	
+		if (unitUnique[key].value > 0) {
+			index = unitType[key].value;
+			if (uniqueAmount[index] > unitUnique[key].value) {
+				armyDisabled = true;
+			}
+		}
 		
 	}
 	
-	
-	if (totalAmount <= 0) {
-		armyCheck = true;
+	for (key=0; key < availableRes.length; key++)  {	
+		if (parseInt(availableRes[key].value) < parseInt(totalRes[key].innerHTML)) {
+			armyDisabled = true;
+		}
 	}
-
-	document.getElementById('startCombat').disabled = armyCheck;
+	
+	document.getElementById('startCombat').disabled = armyDisabled;
 
 }
 
@@ -75,9 +100,9 @@ function armyValue(id, newValue)
 	var totalFuel 		= 0;
 	var grandAmount		= 0;
 	
+	var totalSpeed 		= 999999999;
 	var totalAmount 	= 0;
 	var totalDamage 	= 0;
-	var totalSpeed 		= 0;
 	var totalStealth 	= 0;
 	var totalArmor		= 0;
 	var totalHealth		= 0;
@@ -114,8 +139,11 @@ function armyValue(id, newValue)
 	for(key=0; key < unitAmount.length; key++)  {
 		totalAmount = parseInt(unitAmount[key].value);
 		
+		if (parseInt(unitAmount[key].value) > 0 && parseInt(unitSpeed[key].value) < totalSpeed) {
+		totalSpeed 		= parseInt(unitSpeed[key].value);
+		}
+		
     	totalDamage 	+= parseInt(unitDamage[key].value) * totalAmount;
-    	totalSpeed 		+= parseInt(unitSpeed[key].value) * totalAmount;
     	totalStealth 	+= parseInt(unitStealth[key].value) * totalAmount;
     	totalArmor 		+= parseInt(unitArmor[key].value) * totalAmount;
     	totalHealth 	+= parseInt(unitHealth[key].value) * totalAmount;
@@ -134,6 +162,10 @@ function armyValue(id, newValue)
     	
     	totalFuel += parseInt(unitFuel[key].value) * totalAmount * fuelFactor;
     	grandAmount += totalAmount;
+	}
+	
+	if (totalSpeed >= 999999999) {
+		totalSpeed = 0;
 	}
 	
 	document.getElementById('totalAmount').innerHTML 	= grandAmount;

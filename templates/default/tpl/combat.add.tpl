@@ -20,11 +20,11 @@
 					<div class="swiper-scrollbar"></div>
 				</div>
 				
-				<input type="hidden" name="leaderRequired" value="{{tvar_leader}}">
+				<input type="hidden" id="leaderRequired" value="{{tvar_leader}}">
 				<input type="hidden" name="type" value="{{tvar_type}}">
 				<input type="hidden" name="fuelFactor" id="fuelFactor" value="{{tvar_fuelfactor}}">
 				<input type="hidden" name="fuelResource" id="fuelResource" value="{{tvar_fuelResource}}">
-
+				{{tvar_resources}}
 		</div>
 		
 		<div class="card-footer no-border">

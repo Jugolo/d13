@@ -2,6 +2,8 @@
    var timerIds=new Array();
 </script>
 
+<script src="{{tvar_global_directory}}/plugins/ckeditor/ckeditor.js"></script>
+
 <div class="d13-node" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/nodeBackground.png);">
 <div class="card no-border large-card card-shadow">
 
@@ -18,10 +20,15 @@
 			<div class="content-block">
 				
 				<div>
-				<div><div class="cell"><input class="textbox" type="text" name="recipient" value="{{tvar_recipient}}" style="width: 200px;"></div><div class="cell">{{tvar_ui_recipient}}</div></div>
-				<div><div class="cell"><input class="textbox" type="text" name="subject" value="{{tvar_subject}}" style="width: 200px;"></div><div class="cell">{{tvar_ui_subject}}</div></div>
+				<div class="cell">{{tvar_ui_recipient}}: <input class="textbox" placeholder="{{tvar_ui_recipient}}" type="text" name="recipient" value="{{tvar_recipient}}" style="width: 200px;"></div><div class="cell"></div>
+				<div class="cell">{{tvar_ui_subject}}: <input class="textbox" placeholder="{{tvar_ui_subject}}" type="text" name="subject" value="{{tvar_subject}}" style="width: 200px;"></div><div class="cell"></div>
 				</div>
-				<div><textarea class="textbox" name="body" style="width: 400px; height: 200px;">{{tvar_body}}</textarea></div>
+				<div>
+				<textarea class="textbox" name="msgbody">{{tvar_body}}</textarea>
+				<script>
+                CKEDITOR.replace( 'msgbody' );
+            	</script>
+				</div>
 				
 				
 			</div>

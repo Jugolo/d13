@@ -44,6 +44,8 @@ include(CONST_INCLUDE_PATH."classes/d13_logger.class.php");
 
 //- - - - - INCLUDE CONTROLLERS (change later to autoload)
 include(CONST_INCLUDE_PATH."controller/d13_navbar.controller.php");
+include(CONST_INCLUDE_PATH."controller/d13_resbar.controller.php");
+include(CONST_INCLUDE_PATH."controller/d13_modulelist.controller.php");
 
 //- - - - - CREATE ENGINE
 $d13 = new d13();

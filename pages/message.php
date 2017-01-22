@@ -22,7 +22,6 @@ $d13->dbQuery('start transaction');
 
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
-	foreach($_POST as $key => $value) $_POST[$key] = misc::clean($value);
 	foreach($_GET as $key => $value)
 	if (in_array($key, array(
 		'page',
@@ -32,6 +31,8 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 	
 	switch ($_GET['action']) {
 	
+	
+	// - - - - - - - - - Get Message
 	case 'get':
 		if (isset($_GET['messageId'])) {
 			$msg = new message();
@@ -49,8 +50,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				if ($status == 'done') $msg->data['senderName'] = $user->data['name'];
 				else $msg->data['senderName'] = $d13->getLangUI("game");
 				
-				$msg->data['body'] = str_replace('\r\n', '<br>', $msg->data['body']);
-				$msg->data['body'] = str_replace('\n', '<br>', $msg->data['body']);
+				
 
 			}
 			else $message = $d13->getLangUI("accessDenied");
@@ -59,8 +59,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		else $message = $d13->getLangUI("insufficientData");
 		break;
 
-		// - - - - - - - - -
-
+	// - - - - - - - - - Send Message
 	case 'add':
 		if (isset($_GET['messageId'])) {
 			$msg = new message();
@@ -74,13 +73,13 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			}
 		}
 
-		if (isset($_POST['recipient'], $_POST['subject'], $_POST['body'])) {
-			if ($_POST['recipient'] != '' && $_POST['subject'] != '' && $_POST['body'] != '' && !$d13->getLangBW($_POST['body']) && !$d13->getLangBW($_POST['subject'])) {
+		if (isset($_POST['recipient'], $_POST['subject'], $_POST['msgbody'])) {
+			if ($_POST['recipient'] != '' && $_POST['subject'] != '' && $_POST['msgbody'] != '' && !$d13->getLangBW($_POST['msgbody']) && !$d13->getLangBW($_POST['subject'])) {
 				$msg = new message();
 				$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 				$msg->data['recipient'] = $_POST['recipient'];
 				$msg->data['subject'] = $_POST['subject'];
-				$msg->data['body'] = $_POST['body'];
+				$msg->data['body'] = $_POST['msgbody'];
 				$msg->data['viewed'] = 0;
 				$msg->data['type'] = 'message';
 				$message = $d13->getLangUI($msg->add());
@@ -182,13 +181,8 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			if ($status == 'done') {
 				$recipient = $user->data['name'];
 			}
-
 			$subject = 're: ' . $msg->data['subject'];
-			
-			$msg->data['body'] = str_replace('\r\n', '<br>', $msg->data['body']);
-			$msg->data['body'] = str_replace('\n', '<br>', $msg->data['body']);
-			
-			$body = "\r\n\r\n-----\r\n" . $msg->data['body'];
+			$body .= $msg->data['body'];
 		}
 
 		$tvars['tvar_subject'] = $subject;

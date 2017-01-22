@@ -238,18 +238,6 @@ class d13_combat
 			}
 		}
 
-		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Class Ratios (Damage Bonus)
-/*
-		foreach($d13->getGeneral('classes') as $key => $class) {
-			if ($data['input']['attacker']['damage'] > 0) {
-				$classes['attacker'][$key] = $classes['attacker'][$key] / $data['input']['attacker']['damage'];
-			}
-
-			if ($data['input']['defender']['damage'] > 0) {
-				$classes['defender'][$key] = $classes['defender'][$key] / $data['input']['defender']['damage'];
-			}
-		}
-*/
 		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Base Damage
 		
 		$percentCap = 400;
@@ -265,31 +253,8 @@ class d13_combat
 		$attackerRatio = sqrt($data['input']['attacker']['damage'] / $data['input']['defender']['armor']);
 		$defenderRatio = sqrt($data['input']['defender']['damage'] / $data['input']['attacker']['armor']);
 		
-		$d13->logger("----------");
-		$d13->logger("atk%: ".$attackerRatio." def%: ".$defenderRatio);
-		
-		
-		
-		$d13->logger("atkDAM: ".$data['input']['attacker']['damage']." defDAM: ".$data['input']['defender']['damage']);
-		
 		$attackerDamage = $data['input']['attacker']['damage'] * $attackerRatio;
 		$defenderDamage = $data['input']['defender']['damage'] * $defenderRatio;
-		
-		$d13->logger("atkDAM: ".$attackerDamage." defDAM: ".$defenderDamage);
-		
-		/*		
-		if ($data['input']['attacker']['damage'] >= $data['input']['defender']['armor']) {
-			$data['input']['attacker']['trueDamage'] = $data['input']['attacker']['damage'] + $attackerDamage;
-		} else {
-			$data['input']['attacker']['trueDamage'] = $data['input']['attacker']['damage'] - $attackerDamage;
-		}
-		
-		if ($data['input']['defender']['damage'] >= $data['input']['attacker']['armor']) {
-			$data['input']['defender']['trueDamage'] = $data['input']['defender']['damage'] + $defenderDamage;
-		} else {
-			$data['input']['defender']['trueDamage'] = $data['input']['defender']['damage'] - $defenderDamage;
-		}
-		*/
 		
 		$data['input']['attacker']['trueDamage'] = floor($attackerDamage);
 		$data['input']['defender']['trueDamage'] = floor($defenderDamage);
@@ -307,8 +272,6 @@ class d13_combat
 				$baseDamage = $data['input']['defender']['trueDamage'];
 				$bonusDamage = 0;
 		
-				$d13->logger("defenderDamage:".$baseDamage);									//DEBUG
-		
 				$class = $d13->getUnit($data['input']['attacker']['faction'], $group['unitId'], 'class');
 				foreach ($classes['defender'] as $classKey => $damageMod) {
 					if ($classKey == $class) {
@@ -318,16 +281,14 @@ class d13_combat
 				
 				$damage = 1+ $baseDamage + $bonusDamage;
 				
-				$d13->logger("defenderDamage:".$damage);									//DEBUG
-				
 				$casualties = floor($damage / ($group['hp']/$group['quantity']));
 				$data['input']['defender']['trueDamage'] -= $casualties * $group['hp'];
 				
-				$d13->logger("atk-casualties: ".$casualties);
+				if ($casualties < 0) { $casualties = 0; }
 				
 				$group['quantity'] -= $casualties;
 				
-				if ($group['quantity'] < 0) { $group = 0; }
+				if ($group['quantity'] < 0) { $group['quantity'] = 0; }
 				
 				$data['output']['attacker']['groups'][$key] = $group;
 				$data['output']['defender']['totalDamage'] += $casualties;
@@ -345,32 +306,26 @@ class d13_combat
 				$baseDamage = $data['input']['attacker']['trueDamage'];
 				$bonusDamage = 0;
 		
-				$d13->logger("attackerDamage:".$baseDamage);									//DEBUG
-		
 				$class = $d13->getUnit($data['input']['defender']['faction'], $group['unitId'], 'class');
 				foreach ($classes['attacker'] as $classKey => $damageMod) {
-					$d13->logger($classKey);
 					if ($classKey == $class) {
 						$bonusDamage += floor($baseDamage * $damageMod);
-						$d13->logger($bonusDamage);
 					}
 				}
 				
 				$damage = 1+ $baseDamage + $bonusDamage;
 				
-				$d13->logger("attackerDamage:".$damage);									//DEBUG
-				
 				$casualties = floor($damage / ($group['hp']/$group['quantity']));
 				$data['input']['attacker']['trueDamage'] -= $casualties * $group['hp'];
 				
-				$d13->logger("def-casualties: ".$casualties);
+				if ($casualties < 0) { $casualties = 0; }
 				
 				if ($group['type'] == 'unit') {
 					$group['quantity'] -= $casualties;
-					if ($group['quantity'] < 0) { $group = 0; }
+					if ($group['quantity'] < 0) { $group['quantity'] = 0; }
 				} else if ($group['type'] == 'module') {
 					$group['input'] -= $casualties;
-					if ($group['input'] < 0) { $group = 0; }
+					if ($group['input'] < 0) { $group['input'] = 0; }
 				}
 
 				$data['output']['defender']['groups'][$key] = $group;
@@ -484,38 +439,38 @@ class d13_combat
 		
 		if ($status == 'done') {
 		
-			$exp_value 		= floor($data['input']['attacker']['trueDamage'] / $d13->getGeneral('factors', 'experience'));
-			$difference		= misc::percent_difference($attackerUser->data['trophies'], $defenderUser->data['trophies']) + 1;
+			$exp_value 		= floor($data['output']['attacker']['totalDamage'] / $d13->getGeneral('factors', 'experience'));
+			$difference		= sqrt($attackerUser->data['trophies']+1 / $defenderUser->data['trophies']+1);
 		
-			if ($attackerUser->data['trophies'] > $defenderUser->data['trophies']) {
-				$attackerTrophies -= ($difference/100)*$attackerTrophies;
-				$defenderTrophies += ($difference/100)*$defenderTrophies;
-			} else if ($attackerUser->data['trophies'] <= $defenderUser->data['trophies']) {
-				$attackerTrophies += ($difference/100)*$attackerTrophies;
-				$defenderTrophies -= ($difference/100)*$defenderTrophies;
-			}
-			
-			if ($data['output']['attacker']['winner']) {
+		
+			$attackerTrophies = floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'experience'));
+			$defenderTrophies = floor(($difference * $defenderTrophies)  / $d13->getGeneral('factors', 'experience'));
+		
+			if ($data['output']['attacker']['winner'] > 0) {
 				$attackerTrophies = abs($attackerTrophies);
 				$defenderTrophies = $defenderTrophies * -1;
-			} else if ($data['output']['defender']['winner']) {
+			} else {
 				$attackerTrophies = $attackerTrophies * -1;
 				$defenderTrophies = abs($defenderTrophies);
 			}
-			
-			$attackerTrophies = floor($attackerTrophies);
-			$defenderTrophies = floor($defenderTrophies);
+
+
+			// - - - - - Attacker Stats
+			$status = $attackerUser->setStat('experience', $exp_value);
+			$status = $attackerUser->setStat('trophies', $attackerTrophies);
+		
+			// - - - - - Defender Stats
+			$status = $defenderUser->setStat('trophies', $defenderTrophies);
+		
+		
+		
+			$data['output']['attacker']['userstat']['experience'] 	= $exp_value;
+			$data['output']['attacker']['userstat']['trophies'] 	= $attackerTrophies;
+			$data['output']['defender']['userstat']['trophies'] 	= $defenderTrophies;
 		
 		}
 		
-		// - - - - - Attacker Stats
-		$status = $attackerUser->setStat('experience', $exp_value);
-		$status = $attackerUser->setStat('trophies', $attackerTrophies);
-		
-		// - - - - - Defender Stats
-		$status = $defenderUser->setStat('trophies', $defenderTrophies);
-		
-		return $status;
+		return $data;
 		
 	}
 	
@@ -935,13 +890,35 @@ class d13_combat
 		$i = 0;
 		
 		if (!$other) {
-		
+			
+			// - - - - - Trophies & Experience
+			$attackerUser = new user();
+			$status = $attackerUser->get('id', $attackerNode->data['user']);
+			if ($status == 'done') {
+				$html = '';
+				$html .= '<div class="row">';
+			
+				foreach($d13->getGeneral("userstats") as $stat) {
+					if ($stat['active'] && isset($data['output']['attacker']['userstat'][$stat['name']])) {
+						$vars = array();
+						$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $stat['image'];
+						$vars['tvar_listLabel'] 	= $d13->getLangUI($stat['name']);
+						$vars['tvar_listAmount'] 	= $data['output']['attacker']['userstat'][$stat['name']];
+						$html .= $d13->templateSubpage("msg.combat.resource", $vars);
+					}
+				}
+				
+				$html .= '</div>';
+				
+			}
+
+			// - - - - - Resources
 			foreach ($data['output']['attacker']['resources'] as $resource) {
 			
 				$vars = array();
-				$vars['tvar_listImage'] = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource['resource'], 'image');
-				$vars['tvar_listLabel'] = $d13->getLangGL('resources', $resource['resource'], 'name');
-				$vars['tvar_listAmount'] = '+'.$resource['value'];
+				$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource['resource'], 'image');
+				$vars['tvar_listLabel'] 	= $d13->getLangGL('resources', $resource['resource'], 'name');
+				$vars['tvar_listAmount'] 	= '+'.$resource['value'];
 				
 				if ($i == 0) { $html .= '<div class="row">'; }
 		
@@ -959,6 +936,28 @@ class d13_combat
 		
 		} else {
 			
+			// - - - - - Trophies & Experience
+			$defenderUser = new user();
+			$status = $defenderUser->get('id', $defenderNode->data['user']);
+			if ($status == 'done') {
+				$html = '';
+				$html .= '<div class="row">';
+			
+				foreach($d13->getGeneral("userstats") as $stat) {
+					if ($stat['active'] && isset($data['output']['defender']['userstat'][$stat['name']])) {
+						$vars = array();
+						$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $stat['image'];
+						$vars['tvar_listLabel'] 	= $d13->getLangUI($stat['name']);
+						$vars['tvar_listAmount'] 	= $data['output']['defender']['userstat'][$stat['name']];
+						$html .= $d13->templateSubpage("msg.combat.resource", $vars);
+					}
+				}
+				
+				$html .= '</div>';
+				
+			}
+			
+			// - - - - - Resources
 			foreach ($data['output']['defender']['resources'] as $resource) {
 			
 				$vars = array();
@@ -986,11 +985,6 @@ class d13_combat
 					
 		// - - - - - Return Report
 		$html = $d13->templateSubpage("msg.combat", $tvars);
-		
-		$html = str_replace("\r\n", "", $html);
-		$html = str_replace("\n", "", $html);
-		
-		$html = $d13->dbRealEscapeString($html);
 		
 		return $html;
 	}
