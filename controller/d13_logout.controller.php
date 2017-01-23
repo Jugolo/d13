@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// EMPTY.CONTROLLER
+// LOGOUT.CONTROLLER
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
@@ -13,10 +13,8 @@
 //
 // ========================================================================================
 
-class d13_emptyController extends d13_controller
+class d13_logoutController extends d13_controller
 {
-	
-	private $node, $nodeId;
 	
 	// ----------------------------------------------------------------------------------------
 	// construct
@@ -25,34 +23,20 @@ class d13_emptyController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct($node)
-	{
-		if (isset($node) && !empty($node)) {
-			$this->node = $node;
-			$this->nodeId = $this->node->data['id'];
-		} else {
-			$this->nodeId = 0;
-		}	
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// getTemplate
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-	public
-	
-	function getTemplate()
+	function __construct()
 	{
 	
 		global $d13;
-		
-		$tvars = array();
-		$html = '';
-		
+
+		unset($_POST);
+		unset($_GET);
+		session_unset();
+
+		header('Location: '.CONST_DIRECTORY.'index.php?p=index');
 		
 	}
 
+	
 }
 
 // =====================================================================================EOF

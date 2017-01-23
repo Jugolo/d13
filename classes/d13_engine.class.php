@@ -7,7 +7,7 @@
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
 // # Sourceforge Download........: https://sourceforge.net/projects/d13/
-// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Github Repo.................: https://github.com/CriticalHit-d13/d13
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
@@ -29,13 +29,14 @@ class d13
 
 	function __construct()
 	{
-		$this->db = new d13_db();
-		$this->tpl = new d13_tpl();
+		$this->db 		= new d13_db();
+		$this->tpl 		= new d13_tpl();
+		$this->router 	= new d13_router();
+		$this->session 	= new d13_session();
+		$this->logger 	= new d13_logger();
+		$this->data 	= new d13_data();
 		#$this->flags = new d13_flags();
-		$this->router = new d13_router();
-		$this->session = new d13_session();
-		$this->logger = new d13_logger();
-		$this->data = new d13_data();
+		
 		if (CONST_FLAG_PROFILER) {
 			$this->profiler = new d13_profiler();
 		}

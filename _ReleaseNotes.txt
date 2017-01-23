@@ -33,6 +33,7 @@ V015	--- UPCOMING UPDATE ---
 
 V014	* Added CKEditor for messages
 		* Added extended tooltip system
+		* Rows in the visual town display are now irregular to break up the design a bit
 		* Tweaked a few CSS styles
 		* Fixed a few minor bugs
 		* Minor GUI adjustments

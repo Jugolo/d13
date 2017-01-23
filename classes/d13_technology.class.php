@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// NOTES.CLASS
+// TECHNOLOGY.CLASS
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
@@ -13,18 +13,11 @@
 //
 // ========================================================================================
 
-class d13_notes
+class d13_technology
 
 {
 	
-	private $node;
 	
-
-	#noteAdd
-	#noteGet
-	#noteCheck
-	#noteGetAll
-	#noteGetList
 
 
 

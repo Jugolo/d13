@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// NOTES.CLASS
+// OBJECT.CLASS
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
@@ -13,19 +13,11 @@
 //
 // ========================================================================================
 
-class d13_notes
+class d13_object
 
 {
 	
-	private $node;
 	
-
-	#noteAdd
-	#noteGet
-	#noteCheck
-	#noteGetAll
-	#noteGetList
-
 
 
 }

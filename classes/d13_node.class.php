@@ -7,7 +7,7 @@
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
 // # Sourceforge Download........: https://sourceforge.net/projects/d13/
-// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Github Repo.................: https://github.com/CriticalHit-d13/d13
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
@@ -721,7 +721,18 @@ class node
 		if ($module['module'] == - 1) {
 			$result = $d13->dbQuery('select count(*) as count from modules where node="' . $this->data['id'] . '" and module="' . $moduleId . '"');
 			$row = $d13->dbFetch($result);
-			if ($row['count'] < $d13->getModule($this->data['faction'], $moduleId, 'maxInstances')) {
+			$count = $row['count'];
+			
+			$this->getQueue("build");
+			if (count($this->queue["build"])) {
+				foreach($this->queue["build"] as $item) {
+					if ($item['obj_id'] == $moduleId) {
+						$count++;
+					}
+				}
+			}
+			
+			if ($count < $d13->getModule($this->data['faction'], $moduleId, 'maxInstances')) {
 				$result = $d13->dbQuery('select count(*) as count from build where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
 				$row = $d13->dbFetch($result);
 				if (!$row['count']) {

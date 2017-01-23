@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// EMPTY.CONTROLLER
+// LOGIN.CONTROLLER
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
@@ -13,7 +13,7 @@
 //
 // ========================================================================================
 
-class d13_emptyController extends d13_controller
+class d13_loginController extends d13_controller
 {
 	
 	private $node, $nodeId;
@@ -52,6 +52,8 @@ class d13_emptyController extends d13_controller
 		
 		
 	}
+	
+	
 
 }
 

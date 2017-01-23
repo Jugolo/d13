@@ -7,7 +7,7 @@
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
 // # Sourceforge Download........: https://sourceforge.net/projects/d13/
-// # Github Repo (soon!).........: https://github.com/Fhizbang/d13
+// # Github Repo.................: https://github.com/CriticalHit-d13/d13
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
@@ -29,32 +29,28 @@ class d13_combat
 	{
 	}
 
+
 	// ----------------------------------------------------------------------------------------
-	// doCombat
+	// doCalculateAttackerStats
 	// ----------------------------------------------------------------------------------------
 
-	public static
+	private
+	
+	function doCalculateAttackerStats($data)
 
-	function doCombat($data)
 	{
+		
 		global $d13;
 		
 		$data['output']['attacker']['groups'] = array();
-		$data['output']['defender']['groups'] = array();
-		
-		$classes = array();
 		
 		foreach($d13->getGeneral('classes') as $key => $class) {
-			$classes['attacker'][$key] = 0;
-			$classes['defender'][$key] = 0;
+			$data['classes']['attacker'][$key] = 0;
 		}
 
 		foreach($d13->getGeneral('stats') as $stat) {
 			$data['input']['attacker'][$stat] = 0;
-			$data['input']['defender'][$stat] = 0;
 		}
-
-		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CALCULATE ATTACKER STATS
 
 		$node = new node();
 		$status = $node->get('id', $data['input']['attacker']['nodeId']);
@@ -114,13 +110,36 @@ class d13_combat
 				//- - - - - Add to Class List
 				$class = $d13->getUnit($data['input']['attacker']['faction'],$group['unitId'],'class');
 				foreach ($d13->getGeneral('classes', $class) as $classKey => $classMod) {
-					$classes['attacker'][$classKey] += $classMod;
+					$data['classes']['attacker'][$classKey] += $classMod;
 				}
 		
 			}
 		}
 
-		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CALCULATE DEFENDER STATS
+		return $data;
+
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// doCalculateDefenderStats
+	// ----------------------------------------------------------------------------------------
+
+	private
+	
+	function doCalculateDefenderStats($data)
+
+	{
+		global $d13;
+		
+		$data['output']['defender']['groups'] = array();
+		
+		foreach($d13->getGeneral('classes') as $key => $class) {
+			$data['classes']['defender'][$key] = 0;
+		}
+
+		foreach($d13->getGeneral('stats') as $stat) {
+			$data['input']['defender'][$stat] = 0;
+		}
 
 		$node = new node();
 		$status = $node->get('id', $data['input']['defender']['nodeId']);
@@ -182,7 +201,7 @@ class d13_combat
 				//- - - - - Add to Class List
 				$class = $d13->getUnit($data['input']['defender']['faction'],$group['unitId'],'class');
 				foreach ($d13->getGeneral('classes', $class) as $classKey => $classMod) {
-					$classes['defender'][$classKey] += $classMod;
+					$data['classes']['defender'][$classKey] += $classMod;
 				}
 				
 			// - - - - - MODULES
@@ -232,12 +251,30 @@ class d13_combat
 				//- - - - - Add to Class List
 				$class = $d13->getUnit($data['input']['defender']['faction'],$group['unitId'],'class');
 				foreach ($d13->getGeneral('classes', $class) as $classKey => $classMod) {
-					$classes['defender'][$classKey] += $classMod;
+					$data['classes']['defender'][$classKey] += $classMod;
 				}
 
 			}
 		}
 
+		return $data;
+
+	}	
+
+	// ----------------------------------------------------------------------------------------
+	// doCombat
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function doCombat($data)
+	{
+	
+		global $d13;
+		
+		$data = $this->doCalculateAttackerStats($data);
+		$data = $this->doCalculateDefenderStats($data);
+		
 		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Base Damage
 		
 		$percentCap = 400;
@@ -273,7 +310,7 @@ class d13_combat
 				$bonusDamage = 0;
 		
 				$class = $d13->getUnit($data['input']['attacker']['faction'], $group['unitId'], 'class');
-				foreach ($classes['defender'] as $classKey => $damageMod) {
+				foreach ($data['classes']['defender'] as $classKey => $damageMod) {
 					if ($classKey == $class) {
 						$bonusDamage += floor($baseDamage * $damageMod);
 					}
@@ -291,7 +328,7 @@ class d13_combat
 				if ($group['quantity'] < 0) { $group['quantity'] = 0; }
 				
 				$data['output']['attacker']['groups'][$key] = $group;
-				$data['output']['defender']['totalDamage'] += $casualties;
+				$data['output']['defender']['totalDamage'] += $damage;
 			
 			}
 		}
@@ -307,7 +344,7 @@ class d13_combat
 				$bonusDamage = 0;
 		
 				$class = $d13->getUnit($data['input']['defender']['faction'], $group['unitId'], 'class');
-				foreach ($classes['attacker'] as $classKey => $damageMod) {
+				foreach ($data['classes']['attacker'] as $classKey => $damageMod) {
 					if ($classKey == $class) {
 						$bonusDamage += floor($baseDamage * $damageMod);
 					}
@@ -329,7 +366,7 @@ class d13_combat
 				}
 
 				$data['output']['defender']['groups'][$key] = $group;
-				$data['output']['attacker']['totalDamage']	+= $casualties;
+				$data['output']['attacker']['totalDamage']	+= $damage;
 			
 			}
 		}
@@ -358,6 +395,8 @@ class d13_combat
 		return $data;
 	}
 
+
+
 	// ----------------------------------------------------------------------------------------
 	// doScoutCheck
 	// ----------------------------------------------------------------------------------------
@@ -370,7 +409,10 @@ class d13_combat
 		global $d13;
 		
 		
+		#calculate attacker stats
+		#calculate defender stats
 		
+		# check if attacker 
 		
 		
 		
@@ -393,7 +435,14 @@ class d13_combat
 		
 		
 		
-		
+		/*
+			"spionage": {
+  			"resources": 10,
+  			"modules": 40,
+  			"research": 60,
+  			"unit": 90
+  			},
+  		*/
 		
 	
 	}
@@ -442,7 +491,6 @@ class d13_combat
 			$exp_value 		= floor($data['output']['attacker']['totalDamage'] / $d13->getGeneral('factors', 'experience'));
 			$difference		= sqrt($attackerUser->data['trophies']+1 / $defenderUser->data['trophies']+1);
 		
-		
 			$attackerTrophies = floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'experience'));
 			$defenderTrophies = floor(($difference * $defenderTrophies)  / $d13->getGeneral('factors', 'experience'));
 		
@@ -454,15 +502,12 @@ class d13_combat
 				$defenderTrophies = abs($defenderTrophies);
 			}
 
-
 			// - - - - - Attacker Stats
 			$status = $attackerUser->setStat('experience', $exp_value);
 			$status = $attackerUser->setStat('trophies', $attackerTrophies);
 		
 			// - - - - - Defender Stats
 			$status = $defenderUser->setStat('trophies', $defenderTrophies);
-		
-		
 		
 			$data['output']['attacker']['userstat']['experience'] 	= $exp_value;
 			$data['output']['attacker']['userstat']['trophies'] 	= $attackerTrophies;
@@ -486,7 +531,9 @@ class d13_combat
 		
 		// ============================== Calculate Ratio according to Leagues
 		
-		$resourceRatio = 20; 
+		$resourceRatio 	= 20; 								// TODO move to data files later
+		$minRatio 		= 1;								// TODO move to data files later
+		$maxRatio 		= 60;								// TODO move to data files later
 		
 		$attackerUser = new user();
 		$status = $attackerUser->get('id', $data['input']['attacker']['userId']);
@@ -508,10 +555,10 @@ class d13_combat
 				$resourceRatio += floor($resourceRatio * ($defenderLeague['id']-$attackerLeague['id'])/$defenderLeague['id']);
 			}
 		
-			if ($resourceRatio < 1) {
-				$resourceRatio = 1;
-			} else if ($resourceRatio > 60) {
-				$resourceRatio = 60;
+			if ($resourceRatio < $minRatio) {
+				$resourceRatio = $minRatio;
+			} else if ($resourceRatio > $maxRatio) {
+				$resourceRatio = $maxRatio;
 			}
 		
 		}
@@ -583,6 +630,7 @@ class d13_combat
 				$key = array_rand($resList);	
 			
 				// - choose 1/10 from available resources
+				//   (to give the other resources a chance as well)
 				$value = floor($resList[$key]['value']/10);
 				
 				if ($value > $totalResCapacity) {
@@ -604,7 +652,9 @@ class d13_combat
 		
 		// ============================== Check virtual Loot
 		if ($d13->getGeneral('options', 'bonusLoot')) {
-
+				// TODO
+				// add randomized bonus loot out of 'thin air'
+				// - this feature is still questionable -
 		}
 				
 		// ============================== Process Data
@@ -618,8 +668,7 @@ class d13_combat
 
 		if ($ok) {
 			$d13->dbQuery('commit');
-		}
-		else {
+		} else {
 			$d13->dbQuery('rollback');
 		}
 		
@@ -628,8 +677,6 @@ class d13_combat
 		return $data;
 	
 	}
-	
-	
 	
 	// ----------------------------------------------------------------------------------------
 	// checkCombat

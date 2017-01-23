@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// NOTES.CLASS
+// COMPONENT.CLASS
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
@@ -13,18 +13,11 @@
 //
 // ========================================================================================
 
-class d13_notes
+class d13_component
 
 {
 	
-	private $node;
 	
-
-	#noteAdd
-	#noteGet
-	#noteCheck
-	#noteGetAll
-	#noteGetList
 
 
 

@@ -29,7 +29,10 @@
 
 	<div class="card-footer no-border">
 		<div class="left"></div>
-		<div class="right"></div>
+		
+		<div class="buttons-row">
+			{{tvar_controls}}
+		</div>
 	</div>
 	
 </div>
