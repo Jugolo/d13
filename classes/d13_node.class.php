@@ -577,11 +577,15 @@ class node
 														
 							$start = strftime('%Y-%m-%d %H:%M:%S', time());
 							$totalIR = 0;
-							foreach($this->modules as $key => $item)
-							if ($item['module'] == $this->modules[$slotId]['module']) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
+							
+							#foreach($this->modules as $key => $item)
+							#if ($item['module'] == $this->modules[$slotId]['module']) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
+							
 							$duration = $d13->getTechnology($this->data['faction'],$technologyId,'duration');
 							$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'research') * 60;
 							$d13->dbQuery('insert into research (node, obj_id, start, duration, slot) values ("' . $this->data['id'] . '", "' . $technologyId . '", "' . $start . '", "' . $duration . '", "' . $slotId . '")');
+							
+							
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 							if ($ok) $status = 'done';
 							else $status = 'error';
@@ -1011,8 +1015,10 @@ class node
 
 						$start = strftime('%Y-%m-%d %H:%M:%S', time());
 						$totalIR = 0;
-						foreach($this->modules as $key => $item)
-						if ($item['module'] == $this->modules[$slotId]['module']) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
+						
+						#foreach($this->modules as $key => $item)
+						#if ($item['module'] == $this->modules[$slotId]['module']) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
+						
 						$duration = $d13->getComponent($this->data['faction'], $componentId, 'duration') * $quantity;
 						$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'craft') * 60;
 						
@@ -1188,8 +1194,10 @@ class node
 						
 						$start = strftime('%Y-%m-%d %H:%M:%S', time());
 						$totalIR = 0;
-						foreach($this->modules as $key => $item)
-						if ($item['module'] == $this->modules[$slotId]['module']) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
+						
+						#foreach($this->modules as $key => $item)
+						#if ($item['module'] == $this->modules[$slotId]['module']) $totalIR+= $item['input'] * $d13->getModule($this->data['faction'], $item['module'], 'ratio');
+						
 						$duration = $d13->getUnit($this->data['faction'], $unitId, 'duration') * $quantity * 60;
 						$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'train');
 						
