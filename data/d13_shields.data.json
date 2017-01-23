@@ -1,0 +1,29 @@
+[
+  {
+    "id": 0,
+    "image": "shield.png",
+    "active": true,
+    "priority": 5,
+    "duration": 60,
+    "cannotAttack": true,
+    "scout": true,
+    "sabotage": true,
+    "raid": true,
+    "conquer": true,
+    "raze": true,
+    "skirmish": true,
+    "cost": [
+	{
+	"resource": "integer",
+	"value": "integer"
+	}
+	]
+	"requirements": [
+	{
+	"type": "modules",
+	"id": "integer",
+	"level": "integer"
+	}
+	]
+  }
+]

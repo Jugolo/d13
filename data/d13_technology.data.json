@@ -1,0 +1,2372 @@
+[
+  [
+    {
+      "id": 0,
+      "image": "0.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 500
+        },
+        {
+          "resource": 1,
+          "value": 500
+        },
+        {
+          "resource": 2,
+          "value": 700
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 1,
+      "image": "1.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 500
+        },
+        {
+          "resource": 1,
+          "value": 700
+        },
+        {
+          "resource": 2,
+          "value": 500
+        }
+      ],
+      "requirements": [
+        {
+          "type": "technologies",
+          "id": 0,
+          "level": 1
+        }
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 2,
+      "image": "2.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 1,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 700
+        },
+        {
+          "resource": 1,
+          "value": 1000
+        },
+        {
+          "resource": 2,
+          "value": 800
+        }
+      ],
+      "requirements": [
+        {
+          "type": "technologies",
+          "id": 1,
+          "level": 1
+        }
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 3,
+      "image": "3.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 1,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 700
+        },
+        {
+          "resource": 1,
+          "value": 1000
+        },
+        {
+          "resource": 2,
+          "value": 500
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 4,
+      "image": "4.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 1,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 200
+        },
+        {
+          "resource": 1,
+          "value": 400
+        },
+        {
+          "resource": 2,
+          "value": 300
+        }
+      ],
+      "requirements": [
+        {
+          "type": "technologies",
+          "id": 0,
+          "level": 1
+        }
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 5,
+      "image": "5.png",
+      "active": true,
+      "priority": -1,
+      "duration": 5,
+      "maxLevel": 5,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 200
+        },
+        {
+          "resource": 1,
+          "value": 400
+        }
+      ],
+      "requirements": [
+        {
+          "type": "technologies",
+          "id": 0,
+          "level": 3
+        }
+      ],
+      "upgrades": [
+        200
+      ]
+    },
+    {
+      "id": 6,
+      "image": "6.png",
+      "active": true,
+      "priority": -1,
+      "duration": 5,
+      "maxLevel": 5,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 200
+        },
+        {
+          "resource": 1,
+          "value": 400
+        }
+      ],
+      "requirements": [
+        {
+          "type": "technologies",
+          "id": 0,
+          "level": 3
+        }
+      ],
+      "upgrades": [
+        201
+      ]
+    },
+    {
+      "id": 7,
+      "image": "7.png",
+      "active": true,
+      "priority": -1,
+      "duration": 5,
+      "maxLevel": 5,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 200
+        },
+        {
+          "resource": 1,
+          "value": 400
+        }
+      ],
+      "requirements": [
+        {
+          "type": "technologies",
+          "id": 0,
+          "level": 3
+        }
+      ],
+      "upgrades": [
+        202
+      ]
+    },
+    
+    
+    
+    
+    {
+      "id": 8,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 9,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 10,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 11,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 12,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 13,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 14,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 15,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 16,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 17,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 18,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 19,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 20,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 21,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 22,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 23,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 24,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 25,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 26,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 27,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 28,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 29,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 30,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 31,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 32,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 33,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 34,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 35,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 36,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 37,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 38,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 39,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 40,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 41,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 42,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 43,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 44,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 45,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 46,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 47,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 48,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 49,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 50,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 51,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 52,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 53,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 54,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 55,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 56,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 57,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 58,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 59,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 60,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 61,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 62,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 63,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 64,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 65,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 66,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 67,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 68,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 69,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 70,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 71,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 72,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 73,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 74,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 75,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 76,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 77,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 78,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 79,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 80,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 81,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 82,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 83,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 84,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 85,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 86,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 87,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 88,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 89,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 90,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 91,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 92,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 93,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 94,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 95,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 96,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 97,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 98,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 99,
+      "image": "0.png",
+      "active": false,
+      "priority": -1,
+      "duration": 0,
+      "maxLevel": 0,
+      "cost": [
+        
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        
+      ]
+    },
+    {
+      "id": 100,
+      "image": "100.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        0
+      ]
+    },
+    {
+      "id": 101,
+      "image": "101.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        1
+      ]
+    },
+    {
+      "id": 102,
+      "image": "102.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        2
+      ]
+    },
+    {
+      "id": 103,
+      "image": "103.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        3
+      ]
+    },
+    {
+      "id": 104,
+      "image": "104.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        4
+      ]
+    },
+    {
+      "id": 105,
+      "image": "105.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        5
+      ]
+    },
+    {
+      "id": 106,
+      "image": "106.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        6
+      ]
+    },
+    {
+      "id": 107,
+      "image": "107.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        7
+      ]
+    },
+    {
+      "id": 108,
+      "image": "108.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        8
+      ]
+    },
+    {
+      "id": 109,
+      "image": "109.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        9
+      ]
+    },
+    {
+      "id": 110,
+      "image": "110.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        10
+      ]
+    },
+    {
+      "id": 111,
+      "image": "111.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        11
+      ]
+    },
+    {
+      "id": 112,
+      "image": "112.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        12
+      ]
+    },
+    {
+      "id": 113,
+      "image": "113.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        13
+      ]
+    },
+    {
+      "id": 114,
+      "image": "114.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        14
+      ]
+    },
+    {
+      "id": 115,
+      "image": "115.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        15
+      ]
+    },
+    {
+      "id": 116,
+      "image": "116.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        16
+      ]
+    },
+    
+    
+    {
+      "id": 117,
+      "image": "hero_0.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        19
+      ]
+    },
+    {
+      "id": 118,
+      "image": "hero_1.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        20
+      ]
+    },
+    {
+      "id": 119,
+      "image": "hero_2.png",
+      "active": true,
+      "priority": -1,
+      "duration": 15,
+      "maxLevel": 3,
+      "cost": [
+        {
+          "resource": 0,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "value": 100
+        },
+        {
+          "resource": 2,
+          "value": 100
+        }
+      ],
+      "requirements": [
+        
+      ],
+      "upgrades": [
+        21
+      ]
+    }
+    
+    
+  ]
+]
