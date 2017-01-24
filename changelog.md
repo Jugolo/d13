@@ -1,27 +1,14 @@
 d13 - open-source strategy browser game engine
 ==========================================================================================
 
-News, Updates & Latest version available at Sourceforge:
-
-https://sourceforge.net/projects/d13/
-
-Official project documentation can now be found at my website:
-
-http://www.critical-hit.biz
-
-CREDITS
-------------------------------------------------------------------------------------------
-2008-2013 Andrei Busuioc (Devman)
-2015-2016 Tobias Strunz (Fhizban)
-
 RELEASE CANDIDATE 0
 ------------------------------------------------------------------------------------------
 
-V016	--- UPCOMING UPDATE ---
+V017	--- UPCOMING UPDATE ---
 
 		* Map System
 
-V015	--- UPCOMING UPDATE ---
+V016	--- UPCOMING UPDATE ---
 		
 		* Finalize existing combat system:
 		
@@ -29,7 +16,10 @@ V015	--- UPCOMING UPDATE ---
 			- Scout Checks
 			- Sabotage Reports
 			- Sabotage Checks
-			- Frontend Checking of Army Integrity
+			
+V015	* Added pagination to league ranking list			
+		* Frontend Checking of Army Integrity finished
+		* Fixed a bug that allowed to build more buildings than possible
 
 V014	* Added CKEditor for messages
 		* Added extended tooltip system
