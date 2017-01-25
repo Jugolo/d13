@@ -16,7 +16,9 @@
 class d13_tpl
 
 {
-
+	
+	private $node;
+	
 	// ----------------------------------------------------------------------------------------
 	// tpl_get
 	// @ Retrieves the content of a template file and returns it
@@ -258,9 +260,12 @@ class d13_tpl
 
 	public
 
-	function render_page($template, $tvars = "", $node = "")
+	function render_page($template, $tvars = "")
 	{
 		
+		$this->node	= new node();
+		$status 	= $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
+
 		if (!empty($tvars)) {
 		$tvars = array_merge($tvars, $this->global_vars($tvars));
 		$tvars = array_merge($tvars, $this->merge_ui_vars());
@@ -271,27 +276,24 @@ class d13_tpl
 		$tvars["tpl_page_rightPanel"] = '';
 		
 		// - - - - - Setup the top Navbar
-		$navBar = new d13_navBarController($node);
+		$navBar = new d13_navBarController($this->node);
 		$tvars["tpl_page_navbar"] = $navBar->getTemplate();
 
-		// - - - - - Setup the Resource Bar only if accessing a Node
+		// - - - - - Setup the Resource Bar
 		$subnavbar = "";
 		$tvars["tpl_pvar_subnavbar"] = "";
 		$tvars["tpl_page_subbar"] = "";
-		if (!empty($node)) {
+		
+		$resBar = new d13_resBarController($this->node);
+		$tvars["tpl_page_subbar"] = $resBar->getTemplate();
 			
-			$resBar = new d13_resBarController($node);
-			$tvars["tpl_page_subbar"] = $resBar->getTemplate();
-			
-			if (!empty($subnavbar)) {
-				$tvars["tpl_pvar_subnavbar"] = "with-subnavbar";
-			}
-			
-			$tvars["tpl_page_leftPanel"] = '';
-			$tvars["tpl_page_rightPanel"] = $node->queues->getQueuesList();
-			
+		if (!empty($subnavbar)) {
+			$tvars["tpl_pvar_subnavbar"] = "with-subnavbar";
 		}
-
+			
+		$tvars["tpl_page_leftPanel"] = '';
+		$tvars["tpl_page_rightPanel"] = $this->node->queues->getQueuesList();
+			
 		// - - - - - Setup the rest
 		$tvars["tpl_page_meta_header"] 	= $this->parse($this->get("meta.header") , $tvars);
 		$tvars["tpl_page_meta_footer"] 	= $this->parse($this->get("meta.footer") , $tvars);

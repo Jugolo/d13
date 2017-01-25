@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// LOGOUT.CONTROLLER
+// EMPTY.CONTROLLER
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
@@ -13,7 +13,7 @@
 //
 // ========================================================================================
 
-class d13_logoutController extends d13_controller
+class d13_indexController extends d13_controller
 {
 	
 	// ----------------------------------------------------------------------------------------
@@ -25,18 +25,27 @@ class d13_logoutController extends d13_controller
 	
 	function __construct()
 	{
+		
+		$this->getTemplate();
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// getTemplate
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getTemplate()
+	{
 	
 		global $d13;
-
-		unset($_POST);
-		unset($_GET);
-		session_unset();
-
-		header('Location: '.CONST_DIRECTORY.'index.php?p=index');
+		
+		$d13->templateRender("index");
+		
 		
 	}
 
-	
 }
 
 // =====================================================================================EOF

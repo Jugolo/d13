@@ -25,18 +25,41 @@ class d13_router
 
 	function route()
 	{
+		
+		global $d13;
+		
 		$this->sanitize_vars();
+		
+		$page_name = 'd13_IndexController';
+		
 		if (isset($_GET['p'])) {
-			$page = CONST_INCLUDE_PATH . "pages/" . $_GET['p'] . ".php";
+			$page_access = $_GET['p'];
 		} else {
-			$page = CONST_INCLUDE_PATH . "pages/index.php";
+			$page_access = "index";
 		}
 		
+		foreach ($d13->getRoute() as $route) {
+			if ($route['page'] == $page_access && $route['active'] == TRUE) {
+			
+				if (($route['login'] && isset($_SESSION[CONST_PREFIX . 'User']['id'])) || (!$route['login'] && !isset($_SESSION[CONST_PREFIX . 'User']['id']))) {
+					if(!$route['admin'] || $nav['admin'] && (isset($_SESSION[CONST_PREFIX . 'User']['access'])) && ($_SESSION[CONST_PREFIX . 'User']['access'] >= 3)) {
+						$page_name = 'd13_' . $route['page'] . 'Controller';
+					}
+				}
+
+				$page_object = new $page_name;
+				exit;
+			}
+		}
+		
+		
+		$page = CONST_INCLUDE_PATH . "pages/" . $page_access . ".php";
 		if (file_exists($page)) {
 			include_once ($page);
 		} else {
 			header("location:index.php");
 		}
+		
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -58,8 +81,7 @@ class d13_router
 				'faction'
 				))) {
 				$_POST[$key] = $this->clean($value, 'numeric');
-			}
-			else {
+			} else {
 				if (!in_array($key, array(
 				'msgbody'
 				))) {
@@ -71,8 +93,7 @@ class d13_router
 		foreach($_GET as $key => $value) {
 			if ($key == 'nodeId') {
 				$_GET[$key] = $this->clean($value, 'numeric');
-			}
-			else {
+			} else {
 				$_GET[$key] = $this->clean($value);
 			}
 		}

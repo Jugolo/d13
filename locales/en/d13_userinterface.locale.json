@@ -275,6 +275,7 @@
   "unit": "unit",
   "new": "new",
   "outbox": "outbox",
+  "admin": "admin",
   "component": "component",
   "battle": "battle",
   "power": "power",

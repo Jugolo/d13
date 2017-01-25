@@ -20,6 +20,14 @@ V016	--- UPCOMING UPDATE ---
 V015	* Added pagination to league ranking list			
 		* Frontend Checking of Army Integrity finished
 		* Fixed a bug that allowed to build more buildings than possible
+		* Fixed a few alliance bugs
+		* Technologies costs and requirements can now scale according to upgrades
+		
+		* Refactored all remaining procedural pages into their own classes
+		* Added Technology class
+		* Added Component class
+		
+		* Moved top-navbar to bottom - layout is now "full window"
 
 V014	* Added CKEditor for messages
 		* Added extended tooltip system

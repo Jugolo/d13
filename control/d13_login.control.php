@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// LOGIN
+// LOGIN.CONTROLLER
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
@@ -13,14 +13,63 @@
 //
 // ========================================================================================
 
-global $d13;
-$message = NULL;
-$d13->dbQuery('start transaction');
-
-if (isset($_GET['action'])) {
-	switch ($_GET['action']) {
+class d13_loginController extends d13_controller
+{
 	
-	case 'login':
+	private $actionId;
+	
+	// ----------------------------------------------------------------------------------------
+	// construct
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function __construct()
+	{
+		$this->actionId = $_GET['action'];
+		$this->doControl();
+		
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function doControl()
+	{
+	
+		switch ($this->actionId)
+		{
+		
+			case 'sit':
+				$this->doAssist();
+				break;
+				
+			case 'login':
+				$this->doLogin();
+				break;
+			
+		}
+		
+		$this->getTemplate();
+
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function doLogin()
+	{
+		
+		global $d13;
 		
 		if (isset($_POST['name'], $_POST['password'])) {
 			$name = strtolower($_POST['name']);
@@ -62,10 +111,21 @@ if (isset($_GET['action'])) {
 			else $message = $d13->getLangUI("loginDisabled");
 			else $message = $d13->getLangUI($status);
 		}
-
-		break;
-
-	case 'sit':
+	
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function doAssist()
+	{
+	
+		global $d13;
+		
 		if (isset($_POST['user'], $_POST['sitter'], $_POST['password'])) {
 			$user = new user();
 			$status = $user->get('name', $_POST['user']);
@@ -87,46 +147,48 @@ if (isset($_GET['action'])) {
 			}
 			else $message = $d13->getLangUI($status);
 		}
-
-		break;
-	}
-}
-
-if ((isset($status)) && ($status == 'error')) $d13->dbQuery('rollback');
-else $d13->dbQuery('commit');
-
-// ----------------------------------------------------------------------------------------
-// Setup Template Variables
-// ----------------------------------------------------------------------------------------
-
-$tvars = array();
-$tvars['tvar_global_message'] = $message;
-
-// ----------------------------------------------------------------------------------------
-// Parse & Render Template
-// ----------------------------------------------------------------------------------------
-
-if (isset($_GET['action'])) {
-	switch ($_GET['action']) {
 	
-	case 'sit':
-
-		$d13->templateInject($d13->templateSubpage("sub.assist", $tvars));
-		$d13->templateRender("login", $tvars);
-		break;
-
-	case 'login':
-
-		$d13->templateInject($d13->templateSubpage("sub.login", $tvars));
-		$d13->templateRender("login", $tvars);
-		break;
+	
 	}
 	
-} else {
-
-	$d13->templateInject($d13->templateSubpage("sub.login", $tvars));
-	$d13->templateRender("login", $tvars);
+	// ----------------------------------------------------------------------------------------
+	// getTemplate
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+	public
 	
+	function getTemplate()
+	{
+	
+		global $d13;
+		
+		$tvars = array();
+		
+		switch ($this->actionId)
+		{
+	
+			case 'sit':
+
+			$d13->templateInject($d13->templateSubpage("sub.assist", $tvars));
+			$d13->templateRender("login", $tvars);
+			break;
+
+			case 'login':
+
+			$d13->templateInject($d13->templateSubpage("sub.login", $tvars));
+			$d13->templateRender("login", $tvars);
+			break;
+		
+			default:
+			
+			$d13->templateInject($d13->templateSubpage("sub.login", $tvars));
+			$d13->templateRender("login", $tvars);
+			break;
+		
+		}
+		
+	}
 }
 
 // =====================================================================================EOF

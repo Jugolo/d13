@@ -202,17 +202,18 @@ class d13_module
 				
 				//- - - Attributes Upgrade
 				foreach ($upgrade['attributes'] as $attribute) {
-					
-					if ($attribute['stat'] == 'all' && ($this->data['type'] == 'unit')) {
-						foreach($d13->getGeneral('stats') as $stat) {
+					if (isset($attribute['stat'])) {
+						if ($attribute['stat'] == 'all' && ($this->data['type'] == 'unit')) {
+							foreach($d13->getGeneral('stats') as $stat) {
+								$value = $attribute['value'] * $upgrade['level'];
+								$this->data[$stat] += $value;
+								$this->data['upgrade_' . strtolower($stat)] += $value;
+							}
+						} else if ($attribute['stat'] != 'all') {
 							$value = $attribute['value'] * $upgrade['level'];
-							$this->data[$stat] += $value;
-							$this->data['upgrade_' . strtolower($stat)] += $value;
+							$this->data[$attribute['stat']] += $value;
+							$this->data['upgrade_' . strtolower($attribute['stat'])] += $value;
 						}
-					} else if ($attribute['stat'] != 'all') {
-						$value = $attribute['value'] * $upgrade['level'];
-						$this->data[$attribute['stat']] += $value;
-						$this->data['upgrade_' . strtolower($attribute['stat'])] += $value;
 					}
 				}
 		
@@ -740,7 +741,7 @@ class d13_module
 			$tmp_array['name'] = $d13->getLangGL('resources', $cost['resource'], 'name');
 			$tmp_array['icon'] = $cost['resource'] . '.png';
 			$tmp_array['factor'] = 1;
-			if ($upgrade) {
+			if ($upgrade && !empty($this->data['upgrade_cost'])) {
 				foreach($this->data['upgrade_cost'] as $key => $upcost) {
 					$tmp2_array = array();
 					$tmp2_array['resource'] = $upcost['resource'];
@@ -1431,20 +1432,13 @@ class d13_module_craft extends d13_module
 
 		foreach($d13->getComponent($this->node->data['faction']) as $cid => $component) {
 			if ($component['active'] && in_array($cid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
-				$costData = '';
-				foreach($component['cost'] as $key => $cost) {
-					$costData.= '<div class="cell">' . ($cost['value'] * $d13->getGeneral('users', 'cost', 'craft')) . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div>';
-				}
-
-				if (!count($component['requirements'])) {
-					$requirementsData = $d13->getLangUI('none');
-				}
-				else {
-					$requirementsData = '';
-					foreach($component['requirements'] as $key => $requirement) {
-						$requirementsData.= '<div class="cell">' . $requirement['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $requirement['id'] . '.png" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div>';
-					}
-				}
+				
+				
+				$tmp_component = new d13_component($cid, $this->node);
+				
+				// - - - - Cost and Requirements
+				$costData = $tmp_component->getCostList();
+				$requirementsData = $tmp_component->getRequirementList();
 
 				// - - - Check Affordable Maximum
 
@@ -1933,30 +1927,19 @@ class d13_module_research extends d13_module
 				
 				$i++;
 				
+				$tmp_technology = new d13_technology($tid, $this->node);
+				
 				// - - - - - Check Cost & Requirements
-
-				$costData = '';
-				foreach($technology['cost'] as $key => $cost) {
-					$costData.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div><div class="cell">' . ($cost['value'] * $d13->getGeneral('users', 'cost', 'research')) . '</div>';
-				}
-
-				if (!count($technology['requirements'])) {
-					$requirementsData = $d13->getLangUI('none');
-				}
-				else {
-					$requirementsData = '';
-					foreach($technology['requirements'] as $key => $requirement) {
-						$requirementsData.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $requirement['id'] . '.png" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div><div class="cell">' . $requirement['level'] . '</div>';
-					}
-				}
+				$costData = $tmp_technology->getCostList();
+				$requirementsData = $tmp_technology->getRequirementList();
 
 				// - - - - - Check Permissions
 
 				$linkData = '';
 				$check_requirements = NULL;
 				$check_cost = NULL;
-				$check_requirements = $this->node->checkRequirements($technology['requirements']);
-				$check_cost = $this->node->checkCost($technology['cost'], 'research');
+				$check_requirements = $this->node->checkRequirements($tmp_technology->data['requirements']);
+				$check_cost = $this->node->checkCost($tmp_technology->data['cost'], 'research');
 				if ($check_requirements['ok'] && $check_cost['ok'] && $this->node->technologies[$tid]['level'] < $technology['maxLevel']) {
 					$linkData.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
 					$linkData.= '<a href="?p=module&action=addTechnology&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&technologyId=' . $tid . '" class="external button active">' . $d13->getLangUI("launch") . ' ' . $d13->getLangUI("research") . '</a>';

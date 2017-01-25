@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// LOGIN.CONTROLLER
+// EMPTY.CONTROLLER
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
@@ -13,11 +13,10 @@
 //
 // ========================================================================================
 
-class d13_loginController extends d13_controller
+class d13_termsController extends d13_controller
 {
 	
-	private $node, $nodeId;
-	
+		
 	// ----------------------------------------------------------------------------------------
 	// construct
 	// @
@@ -25,14 +24,10 @@ class d13_loginController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct($node)
+	function __construct()
 	{
-		if (isset($node) && !empty($node)) {
-			$this->node = $node;
-			$this->nodeId = $this->node->data['id'];
-		} else {
-			$this->nodeId = 0;
-		}	
+		
+		$this->getTemplate();
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -48,12 +43,10 @@ class d13_loginController extends d13_controller
 		global $d13;
 		
 		$tvars = array();
-		$html = '';
 		
+		$d13->templateRender("terms", $tvars);
 		
 	}
-	
-	
 
 }
 

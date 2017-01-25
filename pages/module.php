@@ -28,8 +28,8 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 	$status = $node->get('id', $_GET['nodeId']);
 	$node->getModules();
 	
-	$mid = $node->modules[$_GET['slotId']]['module'];
-	$sid = $node->modules[$_GET['slotId']]['slot'];
+	#$mid = $node->modules[$_GET['slotId']]['module'];
+	#$sid = $node->modules[$_GET['slotId']]['slot'];
 	
 	if ($status == 'done') {
 		$node->checkAll(time());

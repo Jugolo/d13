@@ -17,7 +17,6 @@ class d13_notes
 
 {
 	
-	private $node;
 	
 
 	#noteAdd

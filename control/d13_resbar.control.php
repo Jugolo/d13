@@ -16,7 +16,7 @@
 class d13_resBarController extends d13_controller
 {
 	
-	private $node, $nodeId, $user;
+	private $node, $user;
 	
 	// ----------------------------------------------------------------------------------------
 	// construct
@@ -27,13 +27,12 @@ class d13_resBarController extends d13_controller
 	
 	function __construct($node)
 	{
-		if (isset($node) && !empty($node)) {
-			$this->node 	= $node;
-			$this->nodeId 	= $this->node->data['id'];
-			$this->user 	= new user();
-		} else {
-			$this->nodeId = 0;
-		}	
+		
+		$this->node 	= $node;
+		$this->node->getResources();
+	
+		$this->user 	= new user();
+		
 	}
 
 	// ----------------------------------------------------------------------------------------

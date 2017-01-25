@@ -35,6 +35,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			$status = $node->get('id', $_GET['nodeId']);
 			if ($status == 'done') {
 				if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
+					$_SESSION[CONST_PREFIX . 'User']['node'] = $_GET['nodeId'];
 					$node->checkAll(time());
 					$node->getLocation();
 					$node->getQueue('build');

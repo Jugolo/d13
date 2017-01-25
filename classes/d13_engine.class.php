@@ -35,7 +35,8 @@ class d13
 		$this->session 	= new d13_session();
 		$this->logger 	= new d13_logger();
 		$this->data 	= new d13_data();
-		#$this->flags = new d13_flags();
+		
+		$this->flags = new d13_flags();
 		
 		if (CONST_FLAG_PROFILER) {
 			$this->profiler = new d13_profiler();
@@ -225,7 +226,14 @@ class d13
 	{
 		return $this->data->units->get(func_get_args());
 	}
+	
+	public
 
+	function getRoute()
+	{
+		return $this->data->router->get(func_get_args());
+	}
+	
 	// ========================================================================================
 	//								OTHER WRAPPER METHODS
 	// ========================================================================================

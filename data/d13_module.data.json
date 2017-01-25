@@ -905,6 +905,7 @@
       "options": {
         "allianceAdd": true,
         "allianceGet": true,
+        "allianceSet": true,
         "allianceEdit": true,
         "allianceRemove": true,
         "allianceInvite": true,
