@@ -2,8 +2,7 @@
    var timerIds=new Array();
 </script>
 
-<div class="d13-node" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/nodeBackground.png);">
-
+<div class="d13-node" >
 <div class="card no-border large-card card-shadow">
 
 	<div class="card-header no-border">
@@ -19,6 +18,7 @@
 	
 		<div class="col-25">
 			<img src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/avatars/{{tvar_userImage}}" width="80">
+			{{tvar_avatarLink}}
 		</div>
 		
 		<div class="col-75">
@@ -98,4 +98,5 @@
 		<div class="right"></div>
 	</div>
 	
+</div>
 </div>

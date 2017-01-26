@@ -18,7 +18,7 @@ img {
 .large-card {
 	width: 90%;
 	height: 80%;
-	top: 1%;
+	
 	
 	border-style: solid;
 	background: transparent;
@@ -54,6 +54,7 @@ img {
 
 .page ,.page-content ,.views ,.view-main ,.login-screen-content ,.statusbar ,.statusbar-overlay { 
     overflow: hidden;
+    background: transparent;
 }
 
 .navbar, .toolbar, .subnavbar, .buttons-row, .item-content, .navbar-inner {
@@ -61,7 +62,7 @@ img {
 	background: transparent;
 }
 
-.navbar:before, .subnavar:before, .navbar:after, .subnavbar:after {
+.navbar:before, .subnavar:before, .navbar:after, .subnavbar:after, .toolbar:before, .toolbar:after {
 	border-style:none;
 	text-decoration: none;
 	border-width: 0;
@@ -73,16 +74,19 @@ img {
 .subnavbar {
 	left: 0;
 	font-size: 9pt;
+	font-weight: normal;
+	background: transparent;
 }
 
 .page-content {
 	text-align: center;
 	padding: 0;
+	margin: 0;
 }
 
 .row {
-	padding-top: 1%;
-	margin: auto;
+	padding: 0;
+	margin: 0;
 }
 
 .panel {
@@ -100,7 +104,7 @@ img {
 }
 
 .card-content {
-	min-height: 75%;
+	
 	height: auto;
     padding: 0;
     margin: 0;
@@ -108,7 +112,8 @@ img {
 
 .card-header {
 	max-height: 2%;
-	
+	padding: 0;
+    margin: 0;
 }
 
 .card-footer {
@@ -141,11 +146,13 @@ img {
 .swiper-container, .swiper-container-horizontal,   {
 	width: 100%;
 	height: 100%;
+	padding: 0;
+	margin: 0;
 }
 
 .swiper-slide {
-	padding-top: 1%;
-	margin: auto;
+	padding: 0;
+	margin: 0;
 }
 
 .swiper-slide-list
@@ -194,12 +201,11 @@ img {
 .d13-node {
  width: 100%;
  height: 100%;
- background-repeat: repeat;
  text-align: center;
  position: relative;
- vertical-align: middle;
- padding: auto;
- margin: auto;
+ vertical-align: top;
+ padding: 0;
+ margin: 0;
 }
 
 .d13-module

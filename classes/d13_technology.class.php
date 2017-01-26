@@ -30,7 +30,7 @@ class d13_technology
 	function __construct($id, $node)
 	{
 		$this->setNode($node);
-		$this->setStats($id);
+		$this->addStats($id);
 		$this->checkUpgrades();
 	}
 
@@ -51,14 +51,14 @@ class d13_technology
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// setStats
+	// addStats
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
 
 	public
 
-	function setStats($id)
+	function addStats($id)
 	{
 		global $d13;
 		
@@ -268,7 +268,7 @@ class d13_technology
 		// - - - - - - - - - - - - - - - MODULE UPGRADES
 		if (!empty($this->data['upgrades']) && $this->data['type'] != 'unit' && $this->data['level'] > 0) {
 			foreach ($this->data['upgrades'] as $upgrade_id) {
-				$tmp_upgrade = $d13->getUpgrade($this->node->data['faction'], $upgrade_id);
+				$tmp_upgrade = $d13->getUpgradeTechnology($this->node->data['faction'], $upgrade_id);
 				if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $this->data['upgrades'])) {
 					$tmp_upgrade['level'] = $this->data['level'];
 					$my_upgrades[] = $tmp_upgrade;
@@ -289,7 +289,7 @@ class d13_technology
 		}
 		
 		if (!empty($tmp_list)) {
-			foreach ($d13->getUpgrade($this->node->data['faction']) as $tmp_upgrade) {
+			foreach ($d13->getUpgradeTechnology($this->node->data['faction']) as $tmp_upgrade) {
 				if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $tmp_list)) {
 					
 					
@@ -330,12 +330,12 @@ class d13_technology
 					if (isset($attribute['stat'])) {
 						if ($attribute['stat'] == 'all' && ($this->data['type'] == 'unit')) {
 							foreach($d13->getGeneral('stats') as $stat) {
-								$value = $attribute['value'] * $upgrade['level'];
+								$value = misc::upgraded_value($attribute['value'] * $upgrade['level'], $this->data[$stat]);
 								$this->data[$stat] += $value;
 								$this->data['upgrade_' . strtolower($stat)] += $value;
 							}
 						} else if ($attribute['stat'] != 'all') {
-							$value = $attribute['value'] * $upgrade['level'];
+							$value = misc::upgraded_value($attribute['value'] * $upgrade['level'], $this->data[$attribute['stat']]);
 							$this->data[$attribute['stat']] += $value;
 							$this->data['upgrade_' . strtolower($attribute['stat'])] += $value;
 						}

@@ -16,7 +16,9 @@
 class d13_combat
 
 {
-
+	
+	private $attackerNode, $defenderNode, $attackerUser, $defenderUser;
+	
 	// ----------------------------------------------------------------------------------------
 	// construct
 	// @
@@ -25,8 +27,37 @@ class d13_combat
 
 	public
 
-	function __construct()
+	function __construct($data)
 	{
+		return $this->doCombat($data);
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// doCombat
+	// Processes the whole combat including its results and effects
+	// Important: Function call order must NOT change!
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function doCombat($data)
+	{
+	
+		global $d13;
+		
+		$data = $this->doCalculateAttackerStats($data);
+		$data = $this->doCalculateDefenderStats($data);
+		$data = $this->doCalculateCombatSetup($data);
+		$data = $this->doScoutCheck($data);
+		
+		$data = $this->doCalculateAttackerCasualties($data);
+		$data = $this->doCalculateDefenderCasualties($data);
+		$data = $this->doCalculateWinner($data);
+		$data = $this->doAdjustLeague($data);
+		$data = $this->doApplyCasualties($data);
+		$data = $this->doCalculateAftermath($data);
+		
+		return $data;
 	}
 
 
@@ -51,14 +82,17 @@ class d13_combat
 		foreach($d13->getGeneral('stats') as $stat) {
 			$data['input']['attacker'][$stat] = 0;
 		}
-
-		$node = new node();
-		$status = $node->get('id', $data['input']['attacker']['nodeId']);
+		
+		$this->attackerUser = new user();
+		$status = $this->attackerUser->get('id', $data['input']['attacker']['userId']);
+		
+		$this->attackerNode = new node();
+		$status = $this->attackerNode->get('id', $data['input']['attacker']['nodeId']);
 		
 		$armyBonus = array();	
 		foreach($data['input']['attacker']['groups'] as $key => $group) {
 			if ($group['quantity'] > 0) {
-				$unit = new d13_unit($group['unitId'], $node);
+				$unit = new d13_unit($group['unitId'], $this->attackerNode);
 				if (!empty($unit->data['armyAttackModifier'])) {
 					foreach ($unit->data['armyAttackModifier'] as $modifier) {
 						$armyBonus[] = $modifier;
@@ -70,7 +104,7 @@ class d13_combat
 		foreach($data['input']['attacker']['groups'] as $key => $group) {
 			if ($group['quantity'] > 0) {
 			
-				$unit = new d13_unit($group['unitId'], $node);
+				$unit = new d13_unit($group['unitId'], $this->attackerNode);
 				$stats = $unit->getStats();
 				$upgrades = $unit->getUpgrades();
 			
@@ -140,14 +174,17 @@ class d13_combat
 		foreach($d13->getGeneral('stats') as $stat) {
 			$data['input']['defender'][$stat] = 0;
 		}
+		
+		$this->defenderUser = new user();
+		$status = $this->defenderUser->get('id', $data['input']['defender']['userId']);
 
-		$node = new node();
-		$status = $node->get('id', $data['input']['defender']['nodeId']);
+		$this->defenderNode = new node();
+		$status = $this->defenderNode->get('id', $data['input']['defender']['nodeId']);
 		
 		$armyBonus = array();	
 		foreach($data['input']['defender']['groups'] as $key => $group) {
 			if ($group['quantity'] > 0) {
-				$unit = new d13_unit($group['unitId'], $node);
+				$unit = new d13_unit($group['unitId'], $this->defenderNode);
 				if (!empty($unit->data['armyDefenseModifier'])) {
 					foreach ($unit->data['armyDefenseModifier'] as $modifier) {
 						$armyBonus[] = $modifier;
@@ -162,7 +199,7 @@ class d13_combat
 
 			if ($group['type'] == 'unit' && $group['quantity'] > 0) {
 			
-				$unit = new d13_unit($group['unitId'], $node);
+				$unit = new d13_unit($group['unitId'], $this->defenderNode);
 				$stats = $unit->getStats();
 				$upgrades = $unit->getUpgrades();
 				
@@ -208,7 +245,7 @@ class d13_combat
 
 			} else if ($group['type'] == 'module' && $group['input'] > 0) {
 			
-				$modulit = new d13_modulit($group['moduleId'], $group['level'], $group['input'], $group['unitId'], $node);
+				$modulit = new d13_modulit($group['moduleId'], $group['level'], $group['input'], $group['unitId'], $this->defenderNode);
 				$stats = $modulit->getStats();
 				$upgrades = $modulit->getUpgrades();
 				
@@ -262,20 +299,14 @@ class d13_combat
 	}	
 
 	// ----------------------------------------------------------------------------------------
-	// doCombat
+	// doCalculateCombatSetup
 	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function doCombat($data)
+	private
+	
+	function doCalculateCombatSetup($data)
 	{
 	
 		global $d13;
-		
-		$data = $this->doCalculateAttackerStats($data);
-		$data = $this->doCalculateDefenderStats($data);
-		
-		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Base Damage
 		
 		$percentCap = 400;
 		
@@ -298,9 +329,21 @@ class d13_combat
 		
 		$data['output']['attacker']['totalDamage'] = 0;
 		$data['output']['defender']['totalDamage'] = 0;
+	
+		return $data;
+	
+	}
 
-		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Attacker takes damage
-
+	// ----------------------------------------------------------------------------------------
+	// doCalculateAttackerCasualties
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function doCalculateAttackerCasualties($data)
+	{
+		
+		global $d13;
+		
 		foreach($data['input']['attacker']['groups'] as $key => $group) {
 			if ($group['quantity'] > 0) {
 
@@ -316,7 +359,7 @@ class d13_combat
 					}
 				}
 				
-				$damage = 1+ $baseDamage + $bonusDamage;
+				$damage = 1 + $baseDamage + $bonusDamage;
 				
 				$casualties = floor($damage / ($group['hp']/$group['quantity']));
 				$data['input']['defender']['trueDamage'] -= $casualties * $group['hp'];
@@ -333,8 +376,20 @@ class d13_combat
 			}
 		}
 		
-		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Defender takes damage
+		return $data;
+		
+	}
 
+	// ----------------------------------------------------------------------------------------
+	// doCalculateDefenderCasualties
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function doCalculateDefenderCasualties($data)
+	{
+	
+		global $d13;
+		
 		foreach($data['input']['defender']['groups'] as $key => $group) {
 			if ($group['quantity'] > 0) {
 				
@@ -350,7 +405,7 @@ class d13_combat
 					}
 				}
 				
-				$damage = 1+ $baseDamage + $bonusDamage;
+				$damage = 1 + $baseDamage + $bonusDamage;
 				
 				$casualties = floor($damage / ($group['hp']/$group['quantity']));
 				$data['input']['attacker']['trueDamage'] -= $casualties * $group['hp'];
@@ -370,73 +425,109 @@ class d13_combat
 			
 			}
 		}
+		
+		return $data;
+	
+	}
 
-		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Determine Winner
-
+	// ----------------------------------------------------------------------------------------
+	// doCalculateWinner
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function doCalculateWinner($data)
+	{
+			
+		global $d13;
+		
+		// if scout, winner is who won the scout check
+		
+		// if not scout, winner is combat winner
+		
+		
 		if ($data['output']['defender']['totalDamage'] >= $data['output']['attacker']['totalDamage']) {
 			$data['output']['attacker']['winner'] = 0;
 			$data['output']['defender']['winner'] = 1;
-		}
-		else {
+		} else {
 			$data['output']['attacker']['winner'] = 1;
 			$data['output']['defender']['winner'] = 0;
 		}
 
 		if ((!$data['input']['attacker']['hp']) && (!$data['input']['defender']['hp'])) {
 			$data['output']['attacker']['winner'] = 0;
-			$data['output']['defender']['winner'] = 0;
-		}
-		else
-		if (($data['input']['attacker']['hp']) && (!$data['input']['defender']['hp'])) {
+			$data['output']['defender']['winner'] = 1;
+		} else if (($data['input']['attacker']['hp']) && (!$data['input']['defender']['hp'])) {
 			$data['output']['attacker']['winner'] = 1;
 			$data['output']['defender']['winner'] = 0;
-		}
-
+		}	
+		
 		return $data;
+			
 	}
-
-
 
 	// ----------------------------------------------------------------------------------------
 	// doScoutCheck
 	// ----------------------------------------------------------------------------------------
 	
-	public static
+	private
 	
 	function doScoutCheck($data)
 	{
 	
 		global $d13;
+
+		if ($data['combat']['requiresScoutCheck']) {
+
+			$attacker = $data['input']['attacker']['stealth'];
+			$defender = $data['input']['defender']['vision'];
 		
+			if ($attacker > $defender) {
 		
-		#calculate attacker stats
-		#calculate defender stats
+				$value = percent_difference($attacker, $defender);
+				
+				if ($value > 100) {
+					$value = 100;
+				} else if ($value < 1) {
+					$value = 1;
+				}
+						
+				$data['output']['attacker']['scoutValue'] = $value;
+			
+			} else {
+				$data['output']['attacker']['scoutValue'] = 0;
+			}
+
+			if ($attacker > $defender) {
+				$data['output']['attacker']['scoutCheck'] = 1;
+			} else {
+				$data['output']['attacker']['scoutCheck'] = 0;
+			}
 		
-		# check if attacker 
+		}
 		
+		return $data;
 		
-		
-		
-	
 	}
 	
 	// ----------------------------------------------------------------------------------------
 	// doScout
 	// ----------------------------------------------------------------------------------------
 	
-	public static
+	private
 	
 	function doScout($data)
 	{
 	
 		global $d13;
 		
+		#$data['output']['attacker']['scoutValue']
 		
 		
 		
 		
 		/*
 			"spionage": {
+			"technology": 0,
   			"resources": 10,
   			"modules": 40,
   			"research": 60,
@@ -451,14 +542,14 @@ class d13_combat
 	// doSabotage
 	// ----------------------------------------------------------------------------------------
 	
-	public static
+	private
 	
 	function doSabotage($data)
 	{
 	
 		global $d13;
 		
-		
+		#$data['output']['attacker']['scoutValue']
 		
 		
 		
@@ -470,7 +561,7 @@ class d13_combat
 	// ----------------------------------------------------------------------------------------
 	// doAdjustLeague
 	// ----------------------------------------------------------------------------------------
-	public static
+	private
 	
 	function doAdjustLeague($data)
 	{
@@ -480,41 +571,33 @@ class d13_combat
 		$attackerTrophies = $d13->getGeneral('factors', 'experience') + count($d13->getLeague());
 		$defenderTrophies = $d13->getGeneral('factors', 'experience') + count($d13->getLeague());
 		
-		$attackerUser = new user();
-		$status = $attackerUser->get('id', $data['input']['attacker']['userId']);
+		$a = $this->attackerUser->data['trophies'] +1;
+		$b = $this->defenderUser->data['trophies'] +1;
+		$difference		= sqrt($a / $b);
 		
-		$defenderUser = new user();
-		$status = $defenderUser->get('id', $data['input']['defender']['userId']);
+		$exp_value 		= floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'experience'));
+		$attackerTrophies = floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'trophies'));
+		$defenderTrophies = floor(($difference * $defenderTrophies)  / $d13->getGeneral('factors', 'trophies'));
 		
-		if ($status == 'done') {
-		
-			$exp_value 		= floor($data['output']['attacker']['totalDamage'] / $d13->getGeneral('factors', 'experience'));
-			$difference		= sqrt($attackerUser->data['trophies']+1 / $defenderUser->data['trophies']+1);
-		
-			$attackerTrophies = floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'experience'));
-			$defenderTrophies = floor(($difference * $defenderTrophies)  / $d13->getGeneral('factors', 'experience'));
-		
-			if ($data['output']['attacker']['winner'] > 0) {
-				$attackerTrophies = abs($attackerTrophies);
-				$defenderTrophies = $defenderTrophies * -1;
-			} else {
-				$attackerTrophies = $attackerTrophies * -1;
-				$defenderTrophies = abs($defenderTrophies);
-			}
-
-			// - - - - - Attacker Stats
-			$status = $attackerUser->setStat('experience', $exp_value);
-			$status = $attackerUser->setStat('trophies', $attackerTrophies);
-		
-			// - - - - - Defender Stats
-			$status = $defenderUser->setStat('trophies', $defenderTrophies);
-		
-			$data['output']['attacker']['userstat']['experience'] 	= $exp_value;
-			$data['output']['attacker']['userstat']['trophies'] 	= $attackerTrophies;
-			$data['output']['defender']['userstat']['trophies'] 	= $defenderTrophies;
-		
+		if ($data['output']['attacker']['winner'] > 0) {
+			$attackerTrophies = abs($attackerTrophies);
+			$defenderTrophies = $defenderTrophies * -1;
+		} else {
+			$attackerTrophies = $attackerTrophies * -1;
+			$defenderTrophies = abs($defenderTrophies);
 		}
+
+		// - - - - - Attacker Stats
+		$status = $this->attackerUser->addStat('experience', $exp_value);
+		$status = $this->attackerUser->addStat('trophies', $attackerTrophies);
 		
+		// - - - - - Defender Stats
+		$status = $this->defenderUser->addStat('trophies', $defenderTrophies);
+		
+		$data['output']['attacker']['userstat']['experience'] 	= $exp_value;
+		$data['output']['attacker']['userstat']['trophies'] 	= $attackerTrophies;
+		$data['output']['defender']['userstat']['trophies'] 	= $defenderTrophies;
+						
 		return $data;
 		
 	}
@@ -522,7 +605,7 @@ class d13_combat
 	// ----------------------------------------------------------------------------------------
 	// doStealResources
 	// ----------------------------------------------------------------------------------------
-	public static
+	private
 	
 	function doStealResources($data)
 	{
@@ -535,16 +618,16 @@ class d13_combat
 		$minRatio 		= 1;								// TODO move to data files later
 		$maxRatio 		= 60;								// TODO move to data files later
 		
-		$attackerUser = new user();
-		$status = $attackerUser->get('id', $data['input']['attacker']['userId']);
+		$this->attackerUser = new user();
+		$status = $this->attackerUser->get('id', $data['input']['attacker']['userId']);
 		
-		$defenderUser = new user();
-		$status = $defenderUser->get('id', $data['input']['defender']['userId']);
+		$this->defenderUser = new user();
+		$status = $this->defenderUser->get('id', $data['input']['defender']['userId']);
 		
 		if ($status == 'done') {
 		
-			$attackerLeague = $d13->getLeague(misc::getLeague($attackerUser->data['level'], $attackerUser->data['trophies']));
-			$defenderLeague = $d13->getLeague(misc::getLeague($defenderUser->data['level'], $defenderUser->data['trophies']));
+			$attackerLeague = $d13->getLeague(misc::getLeague($this->attackerUser->data['level'], $this->attackerUser->data['trophies']));
+			$defenderLeague = $d13->getLeague(misc::getLeague($this->defenderUser->data['level'], $this->defenderUser->data['trophies']));
 			
 			$attackerLeague['id']++;
 			$defenderLeague['id']++;
@@ -574,13 +657,11 @@ class d13_combat
 		$data['output']['defender']['resources'] = array();
 		
 		// - Attacker Capacity
-		$attackerNode = new node();
-		$status = $attackerNode->get('id', $data['input']['attacker']['nodeId']);
-		
+
 		if ($status == 'done') {
 		
 			foreach($data['input']['attacker']['groups'] as $key => $group) {
-				$unit = new d13_unit($group['unitId'], $attackerNode);
+				$unit = new d13_unit($group['unitId'], $this->attackerNode);
 				$stats = $unit->getStats();
 				$upgrades = $unit->getUpgrades();
 			
@@ -595,13 +676,11 @@ class d13_combat
 		}
 		
 		// - Defender Availability
-		$defenderNode = new node();
-		$status = $defenderNode->get('id', $data['input']['defender']['nodeId']);
-		
-		if ($status == 'done') {
-			$defenderNode->getResources();
 
-			foreach ($defenderNode->resources as $resource) {
+		if ($status == 'done') {
+			$this->defenderNode->getResources();
+
+			foreach ($this->defenderNode->resources as $resource) {
 			
 				$tmp_res = $d13->getResource($resource['id']);
 			
@@ -661,10 +740,10 @@ class d13_combat
 		$d13->dbQuery('start transaction');
 		
 		$data['output']['defender']['resources'] = $realResList;
-		$ok = $defenderNode->setResources($realResList);
+		$ok = $this->defenderNode->setResources($realResList);
 		
 		$data['output']['attacker']['resources'] = $realResList;
-		$ok = $attackerNode->setResources($realResList, 1);
+		$ok = $this->attackerNode->setResources($realResList, 1);
 
 		if ($ok) {
 			$d13->dbQuery('commit');
@@ -677,27 +756,184 @@ class d13_combat
 		return $data;
 	
 	}
-	
-	// ----------------------------------------------------------------------------------------
-	// checkCombat
-	// ----------------------------------------------------------------------------------------
 
-	public static
+	// ----------------------------------------------------------------------------------------
+	// doApplyCasualties
+	// ----------------------------------------------------------------------------------------
+	private
 	
-	function checkCombat()
+	function doApplyCasualties($data)
+	
 	{
+		
+		global $d13;
+		
+		$data['combat']['overkill'] = true;
+		
+		$this->defenderNode->getResources();
+
+		// - - - - - Defender Groups
+
+		foreach($data['output']['defender']['groups'] as $key => $group) {
+
+			// - - - - - Units
+
+			if ($group['type'] == 'unit') {
+				$d13->dbQuery('update units set value="' . $group['quantity'] . '" where node="' . $this->defenderNode->data['id'] . '" and id="' . $group['unitId'] . '"');
+				if ($d13->dbAffectedRows() == - 1) {
+					$ok = 0;
+				}
+
+				$lostCount = $data['input']['defender']['groups'][$key]['quantity'] - $group['quantity'];
+				if ($lostCount > 0) {
+					$upkeepResource = $d13->getUnit($this->defenderNode->data['faction'], $group['unitId'], 'upkeepResource');
+					$upkeep = $d13->getUnit($this->defenderNode->data['faction'], $group['unitId'], 'upkeep');
+					$this->defenderNode->resources[$upkeepResource]['value']+= $upkeep * $lostCount;
+					$d13->dbQuery('update resources set value="' . $this->defenderNode->resources[$upkeepResource]['value'] . '" where node="' . $this->defenderNode->data['id'] . '" and id="' . $upkeepResource . '"');
+					if ($d13->dbAffectedRows() == - 1) {
+						$ok = 0;
+					}
+				}
+
+				if ($group['quantity']) {
+					$data['combat']['overkill'] = false;
+				}
+
+				// - - - - - Modules
+
+			}
+			else
+			if ($group['type'] == 'module') {
+				$d13->dbQuery('update modules set input="' . $group['input'] . '" where node="' . $this->defenderNode->data['id'] . '" and module="' . $group['moduleId'] . '"');
+				if ($d13->dbAffectedRows() == - 1) {
+					$ok = 0;
+				}
+
+				// no lost count for modules
+
+				if ($group['input']) {
+					$data['combat']['overkill'] = false;
+				}
+			}
+		}
+
+		// - - - - - Attacker Groups
+
+		foreach($data['output']['attacker']['groups'] as $key => $group) {
+			$d13->dbQuery('update combat_units set value="' . $group['quantity'] . '" where combat="' . $data['combat']['cid'] . '" and id="' . $group['unitId'] . '"');
+			if ($d13->dbAffectedRows() == - 1) {
+				$ok = 0;
+			}
+		}
+
+		// - - - - - Check Battle Result
+
+		$start = strftime('%Y-%m-%d %H:%M:%S', $data['combat']['end']);
+		$d13->dbQuery('update combat set stage=1, start="' . $start . '" where id="' . $data['combat']['cid'] . '"');
+		if ($d13->dbAffectedRows() == - 1) {
+			$ok = 0;
+		}
+
+		return $data;
+
+	}
 	
+	// ----------------------------------------------------------------------------------------
+	// doCalculateAftermath
+	// ----------------------------------------------------------------------------------------
+	private
 	
+	function doCalculateAftermath($data)
+	
+	{
+
+		global $d13;
+
+		// - - - - - ScoutReport
+		// -> trigger scout report without harm if 'scout check' passed
+		// -> otherwise trigger battle
+		if ($data['combat']['scoutReport']) {
+		
+		
+		}
+		
+		// lootAttacker
+		// -> gain resources
+		// -> gain no resources
+		if ($data['output']['attacker']['winner'] && $data['combat']['lootAttacker']) {
+		
+			$data = $this->doStealResources($data);
+			
+		}
+		
+		// - - - - - nodeDefenderConquer
+		if ($data['output']['attacker']['winner'] && $data['combat']['nodeDefenderConquer']) {
+			if ($data['combat']['requiresWipeout'] == false || $data['combat']['requiresWipeout'] && $overkill) {
+		
+				$d13->dbQuery('update nodes set user="' . $$nodes['attacker']->data['user'] . '" where id="' . $$nodes['defender']->data['id'] . '"');
+		
+			}
+		}
+		
+		
+		// - - - - - nodeDefenderRemove
+		if ($data['output']['attacker']['winner'] && $data['combat']['nodeDefenderRemove']) {
+			if ($data['combat']['requiresWipeout'] == false || $data['combat']['requiresWipeout'] && $overkill) {
+		
+				$this->remove($$nodes['defender']->data['id']);
+		
+			}
+		}
+		
+		// - - - - - sabotageDefender
+		// -> trigger special effect if scout check passed
+		// -> otherwise trigger battle
+		if ($data['combat']['sabotageDefender']) {
+		
+		
+		}
+		
+
+		if ($d13->dbAffectedRows() == - 1) {
+			$ok = 0;
+		}
+
+		// - - - - - Attacker Report
+		$this->attackerUser->getPreferences('name');
+		if ($this->attackerUser->preferences['combatReports']) {
+			$msg = new message();
+			$msg->data['sender'] = $this->attackerUser->data['name'];
+			$msg->data['recipient'] = $this->attackerUser->data['name'];
+			$msg->data['subject'] = $d13->getLangUI($data['combat']['string']) . ' ' . $d13->getLangUI("report") . ' vs ' . $this->defenderNode->data['name'];
+			$msg->data['body'] = $this->assembleReport($data);
+			$msg->data['type'] = 'attack';
+			$msg->data['viewed'] = 0;
+			$msg->add();
+		}
+		
+		// - - - - - Defender Report
+		$this->defenderUser->getPreferences('name');
+		if ($this->defenderUser->preferences['combatReports']) {
+			$msg = new message();
+			$msg->data['sender'] = $this->defenderUser->data['name'];
+			$msg->data['recipient'] = $this->defenderUser->data['name'];
+			$msg->data['subject'] = $d13->getLangUI($data['combat']['string']) . ' ' . $d13->getLangUI("report") . ' vs ' . $this->attackerNode->data['name'];
+			$msg->data['body'] = $this->assembleReport($data, true);
+			$msg->data['type'] = 'defense';
+			$msg->data['viewed'] = 0;
+			$msg->add();
+		}
+		
+		return $data;
 	
 	}
-
+	
 	// ----------------------------------------------------------------------------------------
 	// assembleReport
 	// ----------------------------------------------------------------------------------------
-
-	public static
+	private
 	
-	function assembleReport($data, $attackerNode, $defenderNode, $type, $other=false)
+	function assembleReport($data, $other=false)
 	{
 		
 		global $d13;
@@ -709,17 +945,17 @@ class d13_combat
 
 		if (!$other) {
 			if ($data['output']['attacker']['winner']) {
-				$tvars['tvar_msgHeader'] = $d13->getLangUI($type) . ' ' . $d13->getLangUI("won");
+				$tvars['tvar_msgHeader'] = $d13->getLangUI($data['combat']['string']) . ' ' . $d13->getLangUI("won");
 			}
 			else {
-				$tvars['tvar_msgHeader'] = $d13->getLangUI($type) . ' ' . $d13->getLangUI("lost");
+				$tvars['tvar_msgHeader'] = $d13->getLangUI($data['combat']['string']) . ' ' . $d13->getLangUI("lost");
 			}
 		} else {
 			if ($data['output']['defender']['winner']) {
-				$tvars['tvar_msgHeader'] = $d13->getLangUI($type) . ' ' . $d13->getLangUI("won");
+				$tvars['tvar_msgHeader'] = $d13->getLangUI($data['combat']['string']) . ' ' . $d13->getLangUI("won");
 			}
 			else {
-				$tvars['tvar_msgHeader'] = $d13->getLangUI($type) . ' ' . $d13->getLangUI("lost");
+				$tvars['tvar_msgHeader'] = $d13->getLangUI($data['combat']['string']) . ' ' . $d13->getLangUI("lost");
 			}
 		}
 
@@ -750,9 +986,9 @@ class d13_combat
 				$totalStealth 	+= $data['input']['attacker']['groups'][$key]['stealth'];
 				$totalDamage 	+= $data['input']['attacker']['groups'][$key]['damage'];
 				
-				$name 			= $d13->getLangGL('units', $attackerNode->data['faction'], $group['unitId'], 'name');
+				$name 			= $d13->getLangGL('units', $this->attackerNode->data['faction'], $group['unitId'], 'name');
 				$label 			= $group['quantity']. "/" .$data['input']['attacker']['groups'][$key]['quantity'];
-				$image 			= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $attackerNode->data['faction'] . '/' . $d13->getUnit($attackerNode->data['faction'], $group['unitId'], 'image');
+				$image 			= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->attackerNode->data['faction'] . '/' . $d13->getUnit($this->attackerNode->data['faction'], $group['unitId'], 'image');
 					
 				$vars = array();
 				$vars['tvar_listImage'] = $image;
@@ -798,11 +1034,11 @@ class d13_combat
 		
 		if (!$other) {
 			$tvars['tvar_msgSelfStats'] = $d13->templateSubpage("msg.combat.stats", $vars);
-			$tvars['tvar_msgSelfRowName'] = $attackerNode->data['name']."'s " . $d13->getLangUI('army');
+			$tvars['tvar_msgSelfRowName'] = $this->attackerNode->data['name']."'s " . $d13->getLangUI('army');
 			$tvars['tvar_msgSelfRow'] = $html;
 		} else {
 			$tvars['tvar_msgOtherStats'] = $d13->templateSubpage("msg.combat.stats", $vars);
-			$tvars['tvar_msgOtherRowName'] = $attackerNode->data['name']."'s " . $d13->getLangUI('army');
+			$tvars['tvar_msgOtherRowName'] = $this->attackerNode->data['name']."'s " . $d13->getLangUI('army');
 			$tvars['tvar_msgOtherRow'] = $html;
 		}
 
@@ -834,9 +1070,9 @@ class d13_combat
 					$totalStealth 	+= $data['input']['defender']['groups'][$key]['stealth'];
 					$totalDamage 	+= $data['input']['defender']['groups'][$key]['damage'];
 					
-					$name 			= $d13->getLangGL('units', $defenderNode->data['faction'], $group['unitId'], 'name');
+					$name 			= $d13->getLangGL('units', $this->defenderNode->data['faction'], $group['unitId'], 'name');
 					$label 			= $group['quantity']. "/" .$data['input']['defender']['groups'][$key]['quantity'];
-					$image 			= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $defenderNode->data['faction'] . '/' . $d13->getUnit($defenderNode->data['faction'], $group['unitId'], 'image');
+					$image 			= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->defenderNode->data['faction'] . '/' . $d13->getUnit($this->defenderNode->data['faction'], $group['unitId'], 'image');
 					
 					$vars = array();
 					$vars['tvar_listImage'] = $image;
@@ -872,9 +1108,9 @@ class d13_combat
 					$totalStealth 	+= $data['input']['defender']['groups'][$key]['stealth'];
 					$totalDamage 	+= $data['input']['defender']['groups'][$key]['damage'];
 					
-					$name = $d13->getLangGL('units', $defenderNode->data['faction'], $group['unitId'], 'name');
+					$name = $d13->getLangGL('units', $this->defenderNode->data['faction'], $group['unitId'], 'name');
 					$label = $group['input']."/".$data['input']['defender']['groups'][$key]['input'];
-					$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $defenderNode->data['faction'] . '/' . $d13->getUnit($defenderNode->data['faction'], $group['unitId'], 'image');
+					$image = CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->defenderNode->data['faction'] . '/' . $d13->getUnit($this->defenderNode->data['faction'], $group['unitId'], 'image');
 					
 					$vars = array();
 					$vars['tvar_listImage'] = $image;
@@ -921,11 +1157,11 @@ class d13_combat
 
 		if (!$other) {
 			$tvars['tvar_msgOtherStats'] = $d13->templateSubpage("msg.combat.stats", $vars);
-			$tvars['tvar_msgOtherRowName'] = $defenderNode->data['name']."'s " . $d13->getLangUI('army');
+			$tvars['tvar_msgOtherRowName'] = $this->defenderNode->data['name']."'s " . $d13->getLangUI('army');
 			$tvars['tvar_msgOtherRow'] = $html;
 		} else {
 			$tvars['tvar_msgSelfStats'] = $d13->templateSubpage("msg.combat.stats", $vars);
-			$tvars['tvar_msgSelfRowName'] = $defenderNode->data['name']."'s " . $d13->getLangUI('army');
+			$tvars['tvar_msgSelfRowName'] = $this->defenderNode->data['name']."'s " . $d13->getLangUI('army');
 			$tvars['tvar_msgSelfRow'] = $html;
 		}
 
@@ -939,8 +1175,8 @@ class d13_combat
 		if (!$other) {
 			
 			// - - - - - Trophies & Experience
-			$attackerUser = new user();
-			$status = $attackerUser->get('id', $attackerNode->data['user']);
+			$this->attackerUser = new user();
+			$status = $this->attackerUser->get('id', $this->attackerNode->data['user']);
 			if ($status == 'done') {
 				$html = '';
 				$html .= '<div class="row">';
@@ -984,8 +1220,8 @@ class d13_combat
 		} else {
 			
 			// - - - - - Trophies & Experience
-			$defenderUser = new user();
-			$status = $defenderUser->get('id', $defenderNode->data['user']);
+			$this->defenderUser = new user();
+			$status = $this->defenderUser->get('id', $this->defenderNode->data['user']);
 			if ($status == 'done') {
 				$html = '';
 				$html .= '<div class="row">';

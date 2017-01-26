@@ -136,10 +136,34 @@ class misc
 	{
 		$percentage = 0;
 		if ($fraction > 0 && $total > 0) {
-			$percentage = ($fraction/$total)*100;
+			$percentage = ($total/100)*$fraction;
 		}
 
 		return $percentage;
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// upgraded_value
+	// ----------------------------------------------------------------------------------------
+
+	public static
+	
+	function upgraded_value($fraction, $total)
+	{
+		
+		$value = 1;
+		
+		if ($fraction > 0 && $total > 0) {
+			$value = floor(misc::percentage($fraction, $total));
+			if ($value > $total) {
+				$value = $total;
+			} else if ($value < 1) {
+				$value = 1;
+			}
+		}
+		
+		return $value;
+		
 	}
 
 	// ----------------------------------------------------------------------------------------

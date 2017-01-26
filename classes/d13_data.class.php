@@ -121,8 +121,9 @@ class d13_collection implements IteratorAggregate
 class d13_data
 
 {
-	public $resources, $modules, $technologies, $units, $upgrades, $components, $general, $navigation, $shields, $factions, $leagues, $combat, $router, $bw, $gl, $ui;
-
+	public $resources, $modules, $technologies, $units, $components, $general, $navigation, $shields, $factions, $leagues, $combat, $router, $bw, $gl, $ui;
+	public $up_unit, $up_module, $up_technology, $up_component, $avatars;
+	
 	// ----------------------------------------------------------------------------------------
 	// construct
 	// @
@@ -140,7 +141,11 @@ class d13_data
 		$this->gl 			= $this->loadFromJSON(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/d13_gamelang.locale.json");
 		$this->general 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_general.data.json");
 		$this->router 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_router.data.json");
-		$this->upgrades 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_upgrade.data.json");
+		$this->up_unit 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_upgrade.unit.data.json");
+		$this->up_module 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_upgrade.module.data.json");
+		$this->up_technology= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_upgrade.technology.data.json");
+		$this->up_component = $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_upgrade.component.data.json");
+		$this->avatars 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_avatars.data.json");
 		$this->resources 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_resource.data.json");
 		$this->modules 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_module.data.json");
 		$this->components 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_component.data.json");

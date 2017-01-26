@@ -33,7 +33,7 @@
   	},
 	{
   		"id": 4,
-  		"active": false,
+  		"active": true,
   		"page": "combat",
   		"class": "combat",
   		"login": true,

@@ -4,8 +4,7 @@
 
 <script src="{{tvar_global_directory}}/plugins/ckeditor/ckeditor.js"></script>
 
-<div class="d13-node" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/nodeBackground.png);">
-<div class="card no-border large-card card-shadow">
+<div class="d13-node" ><div class="card no-border large-card card-shadow">
 
 	<form method="post" class="pure-form" action="?p=message&action=add">
 

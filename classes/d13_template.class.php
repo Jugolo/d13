@@ -161,7 +161,9 @@ class d13_tpl
 		$tvars["tvar_global_basepath"] = CONST_BASE_PATH;
 		$tvars["tvar_global_template"] = $_SESSION[CONST_PREFIX . 'User']['template'];
 		$tvars["tvar_global_color"] = $_SESSION[CONST_PREFIX . 'User']['color'];
-
+		
+		$tvars["tvar_nodeFaction"] = $this->node->data['faction'];
+		
 		// - - - Hide Bottom Toolbar while logged in
 
 		if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
@@ -197,7 +199,10 @@ class d13_tpl
 	
 	function render($template, $vars="", $cache=TRUE, $cache_num=0)
 	{
-	
+		
+		$this->node	= new node();
+		$status 	= $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
+		
 		$tvars = array();
 		$tvars = array_merge($tvars, $vars);
 		$tvars = array_merge($tvars, $this->global_vars($vars, $cache_num));
@@ -281,15 +286,12 @@ class d13_tpl
 
 		// - - - - - Setup the Resource Bar
 		$subnavbar = "";
-		$tvars["tpl_pvar_subnavbar"] = "";
 		$tvars["tpl_page_subbar"] = "";
 		
 		$resBar = new d13_resBarController($this->node);
 		$tvars["tpl_page_subbar"] = $resBar->getTemplate();
 			
-		if (!empty($subnavbar)) {
-			$tvars["tpl_pvar_subnavbar"] = "with-subnavbar";
-		}
+		
 			
 		$tvars["tpl_page_leftPanel"] = '';
 		$tvars["tpl_page_rightPanel"] = $this->node->queues->getQueuesList();

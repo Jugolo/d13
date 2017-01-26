@@ -1,0 +1,768 @@
+[
+  [
+    {
+      "active": true,
+      "type": "harvest",
+      "id": 100,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 150
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 350
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 250
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.5
+        },
+        {
+          "stat": "maxInput",
+          "value": 1
+        },
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "harvest",
+      "id": 101,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.5
+        },
+        {
+          "stat": "maxInput",
+          "value": 1
+        },
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "harvest",
+      "id": 102,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.5
+        },
+        {
+          "stat": "maxInput",
+          "value": 1
+        },
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "craft",
+      "id": 103,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "craft",
+      "id": 104,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "train",
+      "id": 105,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "train",
+      "id": 106,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "train",
+      "id": 107,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "research",
+      "id": 108,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "trade",
+      "id": 109,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "storage",
+      "id": 110,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "storage",
+      "id": 111,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "storage",
+      "id": 112,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "alliance",
+      "id": 113,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "command",
+      "id": 114,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "defense",
+      "id": 115,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 125
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 325
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 225
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        },
+        {
+          "stat": "all",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "harvest",
+      "id": 116,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "research",
+      "id": 117,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "active": true,
+      "type": "warfare",
+      "id": 118,
+      "cost": [
+        {
+          "resource": 0,
+          "factor": 1.5,
+          "value": 100
+        },
+        {
+          "resource": 1,
+          "factor": 1.5,
+          "value": 300
+        },
+        {
+          "resource": 2,
+          "factor": 1.5,
+          "value": 200
+        }
+      ],
+      "attributes": [
+        {
+          "stat": "duration",
+          "value": 0.5
+        }
+      ]
+    },
+        {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+        {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+         {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+            {
+      "active": false,
+      "type": "module",
+      "id": -1,
+      "attributes": [
+        
+      ]
+    },
+    
+    {
+      "active": true,
+      "type": "module",
+      "id": 200,
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.1
+        }
+    	],
+    	"targets": [
+    		0
+    	]
+    },
+    {
+      "active": true,
+      "type": "module",
+      "id": 201,
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.1
+        }
+    	],
+    	"targets": [
+    		1
+    	]
+    },
+    {
+      "active": true,
+      "type": "module",
+      "id": 202,
+      "attributes": [
+        {
+          "stat": "ratio",
+          "value": 0.1
+        }
+    	],
+    	"targets": [
+    		2
+    	]
+    }
+    
+  ]
+]

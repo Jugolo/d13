@@ -16,16 +16,20 @@
        		{{tpl_page_rightPanel}}
     	</div>
 	
-	  <div class="views">
-		<div class="view view-main">
-		  <div class="pages">
+	  <div class="views"  >
+		<div class="view view-main" >
+		  <div class="pages toolbar-through">
 			
-			<div data-page="{{tpl_pvar_name}}" class="page {{tvar_global_notoolbar}} theme-{{tvar_global_color}} navbar-fixed {{tpl_pvar_subnavbar}}">
-			
-			  <div class="navbar theme-{{tvar_global_color}}">
-				<div class="navbar-inner">
+			<div data-page="{{tpl_pvar_name}}" class="page {{tvar_global_notoolbar}} theme-{{tvar_global_color}} with-subnavbar" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/nodeBackground.png);">
+
+			  <div class="subnavbar">
+			  	{{tpl_page_subbar}}
+			  </div>
+			  
+			  <div class="toolbar theme-{{tvar_global_color}}">
+				<div class="toolbar-inner">
 				  {{tpl_page_navbar}}
-				  {{tpl_page_subbar}}
+				  
 				</div>
 			  </div>
  

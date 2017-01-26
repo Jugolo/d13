@@ -17,11 +17,14 @@ V016	--- UPCOMING UPDATE ---
 			- Sabotage Reports
 			- Sabotage Checks
 			
-V015	* Added pagination to league ranking list			
+V015	* Project now also on Github: https://github.com/CriticalHit-d13/d13
+		* Added pagination to league ranking list			
 		* Frontend Checking of Army Integrity finished
 		* Fixed a bug that allowed to build more buildings than possible
 		* Fixed a few alliance bugs
 		* Technologies costs and requirements can now scale according to upgrades
+		* Fixed calculation of attribute upgrades
+		* Users can now select an avatar according to their level
 		
 		* Refactored all remaining procedural pages into their own classes
 		* Added Technology class

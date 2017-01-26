@@ -1892,10 +1892,16 @@ class node
 
 				if (!$combat['stage']) {
 					if ($status == 'done') {
-
-						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GATHER ATTACKER DATA
-
+						
+						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GATHER COMBAT DATA
+						
 						$data = array();
+						
+						$data['combat'] = $d13->getCombat($combat['type']);
+						$data['combat']['end'] = $combat['end'];
+						$data['combat']['cid'] = $combat['id'];
+						
+						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GATHER ATTACKER DATA
 
 						$data['input']['attacker']['userId'] 	= $$nodes['attacker']->data['user'];
 						$data['input']['attacker']['groups'] 	= array();
@@ -1954,162 +1960,10 @@ class node
 							}
 						}
 
-						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CALCULATE COMBAT
+						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - PROCESS COMBAT
 
-						$battle = new d13_combat();
-						$data = $battle->doCombat($data);
-						$data = $battle->doAdjustLeague($data);
-
-						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - COMBAT AFTERMATH
-
-						$overkill = true;
-						$$nodes['defender']->getResources();
-
-						// - - - - - Defender Groups
-
-						foreach($data['output']['defender']['groups'] as $key => $group) {
-
-							// - - - - - Units
-
-							if ($group['type'] == 'unit') {
-								$d13->dbQuery('update units set value="' . $group['quantity'] . '" where node="' . $$nodes['defender']->data['id'] . '" and id="' . $group['unitId'] . '"');
-								if ($d13->dbAffectedRows() == - 1) {
-									$ok = 0;
-								}
-
-								$lostCount = $data['input']['defender']['groups'][$key]['quantity'] - $group['quantity'];
-								if ($lostCount > 0) {
-									$upkeepResource = $d13->getUnit($$nodes['defender']->data['faction'], $group['unitId'], 'upkeepResource');
-									$upkeep = $d13->getUnit($$nodes['defender']->data['faction'], $group['unitId'], 'upkeep');
-									$$nodes['defender']->resources[$upkeepResource]['value']+= $upkeep * $lostCount;
-									$d13->dbQuery('update resources set value="' . $$nodes['defender']->resources[$upkeepResource]['value'] . '" where node="' . $$nodes['defender']->data['id'] . '" and id="' . $upkeepResource . '"');
-									if ($d13->dbAffectedRows() == - 1) {
-										$ok = 0;
-									}
-								}
-
-								if ($group['quantity']) {
-									$overkill = false;
-								}
-
-								// - - - - - Modules
-
-							}
-							else
-							if ($group['type'] == 'module') {
-								$d13->dbQuery('update modules set input="' . $group['input'] . '" where node="' . $$nodes['defender']->data['id'] . '" and module="' . $group['moduleId'] . '"');
-								if ($d13->dbAffectedRows() == - 1) {
-									$ok = 0;
-								}
-
-								// no lost count for modules
-
-								if ($group['input']) {
-									$overkill = false;
-								}
-							}
-						}
-
-						// - - - - - Attacker Groups
-
-						foreach($data['output']['attacker']['groups'] as $key => $group) {
-							$d13->dbQuery('update combat_units set value="' . $group['quantity'] . '" where combat="' . $combat['id'] . '" and id="' . $group['unitId'] . '"');
-							if ($d13->dbAffectedRows() == - 1) {
-								$ok = 0;
-							}
-						}
-
-						// - - - - - Check Battle Result
-
-						$start = strftime('%Y-%m-%d %H:%M:%S', $combat['end']);
-						$d13->dbQuery('update combat set stage=1, start="' . $start . '" where id="' . $combat['id'] . '"');
-						if ($d13->dbAffectedRows() == - 1) {
-							$ok = 0;
-						}
+						$battle = new d13_combat($data);
 						
-						$combatData = $d13->getCombat($combat['type']);
-						
-						
-						// ScoutReport
-						// -> trigger scout report without harm if 'scout check' passed
-						// -> otherwise trigger battle
-						if ($combatData['scoutReport']) {
-						
-						
-						}
-						
-						// lootAttacker
-						// -> gain resources
-						// -> gain no resources
-						if ($data['output']['attacker']['winner'] && $combatData['lootAttacker']) {
-						
-							$data = $battle->doStealResources($data);
-							
-						}
-						
-						// nodeDefenderConquer
-						if ($data['output']['attacker']['winner'] && $combatData['nodeDefenderConquer']) {
-							if ($combatData['requiresWipeout'] == false || $combatData['requiresWipeout'] && $overkill) {
-						
-								$d13->dbQuery('update nodes set user="' . $$nodes['attacker']->data['user'] . '" where id="' . $$nodes['defender']->data['id'] . '"');
-						
-							}
-						}
-						
-						
-						// nodeDefenderRemove
-						if ($data['output']['attacker']['winner'] && $combatData['nodeDefenderRemove']) {
-							if ($combatData['requiresWipeout'] == false || $combatData['requiresWipeout'] && $overkill) {
-						
-								$this->remove($$nodes['defender']->data['id']);
-						
-							}
-						}
-						
-						// sabotageDefender
-						// -> trigger special effect if scout check passed
-						// -> otherwise trigger battle
-						
-						
-
-						if ($d13->dbAffectedRows() == - 1) {
-							$ok = 0;
-						}
-
-						// - - - - - Attacker Report
-
-						$attackerUser = new user();
-						if ($attackerUser->get('id', $$nodes['attacker']->data['user']) == 'done') {
-							$attackerUser->getPreferences('name');
-							if ($attackerUser->preferences['combatReports']) {
-								$msg = new message();
-								$msg->data['sender'] = $attackerUser->data['name'];
-								$msg->data['recipient'] = $attackerUser->data['name'];
-								$msg->data['subject'] = $d13->getLangUI($combat['type']) . ' ' . $d13->getLangUI("report") . ' vs ' . $$nodes['defender']->data['name'];
-								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type']);
-								$msg->data['type'] = 'attack';
-								$msg->data['viewed'] = 0;
-								$msg->add();
-							}
-						}
-
-						// - - - - - Defender Report
-
-						$defenderUser = new user();
-						if ($defenderUser->get('id', $$nodes['defender']->data['user']) == 'done') {
-							$defenderUser->getPreferences('name');
-							if ($defenderUser->preferences['combatReports']) {
-								$msg = new message();
-								$msg->data['sender'] = $defenderUser->data['name'];
-								$msg->data['recipient'] = $defenderUser->data['name'];
-								$msg->data['subject'] = $d13->getLangUI($combat['type']) . ' ' . $d13->getLangUI("report") . ' vs ' . $$nodes['attacker']->data['name'];
-								$msg->data['body'] = $battle->assembleReport($data, $$nodes['attacker'], $$nodes['defender'], $combat['type'], true);
-								$msg->data['type'] = 'defense';
-								$msg->data['viewed'] = 0;
-								$msg->add();
-							}
-						}
-
 					}
 					
 				//- - - - - Recalculate Resource Requirements and Units

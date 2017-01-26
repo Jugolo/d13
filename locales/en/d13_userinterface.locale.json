@@ -281,6 +281,7 @@
   "power": "power",
   "army": "army",
   "size": "size",
+  "avatar": "avatar",
   "stealth": "stealth",
   "attack": "attack",
   "defense": "defense",

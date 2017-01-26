@@ -1,0 +1,85 @@
+[
+  [
+  	{
+      "active": true,
+      "type": "technology",
+      "id": 200,
+      "attributes": [
+        {
+          
+        }
+    	],
+	  "cost": [
+     	{
+         "resource": 0,
+         "factor": 1.5,
+         "value": 100
+     	}
+     	],
+      "targets": [
+    		
+    	]
+    },
+    {
+      "active": true,
+      "type": "technology",
+      "id": 201,
+      "attributes": [
+        {
+          
+        }
+    	],
+	  "cost": [
+     	{
+         "resource": 0,
+         "factor": 1.5,
+         "value": 100
+     	}
+     	],
+      "targets": [
+    		
+    	]
+    },
+    {
+      "active": true,
+      "type": "technology",
+      "id": 202,
+      "attributes": [
+        {
+          
+        }
+    	],
+	  "cost": [
+     	{
+         "resource": 0,
+         "factor": 1.5,
+         "value": 100
+     	}
+     	],
+      "targets": [
+    		
+    	]
+    },
+    {
+      "active": true,
+      "type": "technology",
+      "id": 300,
+      "attributes": [
+        {
+          
+        }
+    	],
+	  "cost": [
+     	{
+         "resource": 0,
+         "factor": 1.5,
+         "value": 10
+     	}
+     	],
+      "targets": [
+    		0,1,2
+    	]
+    }
+    
+  ]
+]

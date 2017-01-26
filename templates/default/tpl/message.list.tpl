@@ -2,8 +2,7 @@
    var timerIds=new Array();
 </script>
 
-<div class="d13-node" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/nodeBackground.png);">
-
+<div class="d13-node" >
 	<div class="card no-border large-card card-shadow">
 		<form class="pure-form" method="post" action="?p=message&action=remove" id="messageList">
 		

@@ -194,9 +194,37 @@ class d13
 
 	public
 
-	function getUpgrade()
+	function getAvatar()
 	{
-		return $this->data->upgrades->get(func_get_args());
+		return $this->data->avatars->get(func_get_args());
+	}
+
+	public
+
+	function getUpgradeUnit()
+	{
+		return $this->data->up_unit->get(func_get_args());
+	}
+
+	public
+
+	function getUpgradeModule()
+	{
+		return $this->data->up_module->get(func_get_args());
+	}
+
+	public
+
+	function getUpgradeTechnology()
+	{
+		return $this->data->up_technology->get(func_get_args());
+	}
+
+	public
+
+	function getUpgradeComponent()
+	{
+		return $this->data->up_component->get(func_get_args());
 	}
 
 	public

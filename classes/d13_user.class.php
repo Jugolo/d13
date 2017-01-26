@@ -306,13 +306,38 @@ class user
 		else $status = 'noUser';
 		return $status;
 	}
-	
+
 	// ----------------------------------------------------------------------------------------
 	// setStat
 	// ----------------------------------------------------------------------------------------
 	public
 	
 	function setStat($stat, $value)	
+	{
+	
+		global $d13;
+
+		$status = 0;
+		
+
+			$d13->dbQuery('update users set '.$stat.'="'.$value.'" where id="' . $this->data['id'] . '"');
+			
+			if ($d13->dbAffectedRows() > - 1) {
+				$status = 1;
+			}
+			
+		
+		
+		return $status;
+	
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// addStat
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function addStat($stat, $value)	
 	{
 	
 		global $d13;
@@ -326,7 +351,7 @@ class user
 			
 			if ($tmp_stat['isExp']) {
 				if ($this->data[$tmp_stat['name']] >= misc::nextlevelexp($this->data['level'])) {
-					$this->setStat('level', 1);
+					$this->addStat('level', 1);
 				}
 			}
 			
@@ -365,9 +390,9 @@ class user
 			$i++;
 		}
 		
-		$value = floor((($value/$i)*$level)/$d13->getGeneral('factors', 'experience'));
+		$value = abs(floor((($value/$i)*$level)/$d13->getGeneral('factors', 'experience')));
 	
-		$status = $this->setStat('experience', $value);
+		$status = $this->addStat('experience', $value);
 		
 		return $status;
 		
@@ -387,7 +412,7 @@ class user
 	
 		//- - - - - Player Name & Avatar
 		$tvars['tvar_userName'] 		= $this->data['name'];
-		$tvars['tvar_userImage'] 		= $this->data['avatar'];
+		$tvars['tvar_userImage'] 		= $d13->getAvatar($this->data['avatar'], 'image');
 		
 		//- - - - - Player Alliance
 		

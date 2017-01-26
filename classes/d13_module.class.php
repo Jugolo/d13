@@ -143,7 +143,7 @@ class d13_module
 		// - - - - - - - - - - - - - - - MODULE UPGRADES
 		if (!empty($this->data['upgrades']) && $this->data['type'] != 'unit' && $this->data['level'] > 1) {
 			foreach ($this->data['upgrades'] as $upgrade_id) {
-				$tmp_upgrade = $d13->getUpgrade($this->node->data['faction'], $upgrade_id);
+				$tmp_upgrade = $d13->getUpgradeModule($this->node->data['faction'], $upgrade_id);
 				if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $this->data['upgrades'])) {
 					$tmp_upgrade['level'] = $this->data['level'];
 					$my_upgrades[] = $tmp_upgrade;
@@ -164,7 +164,7 @@ class d13_module
 		}
 		
 		if (!empty($tmp_list)) {
-			foreach ($d13->getUpgrade($this->node->data['faction']) as $tmp_upgrade) {
+			foreach ($d13->getUpgradeModule($this->node->data['faction']) as $tmp_upgrade) {
 				if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $tmp_list)) {
 					
 					

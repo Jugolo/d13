@@ -29,7 +29,7 @@ class d13_unit
 	function __construct($unitId, $node)
 	{
 		$this->setNode($node);
-		$this->setStats($unitId);
+		$this->addStats($unitId);
 		$this->checkUpgrades();
 	}
 
@@ -50,14 +50,14 @@ class d13_unit
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// setStats
+	// addStats
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
 
 	public
 
-	function setStats($unitId)
+	function addStats($unitId)
 	{
 		global $d13;
 		
@@ -261,7 +261,7 @@ class d13_unit
 
 		// - - - - - - - - - - - - - - - COST & ATTRIBUTES
 
-		foreach($d13->getUpgrade($this->node->data['faction']) as $upgrade) {
+		foreach($d13->getUpgradeUnit($this->node->data['faction']) as $upgrade) {
 			if ($upgrade['type'] == $this->data['type'] && $upgrade['id'] == $this->data['unitId']) {
 
 				// - - - - - - - - - - - - - - - COST
@@ -319,15 +319,15 @@ class d13_unit
 
 		foreach($unit_upgrades as $technology) {
 			foreach($technology['upgrades'] as $upgrade) {
-				if ($d13->getUpgrade($this->node->data['faction'], $upgrade, 'id') == $this->data['unitId'] && $d13->getUpgrade($this->node->data['faction'], $upgrade, 'type') == $this->data['type']) {
-					foreach($d13->getUpgrade($this->node->data['faction'], $upgrade, 'attributes') as $stats) {
+				if ($d13->getUpgradeUnit($this->node->data['faction'], $upgrade, 'id') == $this->data['unitId'] && $d13->getUpgradeUnit($this->node->data['faction'], $upgrade, 'type') == $this->data['type']) {
+					foreach($d13->getUpgradeUnit($this->node->data['faction'], $upgrade, 'attributes') as $stats) {
 						if ($stats['stat'] == 'all') {
 							foreach($d13->getGeneral('stats') as $stat) {
-								$this->data['upgrade_' . $stat] = floor(misc::percentage($stats['value'] * $technology['level'], $this->data[$stat]));
+								$this->data['upgrade_' . $stat] = misc::upgraded_value($stats['value'] * $technology['level'], $this->data[$stat]);
 							}
 						}
 						else {
-							$this->data['upgrade_' . $stats['stat']] = floor(misc::percentage($stats['value'] * $technology['level'], $this->data[$stats['stat']]));
+							$this->data['upgrade_' . $stats['stat']] = misc::upgraded_value($stats['value'] * $technology['level'], $this->data[$stats['stat']]);
 						}
 					}
 				}

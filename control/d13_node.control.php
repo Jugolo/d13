@@ -593,7 +593,7 @@ class d13_nodeController extends d13_controller
 	
 		global $d13;
 		
-		$tvars['tvar_nodeFaction'] 	= $this->node->data['faction'];
+		#$tvars['tvar_nodeFaction'] 	= $this->node->data['faction'];
 		$tvars['tvar_nodeID'] 		= $this->node->data['id'];
 		$tvars['tvar_nodeName'] 	= $this->node->data['name'];
 		$tvars['tvar_nodeX'] 		= $this->node->data['x'];
