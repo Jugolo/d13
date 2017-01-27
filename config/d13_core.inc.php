@@ -24,7 +24,7 @@ spl_autoload_register(function ($className){
         require_once  $fullPath;
         return;
     }
-    $fullPath = CONST_INCLUDE_PATH."control/".$className.".php";
+    $fullPath = CONST_INCLUDE_PATH."control/".strtolower($className).".php";
 
     if(is_file($fullPath)){
         require_once  $fullPath;
