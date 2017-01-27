@@ -172,17 +172,15 @@
     }
   },
   "spionage": {
-  	"technology": 0,
-  	"resources": 10,
-  	"modules": 40,
-  	"research": 60,
-  	"unit": 90
+  	"technology": 10,
+  	"resources": 40,
+  	"modules": 60,
+  	"unit": 80
   },
   "sabotage": {
-  	"technology": 0,
-  	"resources": 10,
-  	"modules": 40,
-  	"research": 60,
-  	"unit": 90
+  	"technology": 10,
+  	"resources": 40,
+  	"modules": 60,
+  	"unit": 80
   }
 }

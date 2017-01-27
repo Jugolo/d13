@@ -101,11 +101,13 @@ img {
 	max-height: 1024px;
     vertical-align: middle;
     margin: auto;
+    overflow: hidden;
 }
 
 .card-content {
-	
-	height: auto;
+	overflow: hidden;
+	min-height: 75%;
+	max-height: 90%;
     padding: 0;
     margin: 0;
 }

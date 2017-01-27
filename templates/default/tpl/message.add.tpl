@@ -4,7 +4,8 @@
 
 <script src="{{tvar_global_directory}}/plugins/ckeditor/ckeditor.js"></script>
 
-<div class="d13-node" ><div class="card no-border large-card card-shadow">
+<div class="d13-node" >
+<div class="card no-border large-card card-shadow">
 
 	<form method="post" class="pure-form" action="?p=message&action=add">
 
@@ -16,21 +17,17 @@
 	<div class="card-content">
     	<div class="card-content-inner">
 		
-			<div class="content-block">
 				
-				<div>
+				
 				<div class="cell">{{tvar_ui_recipient}}: <input class="textbox" placeholder="{{tvar_ui_recipient}}" type="text" name="recipient" value="{{tvar_recipient}}" style="width: 200px;"></div><div class="cell"></div>
 				<div class="cell">{{tvar_ui_subject}}: <input class="textbox" placeholder="{{tvar_ui_subject}}" type="text" name="subject" value="{{tvar_subject}}" style="width: 200px;"></div><div class="cell"></div>
-				</div>
-				<div>
+			
 				<textarea class="textbox" name="msgbody">{{tvar_body}}</textarea>
 				<script>
                 CKEDITOR.replace( 'msgbody' );
             	</script>
-				</div>
 				
-				
-			</div>
+			
 		
 		</div>
 	</div>

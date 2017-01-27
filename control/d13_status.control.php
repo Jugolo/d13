@@ -25,7 +25,7 @@ class d13_statusController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct($userId=0)
 	{
 		
 		$tvars = array();
@@ -34,6 +34,8 @@ class d13_statusController extends d13_controller
 
 			if (isset($_GET['userId'])) {
 				$userId = $_GET['userId'];
+				$this->own = false;
+			} else if ($userid > 0) {
 				$this->own = false;
 			} else {
 				$userId = $_SESSION[CONST_PREFIX . 'User']['id'];

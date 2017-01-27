@@ -2156,7 +2156,7 @@ class d13_module_alliance extends d13_module
 
 		if ($this->data['options']['allianceEdit']) {
 			$tvars['tvar_Label'] = $d13->getLangUI("edit") . ' ' . $d13->getLangUI("alliance");
-			$tvars['tvar_Link'] = '?p=alliance&action=add&nodeId=' . $this->node->data['id'];
+			$tvars['tvar_Link'] = '?p=alliance&action=set&nodeId=' . $this->node->data['id'];
 			$tvars['tvar_LinkLabel'] = $d13->getLangUI("edit") . ' ' . $d13->getLangUI("alliance");
 			$tvars['tvar_description'] = '';
 			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);

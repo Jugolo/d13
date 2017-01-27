@@ -71,19 +71,28 @@ class d13_rankingController extends d13_controller
 			$result = $d13->dbQuery('select * from users order by trophies desc, level desc limit ' . $limit . ' offset ' . $offset);
 			for ($i = 0; $row = $d13->dbFetch($result); $i++) {
 					$row['league'] = misc::getLeague($row['level'], $row['trophies']);
-					$users[] = $row;	
+					$users[] = new user($row['id']);	
 			}
 	
 			$pageCount = ceil($count / $limit);
 		
 			foreach ($users as $user) {
+				
 				$vars = array();
-				$vars['tvar_listAvatar'] 	= $user['avatar'];
-				$vars['tvar_listLeague']	= $d13->getLeague($user['league'], 'image');
-				$vars['tvar_listName'] 		= $d13->getLangGL('leagues', $user['league'], 'name');
-				$vars['tvar_listLink']		= '?p=status&userId='.$user['id'];
-				$vars['tvar_listLabel'] 	= $user['name'];
-				$vars['tvar_listAmount'] 	= $user['trophies'];
+				$uvars = array();
+				$uvars = $user->getTemplateVariables();
+				
+				$vars['tvar_listLink']		= '?p=status&userId='.$uvars['tvar_userID'];
+				$vars['tvar_listAmount'] 	= $uvars['tvar_userTrophies'];
+				$vars['tvar_listLabel'] 	= $uvars['tvar_userName'];
+				
+				$vars['tvar_listAvatar'] 	= $uvars['tvar_userImage'];
+				$vars['tvar_listLeague']	= $uvars['tvar_userImageLeague'];
+				$vars['tvar_listName'] 		= $uvars['tvar_userLeague'];
+				
+				
+				
+				
 				$tvars['tvar_userRankings'] .= $d13->templateSubpage("sub.module.leaguecontent", $vars);
 			}
 	

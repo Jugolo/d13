@@ -35,9 +35,9 @@ class node
 
 	function __construct()
 	{
+		
+		
 		$this->queues = new d13_queue($this);
-		
-		
 		
 	}
 
@@ -302,6 +302,7 @@ class node
 	function getResources()
 	{
 		global $d13;
+		
 		$this->resources = array();
 		$this->production = array();
 		$this->storage = array();
@@ -310,14 +311,16 @@ class node
 		for ($i = 0; $row = $d13->dbFetch($result); $i++) {
 			$tmp_resources[$i] = $row;
 		}
-
+		
 		foreach($d13->getResource() as $resource) {
 			$this->production[$resource['id']] = 0;
 			$this->production[$resource['id']] += $d13->getResource($resource['id'], 'autoproduction');
 			$this->storage[$resource['id']] = $d13->getResource($resource['id'], 'storage');
 			$this->resources[$resource['id']] = $tmp_resources[$resource['id']];
 		}
-
+		
+		$this->getModules();
+		
 		if ($this->modules) {
 			foreach($this->modules as $module) {
 				if ($module['module'] > - 1) {
@@ -1871,6 +1874,7 @@ class node
 		$ok = 1;
 		
 		foreach($this->queue['combat'] as $combat) {
+		
 			$combat['end'] = $combat['start'] + floor($combat['duration']);
 			if ($combat['end'] <= $time) {
 			
@@ -1881,15 +1885,14 @@ class node
 						'defender' => 'otherNode'
 					);
 					$status = $otherNode->get('id', $combat['recipient']);
-				}
-				else {
+				} else {
 					$nodes = array(
 						'attacker' => 'otherNode',
 						'defender' => 'this'
 					);
 					$status = $otherNode->get('id', $combat['sender']);
 				}
-
+				
 				if (!$combat['stage']) {
 					if ($status == 'done') {
 						
@@ -1903,11 +1906,11 @@ class node
 						
 						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GATHER ATTACKER DATA
 
-						$data['input']['attacker']['userId'] 	= $$nodes['attacker']->data['user'];
+						$data['input']['attacker']['userId'] 	= ${$nodes['attacker']}->data['user'];
 						$data['input']['attacker']['groups'] 	= array();
 						$data['input']['attacker']['focus'] 	= $combat['focus'];
-						$data['input']['attacker']['faction'] 	= $$nodes['attacker']->data['faction'];
-						$data['input']['attacker']['nodeId'] 	= $$nodes['attacker']->data['id'];
+						$data['input']['attacker']['faction'] 	= ${$nodes['attacker']}->data['faction'];
+						$data['input']['attacker']['nodeId'] 	= ${$nodes['attacker']}->data['id'];
 						$data['output']['attacker']['resources'] = array();
 						
 						// - - - - - ATTACKER UNITS
@@ -1922,18 +1925,18 @@ class node
 
 						// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - GATHER DEFENDER DATA
 						
-						$data['input']['defender']['userId'] 	= $$nodes['defender']->data['user'];
+						$data['input']['defender']['userId'] 	= ${$nodes['defender']}->data['user'];
 						$data['input']['defender']['groups'] 	= array();
-						$data['input']['defender']['focus'] 	= $$nodes['defender']->data['focus'];
-						$data['input']['defender']['faction'] 	= $$nodes['defender']->data['faction'];
-						$data['input']['defender']['nodeId'] 	= $$nodes['defender']->data['id'];
+						$data['input']['defender']['focus'] 	= ${$nodes['defender']}->data['focus'];
+						$data['input']['defender']['faction'] 	= ${$nodes['defender']}->data['faction'];
+						$data['input']['defender']['nodeId'] 	= ${$nodes['defender']}->data['id'];
 						$data['output']['defender']['resources'] = array();
 						
 						// - - - - - DEFENDER UNITS
 
 						if (!$d13->getGeneral('options', 'unitAttackOnly')) {
 							$otherNode->getUnits();
-							foreach($$nodes['defender']->units as $group) {
+							foreach(${$nodes['defender']}->units as $group) {
 								$data['input']['defender']['groups'][] = array(
 									'unitId' => $group['id'],
 									'type' => 'unit',
@@ -1945,16 +1948,16 @@ class node
 						// - - - - - DEFENDER MODULES
 
 						$otherNode->getModules();
-						foreach($$nodes['defender']->modules as $group) {
+						foreach(${$nodes['defender']}->modules as $group) {
 							if ($group['module'] > - 1) {
-								if ($d13->getModule($$nodes['defender']->data['faction'], $group['module'], 'type') == 'defense' && $group['input'] > 0) {
+								if ($d13->getModule(${$nodes['defender']}->data['faction'], $group['module'], 'type') == 'defense' && $group['input'] > 0) {
 									$data['input']['defender']['groups'][] = array(
 										'moduleId' => $group['module'],
-										'unitId' => $d13->getModule($$nodes['defender']->data['faction'], $group['module'], 'unitId') ,
+										'unitId' => $d13->getModule(${$nodes['defender']}->data['faction'], $group['module'], 'unitId') ,
 										'type' => 'module',
 										'level' => $group['level'],
 										'input' => $group['input'],
-										'maxInput' => $d13->getModule($$nodes['defender']->data['faction'], $group['module'], 'maxInput')
+										'maxInput' => $d13->getModule(${$nodes['defender']}->data['faction'], $group['module'], 'maxInput')
 									);
 								}
 							}
@@ -1968,31 +1971,34 @@ class node
 					
 				//- - - - - Recalculate Resource Requirements and Units
 				} else {
-					$$nodes['attacker']->getResources();
-					$result = $d13->dbQuery('select * from combat_units where combat="' . $combat['id'] . '"');
-					while ($group = $d13->dbFetch($result)) {
-						$d13->dbQuery('update units set value=value+"' . $group['value'] . '" where node="' . $combat['sender'] . '" and id="' . $group['id'] . '"');
+				
+					if ($status == 'done') {
+						${$nodes['attacker']}->getResources();
+						$result = $d13->dbQuery('select * from combat_units where combat="' . $combat['id'] . '"');
+						while ($group = $d13->dbFetch($result)) {
+							$d13->dbQuery('update units set value=value+"' . $group['value'] . '" where node="' . $combat['sender'] . '" and id="' . $group['id'] . '"');
+							if ($d13->dbAffectedRows() == - 1) {
+								$ok = 0;
+							}
+
+							$upkeepResource = $d13->getUnit(${$nodes['attacker']}->data['faction'], $group['id'], 'upkeepResource');
+							$upkeep = $d13->getUnit(${$nodes['attacker']}->data['faction'], $group['id'], 'upkeep');
+							$this->resources[$upkeepResource]['value']-= $upkeep * $group['value'];
+							$d13->dbQuery('update resources set value="' . ${$nodes['attacker']}->resources[$upkeepResource]['value'] . '" where node="' . ${$nodes['attacker']}->data['id'] . '" and id="' . $upkeepResource . '"');
+							if ($d13->dbAffectedRows() == - 1) {
+								$ok = 0;
+							}
+						}
+
+						$d13->dbQuery('delete from combat_units where combat="' . $combat['id'] . '"');
 						if ($d13->dbAffectedRows() == - 1) {
 							$ok = 0;
 						}
 
-						$upkeepResource = $d13->getUnit($$nodes['attacker']->data['faction'], $group['id'], 'upkeepResource');
-						$upkeep = $d13->getUnit($$nodes['attacker']->data['faction'], $group['id'], 'upkeep');
-						$this->resources[$upkeepResource]['value']-= $upkeep * $group['value'];
-						$d13->dbQuery('update resources set value="' . $$nodes['attacker']->resources[$upkeepResource]['value'] . '" where node="' . $$nodes['attacker']->data['id'] . '" and id="' . $upkeepResource . '"');
+						$d13->dbQuery('delete from combat where id="' . $combat['id'] . '"');
 						if ($d13->dbAffectedRows() == - 1) {
 							$ok = 0;
 						}
-					}
-
-					$d13->dbQuery('delete from combat_units where combat="' . $combat['id'] . '"');
-					if ($d13->dbAffectedRows() == - 1) {
-						$ok = 0;
-					}
-
-					$d13->dbQuery('delete from combat where id="' . $combat['id'] . '"');
-					if ($d13->dbAffectedRows() == - 1) {
-						$ok = 0;
 					}
 				}
 			}

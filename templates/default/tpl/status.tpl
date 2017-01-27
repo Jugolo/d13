@@ -10,7 +10,6 @@
   		<a class="external" href="?p=node&action=list"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 	</div>
   
-  
 	<div class="card-content">
 		<div class="card-content-inner">
 
@@ -82,7 +81,26 @@
 								</div>
 							</li>
 							
-							
+							<li class="item-content">
+								<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/alliances/{{tvar_userAllianceImage}}"></div>
+								<div class="item-inner">
+									<div class="item-title">
+										{{tvar_ui_alliance}}:
+									</div>
+									<div class="item-after">
+										<span class="badge">{{tvar_userAllianceName}} {{tvar_userAllianceTag}}</span>
+									</div>
+								</div>
+								<div class="item-media"></div>
+								<div class="item-inner">
+									<div class="item-title">
+										
+									</div>
+									<div class="item-after">
+										
+									</div>
+								</div>
+							</li>
 
 				</ul>
 				

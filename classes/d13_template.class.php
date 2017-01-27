@@ -137,7 +137,8 @@ class d13_tpl
 	{
 		global $d13;
 		$vars = array();
-		foreach($d13->data->ui as $key => $var) {
+		
+		foreach($d13->data->json['userinterface'] as $key => $var) {
 			$vars["tvar_ui_" . $key] = $var;
 		}
 
@@ -200,8 +201,10 @@ class d13_tpl
 	function render($template, $vars="", $cache=TRUE, $cache_num=0)
 	{
 		
+		if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
 		$this->node	= new node();
-		$status 	= $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
+		$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
+		}
 		
 		$tvars = array();
 		$tvars = array_merge($tvars, $vars);
@@ -268,35 +271,34 @@ class d13_tpl
 	function render_page($template, $tvars = "")
 	{
 		
+		if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
 		$this->node	= new node();
-		$status 	= $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
+		$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
+		}
 
-		if (!empty($tvars)) {
 		$tvars = array_merge($tvars, $this->global_vars($tvars));
 		$tvars = array_merge($tvars, $this->merge_ui_vars());
-		}
+		
 		
 		$tvars["tpl_pvar_name"] = $template;
 		$tvars["tpl_page_leftPanel"] = '';
 		$tvars["tpl_page_rightPanel"] = '';
+		$tvars["tpl_page_navbar"] = "";
+		$tvars["tpl_page_subbar"] = "";
 		
-		// - - - - - Setup the top Navbar
+		
 		$navBar = new d13_navBarController($this->node);
 		$tvars["tpl_page_navbar"] = $navBar->getTemplate();
-
-		// - - - - - Setup the Resource Bar
-		$subnavbar = "";
-		$tvars["tpl_page_subbar"] = "";
+		
+		if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
 		
 		$resBar = new d13_resBarController($this->node);
 		$tvars["tpl_page_subbar"] = $resBar->getTemplate();
-			
 		
-			
-		$tvars["tpl_page_leftPanel"] = '';
 		$tvars["tpl_page_rightPanel"] = $this->node->queues->getQueuesList();
-			
-		// - - - - - Setup the rest
+		
+		}
+
 		$tvars["tpl_page_meta_header"] 	= $this->parse($this->get("meta.header") , $tvars);
 		$tvars["tpl_page_meta_footer"] 	= $this->parse($this->get("meta.footer") , $tvars);
 		$tvars["tpl_page_content"] 		= $this->render($template, $tvars);

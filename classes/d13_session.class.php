@@ -92,6 +92,7 @@ class d13_session
 			$_SESSION[CONST_PREFIX . 'User']['color'] = CONST_DEFAULT_COLOR;
 			$_SESSION[CONST_PREFIX . 'User']['template'] = CONST_DEFAULT_TEMPLATE;
 			$_SESSION[CONST_PREFIX . 'User']['locale'] = CONST_DEFAULT_LOCALE;
+			$_SESSION[CONST_PREFIX . 'User']['node'] = -1;
 		}
 	}
 

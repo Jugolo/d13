@@ -121,8 +121,8 @@ class d13_collection implements IteratorAggregate
 class d13_data
 
 {
-	public $resources, $modules, $technologies, $units, $components, $general, $navigation, $shields, $factions, $leagues, $combat, $router, $bw, $gl, $ui;
-	public $up_unit, $up_module, $up_technology, $up_component, $avatars;
+	
+	public $json;
 	
 	// ----------------------------------------------------------------------------------------
 	// construct
@@ -136,26 +136,69 @@ class d13_data
 	{
 		global $d13;
 		
-		$this->bw 			= $this->loadFromJSON(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/d13_blockwords.locale.json");
-		$this->ui 			= $this->loadFromJSON(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/d13_userinterface.locale.json");
-		$this->gl 			= $this->loadFromJSON(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/d13_gamelang.locale.json");
-		$this->general 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_general.data.json");
-		$this->router 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_router.data.json");
-		$this->up_unit 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_upgrade.unit.data.json");
-		$this->up_module 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_upgrade.module.data.json");
-		$this->up_technology= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_upgrade.technology.data.json");
-		$this->up_component = $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_upgrade.component.data.json");
-		$this->avatars 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_avatars.data.json");
-		$this->resources 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_resource.data.json");
-		$this->modules 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_module.data.json");
-		$this->components 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_component.data.json");
-		$this->technologies = $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_technology.data.json");
-		$this->units 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_unit.data.json");
-		$this->navigation 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_navigation.data.json");
-		$this->factions 	= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_factions.data.json");
-		$this->shields 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_shields.data.json");
-		$this->leagues 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_leagues.data.json");
-		$this->combat 		= $this->loadFromJSON(CONST_INCLUDE_PATH . "data/d13_combat.data.json");
+		$this->loadFiles();
+		
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// loadFiles
+	//
+	// @
+	// ----------------------------------------------------------------------------------------
+	private
+
+	function loadFiles()
+	{
+
+		$this->json = array();
+		
+		//- - - read language files
+		$dir = new DirectoryIterator(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/");
+		foreach ($dir as $fileinfo) {
+    		if (!$fileinfo->isDot()) {
+        		$name = $this->getRealName($fileinfo->getFilename());
+        		if ($name) {
+        			$this->json[$name] = $this->loadFromJSON($fileinfo->getPath() , $fileinfo->getFilename());
+        		}
+    		}
+		}
+
+		//- - - read data files
+		$dir = new DirectoryIterator(CONST_INCLUDE_PATH . "data/");
+		foreach ($dir as $fileinfo) {
+    		if (!$fileinfo->isDot()) {
+       		 	$name = $this->getRealName($fileinfo->getFilename());
+       		 	if ($name) {
+       		 		$this->json[$name] = $this->loadFromJSON($fileinfo->getPath() , $fileinfo->getFilename());
+       		 	}
+    		}
+		}
+
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getFileName
+	//
+	// @
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function getRealName($url)
+	{
+		
+		if (substr($url, 0, 4) === "d13_") {
+			$url = basename($url);
+			$url = str_ireplace("d13_", "", $url);
+			$url = str_ireplace(".data", "", $url);
+			$url = str_ireplace(".locale", "", $url);
+			$url = str_ireplace(".json", "", $url);
+			$url = str_ireplace(".", "_", $url);
+		} else {
+			$url = "";
+		}
+		
+		return $url;
+	
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -166,10 +209,12 @@ class d13_data
 
 	private
 
-	function loadFromJSON($url)
+	function loadFromJSON($path, $name)
 	{
    		
-		$cacheFile = CONST_INCLUDE_PATH . 'cache/data' . DIRECTORY_SEPARATOR . basename($url). '.' . md5($url) . ".php";
+   		
+   		$url = $path . "/" . $name;
+		$cacheFile = CONST_INCLUDE_PATH . 'cache/data' . DIRECTORY_SEPARATOR . basename($url). ".php";
 		
 		if (is_file($cacheFile) && filemtime($url) < filemtime($cacheFile)) {
 			$classConstruct = require_once $cacheFile;
@@ -182,18 +227,19 @@ class d13_data
 		}
 		$jsonData = json_decode($jsonString, true);
 		
-		$name = md5($url);
+		
 		$vars = var_export($jsonData, true);
-
+		$name = "d13_".$this->getRealName($name) ."_cache";
+		
 		$cacheFileData = '';
 		$cacheFileData .= '<?php '.PHP_EOL;
-		$cacheFileData .= 'class d13_'.$name.' extends d13_collection {'.PHP_EOL;
+		$cacheFileData .= 'class '.$name.' extends d13_collection {'.PHP_EOL;
 		$cacheFileData .= '	public function __construct() {'.PHP_EOL;
 		$cacheFileData .= '	$data = '.$vars.';'.PHP_EOL;
 		$cacheFileData .= ' parent::__construct($data);';
 		$cacheFileData .= '	}'.PHP_EOL;
 		$cacheFileData .= '}'.PHP_EOL;
-		$cacheFileData .= 'return new d13_'.$name.'();'.PHP_EOL;
+		$cacheFileData .= 'return new '.$name.'();'.PHP_EOL;
 		$cacheFileData .= '?>';
 		
 		file_put_contents($cacheFile, $cacheFileData);

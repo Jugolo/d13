@@ -103,6 +103,7 @@ class d13_nodeController extends d13_controller
 		
 		$this->node = new node();
 		$status = $this->node->get('id', $nodeId);
+		
 		if ($status == 'done') {
 			if ($this->node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
 				$_SESSION[CONST_PREFIX . 'User']['node'] = $nodeId;

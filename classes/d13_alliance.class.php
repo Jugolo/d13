@@ -51,7 +51,7 @@ class alliance
 						if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					}
 
-					$d13->dbQuery('update alliances set name="' . $this->data['name'] . '" where id="' . $this->data['id'] . '"');
+					$d13->dbQuery('update alliances set name="' . $this->data['name'] . '", tag="' . $this->data['tag'] . '", avatar="' . $this->data['avatar'] . '" where id="' . $this->data['id'] . '"');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					if ($ok) $status = 'done';
 					else $status = 'error';

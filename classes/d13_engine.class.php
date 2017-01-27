@@ -51,21 +51,21 @@ class d13
 
 	function getLangBW($index)
 	{
-		return $this->data->bw->get($index);
+		return $this->data->json['blockwords']->get($index);
 	}
 
 	public
 
 	function getLangUI($index)
 	{
-		return $this->data->ui->get($index);
+		return $this->data->json['userinterface']->get($index);
 	}
 
 	public
 
 	function getLangGL()
 	{
-		return $this->data->gl->get(func_get_args());
+		return $this->data->json['gamelang']->get(func_get_args());
 	}
 
 	// ========================================================================================
@@ -147,119 +147,126 @@ class d13
 
 	function getResource()
 	{
-		return $this->data->resources->get(func_get_args());
+		return $this->data->json['resource']->get(func_get_args());
 	}
 
 	public
 
 	function getGeneral()
 	{
-		return $this->data->general->get(func_get_args());
+		return $this->data->json['general']->get(func_get_args());
 	}
 
 	public
 
 	function getLeague()
 	{
-		return $this->data->leagues->get(func_get_args());
+		return $this->data->json['leagues']->get(func_get_args());
 	}
 
 	public
 
 	function getCombat()
 	{
-		return $this->data->combat->get(func_get_args());
+		return $this->data->json['combat']->get(func_get_args());
 	}
 	
 	public
 
 	function getNavigation()
 	{
-		return $this->data->navigation->get(func_get_args());
+		return $this->data->json['navigation']->get(func_get_args());
 	}
 
 	public
 
 	function getFaction()
 	{
-		return $this->data->factions->get(func_get_args());
+		return $this->data->json['factions']->get(func_get_args());
 	}
 
 	public
 
 	function getShield()
 	{
-		return $this->data->shields->get(func_get_args());
+		return $this->data->json['shields']->get(func_get_args());
 	}
 
 	public
 
 	function getAvatar()
 	{
-		return $this->data->avatars->get(func_get_args());
+		return $this->data->json['avatars']->get(func_get_args());
 	}
+	
+	public
 
+	function getAlliance()
+	{
+		return $this->data->json['alliances']->get(func_get_args());
+	}
+	
 	public
 
 	function getUpgradeUnit()
 	{
-		return $this->data->up_unit->get(func_get_args());
+		return $this->data->json['upgrade_unit']->get(func_get_args());
 	}
 
 	public
 
 	function getUpgradeModule()
 	{
-		return $this->data->up_module->get(func_get_args());
+		return $this->data->json['upgrade_module']->get(func_get_args());
 	}
 
 	public
 
 	function getUpgradeTechnology()
 	{
-		return $this->data->up_technology->get(func_get_args());
+		return $this->data->json['upgrade_technology']->get(func_get_args());
 	}
 
 	public
 
 	function getUpgradeComponent()
 	{
-		return $this->data->up_component->get(func_get_args());
+		return $this->data->json['upgrade_component']->get(func_get_args());
 	}
 
 	public
 
 	function getModule()
 	{
-		return $this->data->modules->get(func_get_args());
+		return $this->data->json['module']->get(func_get_args());
 	}
 
 	public
 
 	function getComponent()
 	{
-		return $this->data->components->get(func_get_args());
+		return $this->data->json['component']->get(func_get_args());
 	}
 
 	public
 
 	function getTechnology()
 	{
-		return $this->data->technologies->get(func_get_args());
+		return $this->data->json['technology']->get(func_get_args());
 	}
 
 	public
 
 	function getUnit()
 	{
-		return $this->data->units->get(func_get_args());
+		return $this->data->json['unit']->get(func_get_args());
 	}
 	
 	public
 
 	function getRoute()
 	{
-		return $this->data->router->get(func_get_args());
+		return $this->data->json['router']->get(func_get_args());
 	}
 	
 	// ========================================================================================

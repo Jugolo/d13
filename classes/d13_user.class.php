@@ -17,7 +17,7 @@ class user
 
 {
 	
-	public $data, $preferences, $blocklist;
+	public $data, $alliance, $ally_status, $preferences, $blocklist;
 	
 
 	// ----------------------------------------------------------------------------------------
@@ -27,9 +27,10 @@ class user
 	
 	function __construct($id=0)
 	{
-		if (!empty($id) && $id > 0) {
-			$status = $this->get('id', $id);
-		}
+		
+		$status 		= $this->get('id', $id);
+		$this->alliance	= new alliance();
+		$this->ally_status 	= $this->alliance->get('id', $this->data['alliance']);
 		
 	}
 	
@@ -413,10 +414,24 @@ class user
 		//- - - - - Player Name & Avatar
 		$tvars['tvar_userName'] 		= $this->data['name'];
 		$tvars['tvar_userImage'] 		= $d13->getAvatar($this->data['avatar'], 'image');
+		$tvars['tvar_userTrophies']		= $this->data['trophies'];
+		$tvars['tvar_userID']			= $this->data['id'];
 		
 		//- - - - - Player Alliance
+		if ($this->ally_status == "done") {
 		
+			$tvars['tvar_userAllianceName'] 	= $this->alliance->data['name'];
+			$tvars['tvar_userAllianceTag'] 		= " [" . $this->alliance->data['tag'] . "]";
+			$tvars['tvar_userAllianceImage'] 	= $d13->getAlliance($this->alliance->data['avatar'], 'image');
+			$tvars['tvar_userName'] 			.= " [" . $this->alliance->data['tag'] . "]";
 		
+		} else {
+		
+			$tvars['tvar_userAllianceName']	= $d13->getLangUI("none");
+			$tvars['tvar_userAllianceImage'] = "alliance0.png";
+		
+		}
+
 		//- - - - - Player League
 		$league = array();
 		$league = $d13->getLeague(misc::getLeague($this->data['level'], $this->data['trophies']));

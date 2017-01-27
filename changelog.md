@@ -25,6 +25,9 @@ V015	* Project now also on Github: https://github.com/CriticalHit-d13/d13
 		* Technologies costs and requirements can now scale according to upgrades
 		* Fixed calculation of attribute upgrades
 		* Users can now select an avatar according to their level
+		* Alliances can now select an avatar and TAG according to their level
+		* Added dynamic loading of data and language files
+		* CKEditor messages are now limited, limit is shown during message edit
 		
 		* Refactored all remaining procedural pages into their own classes
 		* Added Technology class

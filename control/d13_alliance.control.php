@@ -16,7 +16,7 @@
 class d13_allianceController extends d13_controller
 {
 	
-	private $node, $alliance, $node_status, $ally_status;
+	private $node, $alliance, $node_status, $ally_status, $own;
 	
 	// ----------------------------------------------------------------------------------------
 	// construct
@@ -35,6 +35,7 @@ class d13_allianceController extends d13_controller
 		$this->node_status 	= $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
 		$this->alliance 	= new alliance();
 		$this->ally_status 	= $this->alliance->get('id', $_SESSION[CONST_PREFIX . 'User']['alliance']);
+		$this->own = true;
 		
 		$tvars = $this->doControl();
 		$this->getTemplate($tvars);
@@ -214,7 +215,7 @@ class d13_allianceController extends d13_controller
 		$tvars = array();
 		
 		if ($this->node->checkOptions('allianceSet')) {
-			
+
 			$nodes = node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
 			$nodeList = '';
 			foreach($nodes as $node) {
@@ -224,12 +225,14 @@ class d13_allianceController extends d13_controller
 			if (isset($_POST['nodeId'], $_POST['name']))
 			if ($_POST['name'] != '')
 			if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$this->node = new node();
-				$status = $this->node->get('id', $_POST['nodeId']);
+				$node = new node();
+				$status = $node->get('id', $_POST['nodeId']);
 				if ($status == 'done')
-				if ($this->node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-					$this->alliance->data['name'] = $_POST['name'];
-					$status = $this->alliance->set($this->node->data['id']);
+				if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
+					$this->alliance->data['name'] 	= $_POST['name'];
+					$this->alliance->data['tag'] 	= $_POST['tag'];
+					$this->alliance->data['avatar'] = $_POST['avatar'];
+					$status = $this->alliance->set($node->data['id']);
 					$message = $d13->getLangUI($status);
 				}
 				else $message = $d13->getLangUI("accessDenied");
@@ -247,10 +250,20 @@ class d13_allianceController extends d13_controller
 		foreach($d13->getFaction($this->node->data['faction'], 'costs', 'alliance') as $key => $cost) {
 			$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></div>';
 		}
+		
+		if (isset($_GET['avatarId'])) {
+			$tvars['tvar_allianceAvatar'] = $d13->getAlliance($_GET['avatarId'], 'image');
+			$tvars['tvar_avatarId'] = $_GET['avatarId'];
+		} else {
+			$tvars['tvar_allianceAvatar'] = $d13->getAlliance($this->alliance->data['avatar'], 'image');
+			$tvars['tvar_avatarId'] = $this->alliance->data['avatar'];
+		}
 
 		$tvars['tvar_nodeList'] = $nodeList;
 		$tvars['tvar_costData'] = $costData;
 		$tvars['tvar_allianceName'] = $this->alliance->data['name'];
+		$tvars['tvar_allianceTag'] = $this->alliance->data['tag'];
+		
 		$tvars['tvar_nodeID'] = $this->node->data['id'];
 		$tvars['tvar_nodeName'] = $this->node->data['name'];
 		
@@ -704,6 +717,75 @@ class d13_allianceController extends d13_controller
 	
 	}
 	
+	
+	// ----------------------------------------------------------------------------------------
+	// getAvatarPopup
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+
+	function getAvatarPopup()
+	{
+	
+		global $d13;
+		
+		$html = '';
+		
+		if ($this->own) {
+		
+			$i = 0;
+			$open = false;
+			$tvars = array();
+			$tvars['tvar_sub_popuplist'] = '';
+			$tvars['tvar_listID'] = 1;
+		
+			foreach ($d13->getAlliance() as $avatar) {
+				if ($avatar['active']) {
+
+					if ($avatar['level'] <= $this->alliance->data['level']) {
+						$vars = array();
+						$vars['tvar_Image'] 		= "/alliances/" . $avatar['image'];
+						$vars['tvar_Link'] 			= "?p=alliance&action=set&avatarId=" . $avatar['id'];
+						
+						if ($i %2 == 0 || $i == 0) {
+						$open = true;
+						$tvars['tvar_sub_popuplist'] .= '<div class="row">';
+						}
+						
+						$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.imagecontent", $vars);
+						if ($i %2 != 0) {
+						$tvars['tvar_sub_popuplist'] .= '</div>';
+						}
+						$i++;
+					}
+
+				}
+			}
+			
+			if ($open) {
+				$tvars['tvar_sub_popuplist'] .= '</div>';
+			}
+			
+			if ($i > 0) {
+				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
+				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-1">' . $d13->getLangUI("set") . " " . $d13->getLangUI("avatar") . '</a>';
+				$html.= '</p>';
+			} else {
+				$html.= '<p class="buttons-row theme-gray">';
+				$html.= '<a href="#" class="button">' . $d13->getLangUI("set") . " " . $d13->getLangUI("avatar") .'</a>';
+				$html.= '</p>';
+			}
+		
+		}
+		
+		return $html;
+
+	}
+
+	
+	
 	// ----------------------------------------------------------------------------------------
 	// getTemplate
 	// @
@@ -715,6 +797,8 @@ class d13_allianceController extends d13_controller
 	{
 	
 		global $d13;
+		
+		$tvars['tvar_avatarLink'] = $this->getAvatarPopup();
 		
 		$tvars['tvar_allianceGet'] = '<a class="external" href="?p=alliance&action=get">' . $this->alliance->data['name'] . '</a>';
 		$tvars['tvar_allianceSet'] = "";

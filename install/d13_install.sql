@@ -56,6 +56,12 @@ CREATE TABLE IF NOT EXISTS `alliances` (
   `id` int(10) unsigned NOT NULL,
   `user` int(10) unsigned NOT NULL,
   `name` varchar(32) COLLATE utf8_bin NOT NULL,
+  `description` text COLLATE utf8_bin NOT NULL,
+  `avatar` int(10) NOT NULL DEFAULT '0',
+  `tag` varchar(16) unsigned NOT NULL,
+  `level` int(10) unsigned NOT NULL,
+  `experience` int(10) unsigned NOT NULL,
+  `trophies` int(10) unsigned NOT NULL DEFAULT '500',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `user` (`user`)
