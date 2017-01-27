@@ -23,28 +23,23 @@ class d13_collection implements IteratorAggregate
         return new ArrayIterator($this->data);
     }
 
-    public
-
-    function getAll()
+    public function getAll()
     {
         return $this->data;
     }
 
-    public
-
-    function getByKey($key, $field)
+    public function getByKey($key, $field)
     {
         if (array_key_exists($key, $this->data)) {
             return $this->data[$key][$field];
-        }
-        else {
+        } else {
             return NULL;
         }
     }
 
-    function getByID($id, $field="")
+    public function getByID($id, $field = "")
     {
-        foreach($this->data as $entry) {
+        foreach ($this->data as $entry) {
             if ($entry['id'] == $id) {
                 if ($field = "" || !isset($entry[$field])) {
                     return $entry;
@@ -57,9 +52,7 @@ class d13_collection implements IteratorAggregate
         return NULL;
     }
 
-    public
-
-    function get($indices)
+    public function get($indices)
     {
 
         if (empty($indices)) {
@@ -73,11 +66,10 @@ class d13_collection implements IteratorAggregate
             );
         }
 
-        foreach($indices as $index) {
+        foreach ($indices as $index) {
             if (isset($array[$index])) {
                 $array = $array[$index];
-            }
-            else {
+            } else {
                 return FALSE;
             }
         }
@@ -93,5 +85,4 @@ class d13_collection implements IteratorAggregate
         return $array;
 
     }
-
 }
