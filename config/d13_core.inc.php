@@ -16,11 +16,29 @@
 //- - - - - INCLUDES
 include("d13_config.inc.php");
 
+spl_autoload_register(function ($className){
+
+    $className = str_replace('Controller','.control',$className);
+    $fullPath = CONST_INCLUDE_PATH."classes/".$className.".class.php";
+    if(is_file($fullPath)){
+        require_once  $fullPath;
+        return;
+    }
+    $fullPath = CONST_INCLUDE_PATH."control/".$className.".php";
+
+    if(is_file($fullPath)){
+        require_once  $fullPath;
+        return;
+    }
+});
+
+
+/*
 //- - - - - INCLUDE CLASSES (change later to autoload)
 include(CONST_INCLUDE_PATH."classes/d13_session.class.php");
-include(CONST_INCLUDE_PATH."classes/d13_database.class.php");
+include(CONST_INCLUDE_PATH."classes/d13_db.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_data.class.php");
-include(CONST_INCLUDE_PATH."classes/d13_template.class.php");
+include(CONST_INCLUDE_PATH."classes/d13_tpl.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_router.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_profiler.class.php");
 include(CONST_INCLUDE_PATH."classes/d13_engine.class.php");
@@ -69,8 +87,9 @@ include(CONST_INCLUDE_PATH."control/d13_reset.control.php");
 include(CONST_INCLUDE_PATH."control/d13_status.control.php");
 include(CONST_INCLUDE_PATH."control/d13_terms.control.php");
 
+*/
 //- - - - - CREATE ENGINE
-$d13 = new d13();
+$d13 = new d13_engine();
 
 //=====================================================================================EOF
 
