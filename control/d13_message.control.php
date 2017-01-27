@@ -89,7 +89,7 @@ class d13_messageController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['messageId'])) {
-			$msg = new message();
+			$msg = new d13_message();
 			$status = $msg->get($_GET['messageId']);
 			if ($status == 'done') {
 				if ($msg->data['recipient'] == $_SESSION[CONST_PREFIX . 'User']['id'] || $msg->data['sender'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -97,7 +97,7 @@ class d13_messageController extends d13_controller
 						$msg->data['viewed'] = 1;
 						$msg->set();
 					}
-					$user = new user();
+					$user = new d13_user();
 					$status = $user->get('id', $msg->data['sender']);
 					if ($status == 'done') {
 						$msg->data['senderName'] = $user->data['name'];
@@ -141,7 +141,7 @@ class d13_messageController extends d13_controller
 		$d13->dbQuery('start transaction');
 		
 		if (isset($_GET['messageId'])) {
-			$msg = new message();
+			$msg = new d13_message();
 			$status = $msg->get($_GET['messageId']);
 			if ($status != 'done') {
 				$msg = 0;
@@ -152,7 +152,7 @@ class d13_messageController extends d13_controller
 
 		if (isset($_POST['recipient'], $_POST['subject'], $_POST['msgbody'])) {
 			if ($_POST['recipient'] != '' && $_POST['subject'] != '' && $_POST['msgbody'] != '' && !$d13->getLangBW($_POST['msgbody']) && !$d13->getLangBW($_POST['subject'])) {
-				$msg = new message();
+				$msg = new d13_message();
 				$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 				$msg->data['recipient'] = $_POST['recipient'];
 				$msg->data['subject'] = $_POST['subject'];
@@ -169,7 +169,7 @@ class d13_messageController extends d13_controller
 						
 		$recipient = $subject = $body = '';
 		if (isset($msg->data['id'])) {
-			$user = new user();
+			$user = new d13_user();
 			$status = $user->get('id', $msg->data['sender']);
 			if ($status == 'done') {
 				$recipient = $user->data['name'];
@@ -208,11 +208,11 @@ class d13_messageController extends d13_controller
 		$d13->dbQuery('start transaction');
 		
 		if (isset($_GET['messageId'])) {
-			$msg = new message();
+			$msg = new d13_message();
 			$status = $msg->get($_GET['messageId']);
 			if ($status == 'done') {
 				if ($msg->data['recipient'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-					$status = message::remove($_GET['messageId']);
+					$status = d13_message::remove($_GET['messageId']);
 					if ($status == 'done') {
 						header('location: ?p=message&action=list');
 					} else {
@@ -227,7 +227,7 @@ class d13_messageController extends d13_controller
 			
 		} else {
 			if (isset($_POST['messageId'])) {
-				foreach($_POST['messageId'] as $id) message::remove($id);
+				foreach($_POST['messageId'] as $id) d13_message::remove($id);
 				header('location: ?p=message&action=list');
 			} else {
 				$message = $d13->getLangUI("insufficientData");
@@ -257,7 +257,7 @@ class d13_messageController extends d13_controller
 		
 		$tvars = array();
 		
-		$status = message::removeAll($_SESSION[CONST_PREFIX . 'User']['id']);
+		$status = d13_message::removeAll($_SESSION[CONST_PREFIX . 'User']['id']);
 		if ($status == 'done') {
 			header('location: ?p=message&action=list');
 		} else {
@@ -288,7 +288,7 @@ class d13_messageController extends d13_controller
 		if (isset($_POST['filter'])) {
 			$filter = $_POST['filter'];
 		}
-		$messages = message::getList($_SESSION[CONST_PREFIX . 'User']['id'], $limit, $offset, $filter);
+		$messages = d13_message::getList($_SESSION[CONST_PREFIX . 'User']['id'], $limit, $offset, $filter);
 		$pageCount = ceil($messages['count'] / $limit);
 		
 		

@@ -204,7 +204,7 @@ class d13_tpl
 	{
 		
 		if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
-		$this->node	= new node();
+		$this->node	= new d13_node();
 		$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
 		}
 		
@@ -274,7 +274,7 @@ class d13_tpl
 	{
 		
 		if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
-		$this->node	= new node();
+		$this->node	= new d13_node();
 		$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
 		}
 
@@ -312,4 +312,3 @@ class d13_tpl
 
 // =====================================================================================EOF
 
-?>

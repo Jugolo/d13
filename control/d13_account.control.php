@@ -153,7 +153,7 @@ class d13_accountController extends d13_controller
 		
 		global $d13;
 		
-		$user = new user();
+		$user = new d13_user();
 		$user->get('id', $_SESSION[CONST_PREFIX . 'User']['id']);
 		if (isset($_GET['action'], $_POST['password'])) {
 		
@@ -196,7 +196,7 @@ class d13_accountController extends d13_controller
 
 			case 'remove':
 				if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) {
-					$status = user::remove($user->data['id']);
+					$status = d13_user::remove($user->data['id']);
 					if ($status == 'done') header('Location: index.php?p=logout');
 					else $message = $d13->getLangUI($status);
 				}

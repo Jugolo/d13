@@ -27,7 +27,7 @@ chdir("../");
 if (isset($_POST['email'], $_POST['name'], $_POST['password'], $_POST['rePassword'])) {
 
 	if ((($_POST['email'] != '')) && ($_POST['name'] != '') && (($_POST['password'] != ''))) {
-		$user = new user();
+		$user = new d13_user();
 		$user->get('name', $_POST['name']);
 		if ($_POST['password'] == $_POST['rePassword'])
 		if (!$user->data['id']) {

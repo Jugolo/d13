@@ -22,9 +22,9 @@ $d13->dbQuery('start transaction');
 
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
-	$node = new node();
+	$node = new d13_node();
 	$status = $node->get('id', $_GET['nodeId']);
-	$alliance = new alliance();
+	$alliance = new d13_alliance();
 	$status = $alliance->get('id', $_SESSION[CONST_PREFIX . 'User']['alliance']);
 	switch ($_GET['action']) {
 
@@ -41,7 +41,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				}
 			}
 			else {
-				$invitations = alliance::getInvitations('user', $_SESSION[CONST_PREFIX . 'User']['id']);
+				$invitations = d13_alliance::getInvitations('user', $_SESSION[CONST_PREFIX . 'User']['id']);
 			}
 		}
 		else {
@@ -54,13 +54,13 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
 	case 'set':
 		if ($node->checkOptions('allianceSet')) {
-			$nodes = node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
+			$nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
 			$nodeList = '';
 			foreach($nodes as $node) $nodeList.= '<option value="' . $node->data['id'] . '">' . $node->data['name'] . '</option>';
 			if (($status == 'done') && (isset($_POST['nodeId'], $_POST['name'])))
 			if ($_POST['name'] != '')
 			if ($alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$node = new node();
+				$node = new d13_node();
 				$status = $node->get('id', $_POST['nodeId']);
 				if ($status == 'done')
 				if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -85,14 +85,14 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 	case 'add':
 		if ($node->checkOptions('allianceAdd')) {
 			if ($status == 'noAlliance') {
-				$nodes = node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
+				$nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
 				if ($nodes) {
 					$nodeList = '';
 					foreach($nodes as $node) $nodeList.= '<option value="' . $node->data['id'] . '">' . $node->data['name'] . '</option>';
 					if (isset($_POST['nodeId'], $_POST['name']))
 					if ($_POST['name'] != '') {
-						$alliance = new alliance();
-						$node = new node();
+						$alliance = new d13_alliance();
+						$node = new d13_node();
 						$status = $node->get('id', $_POST['nodeId']);
 						if ($status == 'done')
 						if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -129,7 +129,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			if ($_SESSION[CONST_PREFIX . 'User']['alliance']) {
 				if ($status == 'done')
 				if ($alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-					$status = alliance::remove($_SESSION[CONST_PREFIX . 'User']['alliance']);
+					$status = d13_alliance::remove($_SESSION[CONST_PREFIX . 'User']['alliance']);
 					if ($status == 'done') {
 						$_SESSION[CONST_PREFIX . 'User']['alliance'] = 0;
 						header('location: alliance.php?action=get');
@@ -155,13 +155,13 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			if ($_POST['name'] != '')
 			if ($status == 'done')
 			if ($alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$user = new user();
+				$user = new d13_user();
 				if ($user->get('name', $_POST['name']) == 'done') {
 					$status = $alliance->addInvitation($user->data['id']);
 					if ($status == 'done') {
 						$user->getPreferences('name');
 						if ($user->preferences['allianceReports']) {
-							$msg = new message();
+							$msg = new d13_message();
 							$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 							$msg->data['recipient'] = $user->data['name'];
 							$msg->data['subject'] = $d13->getLangUI("allianceInvitation");
@@ -189,13 +189,13 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
 	case 'removeInvitation':
 		if (isset($_GET['alliance'], $_GET['user'])) {
-			$senderAlliance = new alliance();
+			$senderAlliance = new d13_alliance();
 			if ($senderAlliance->get('id', $_GET['alliance']) == 'done')
 			if (in_array($_SESSION[CONST_PREFIX . 'User']['id'], array(
 				$_GET['user'],
 				$senderAlliance->data['user']
 			))) {
-				$status = alliance::removeInvitation($_GET['alliance'], $_GET['user']);
+				$status = d13_alliance::removeInvitation($_GET['alliance'], $_GET['user']);
 				if ($status == 'done') header('Location: alliance.php?action=get');
 				else $message = $d13->getLangUI($status);
 			}
@@ -210,7 +210,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 	case 'acceptInvitation':
 		if (isset($_GET['alliance'], $_GET['user']))
 		if ($_SESSION[CONST_PREFIX . 'User']['id'] == $_GET['user']) {
-			$status = alliance::acceptInvitation($_GET['alliance'], $_GET['user']);
+			$status = d13_alliance::acceptInvitation($_GET['alliance'], $_GET['user']);
 			if ($status == 'done') $_SESSION[CONST_PREFIX . 'User']['alliance'] = $_GET['alliance'];
 			$message = $d13->getLangUI($status);
 		}
@@ -251,16 +251,16 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			if ($_POST['name'] != '')
 			if ($status == 'done')
 			if ($alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$recipientAlliance = new alliance();
+				$recipientAlliance = new d13_alliance();
 				if ($recipientAlliance->get('name', $_POST['name']) == 'done')
 				if ($alliance->data['id'] != $recipientAlliance->data['id']) {
 					$status = $alliance->addWar($recipientAlliance->data['id']);
 					if ($status == 'done') {
-						$user = new user();
+						$user = new d13_user();
 						if ($user->get('id', $recipientAlliance->data['user']) == 'done') {
 							$user->getPreferences('name');
 							if ($user->preferences['allianceReports']) {
-								$msg = new message();
+								$msg = new d13_message();
 								$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 								$msg->data['recipient'] = $user->data['name'];
 								$msg->data['subject'] = $d13->getLangUI("warDeclaration");
@@ -295,7 +295,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			if (isset($_GET['recipient']))
 			if ($status == 'done')
 			if ($alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$recipientAlliance = new alliance();
+				$recipientAlliance = new d13_alliance();
 				if ($recipientAlliance->get('id', $_GET['recipient']) == 'done') {
 					$status = $alliance->proposePeace($recipientAlliance->data['id']);
 					if ($status == 'done') header('Location: alliance.php?action=get');
@@ -319,7 +319,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		if (isset($_GET['recipient']))
 		if ($status == 'done')
 		if ($alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-			$recipientAlliance = new alliance();
+			$recipientAlliance = new d13_alliance();
 			if ($recipientAlliance->get('id', $_GET['recipient']) == 'done') {
 				$status = $alliance->removePeace($recipientAlliance->data['id']);
 				if ($status == 'done') header('Location: alliance.php?action=get');
@@ -338,15 +338,15 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		if (isset($_GET['sender'], $_GET['recipient']))
 		if ($status == 'done')
 		if (($alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) && ($alliance->data['id'] == $_GET['recipient'])) {
-			$senderAlliance = new alliance();
+			$senderAlliance = new d13_alliance();
 			if ($senderAlliance->get('id', $_GET['sender']) == 'done') {
 				$status = $alliance->acceptPeace($senderAlliance->data['id']);
 				if ($status == 'done') {
-					$user = new user();
+					$user = new d13_user();
 					if ($user->get('id', $senderAlliance->data['user']) == 'done') {
 						$user->getPreferences('name');
 						if ($user->preferences['allianceReports']) {
-							$msg = new message();
+							$msg = new d13_message();
 							$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 							$msg->data['recipient'] = $user->data['name'];
 							$msg->data['subject'] = $d13->getLangUI("peaceAccepted");
@@ -414,7 +414,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
 				if ($alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) $html.= '<div class="section" style="margin-top: 5px;"> -> {{tvar_ui_invitations}} | <a class="external" href="index.php?p=alliance&action=addInvitation">{{tvar_ui_invite}}</a></div>';
 				foreach($alliance->invitations as $invitation) {
-					$user = new user();
+					$user = new d13_user();
 					if ($user->get('id', $invitation['user']) == 'done') {
 						$accept = '';
 						$removeLabel = 'x';
@@ -429,7 +429,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
 				if ($alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) $html.= '<div class="section" style="margin-top: 5px;"> -> {{tvar_ui_wars}} | <a class="external" href="index.php?p=alliance&action=addWar">{{tvar_ui_goToWar}}</a></div>';
 				foreach($alliance->wars as $war) {
-					$otherAlliance = new alliance();
+					$otherAlliance = new d13_alliance();
 					if ($alliance->data['id'] == $war['sender']) $otherAllianceId = $war['recipient'];
 					else $otherAllianceId = $war['sender'];
 					if ($otherAlliance->get('id', $otherAllianceId) == 'done')
@@ -446,7 +446,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				if ($invitations) {
 					$html.= '<div class="section"> -> {{tvar_ui_invitations}}</div>';
 					foreach($invitations as $invitation) {
-						$user = new user();
+						$user = new d13_user();
 						if ($user->get('id', $invitation['user']) == 'done') {
 							$accept = '';
 							$removeLabel = 'x';

@@ -31,7 +31,7 @@ class d13_moduleController extends d13_controller
 		global $d13;
 		
 		$tvars 				= array();
-		$this->node 		= new node();
+		$this->node 		= new d13_node();
 		$this->node_status 	= $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
 		
 		if ($this->node_status == 'done') {

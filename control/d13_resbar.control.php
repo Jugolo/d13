@@ -31,7 +31,7 @@ class d13_resBarController extends d13_controller
 		$this->node 	= $node;
 		$this->node->getResources();
 	
-		$this->user 	= new user();
+		$this->user 	= new d13_user();
 		
 	}
 
@@ -64,13 +64,13 @@ class d13_resBarController extends d13_controller
 					$tvars['tvar_resValue'] 		= $this->user->data[$stat['value']];
 					$tvars['tvar_resColor'] 		= $stat['color'];
 					if ($stat['isExp']) {
-					$tvars['tvar_resPercentage'] 	= misc::percentage(floor($this->user->data[$stat['value']]), misc::nextlevelexp($this->user->data['level']));
+					$tvars['tvar_resPercentage'] 	= d13_misc::percentage(floor($this->user->data[$stat['value']]), d13_misc::nextlevelexp($this->user->data['level']));
 					} else {
 					$tvars['tvar_resPercentage'] 	= 0;
 					}
 					$tvars['tvar_resTooltip'] 		= $d13->getLangUI($stat['name']);
 					if ($stat['isExp']) {
-					$tvars['tvar_resTooltip'] 		.= ' '. floor($this->user->data[$stat['value']]) . '/' . misc::nextlevelexp($this->user->data['level']);
+					$tvars['tvar_resTooltip'] 		.= ' '. floor($this->user->data[$stat['value']]) . '/' . d13_misc::nextlevelexp($this->user->data['level']);
 					} else {
 					$tvars['tvar_resTooltip'] 		.= ' '. floor($this->user->data[$stat['value']]) ;
 					}
@@ -93,7 +93,7 @@ class d13_resBarController extends d13_controller
 					$tvars['tvar_resTooltip'] .= $d13->getLangGL('resources', $resource['id'], 'name') . ' ';
 					if ($d13->getResource($resource['id'], 'limited')) {
 						$tvars['tvar_resValue'] = floor($resource['value']) . '/' . floor($this->node->storage[$resource['id']]);
-						$tvars['tvar_resPercentage'] = misc::percentage(floor($resource['value']), floor($this->node->storage[$resource['id']]));
+						$tvars['tvar_resPercentage'] = d13_misc::percentage(floor($resource['value']), floor($this->node->storage[$resource['id']]));
 						$tvars['tvar_resTooltip'] .= floor($resource['value']) . '/' . floor($this->node->storage[$resource['id']]);
 					} else {
 						$tvars['tvar_resValue'] = floor($resource['value']);

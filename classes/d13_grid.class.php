@@ -13,7 +13,7 @@
 //
 // ========================================================================================
 
-class grid
+class d13_grid
 
 {
 	public $data = array(
@@ -113,9 +113,9 @@ class grid
 		if ((isset($this->data[$i])) && ($this->data[$i]['x'] == $x) && ($this->data[$i]['y'] == $y)) {
 			if ($this->data[$i]['type'] != 2) $output = 'href="javascript: fetch(\'getGrid.php\', \'x=' . $x . '&y=' . $y . '\')" onMouseOver="setSectorData(labels[' . $this->data[$i]['type'] . '], \'-\', \'-\')" onMouseOut="setSectorData(\'-\', \'-\', \'-\')"';
 			else {
-				$node = new node();
+				$node = new d13_node();
 				$node->get('id', $this->data[$i]['id']);
-				$user = new user();
+				$user = new d13_user();
 				$user->get('id', $node->data['user']);
 				$output = 'href="javascript: fetch(\'getGrid.php\', \'x=' . $x . '&y=' . $y . '\')" onMouseOver="setSectorData(\'' . $node->data['name'] . '\', \'' . $user->data['name'] . '\', \'-\')" onMouseOut="setSectorData(\'-\', \'-\', \'-\')"';
 			}
@@ -129,4 +129,3 @@ class grid
 
 // =====================================================================================EOF
 
-?>

@@ -83,10 +83,10 @@ class d13_combat
 			$data['input']['attacker'][$stat] = 0;
 		}
 		
-		$this->attackerUser = new user();
+		$this->attackerUser = new d13_user();
 		$status = $this->attackerUser->get('id', $data['input']['attacker']['userId']);
 		
-		$this->attackerNode = new node();
+		$this->attackerNode = new d13_node();
 		$status = $this->attackerNode->get('id', $data['input']['attacker']['nodeId']);
 		
 		$armyBonus = array();	
@@ -175,10 +175,10 @@ class d13_combat
 			$data['input']['defender'][$stat] = 0;
 		}
 		
-		$this->defenderUser = new user();
+		$this->defenderUser = new d13_user();
 		$status = $this->defenderUser->get('id', $data['input']['defender']['userId']);
 
-		$this->defenderNode = new node();
+		$this->defenderNode = new d13_node();
 		$status = $this->defenderNode->get('id', $data['input']['defender']['nodeId']);
 		
 		$armyBonus = array();	
@@ -518,7 +518,7 @@ class d13_combat
 		
 			if ($attacker > $defender) {
 		
-				$value = misc::percent_difference($attacker, $defender);
+				$value = d13_misc::percent_difference($attacker, $defender);
 				
 				if ($value > 100) {
 					$value = 100;
@@ -605,7 +605,7 @@ class d13_combat
 		}
 		
 		shuffle($tmp_result);
-		$tmp_result = misc::record_sort($tmp_result, 'value', true);
+		$tmp_result = d13_misc::record_sort($tmp_result, 'value', true);
 
 		$data['output']['attacker']['results'] = $tmp_result;
 		
@@ -637,7 +637,7 @@ class d13_combat
 		}
 		
 		shuffle($tmp_result);
-		$tmp_result = misc::record_sort($tmp_result, 'level', true);
+		$tmp_result = d13_misc::record_sort($tmp_result, 'level', true);
 		
 		$data['output']['attacker']['results'] = $tmp_result;
 		
@@ -674,7 +674,7 @@ class d13_combat
 		shuffle($tmp_result);
 		shuffle($tmp_result2);
 		$tmp_result = array_merge($tmp_result, $tmp_result2);
-		$tmp_result = misc::record_sort($tmp_result, 'level', true);
+		$tmp_result = d13_misc::record_sort($tmp_result, 'level', true);
 		
 		$data['output']['attacker']['results'] = $tmp_result;
 		
@@ -706,7 +706,7 @@ class d13_combat
 		}
 
 		shuffle($tmp_result);
-		$tmp_result = misc::record_sort($tmp_result, 'rarity', true);
+		$tmp_result = d13_misc::record_sort($tmp_result, 'rarity', true);
 		
 		$data['output']['attacker']['results'] = $tmp_result;
 		
@@ -804,16 +804,16 @@ class d13_combat
 		$minRatio 		= 1;								// TODO move to data files later
 		$maxRatio 		= 60;								// TODO move to data files later
 		
-		$this->attackerUser = new user();
+		$this->attackerUser = new d13_user();
 		$status = $this->attackerUser->get('id', $data['input']['attacker']['userId']);
 		
-		$this->defenderUser = new user();
+		$this->defenderUser = new d13_user();
 		$status = $this->defenderUser->get('id', $data['input']['defender']['userId']);
 		
 		if ($status == 'done') {
 		
-			$attackerLeague = $d13->getLeague(misc::getLeague($this->attackerUser->data['level'], $this->attackerUser->data['trophies']));
-			$defenderLeague = $d13->getLeague(misc::getLeague($this->defenderUser->data['level'], $this->defenderUser->data['trophies']));
+			$attackerLeague = $d13->getLeague(d13_misc::getLeague($this->attackerUser->data['level'], $this->attackerUser->data['trophies']));
+			$defenderLeague = $d13->getLeague(d13_misc::getLeague($this->defenderUser->data['level'], $this->defenderUser->data['trophies']));
 			
 			$attackerLeague['id']++;
 			$defenderLeague['id']++;
@@ -1075,7 +1075,7 @@ class d13_combat
 		// - - - - - Attacker Report
 		$this->attackerUser->getPreferences('name');
 		if ($this->attackerUser->preferences['combatReports']) {
-			$msg = new message();
+			$msg = new d13_message();
 			$msg->data['sender'] = $this->attackerUser->data['name'];
 			$msg->data['recipient'] = $this->attackerUser->data['name'];
 			$msg->data['subject'] = $d13->getLangUI($data['combat']['string']) . ' ' . $d13->getLangUI("report") . ' vs ' . $this->defenderNode->data['name'];
@@ -1091,7 +1091,7 @@ class d13_combat
 			// - - - - - Defender Report
 			$this->defenderUser->getPreferences('name');
 			if ($this->defenderUser->preferences['combatReports']) {
-				$msg = new message();
+				$msg = new d13_message();
 				$msg->data['sender'] = $this->defenderUser->data['name'];
 				$msg->data['recipient'] = $this->defenderUser->data['name'];
 				$msg->data['subject'] = $d13->getLangUI($data['combat']['string']) . ' ' . $d13->getLangUI("report") . ' vs ' . $this->attackerNode->data['name'];
@@ -1352,7 +1352,7 @@ class d13_combat
 		if (!$other) {
 			
 			// - - - - - Trophies & Experience
-			$this->attackerUser = new user();
+			$this->attackerUser = new d13_user();
 			$status = $this->attackerUser->get('id', $this->attackerNode->data['user']);
 			if ($status == 'done') {
 				$html = '';
@@ -1428,7 +1428,7 @@ class d13_combat
 		} else {
 			
 			// - - - - - Trophies & Experience
-			$this->defenderUser = new user();
+			$this->defenderUser = new d13_user();
 			$status = $this->defenderUser->get('id', $this->defenderNode->data['user']);
 			if ($status == 'done') {
 				$html = '';
@@ -1491,4 +1491,3 @@ class d13_combat
 
 // =====================================================================================EOF
 
-?>

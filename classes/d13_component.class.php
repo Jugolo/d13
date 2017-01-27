@@ -328,12 +328,12 @@ class d13_component
 					if (isset($attribute['stat'])) {
 						if ($attribute['stat'] == 'all' && ($this->data['type'] == 'unit')) {
 							foreach($d13->getGeneral('stats') as $stat) {
-								$value = misc::upgraded_value($attribute['value'] * $upgrade['level'], $this->data[$stat]);
+								$value = d13_misc::upgraded_value($attribute['value'] * $upgrade['level'], $this->data[$stat]);
 								$this->data[$stat] += $value;
 								$this->data['upgrade_' . strtolower($stat)] += $value;
 							}
 						} else if ($attribute['stat'] != 'all') {
-							$value = misc::upgraded_value($attribute['value'] * $upgrade['level'], $this->data[$attribute['stat']]);
+							$value = d13_misc::upgraded_value($attribute['value'] * $upgrade['level'], $this->data[$attribute['stat']]);
 							$this->data[$attribute['stat']] += $value;
 							$this->data['upgrade_' . strtolower($attribute['stat'])] += $value;
 						}
@@ -407,4 +407,3 @@ class d13_component
 
 // =====================================================================================EOF
 
-?>

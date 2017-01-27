@@ -13,77 +13,6 @@
 //
 // ========================================================================================
 
-// ----------------------------------------------------------------------------------------
-// d13_module_factory
-//
-// ----------------------------------------------------------------------------------------
-
-class d13_module_factory
-
-{
-	public static
-
-	function create($moduleId, $slotId, $node)
-	{
-	
-		global $d13;
-		$type = $d13->getModule($node->data['faction'], $moduleId, 'type');
-		
-		switch ($type) {
-		case 'storage':
-			return new d13_module_storage($moduleId, $slotId, $type, $node);
-			break;
-
-		case 'harvest':
-			return new d13_module_harvest($moduleId, $slotId, $type, $node);
-			break;
-
-		case 'craft':
-			return new d13_module_craft($moduleId, $slotId, $type, $node);
-			break;
-
-		case 'train':
-			return new d13_module_train($moduleId, $slotId, $type, $node);
-			break;
-
-		case 'research':
-			return new d13_module_research($moduleId, $slotId, $type, $node);
-			break;
-
-		case 'alliance':
-			return new d13_module_alliance($moduleId, $slotId, $type, $node);
-			break;
-
-		case 'command':
-			return new d13_module_command($moduleId, $slotId, $type, $node);
-			break;
-
-		case 'defense':
-			return new d13_module_defense($moduleId, $slotId, $type, $node);
-			break;
-
-		case 'warfare':
-			return new d13_module_warfare($moduleId, $slotId, $type, $node);
-			break;
-
-		case 'trade':
-			return new d13_module_trade($moduleId, $slotId, $type, $node);
-			break;
-			
-		case 'storvest':
-			return new d13_module_storvest($moduleId, $slotId, $type, $node);
-			break;
-
-		case 'market':
-			return new d13_module_market($moduleId, $slotId, $type, $node);
-			break;
-
-		default:
-			return NULL;
-			break;
-		}
-	}
-}
 
 // ----------------------------------------------------------------------------------------
 // d13_module
@@ -325,7 +254,7 @@ class d13_module
 		$tvars['tvar_linkData'] 			= $this->getModuleUpgrade();
 		$tvars['tvar_moduleItemContent'] 	= $this->getOptions();
 		$tvars['tvar_image'] = $this->data['image'];
-		$tvars['tvar_moduleDescription'] = misc::toolTip($this->data['name'] . '<br>' . $this->data['description']);
+		$tvars['tvar_moduleDescription'] = d13_misc::toolTip($this->data['name'] . '<br>' . $this->data['description']);
 		
 		if ($this->data['level'] > 0) {
 			$tvars['tvar_popup'] = $this->getPopup();
@@ -471,12 +400,12 @@ class d13_module
 		$vars['tvar_sliderTooltip']		= '';
 		
 		if ($tooltip) {
-		$vars['tvar_sliderTooltip']		= misc::toolTip($d13->getLangUI("tipRangeSliderTooltip"));
+		$vars['tvar_sliderTooltip']		= d13_misc::toolTip($d13->getLangUI("tipRangeSliderTooltip"));
 		}
 		
 		if ($disabled || $max <= 0) {
 			$vars['tvar_disableData']	= 'disabled';
-			$vars['tvar_sliderTooltip']	= misc::toolTip($d13->getLangUI("tipRangeSliderDisabled"));
+			$vars['tvar_sliderTooltip']	= d13_misc::toolTip($d13->getLangUI("tipRangeSliderDisabled"));
 		}
 		
 		return $d13->templateSubpage("sub.range.slider", $vars);
@@ -497,12 +426,12 @@ class d13_module
 		if ($this->data['level'] > 0) {
 			if ($d13->getGeneral('options', 'moduleDemolish')) {
 				if ($this->node->modules[$this->data['slotId']]['input'] <= 0) {
-					$tooltip = misc::toolTip($d13->getLangUI("tipDemolishModule"));
+					$tooltip = d13_misc::toolTip($d13->getLangUI("tipDemolishModule"));
 					$html .= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
 					$html .= '<a href="?p=module&action=remove&nodeId='.$this->node->data['id'].'&slotId='.$this->data['slotId'].'" class="external button active '.$tooltip.'">'.$d13->getLangUI("removeModule").'</a>';
 					$html .= '</p>';
 				} else {
-					$tooltip = misc::toolTip($d13->getLangUI("tipRemoveWorkersfirst"));
+					$tooltip = d13_misc::toolTip($d13->getLangUI("tipRemoveWorkersfirst"));
 					$html .= '<p class="buttons-row">';
 					$html .= '<a href="#" class="external button '.$tooltip.'">'.$d13->getLangUI("removeModule").'</a>';
 					$html .= '</p>';
@@ -578,12 +507,12 @@ class d13_module
 						false);
 					
 					$d13->templateInject($d13->templateSubpage("sub.popup.build" , $tvars, true));
-					$tooltip = misc::toolTip($d13->getLangUI("addModule") . ' ' . $d13->getLangUI("tipModuleBuildup"));
+					$tooltip = d13_misc::toolTip($d13->getLangUI("addModule") . ' ' . $d13->getLangUI("tipModuleBuildup"));
 					$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
 					$html.= '<a href="#" class="button active open-popup '.$tooltip.'" data-popup=".popup-build-'.$this->data['moduleId'].'">' . $d13->getLangUI("addModule") . '</a>';
 					$html.= '</p>';
 				} else {
-					$tooltip = misc::toolTip($d13->getLangUI("tipModuleBuildupDisabled"));
+					$tooltip = d13_misc::toolTip($d13->getLangUI("tipModuleBuildupDisabled"));
 					$html.= '<p class="buttons-row theme-gray">';
 					$html.= '<a href="#" class="button '.$tooltip.'">' . $d13->getLangUI("addModule") . " " . $d13->getLangUI("impossible") . '</a>';
 					$html.= '</p>';
@@ -616,18 +545,18 @@ class d13_module
 								false);
 				
 							$d13->templateInject($d13->templateSubpage("sub.popup.build" , $tvars, true));
-							$tooltip = misc::toolTip($d13->getLangUI("upgrade") . ' ' . $d13->getLangUI("tipModuleBuildup"));
+							$tooltip = d13_misc::toolTip($d13->getLangUI("upgrade") . ' ' . $d13->getLangUI("tipModuleBuildup"));
 							$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
 							$html.= '<a href="#" class="button active open-popup '.$tooltip.'" data-popup=".popup-build-'.$this->data['moduleId'].'">' . $d13->getLangUI("upgrade") . '</a>';
 							$html.= '</p>';
 						} else {
-							$tooltip = misc::toolTip($d13->getLangUI("tipModuleBuildupDisabled"));
+							$tooltip = d13_misc::toolTip($d13->getLangUI("tipModuleBuildupDisabled"));
 							$html.= '<p class="buttons-row theme-gray">';
 							$html.= '<a href="#" class="button '.$tooltip.'">' . $d13->getLangUI("upgrade") . " " . $d13->getLangUI("impossible") . '</a>';
 							$html.= '</p>';
 						}
 					} else {
- 						$tooltip = misc::toolTip($d13->getLangUI("tipModuleMaxLevel"));
+ 						$tooltip = d13_misc::toolTip($d13->getLangUI("tipModuleMaxLevel"));
 						$html.= '<p class="buttons-row theme-gray">';
 						$html.= '<a href="#" class="button '.$tooltip.'">' . $d13->getLangUI("maxModuleLevel") . '</a>';
 						$html.= '</p>';
@@ -892,13 +821,13 @@ class d13_module_warfare extends d13_module
 			}
 			
 			if ($i>0) {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryTrain"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryTrain"));
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html .= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
 				$html .= '<a href="#" class="button active '.$tooltip.' open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html .= '</p>';
 			} else {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
 				$html .= '<p class="buttons-row theme-gray">';
 				$html .= '<a href="#" class="button '.$tooltip.'">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html .= '</p>';
@@ -996,7 +925,7 @@ class d13_module_warfare extends d13_module
 					
 					$remaining = ($item['start'] + $item['duration']) - time();
 					
-					$otherNode = new node();
+					$otherNode = new d13_node();
 					if ($item['sender'] == $this->node->data['id']) {
 						$status = $otherNode->get('id', $item['recipient']);
 					}
@@ -1008,7 +937,7 @@ class d13_module_warfare extends d13_module
 						$tvars = array();
 						$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/flag.png">';
 						$tvars['tvar_listLabel'] 	= $stage . ' ' . $d13->getLangUI("combat") . ' ' . $otherNode->data['name'];
-						$tvars['tvar_listAmount'] 	= '<span id="combat_' . $item['id'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("combat_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> '.$cancel;
+						$tvars['tvar_listAmount'] 	= '<span id="combat_' . $item['id'] . '">' . implode(':', d13_misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("combat_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> '.$cancel;
 				
 					
 				
@@ -1024,14 +953,14 @@ class d13_module_warfare extends d13_module
 		if ($this->data['busy'] == false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $this->data['units'] > 0) {
 				$tvars = array();
-				$tooltip = misc::toolTip($d13->getLangUI('tipModuleInactive'));
+				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
 				$tvars['tvar_buttonColor'] 	= 'theme-'.$_SESSION[CONST_PREFIX.'User']['color'];
 				$tvars['tvar_buttonData'] 	= 'class="button active open-popup '.$tooltip.'" data-popup=".popup-list-1"';
 				$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("combat");
 				$html = $d13->templateSubpage("sub.module.listbutton", $tvars);
 			} else {
 				$tvars = array();
-				$tooltip = misc::toolTip($d13->getLangUI('tipModuleDisabled'));
+				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleDisabled'));
 				$tvars['tvar_buttonColor'] 	= 'theme-gray';
 				$tvars['tvar_buttonData'] 	= 'class="button '.$tooltip.'"';
 				$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("combat");
@@ -1125,13 +1054,13 @@ class d13_module_storage extends d13_module
 			$this->data['units'] = $i;											// !important
 			
 			if ($i > 0) {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryResource"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryResource"));
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html .= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
 				$html .= '<a href="#" class="button active '.$tooltip.' open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html .= '</p>';
 			} else {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
 				$html .= '<p class="buttons-row theme-gray">';
 				$html .= '<a href="#" class="button '.$tooltip.'">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html .= '</p>';
@@ -1260,13 +1189,13 @@ class d13_module_harvest extends d13_module
 				}
 			}
 			if ($i>0) {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryResource"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryResource"));
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
 				$html .= '<a href="#" class="button active '.$tooltip.' open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			} else {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
 				$html.= '<p class="buttons-row theme-gray">';
 				$html .= '<a href="#" class="button '.$tooltip.'">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
@@ -1385,13 +1314,13 @@ class d13_module_craft extends d13_module
 			}
 			
 			if ($i>0) {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryCraft"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryCraft"));
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
 				$html .= '<a href="#" class="button active '.$tooltip.' open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			} else {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
 				$html.= '<p class="buttons-row theme-gray">';
 				$html .= '<a href="#" class="button '.$tooltip.'">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
@@ -1484,7 +1413,7 @@ class d13_module_craft extends d13_module
 				$tvars['tvar_cid'] = $cid;
 				$tvars['tvar_componentName'] = $d13->getLangGL("components", $this->node->data['faction'], $cid) ["name"];
 				$tvars['tvar_componentDescription'] = $d13->getLangGL("components", $this->node->data['faction'], $cid, "description");
-				$tvars['tvar_duration'] = misc::sToHMS( (($component['duration'] - $component['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'craft')) * 60, true);
+				$tvars['tvar_duration'] = d13_misc::sToHMS( (($component['duration'] - $component['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'craft')) * 60, true);
 				$tvars['tvar_compLimit'] = $limitData;
 				$vars['tvar_disableData']		= '';
 				if ($limitData <= 0) {
@@ -1539,7 +1468,7 @@ class d13_module_craft extends d13_module
 						$stage = $d13->getLangUI('remove');
 					}
 					
-					$remaining = misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
+					$remaining = d13_misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
 					$tvars = array();;
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $item['obj_id'] . '.png">';
@@ -1557,14 +1486,14 @@ class d13_module_craft extends d13_module
 		if ($this->data['busy'] == false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
 				$tvars = array();
-				$tooltip = misc::toolTip($d13->getLangUI('tipModuleInactive'));
+				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
 				$tvars['tvar_buttonColor'] 	= 'theme-'.$_SESSION[CONST_PREFIX.'User']['color'];
 				$tvars['tvar_buttonData'] 	= 'class="button active open-popup '.$tooltip.'" data-popup=".popup-swiper" onclick="swiperUpdate();"';
 				$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("craft");
 				$html = $d13->templateSubpage("sub.module.listbutton", $tvars);
 			} else {
 				$tvars = array();
-				$tooltip = misc::toolTip($d13->getLangUI('tipModuleDisabled'));
+				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleDisabled'));
 				$tvars['tvar_buttonColor'] 	= 'theme-gray';
 				$tvars['tvar_buttonData'] 	= 'class="button '.$tooltip.'"';
 				$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("craft");
@@ -1656,13 +1585,13 @@ class d13_module_train extends d13_module
 			}
 			
 			if ($i>0) {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryTrain"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryTrain"));
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
 				$html .= '<a href="#" class="button active '.$tooltip.' open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			} else {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
 				$html.= '<p class="buttons-row theme-gray">';
 				$html .= '<a href="#" class="button '.$tooltip.'">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
@@ -1708,7 +1637,7 @@ class d13_module_train extends d13_module
 				$vars = array();
 				$vars = $tmp_unit->getTemplateVariables();
 				
-				$vars['tvar_duration'] = misc::sToHMS((($tmp_unit->data['duration'] - $tmp_unit->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'train')) * 60, true);
+				$vars['tvar_duration'] = d13_misc::sToHMS((($tmp_unit->data['duration'] - $tmp_unit->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'train')) * 60, true);
 				$vars['tvar_uid'] = $uid;
 				$vars['tvar_nodeId'] = $this->node->data['id'];
 				$vars['tvar_slotId'] = $this->data['slotId'];
@@ -1760,7 +1689,7 @@ class d13_module_train extends d13_module
 					} else {
 						$stage = $d13->getLangUI('remove');
 					}
-					$remaining = misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
+					$remaining = d13_misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
 					$tvars = array();;
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $d13->getUnit($this->node->data['faction'], $item['obj_id'], 'image') . '">';
@@ -1778,14 +1707,14 @@ class d13_module_train extends d13_module
 		if ($this->data['busy'] == false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
 				$tvars = array();
-				$tooltip = misc::toolTip($d13->getLangUI('tipModuleInactive'));
+				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
 				$tvars['tvar_buttonColor'] 	= 'theme-'.$_SESSION[CONST_PREFIX.'User']['color'];
 				$tvars['tvar_buttonData'] 	= 'class="button active open-popup '.$tooltip.'" data-popup=".popup-swiper" onclick="swiperUpdate();"';
 				$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("train");
 				$html = $d13->templateSubpage("sub.module.listbutton", $tvars);
 			} else {
 				$tvars = array();
-				$tooltip = misc::toolTip($d13->getLangUI('tipModuleDisabled'));
+				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleDisabled'));
 				$tvars['tvar_buttonColor'] 	= 'theme-gray';
 				$tvars['tvar_buttonData'] 	= 'class="button '.$tooltip.'"';
 				$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("train");
@@ -1876,13 +1805,13 @@ class d13_module_research extends d13_module
 				}
 			}
 			if ($i>0) {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryResearch"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryResearch"));
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
 				$html .= '<a href="#" class="button active '.$tooltip.' open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			}else {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
 				$html.= '<p class="buttons-row theme-gray">';
 				$html .= '<a href="#" class="button '.$tooltip.'">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
@@ -1975,7 +1904,7 @@ class d13_module_research extends d13_module
 				$tvars['tvar_techDescription'] = $d13->getLangGL('technologies', $this->node->data['faction'], $tid, 'description');
 				$tvars['tvar_techTier'] = $this->node->technologies[$tid]['level'];
 				$tvars['tvar_techMaxTier'] = $technology['maxLevel'];
-				$tvars['tvar_duration'] = misc::sToHMS((($technology['duration'] - $technology['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'research')) * 60, true);
+				$tvars['tvar_duration'] = d13_misc::sToHMS((($technology['duration'] - $technology['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'research')) * 60, true);
 				$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.research", $tvars);
 				
 			}
@@ -2016,7 +1945,7 @@ class d13_module_research extends d13_module
 					$tvars = array();;
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $d13->getTechnology($this->node->data['faction'], $item['obj_id'], 'image') .'">';
 					$tvars['tvar_listLabel'] 	= $d13->getLangGL("technologies", $this->node->data['faction'], $item['obj_id'], "name");
-					$tvars['tvar_listAmount'] 	= '<span id="research_' . $item['obj_id'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("research_' . $item['obj_id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelTechnology&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&technologyId=' . $item['obj_id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
+					$tvars['tvar_listAmount'] 	= '<span id="research_' . $item['obj_id'] . '">' . implode(':', d13_misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("research_' . $item['obj_id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelTechnology&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&technologyId=' . $item['obj_id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 				
 					$html = $d13->templateSubpage("sub.module.listcontent", $tvars);
 				
@@ -2029,14 +1958,14 @@ class d13_module_research extends d13_module
 		if ($this->data['busy'] == false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $this->data['available'] > 0) {
 				$tvars = array();
-				$tooltip = misc::toolTip($d13->getLangUI('tipModuleInactive'));
+				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
 				$tvars['tvar_buttonColor'] 	= 'theme-'.$_SESSION[CONST_PREFIX.'User']['color'];
 				$tvars['tvar_buttonData'] 	= 'class="button active open-popup '.$tooltip.'" data-popup=".popup-swiper" onclick="swiperUpdate();"';
 				$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("research");
 				$html = $d13->templateSubpage("sub.module.listbutton", $tvars);
 			} else {
 				$tvars = array();
-				$tooltip = misc::toolTip($d13->getLangUI('tipModuleDisabled'));
+				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleDisabled'));
 				$tvars['tvar_buttonColor'] 	= 'theme-gray';
 				$tvars['tvar_buttonData'] 	= 'class="button '.$tooltip.'"';
 				$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("research");
@@ -2199,14 +2128,14 @@ class d13_module_alliance extends d13_module
 		if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $i > 0) {
 			$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 			$tvars = array();
-			$tooltip = misc::toolTip($d13->getLangUI('tipModuleInactive'));
+			$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
 			$tvars['tvar_buttonColor'] 	= 'theme-'.$_SESSION[CONST_PREFIX.'User']['color'];
 			$tvars['tvar_buttonData'] 	= 'class="button active open-popup '.$tooltip.'" data-popup=".popup-list-1"';
 			$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("alliance");
 			$html = $d13->templateSubpage("sub.module.listbutton", $tvars);
 		} else {
 			$tvars = array();
-			$tooltip = misc::toolTip($d13->getLangUI('tipModuleDisabled'));
+			$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleDisabled'));
 			$tvars['tvar_buttonColor'] 	= 'theme-gray';
 			$tvars['tvar_buttonData'] 	= 'class="button '.$tooltip.'"';
 			$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("alliance");
@@ -2297,13 +2226,13 @@ class d13_module_command extends d13_module
 				}
 			}
 			if ($i>0) {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryResource"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryResource"));
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
 				$html.= '<a href="#" class="button active open-popup '.$tooltip.'" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html.= '</p>';
 			} else {
-				$tooltip = misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
+				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
 				$html.= '<p class="buttons-row theme-gray">';
 				$html.= '<a href="#" class="button '.$tooltip.'">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
 				$html.= '</p>';
@@ -2867,5 +2796,3 @@ class d13_module_storvest extends d13_module
 
 
 // =====================================================================================EOF
-
-?>

@@ -17,7 +17,7 @@
 //
 // ----------------------------------------------------------------------------------------
 
-class message
+class d13_message
 
 {
 	public $data;
@@ -50,7 +50,7 @@ class message
 	function set()
 	{
 		global $d13;
-		$message = new message();
+		$message = new d13_message();
 		if ($message->get($this->data['id']) == 'done') {
 			$d13->dbQuery('update messages set viewed="' . $this->data['viewed'] . '" where id="' . $this->data['id'] . '"');
 			if ($d13->dbAffectedRows() > - 1) $status = 'done';
@@ -70,13 +70,13 @@ class message
 	function add()
 	{
 		global $d13;
-		$recipient = new user();
+		$recipient = new d13_user();
 		if ($recipient->get('name', $this->data['recipient']) == 'done') {
-			$sender = new user();
+			$sender = new d13_user();
 			if ($sender->get('name', $this->data['sender']) == 'done') {
 				if (!$sender->isBlocked($recipient->data['id'])) {
 					$this->data['body'] = $this->textEncode($this->data['body']);
-					$this->data['id'] = misc::newId('messages');
+					$this->data['id'] = d13_misc::newId('messages');
 					$sent = strftime('%Y-%m-%d %H:%M:%S', time());
 					$d13->dbQuery('insert into messages (id, sender, recipient, subject, body, sent, viewed, type) values ("' . $this->data['id'] . '", "' . $sender->data['id'] . '", "' . $recipient->data['id'] . '", "' . $this->data['subject'] . '", "' . $this->data['body'] . '", "' . $sent . '", "' . $this->data['viewed'] . '", "' . $this->data['type'] . '")');
 					if ($d13->dbAffectedRows() > - 1) {
@@ -111,7 +111,7 @@ class message
 	function remove($id)
 	{
 		global $d13;
-		$message = new message();
+		$message = new d13_message();
 		if ($message->get($id) == 'done') {
 			$ok = 1;
 			$d13->dbQuery('insert into free_ids (id, type) values ("' . $id . '", "messages")');
@@ -178,7 +178,7 @@ class message
 		
 		
 		for ($i = 0; $row = $d13->dbFetch($result); $i++) {
-			$messages['messages'][$i] = new message();
+			$messages['messages'][$i] = new d13_message();
 			$messages['messages'][$i]->data = $row;
 		}
 
@@ -242,5 +242,3 @@ class message
 }
 
 // =====================================================================================EOF
-
-?>

@@ -323,11 +323,11 @@ class d13_unit
 					foreach($d13->getUpgradeUnit($this->node->data['faction'], $upgrade, 'attributes') as $stats) {
 						if ($stats['stat'] == 'all') {
 							foreach($d13->getGeneral('stats') as $stat) {
-								$this->data['upgrade_' . $stat] = misc::upgraded_value($stats['value'] * $technology['level'], $this->data[$stat]);
+								$this->data['upgrade_' . $stat] = d13_misc::upgraded_value($stats['value'] * $technology['level'], $this->data[$stat]);
 							}
 						}
 						else {
-							$this->data['upgrade_' . $stats['stat']] = misc::upgraded_value($stats['value'] * $technology['level'], $this->data[$stats['stat']]);
+							$this->data['upgrade_' . $stats['stat']] = d13_misc::upgraded_value($stats['value'] * $technology['level'], $this->data[$stats['stat']]);
 						}
 					}
 				}
@@ -491,5 +491,3 @@ class d13_unit
 }
 
 // =====================================================================================EOF
-
-?>

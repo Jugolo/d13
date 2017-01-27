@@ -13,7 +13,7 @@
 //
 // ========================================================================================
 
-class misc
+class d13_misc
 
 {
 
@@ -154,7 +154,7 @@ class misc
 		$value = 1;
 		
 		if ($fraction > 0 && $total > 0) {
-			$value = floor(misc::percentage($fraction, $total));
+			$value = floor(d13_misc::percentage($fraction, $total));
 			if ($value > $total) {
 				$value = $total;
 			} else if ($value < 1) {
@@ -253,4 +253,3 @@ class misc
 
 // =====================================================================================EOF
 
-?>

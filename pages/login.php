@@ -30,13 +30,13 @@ if (isset($_GET['action'])) {
 		}
 		else
 		if (isset($_COOKIE[CONST_PREFIX . 'Name'], $_COOKIE[CONST_PREFIX . 'Password'])) {
-			$name = misc::clean($_COOKIE[CONST_PREFIX . 'Name']);
-			$pass = misc::clean($_COOKIE[CONST_PREFIX . 'Password']);
+			$name = d13_misc::clean($_COOKIE[CONST_PREFIX . 'Name']);
+			$pass = d13_misc::clean($_COOKIE[CONST_PREFIX . 'Password']);
 			$remember = 1;
 		}
 
 		if (isset($name, $pass)) {
-			$user = new user();
+			$user = new d13_user();
 			$status = $user->get('name', $name);
 			if ($status == 'done')
 			if ($d13->getGeneral('options', 'enabledLogin') || $user->data['access'] == 3)
@@ -67,10 +67,10 @@ if (isset($_GET['action'])) {
 
 	case 'sit':
 		if (isset($_POST['user'], $_POST['sitter'], $_POST['password'])) {
-			$user = new user();
+			$user = new d13_user();
 			$status = $user->get('name', $_POST['user']);
 			if ($status == 'done') {
-				$sitter = new user();
+				$sitter = new d13_user();
 				$status = $sitter->get('name', $_POST['sitter']);
 				if ($status == 'done')
 				if (sha1($_POST['password']) == $sitter->data['password'])

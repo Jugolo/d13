@@ -13,7 +13,7 @@
 //
 // ========================================================================================
 
-class user
+class d13_user
 
 {
 	
@@ -29,7 +29,7 @@ class user
 	{
 		
 		$status 		= $this->get('id', $id);
-		$this->alliance	= new alliance();
+		$this->alliance	= new d13_alliance();
 		$this->ally_status 	= $this->alliance->get('id', $this->data['alliance']);
 		
 	}
@@ -70,7 +70,7 @@ class user
 	function set()
 	{
 		global $d13;
-		$user = new user();
+		$user = new d13_user();
 		if ($user->get('id', $this->data['id']) == 'done') {
 			$d13->dbQuery('update users set name="' . $this->data['name'] . '", password="' . $this->data['password'] . '", email="' . $this->data['email'] . '", access="' . $this->data['access'] . '", joined="' . $this->data['joined'] . '", lastVisit="' . $this->data['lastVisit'] . '", ip="' . $this->data['ip'] . '", alliance="' . $this->data['alliance'] . '", template="' . $this->data['template'] . '", color="' . $this->data['color'] . '", locale="' . $this->data['locale'] . '", sitter="' . $this->data['sitter'] . '" where id="' . $this->data['id'] . '"');
 			if ($d13->dbAffectedRows() > - 1) $status = 'done';
@@ -89,13 +89,13 @@ class user
 	function add()
 	{
 		global $d13;
-		$user = new user();
+		$user = new d13_user();
 		if ($user->get('name', $this->data['name']) == 'noUser') {
 			if ($user->get('email', $this->data['email']) == 'noUser') {
-				if (!blacklist::check('ip', $this->data['ip'])) {
-					if (!blacklist::check('email', $this->data['email'])) {
+				if (!d13_blacklist::check('ip', $this->data['ip'])) {
+					if (!d13_blacklist::check('email', $this->data['email'])) {
 						$ok = 1;
-						$this->data['id'] = misc::newId('users');
+						$this->data['id'] = d13_misc::newId('users');
 						$d13->dbQuery('insert into users (id, name, password, email, access, joined, lastVisit, ip, template, color, locale, trophies) values ("' . $this->data['id'] . '", "' . $this->data['name'] . '", "' . $this->data['password'] . '", "' . $this->data['email'] . '", "' . $this->data['access'] . '", "' . $this->data['joined'] . '", "' . $this->data['lastVisit'] . '", "' . $this->data['ip'] . '", "' . $this->data['template'] . '", "' . $this->data['color'] . '", "' . $this->data['locale'] . '", "500")');
 						if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						$preferences = array();
@@ -134,12 +134,12 @@ class user
 	function remove($id)
 	{
 		global $d13;
-		$user = new user();
+		$user = new d13_user();
 		if ($user->get('id', $id) == 'done') {
 			$result = $d13->dbQuery('select id from alliances where user="' . $id . '"');
-			while ($row = $d13->dbFetch($result)) alliance::remove($row['id']);
+			while ($row = $d13->dbFetch($result)) d13_alliance::remove($row['id']);
 			$result = $d13->dbQuery('select id from nodes where user="' . $id . '"');
-			while ($row = $d13->dbFetch($result)) node::remove($row['id']);
+			while ($row = $d13->dbFetch($result)) d13_node::remove($row['id']);
 			$ok = 1;
 			$d13->dbQuery('delete from activations where user="' . $id . '"');
 			$d13->dbQuery('delete from preferences where user="' . $id . '"');
@@ -179,7 +179,7 @@ class user
 		while ($userRow = $d13->dbFetch($usersResult)) {
 			$pendingCount++;
 			$result = $d13->dbQuery('select id from nodes where user="' . $userRow['id'] . '"');
-			while ($row = $d13->dbFetch($result)) node::remove($row['id']);
+			while ($row = $d13->dbFetch($result)) d13_node::remove($row['id']);
 			$ok = 1;
 			$d13->dbQuery('delete from activations where user="' . $userRow['id'] . '"');
 			$messagesResult = $d13->dbQuery('select id from messages where recipient="' . $userRow['id'] . '" or sender="' . $userRow['id'] . '"');
@@ -265,7 +265,7 @@ class user
 		global $d13;
 		$result = $d13->dbQuery('select * from blocklist where recipient="' . $this->data['id'] . '"');
 		$this->blocklist = array();
-		$user = new user();
+		$user = new d13_user();
 		for ($i = 0; $row = $d13->dbFetch($result); $i++) {
 			$this->blocklist[$i] = $row;
 			if ($user->get('id', $this->blocklist[$i]['sender']) == 'done') $this->blocklist[$i]['senderName'] = $user->data['name'];
@@ -295,7 +295,7 @@ class user
 	function setBlocklist($name)
 	{
 		global $d13;
-		$user = new user();
+		$user = new d13_user();
 		if ($user->get('name', $name) == 'done') {
 			$result = $d13->dbQuery('select count(*) as count from blocklist where recipient="' . $this->data['id'] . '" and sender="' . $user->data['id'] . '"');
 			$row = $d13->dbFetch($result);
@@ -351,7 +351,7 @@ class user
 			$this->data[$tmp_stat['name']] += $value;
 			
 			if ($tmp_stat['isExp']) {
-				if ($this->data[$tmp_stat['name']] >= misc::nextlevelexp($this->data['level'])) {
+				if ($this->data[$tmp_stat['name']] >= d13_misc::nextlevelexp($this->data['level'])) {
 					$this->addStat('level', 1);
 				}
 			}
@@ -434,7 +434,7 @@ class user
 
 		//- - - - - Player League
 		$league = array();
-		$league = $d13->getLeague(misc::getLeague($this->data['level'], $this->data['trophies']));
+		$league = $d13->getLeague(d13_misc::getLeague($this->data['level'], $this->data['trophies']));
 		
 		$tvars['tvar_userLeague']		= $d13->getLangGL('leagues', $league['id'], 'name');
 		$tvars['tvar_userImageLeague'] 	= $league['image'];
@@ -446,8 +446,8 @@ class user
 				$tvars['tvar_userImage'.$stat['name']] 		= $stat['image'];
 				$tvars['tvar_userPercentage'.$stat['name']] = '';
 				if ($stat['isExp']) {
-				$tvars['tvar_user'.$stat['name']] 			= $this->data[$stat['value']] . '/' . misc::nextlevelexp($this->data['level']);
-				$tvars['tvar_userPercentage'.$stat['name']] = misc::percentage(floor($this->data[$stat['value']]), misc::nextlevelexp($this->data['level']));
+				$tvars['tvar_user'.$stat['name']] 			= $this->data[$stat['value']] . '/' . d13_misc::nextlevelexp($this->data['level']);
+				$tvars['tvar_userPercentage'.$stat['name']] = d13_misc::percentage(floor($this->data[$stat['value']]), d13_misc::nextlevelexp($this->data['level']));
 				$tvars['tvar_userColor'] 					= $stat['color'];
 				} else {
 				$tvars['tvar_user'.$stat['name']] 			= $this->data[$stat['value']];
@@ -464,4 +464,3 @@ class user
 
 // =====================================================================================EOF
 
-?>

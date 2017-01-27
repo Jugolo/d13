@@ -42,7 +42,7 @@ class d13_statusController extends d13_controller
 				$this->own = true;
 			}
 
-			$this->user = new user($userId);
+			$this->user = new d13_user($userId);
 
 		} else {
 			$this->own = false;

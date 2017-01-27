@@ -13,7 +13,7 @@
 //
 // ========================================================================================
 
-class alliance
+class d13_alliance
 
 {
 	public $data, $members, $invitations, $wars;
@@ -35,10 +35,10 @@ class alliance
 	function set($nodeId)
 	{
 		global $d13;
-		$alliance = new alliance();
+		$alliance = new d13_alliance();
 		if ($alliance->get('id', $this->data['id']) == 'done')
 		if ($alliance->get('name', $this->data['name']) == 'noAlliance') {
-			$node = new node();
+			$node = new d13_node();
 			if ($node->get('id', $nodeId) == 'done') {
 				$node->getResources();
 				$setCost = $d13->getFaction($node->data['faction'], 'costs', 'alliance');
@@ -70,9 +70,9 @@ class alliance
 	function add($nodeId)
 	{
 		global $d13;
-		$alliance = new alliance();
+		$alliance = new d13_alliance();
 		if ($alliance->get('name', $this->data['name']) == 'noAlliance') {
-			$node = new node();
+			$node = new d13_node();
 			if ($node->get('id', $nodeId) == 'done') {
 				$node->checkResources(time());
 				$addCost = $d13->getFaction($node->data['faction'], 'costs', 'alliance');
@@ -85,7 +85,7 @@ class alliance
 						if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					}
 
-					$this->data['id'] = misc::newId('alliances');
+					$this->data['id'] = d13_misc::newId('alliances');
 					$d13->dbQuery('insert into alliances (id, user, name) values ("' . $this->data['id'] . '", "' . $node->data['user'] . '", "' . $this->data['name'] . '")');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					$d13->dbQuery('update users set alliance="' . $this->data['id'] . '" where id="' . $this->data['user'] . '"');
@@ -106,7 +106,7 @@ class alliance
 	function remove($id)
 	{
 		global $d13;
-		$alliance = new alliance();
+		$alliance = new d13_alliance();
 		if ($alliance->get('id', $id) == 'done') {
 			$ok = 1;
 			$d13->dbQuery('delete from invitations where alliance="' . $id . '"');
@@ -150,7 +150,7 @@ class alliance
 	function addInvitation($userId)
 	{
 		global $d13;
-		$user = new user();
+		$user = new d13_user();
 		if ($user->get('id', $userId) == 'done') {
 			$result = $d13->dbQuery('select count(*) as count from invitations where alliance="' . $this->data['id'] . '" and user="' . $userId . '"');
 			$row = $d13->dbFetch($result);
@@ -172,9 +172,9 @@ class alliance
 	function removeInvitation($allianceId, $userId)
 	{
 		global $d13;
-		$alliance = new alliance();
+		$alliance = new d13_alliance();
 		if ($alliance->get('id', $allianceId) == 'done') {
-			$user = new user();
+			$user = new d13_user();
 			if ($user->get('id', $userId) == 'done') {
 				$result = $d13->dbQuery('select count(*) as count from invitations where alliance="' . $allianceId . '" and user="' . $userId . '"');
 				$row = $d13->dbFetch($result);
@@ -196,9 +196,9 @@ class alliance
 	function acceptInvitation($allianceId, $userId)
 	{
 		global $d13;
-		$alliance = new alliance();
+		$alliance = new d13_alliance();
 		if ($alliance->get('id', $allianceId) == 'done') {
-			$user = new user();
+			$user = new d13_user();
 			if ($user->get('id', $userId) == 'done')
 			if (!$user->data['alliance']) {
 				$result = $d13->dbQuery('select count(*) as count from invitations where alliance="' . $allianceId . '" and user="' . $userId . '"');
@@ -226,7 +226,7 @@ class alliance
 	function removeMember($userId)
 	{
 		global $d13;
-		$user = new user();
+		$user = new d13_user();
 		if ($user->get('id', $userId) == 'done') {
 			$d13->dbQuery('update users set alliance=0 where id="' . $userId . '"');
 			if ($d13->dbAffectedRows() > - 1) $status = 'done';
@@ -261,7 +261,7 @@ class alliance
 	function addWar($allianceId)
 	{
 		global $d13;
-		$alliance = new alliance();
+		$alliance = new d13_alliance();
 		if ($alliance->get('id', $allianceId) == 'done') {
 			$result = $d13->dbQuery('select count(*) as count from wars where type=1 and (sender="' . $this->data['id'] . '" or recipient="' . $this->data['id'] . '")');
 			$row = $d13->dbFetch($result);
@@ -281,7 +281,7 @@ class alliance
 	function proposePeace($allianceId)
 	{
 		global $d13;
-		$alliance = new alliance();
+		$alliance = new d13_alliance();
 		if ($alliance->get('id', $allianceId) == 'done') {
 			$result = $d13->dbQuery('select count(*) as count from wars where type=1 and ((sender="' . $this->data['id'] . '" and recipient="' . $alliance->data['id'] . '") or (sender="' . $alliance->data['id'] . '" and recipient="' . $this->data['id'] . '"))');
 			$row = $d13->dbFetch($result);
@@ -306,7 +306,7 @@ class alliance
 	function removePeace($allianceId)
 	{
 		global $d13;
-		$alliance = new alliance();
+		$alliance = new d13_alliance();
 		if ($alliance->get('id', $allianceId) == 'done') {
 			$result = $d13->dbQuery('select count(*) as count from wars where type=0 and ((sender="' . $this->data['id'] . '" and recipient="' . $alliance->data['id'] . '") or (sender="' . $alliance->data['id'] . '" and recipient="' . $this->data['id'] . '"))');
 			$row = $d13->dbFetch($result);
@@ -326,7 +326,7 @@ class alliance
 	function acceptPeace($allianceId)
 	{
 		global $d13;
-		$alliance = new alliance();
+		$alliance = new d13_alliance();
 		if ($alliance->get('id', $allianceId) == 'done') {
 			$result = $d13->dbQuery('select count(*) as count from wars where type=0 and sender="' . $alliance->data['id'] . '" and recipient="' . $this->data['id'] . '"');
 			$row = $d13->dbFetch($result);
@@ -350,11 +350,10 @@ class alliance
 	function getAll()
 	{
 		$this->getMembers();
-		$this->invitations = alliance::getInvitations('alliance', $this->data['id']);
+		$this->invitations = d13_alliance::getInvitations('alliance', $this->data['id']);
 		$this->getWars();
 	}
 }
 
 // =====================================================================================EOF
 
-?>

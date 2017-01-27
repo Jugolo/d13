@@ -61,10 +61,10 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 
 	// - - - - - User
 
-	$user = new user();
+	$user = new d13_user();
 	$user->get('id', $_SESSION[CONST_PREFIX . 'User']['id']);
 	if (isset($_GET['action'], $_POST['password'])) {
-		foreach($_POST as $key => $value) $_POST[$key] = misc::clean($value);
+		foreach($_POST as $key => $value) $_POST[$key] = d13_misc::clean($value);
 		switch ($_GET['action']) {
 
 			// - - - - -
@@ -114,7 +114,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 
 		case 'remove':
 			if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) {
-				$status = user::remove($user->data['id']);
+				$status = d13_user::remove($user->data['id']);
 				if ($status == 'done') header('Location: index.php?p=logout');
 				else $message = $d13->getLangUI($status);
 			}

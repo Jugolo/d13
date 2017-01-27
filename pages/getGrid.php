@@ -21,15 +21,15 @@ $message = NULL;
 $d13->dbQuery('start transaction');
 
 if (isset($_GET['x'], $_GET['y'])) {
-	$x = misc::clean($_GET['x']);
-	$y = misc::clean($_GET['y']);
+	$x = d13_misc::clean($_GET['x']);
+	$y = d13_misc::clean($_GET['y']);
 }
 else {
 	$x = rand(0, 49);
 	$y = rand(0, 49);
 }
 
-$grid = new grid();
+$grid = new d13_grid();
 $grid->get($x, $y);
 
 if ((isset($status)) && ($status == 'error')) {

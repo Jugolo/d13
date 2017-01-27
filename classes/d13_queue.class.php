@@ -83,7 +83,7 @@ class d13_queue
 		}
 		
 		if (count($tmp_queues)) {
-			$tmp_queues = misc::record_sort($tmp_queues, 'remaining');
+			$tmp_queues = d13_misc::record_sort($tmp_queues, 'remaining');
 			$html = $this->getQueueItem($tmp_queues[0]['item']);
 		}
 		return $html;
@@ -166,7 +166,7 @@ class d13_queue
 				$icon 	= '/icon/armies.png';
 				$item['node'] = $item['sender'];
 				$name = '';
-				$otherNode = new node();
+				$otherNode = new d13_node();
 				if ($item['sender'] == $this->node->data['id']) {
 					$status = $otherNode->get('id', $item['recipient']);
 				} else {
@@ -197,10 +197,10 @@ class d13_queue
 	
 		$tvars['tvar_itemImage'] 		= '<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$icon.'">';
 		$tvars['tvar_itemTitle'] 		= $action . ' ' . $name;
-		$tvars['tvar_itemTimer'] 		= '<span id="'.$item['type'].'_' . $token . '_' . $item['node'] . '_' . $item['slot'] . '_' .  $item['obj_id'] . '">' . implode(':', misc::sToHMS($remaining)) . '</span>';
+		$tvars['tvar_itemTimer'] 		= '<span id="'.$item['type'].'_' . $token . '_' . $item['node'] . '_' . $item['slot'] . '_' .  $item['obj_id'] . '">' . implode(':', d13_misc::sToHMS($remaining)) . '</span>';
 		$tvars['tvar_itemScript']		= '<script type="text/javascript">timedJump("'.$item['type'].'_' . $token . '_' . $item['node'] . '_' . $item['slot'] . '_' . $item['obj_id'] .'", "index.php?p=node&action=get&nodeId=' . $this->node->data['id'] . '");</script>';
 		$tvars['tvar_itemCancel'] 		= $cancel . ' <img class="d13-micron" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
-		$tvars['tvar_itemPercentage']	= misc::percentage($remaining, $item['duration']);
+		$tvars['tvar_itemPercentage']	= d13_misc::percentage($remaining, $item['duration']);
 		$html .= $d13->templateSubpage("sub.queue.item", $tvars);
 
 		return $html;
@@ -245,4 +245,3 @@ class d13_queue
 
 // =====================================================================================EOF
 
-?>

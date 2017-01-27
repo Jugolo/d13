@@ -31,9 +31,9 @@ class d13_allianceController extends d13_controller
 		global $d13;
 		
 		$tvars 				= array();
-		$this->node 		= new node();
+		$this->node 		= new d13_node();
 		$this->node_status 	= $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
-		$this->alliance 	= new alliance();
+		$this->alliance 	= new d13_alliance();
 		$this->ally_status 	= $this->alliance->get('id', $_SESSION[CONST_PREFIX . 'User']['alliance']);
 		$this->own = true;
 		
@@ -129,7 +129,7 @@ class d13_allianceController extends d13_controller
 					$message = $d13->getLangUI($this->ally_status);
 				}
 			} else {
-				$invitations = alliance::getInvitations('user', $_SESSION[CONST_PREFIX . 'User']['id']);
+				$invitations = d13_alliance::getInvitations('user', $_SESSION[CONST_PREFIX . 'User']['id']);
 			}
 		
 			if (isset($this->alliance->data['id'])) {
@@ -144,7 +144,7 @@ class d13_allianceController extends d13_controller
 
 				if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) $html.= '<div class="section" style="margin-top: 5px;"> -> {{tvar_ui_invitations}} | <a class="external" href="index.php?p=alliance&action=addInvitation">{{tvar_ui_invite}}</a></div>';
 				foreach($this->alliance->invitations as $invitation) {
-					$user = new user();
+					$user = new d13_user();
 					if ($user->get('id', $invitation['user']) == 'done') {
 						$accept = '';
 						$removeLabel = 'x';
@@ -159,7 +159,7 @@ class d13_allianceController extends d13_controller
 
 				if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) $html.= '<div class="section" style="margin-top: 5px;"> -> {{tvar_ui_wars}} | <a class="external" href="index.php?p=alliance&action=addWar">{{tvar_ui_goToWar}}</a></div>';
 				foreach($this->alliance->wars as $war) {
-					$otherAlliance = new alliance();
+					$otherAlliance = new d13_alliance();
 					if ($this->alliance->data['id'] == $war['sender']) $otherAllianceId = $war['recipient'];
 					else $otherAllianceId = $war['sender'];
 					if ($otherAlliance->get('id', $otherAllianceId) == 'done')
@@ -175,7 +175,7 @@ class d13_allianceController extends d13_controller
 				if ($invitations) {
 					$html.= '<div class="section"> -> {{tvar_ui_invitations}}</div>';
 					foreach($invitations as $invitation) {
-						$user = new user();
+						$user = new d13_user();
 						if ($user->get('id', $invitation['user']) == 'done') {
 							$accept = '';
 							$removeLabel = 'x';
@@ -216,7 +216,7 @@ class d13_allianceController extends d13_controller
 		
 		if ($this->node->checkOptions('allianceSet')) {
 
-			$nodes = node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
+			$nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
 			$nodeList = '';
 			foreach($nodes as $node) {
 				$nodeList.= '<option value="' . $node->data['id'] . '">' . $node->data['name'] . '</option>';
@@ -225,7 +225,7 @@ class d13_allianceController extends d13_controller
 			if (isset($_POST['nodeId'], $_POST['name']))
 			if ($_POST['name'] != '')
 			if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$node = new node();
+				$node = new d13_node();
 				$status = $node->get('id', $_POST['nodeId']);
 				if ($status == 'done')
 				if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -290,7 +290,7 @@ class d13_allianceController extends d13_controller
 			if ($this->ally_status == 'noAlliance') {
 			
 				$nodeList = '';
-				$nodes = node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
+				$nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
 				if ($nodes) {
 					
 					foreach($nodes as $node) {
@@ -299,8 +299,8 @@ class d13_allianceController extends d13_controller
 					
 					if (isset($_POST['nodeId'], $_POST['name']))
 					if ($_POST['name'] != '') {
-						$alliance = new alliance();
-						$node = new node();
+						$alliance = new d13_alliance();
+						$node = new d13_node();
 						$status = $node->get('id', $_POST['nodeId']);
 						if ($status == 'done') {
 							if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -366,7 +366,7 @@ class d13_allianceController extends d13_controller
 			if ($_SESSION[CONST_PREFIX . 'User']['alliance']) {
 				if ($this->ally_status == 'done')
 				if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-					$status = alliance::remove($_SESSION[CONST_PREFIX . 'User']['alliance']);
+					$status = d13_alliance::remove($_SESSION[CONST_PREFIX . 'User']['alliance']);
 					if ($status == 'done') {
 						$_SESSION[CONST_PREFIX . 'User']['alliance'] = 0;
 						header('Location ?p=alliance&action=get');
@@ -405,13 +405,13 @@ class d13_allianceController extends d13_controller
 			if ($_POST['name'] != '')
 			if ($this->ally_status == 'done')
 			if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$user = new user();
+				$user = new d13_user();
 				if ($user->get('name', $_POST['name']) == 'done') {
 					$status = $this->alliance->addInvitation($user->data['id']);
 					if ($status == 'done') {
 						$user->getPreferences('name');
 						if ($user->preferences['allianceReports']) {
-							$msg = new message();
+							$msg = new d13_message();
 							$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 							$msg->data['recipient'] = $user->data['name'];
 							$msg->data['subject'] = $d13->getLangUI("allianceInvitation");
@@ -453,13 +453,13 @@ class d13_allianceController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['alliance'], $_GET['user'])) {
-			$senderAlliance = new alliance();
+			$senderAlliance = new d13_alliance();
 			if ($senderAlliance->get('id', $_GET['alliance']) == 'done')
 			if (in_array($_SESSION[CONST_PREFIX . 'User']['id'], array(
 				$_GET['user'],
 				$senderAlliance->data['user']
 			))) {
-				$status = alliance::removeInvitation($_GET['alliance'], $_GET['user']);
+				$status = d13_alliance::removeInvitation($_GET['alliance'], $_GET['user']);
 				if ($status == 'done') header('Location: ?p=alliance&action=get');
 				else $message = $d13->getLangUI($status);
 			}
@@ -488,7 +488,7 @@ class d13_allianceController extends d13_controller
 		
 		if (isset($_GET['alliance'], $_GET['user']))
 		if ($_SESSION[CONST_PREFIX . 'User']['id'] == $_GET['user']) {
-			$status = alliance::acceptInvitation($_GET['alliance'], $_GET['user']);
+			$status = d13_alliance::acceptInvitation($_GET['alliance'], $_GET['user']);
 			if ($status == 'done') $_SESSION[CONST_PREFIX . 'User']['alliance'] = $_GET['alliance'];
 			$message = $d13->getLangUI($status);
 		}
@@ -556,16 +556,16 @@ class d13_allianceController extends d13_controller
 			if ($_POST['name'] != '')
 			if ($this->ally_status == 'done')
 			if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$recipientAlliance = new alliance();
+				$recipientAlliance = new d13_alliance();
 				if ($recipientAlliance->get('name', $_POST['name']) == 'done')
 				if ($this->alliance->data['id'] != $recipientAlliance->data['id']) {
 					$status = $this->alliance->addWar($recipientAlliance->data['id']);
 					if ($status == 'done') {
-						$user = new user();
+						$user = new d13_user();
 						if ($user->get('id', $recipientAlliance->data['user']) == 'done') {
 							$user->getPreferences('name');
 							if ($user->preferences['allianceReports']) {
-								$msg = new message();
+								$msg = new d13_message();
 								$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 								$msg->data['recipient'] = $user->data['name'];
 								$msg->data['subject'] = $d13->getLangUI("warDeclaration");
@@ -613,7 +613,7 @@ class d13_allianceController extends d13_controller
 			if (isset($_GET['recipient']))
 			if ($this->ally_status == 'done')
 			if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$recipientAlliance = new alliance();
+				$recipientAlliance = new d13_alliance();
 				if ($recipientAlliance->get('id', $_GET['recipient']) == 'done') {
 					$status = $this->alliance->proposePeace($recipientAlliance->data['id']);
 					if ($status == 'done') header('Location ?p=alliance&action=get');
@@ -650,7 +650,7 @@ class d13_allianceController extends d13_controller
 		if (isset($_GET['recipient']))
 		if ($this->ally_status == 'done')
 		if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-			$recipientAlliance = new alliance();
+			$recipientAlliance = new d13_alliance();
 			if ($recipientAlliance->get('id', $_GET['recipient']) == 'done') {
 				$status = $this->alliance->removePeace($recipientAlliance->data['id']);
 				if ($status == 'done') header('Location ?p=alliance&action=get');
@@ -683,15 +683,15 @@ class d13_allianceController extends d13_controller
 		if (isset($_GET['sender'], $_GET['recipient']))
 		if ($this->ally_status == 'done')
 		if (($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) && ($this->alliance->data['id'] == $_GET['recipient'])) {
-			$senderAlliance = new alliance();
+			$senderAlliance = new d13_alliance();
 			if ($senderAlliance->get('id', $_GET['sender']) == 'done') {
 				$status = $this->alliance->acceptPeace($senderAlliance->data['id']);
 				if ($status == 'done') {
-					$user = new user();
+					$user = new d13_user();
 					if ($user->get('id', $senderAlliance->data['user']) == 'done') {
 						$user->getPreferences('name');
 						if ($user->preferences['allianceReports']) {
-							$msg = new message();
+							$msg = new d13_message();
 							$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 							$msg->data['recipient'] = $user->data['name'];
 							$msg->data['subject'] = $d13->getLangUI("peaceAccepted");

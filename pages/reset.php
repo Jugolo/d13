@@ -22,11 +22,11 @@ $message = '';
 
 if (isset($_POST['name'], $_POST['email'])) {
 	foreach($_POST as $key => $value) {
-		$_POST[$key] = misc::clean($value);
+		$_POST[$key] = d13_misc::clean($value);
 	}
 
 	if ((($_POST['name'] != '')) && ($_POST['email'] != '')) {
-		$user = new user();
+		$user = new d13_user();
 		$status = $user->get('name', $_POST['name']);
 		if ($status == 'done') {
 			$newPass = rand(1000000000, 9999999999);

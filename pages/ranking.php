@@ -43,7 +43,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 	
 	$result = $d13->dbQuery('select * from users order by trophies desc, level desc limit ' . $limit . ' offset ' . $offset);
 	for ($i = 0; $row = $d13->dbFetch($result); $i++) {
-			$row['league'] = misc::getLeague($row['level'], $row['trophies']);
+			$row['league'] = d13_misc::getLeague($row['level'], $row['trophies']);
 			$users[] = $row;	
 	}
 	

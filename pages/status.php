@@ -29,7 +29,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 		$userId = $_SESSION[CONST_PREFIX . 'User']['id'];
 	}
 
-	$user = new user($userId);
+	$user = new d13_user($userId);
 
 
 } else {

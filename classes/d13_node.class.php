@@ -13,7 +13,7 @@
 //
 // ========================================================================================
 
-class node
+class d13_node
 
 {
 
@@ -80,7 +80,7 @@ class node
 		$setCost = $d13->getFaction($this->data['faction'], 'costs', 'set');
 		$setCostData = $this->checkCost($setCost, 'set');
 		if ($setCostData['ok']) {
-			$node = new node();
+			$node = new d13_node();
 			if ($node->get('id', $this->data['id']) == 'done')
 			if (($node->data['name'] == $this->data['name']) || ($node->get('name', $this->data['name']) == 'noNode')) {
 				$ok = 1;
@@ -111,15 +111,15 @@ class node
 	function add($userId)
 	{
 		global $d13;
-		$sector = grid::getSector($this->location['x'], $this->location['y']);
-		$node = new node();
+		$sector = d13_grid::getSector($this->location['x'], $this->location['y']);
+		$node = new d13_node();
 		$status = 0;
 		if ($sector['type'] == 1) {
 			if ($node->get('name', $this->data['name']) == 'noNode') {
-				$nodes = node::getList($userId);
+				$nodes = d13_node::getList($userId);
 				if (count($nodes) < $d13->getGeneral('users', 'maxNodes')) {
 					$ok = 1;
-					$this->data['id'] = misc::newId('nodes');
+					$this->data['id'] = d13_misc::newId('nodes');
 					
 					//- - - - - Add to grid
 					$d13->dbQuery('insert into nodes (id, faction, user, name, focus, lastCheck) values ("' . $this->data['id'] . '", "' . $this->data['faction'] . '", "' . $this->data['user'] . '", "' . $this->data['name'] . '", "hp", now())');
@@ -206,7 +206,7 @@ class node
 	function remove($id)
 	{
 		global $d13;
-		$node = new node();
+		$node = new d13_node();
 		if ($node->get('id', $id) == 'done') {
 			$ok = 1;
 			$node->getLocation();
@@ -267,7 +267,7 @@ class node
 
 		
 		for ($i = 0; $row = $d13->dbFetch($result); $i++) {
-			$nodes[$i] = new node();
+			$nodes[$i] = new d13_node();
 			$nodes[$i]->data = $row;
 		}
 
@@ -1375,7 +1375,7 @@ class node
 		$this->getResources();
 		$this->getUnits();
 		$this->getLocation();
-		$node = new node();
+		$node = new d13_node();
 		$node->get('id', $nodeId);
 		$okUnits = 1;
 		
@@ -1421,7 +1421,7 @@ class node
 						$node->getLocation();
 						$distance = sqrt(pow(abs($this->location['x'] - $node->location['x']) , 2) + pow(abs($this->location['y'] - $node->location['y']) , 2));
 						$duration = ($distance * $d13->getGeneral('factors', 'movement')) / ($speed * $d13->getGeneral('users', 'speed', 'combat'));
-						$combatId = misc::newId('combat');
+						$combatId = d13_misc::newId('combat');
 						$ok = 1;
 						$cuBuffer = array();
 			
@@ -1614,7 +1614,7 @@ class node
 				$d13->dbQuery('delete from research where node="' . $this->data['id'] . '" and obj_id="' . $entry['obj_id'] . '"');
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
 				if ($ok) { #experience gain
-					$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+					$tmp_user = new d13_user($_SESSION[CONST_PREFIX . 'User']['id']);
 					$ok = $tmp_user->gainExperience($d13->getTechnology($this->data['faction'],  $entry['obj_id'], 'cost'), $this->technologies[$entry['obj_id']]['level']);
 				}
 			}
@@ -1650,7 +1650,7 @@ class node
 					$d13->dbQuery('update modules set module="' . $entry['obj_id'] . '", level=1 where node="' . $this->data['id'] . '" and slot="' . $entry['slot'] . '"');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					if ($ok) { #experience gain
-						$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+						$tmp_user = new d13_user($_SESSION[CONST_PREFIX . 'User']['id']);
 						$ok = $tmp_user->gainExperience($d13->getModule($this->data['faction'],  $entry['obj_id'], 'cost'), 1);
 					}
 				
@@ -1661,7 +1661,7 @@ class node
 					$d13->dbQuery('update modules set module="' . $entry['obj_id'] . '", level=level+1 where node="' . $this->data['id'] . '" and slot="' . $entry['slot'] . '"');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 					if ($ok) { #experience gain
-						$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+						$tmp_user = new d13_user($_SESSION[CONST_PREFIX . 'User']['id']);
 						$ok = $tmp_user->gainExperience($d13->getModule($this->data['faction'],  $entry['obj_id'], 'cost'), $this->modules[$entry['obj_id']]['level']+1);
 					}
 				
@@ -1704,7 +1704,7 @@ class node
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						
 					if ($ok) { #experience loss
-						$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+						$tmp_user = new d13_user($_SESSION[CONST_PREFIX . 'User']['id']);
 						$ok = $tmp_user->gainExperience($d13->getModule($this->data['faction'],  $entry['obj_id'], 'cost'), -$this->modules[$entry['obj_id']]['level']);
 					}
 				
@@ -1775,7 +1775,7 @@ class node
 				}
 				
 				if ($ok && $d13->getComponent($this->data['faction'], $entry['obj_id'], 'gainExperience')) { #experience gain
-					$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+					$tmp_user = new d13_user($_SESSION[CONST_PREFIX . 'User']['id']);
 					$ok = $tmp_user->gainExperience($d13->getComponent($this->data['faction'],  $entry['obj_id'], 'cost'), $entry['quantity']);
 				}
 					
@@ -1844,7 +1844,7 @@ class node
 				}
 				
 				if ($ok && $d13->getUnit($this->data['faction'], $entry['obj_id'], 'gainExperience')) { #experience gain
-					$tmp_user = new user($_SESSION[CONST_PREFIX . 'User']['id']);
+					$tmp_user = new d13_user($_SESSION[CONST_PREFIX . 'User']['id']);
 					$ok = $tmp_user->gainExperience($d13->getUnit($this->data['faction'],  $entry['obj_id'], 'cost'), $entry['quantity']);
 				}
 				
@@ -1878,7 +1878,7 @@ class node
 			$combat['end'] = $combat['start'] + floor($combat['duration']);
 			if ($combat['end'] <= $time) {
 			
-				$otherNode = new node();
+				$otherNode = new d13_node();
 				if ($combat['sender'] == $this->data['id']) {
 					$nodes = array(
 						'attacker' => 'this',
@@ -2397,9 +2397,9 @@ class node
 		$distance = ceil(sqrt(pow($this->location['x'] - $x, 2) + pow($this->location['y'] - $y, 2)));
 		$moveCostData = $this->checkCost($moveCost, 'move');
 		if ($moveCostData['ok']) {
-			$node = new node();
+			$node = new d13_node();
 			if ($node->get('id', $this->data['id']) == 'done') {
-				$sector = grid::getSector($x, $y);
+				$sector = d13_grid::getSector($x, $y);
 				if ($sector['type'] == 1) {
 					$ok = 1;
 					$d13->dbQuery('update grid set type="1", id=floor(1+rand()*9) where x="' . $this->location['x'] . '" and y="' . $this->location['y'] . '"');
@@ -2428,5 +2428,3 @@ class node
 }
 
 // =====================================================================================EOF
-
-?>

@@ -23,7 +23,7 @@ $d13->dbQuery('start transaction');
 
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId'], $_GET['slotId'])) {
 	#$flags = $d13->flags->get('name');
-	$node = new node();
+	$node = new d13_node();
 	
 	$status = $node->get('id', $_GET['nodeId']);
 	$node->getModules();

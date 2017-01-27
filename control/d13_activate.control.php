@@ -47,9 +47,9 @@ class d13_activateController extends d13_controller
 		$d13->dbQuery('start transaction');
 
 		if (isset($_GET['user'], $_GET['code'])) {
-			foreach($_GET as $key => $value) $_GET[$key] = misc::clean($value);
+			foreach($_GET as $key => $value) $_GET[$key] = d13_misc::clean($value);
 			if ((($_GET['user'] != '')) && ($_GET['code'] != '')) {
-				$user = new user();
+				$user = new d13_user();
 				$status = $user->get('name', $_GET['user']);
 				if ($status == 'done') {
 					$activation = new d13_activation();

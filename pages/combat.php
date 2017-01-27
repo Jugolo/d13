@@ -18,7 +18,7 @@ $message = "";
 $d13->dbQuery('start transaction');
 
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId'])) {
-	$node = new node();
+	$node = new d13_node();
 	if ($node->get('id', $_GET['nodeId']) == 'done') {
 		$node->checkAll(time());
 		
@@ -41,15 +41,15 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 				
 				if ($pass && isset($_POST['type'], $_POST['id'], $_POST['attackerGroupUnitIds'], $_POST['attackerGroups'])) {
 					
-					$target = new node();
+					$target = new d13_node();
 					if ($target->get('id', $_POST['id']) == 'done') {
 						
 						// - - - - Check Alliance Status
-						$targetUser = new user();
+						$targetUser = new d13_user();
 						if ($targetUser->get('id', $target->data['user']) == 'done') {
 							$pass = true;
-							$alliance = new alliance();
-							$targetAlliance = new alliance();
+							$alliance = new d13_alliance();
+							$targetAlliance = new d13_alliance();
 							if (($targetAlliance->get('id', $targetUser->data['alliance']) == 'done') && ($alliance->get('id', $_SESSION[CONST_PREFIX . 'User']['alliance']) == 'done')) {
 								$war = $alliance->getWar($targetAlliance->data['id']);
 								if (isset($war['type'])) {
@@ -146,7 +146,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId
 
 		case 'cancel':
 			if (isset($_GET['combatId'])) {
-				$combat = node::getCombat($_GET['combatId']);
+				$combat = d13_node::getCombat($_GET['combatId']);
 				if (isset($combat['id'])) {
 					if ($combat['sender'] == $node->data['id']) {
 						$status = $node->cancelCombat($combat['id']);
@@ -275,7 +275,7 @@ if (isset($node)) {
 	// - - - - Available Enemies List
 	$showAll = true;
 	$tvars['tvar_nodeList'] = '<option disabled>...</option>';
-	$target_nodes = node::getList($_SESSION[CONST_PREFIX . 'User']['id'], TRUE);
+	$target_nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id'], TRUE);
 	$node->getLocation();
 	
 	foreach($target_nodes as $target_node) {

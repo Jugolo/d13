@@ -13,7 +13,7 @@
 //
 // ========================================================================================
 
-class blacklist
+class d13_blacklist
 
 {
 	public static
@@ -42,7 +42,7 @@ class blacklist
 	function add($type, $value)
 	{
 		global $d13;
-		if (!$this->check($type, $value)) {
+		if (!self::check($type, $value)) {
 			$d13->dbQuery('insert into blacklist (type, value) values ("' . $type . '", "' . $value . '")');
 			if ($d13->dbAffectedRows() > - 1) $status = 'done';
 			else $status = 'error';
@@ -56,7 +56,7 @@ class blacklist
 	function remove($type, $value)
 	{
 		global $d13;
-		if ($this->check($type, $value)) {
+		if (self::check($type, $value)) {
 			$d13->dbQuery('delete from blacklist where type="' . $type . '" and value="' . $value . '"');
 			if ($d13->dbAffectedRows() > - 1) $status = 'done';
 			else $status = 'error';
@@ -68,4 +68,3 @@ class blacklist
 
 // =====================================================================================EOF
 
-?>

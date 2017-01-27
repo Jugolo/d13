@@ -21,7 +21,7 @@ if ($d13->getGeneral('options', 'enabledRegister')) {
 	if (isset($_POST['email'], $_POST['name'], $_POST['password'])) {
 		
 		if (!empty($_POST['email']) && !empty($_POST['name']) && !empty($_POST['password'])) {
-			$user = new user();
+			$user = new d13_user();
 			if (!$d13->getLangBW($_POST['name'])) {
 				if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
 					$user->data['name'] = $_POST['name'];

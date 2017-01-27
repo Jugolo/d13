@@ -26,8 +26,8 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 	if (in_array($key, array(
 		'page',
 		'messageId'
-	))) $_GET[$key] = misc::clean($value, 'numeric');
-	else $_GET[$key] = misc::clean($value);
+	))) $_GET[$key] = d13_misc::clean($value, 'numeric');
+	else $_GET[$key] = d13_misc::clean($value);
 	
 	switch ($_GET['action']) {
 	
@@ -35,7 +35,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 	// - - - - - - - - - Get Message
 	case 'get':
 		if (isset($_GET['messageId'])) {
-			$msg = new message();
+			$msg = new d13_message();
 			$status = $msg->get($_GET['messageId']);
 			if ($status == 'done')
 			if ($msg->data['recipient'] == $_SESSION[CONST_PREFIX . 'User']['id'] || $msg->data['sender'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -45,7 +45,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					$msg->set();
 				}
 
-				$user = new user();
+				$user = new d13_user();
 				$status = $user->get('id', $msg->data['sender']);
 				if ($status == 'done') $msg->data['senderName'] = $user->data['name'];
 				else $msg->data['senderName'] = $d13->getLangUI("game");
@@ -62,7 +62,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 	// - - - - - - - - - Send Message
 	case 'add':
 		if (isset($_GET['messageId'])) {
-			$msg = new message();
+			$msg = new d13_message();
 			$status = $msg->get($_GET['messageId']);
 			if ($status != 'done') {
 				$msg = 0;
@@ -75,7 +75,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
 		if (isset($_POST['recipient'], $_POST['subject'], $_POST['msgbody'])) {
 			if ($_POST['recipient'] != '' && $_POST['subject'] != '' && $_POST['msgbody'] != '' && !$d13->getLangBW($_POST['msgbody']) && !$d13->getLangBW($_POST['subject'])) {
-				$msg = new message();
+				$msg = new d13_message();
 				$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 				$msg->data['recipient'] = $_POST['recipient'];
 				$msg->data['subject'] = $_POST['subject'];
@@ -97,11 +97,11 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 	// - - - - - 
 	case 'remove':
 		if (isset($_GET['messageId'])) {
-			$msg = new message();
+			$msg = new d13_message();
 			$status = $msg->get($_GET['messageId']);
 			if ($status == 'done') {
 				if ($msg->data['recipient'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-					$status = message::remove($_GET['messageId']);
+					$status = d13_message::remove($_GET['messageId']);
 					if ($status == 'done') header('location: ?p=message&action=list');
 					else $message = $d13->getLangUI($status);
 				}
@@ -111,7 +111,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		}
 		else
 		if (isset($_POST['messageId'])) {
-			foreach($_POST['messageId'] as $id) message::remove($id);
+			foreach($_POST['messageId'] as $id) d13_message::remove($id);
 			header('location: ?p=message&action=list');
 		}
 		else $message = $d13->getLangUI("insufficientData");
@@ -119,7 +119,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		
 	// - - - - - 
 	case 'removeAll':
-		$status = message::removeAll($_SESSION[CONST_PREFIX . 'User']['id']);
+		$status = d13_message::removeAll($_SESSION[CONST_PREFIX . 'User']['id']);
 		if ($status == 'done') header('location: ?p=message&action=list');
 		else $message = $d13->getLangUI($status);
 		break;
@@ -136,7 +136,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 		if (isset($_POST['filter'])) {
 			$filter = $_POST['filter'];
 		}
-		$messages = message::getList($_SESSION[CONST_PREFIX . 'User']['id'], $limit, $offset, $filter);
+		$messages = d13_message::getList($_SESSION[CONST_PREFIX . 'User']['id'], $limit, $offset, $filter);
 		$pageCount = ceil($messages['count'] / $limit);
 		break;
 	}
@@ -176,7 +176,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 	case 'add':
 		$recipient = $subject = $body = '';
 		if (isset($msg->data['id'])) {
-			$user = new user();
+			$user = new d13_user();
 			$status = $user->get('id', $msg->data['sender']);
 			if ($status == 'done') {
 				$recipient = $user->data['name'];

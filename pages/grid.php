@@ -21,12 +21,12 @@ $message = NULL;
 $d13->dbQuery('start transaction');
 
 if (isset($_GET['x'], $_GET['y'])) {
-	$x = misc::clean($_GET['x'], 'numeric');
-	$y = misc::clean($_GET['y'], 'numeric');
+	$x = d13_misc::clean($_GET['x'], 'numeric');
+	$y = d13_misc::clean($_GET['y'], 'numeric');
 	$vars = 'x=' . $x . '&y=' . $y;
 }
 
-$grid = new grid();
+$grid = new d13_grid();
 $grid->getAll();
 
 if ((isset($status)) && ($status == 'error')) {
