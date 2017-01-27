@@ -162,8 +162,10 @@ class d13_tpl
 		$tvars["tvar_global_basepath"] = CONST_BASE_PATH;
 		$tvars["tvar_global_template"] = $_SESSION[CONST_PREFIX . 'User']['template'];
 		$tvars["tvar_global_color"] = $_SESSION[CONST_PREFIX . 'User']['color'];
-		
-		$tvars["tvar_nodeFaction"] = $this->node->data['faction'];
+		if($this->node){
+            $tvars["tvar_nodeFaction"] = $this->node->data['faction'];
+        }
+
 		
 		// - - - Hide Bottom Toolbar while logged in
 
