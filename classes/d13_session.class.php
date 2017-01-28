@@ -41,7 +41,7 @@ class d13_session
 	// @param bool $secure If true the browser only sends the cookie over https
 	// ----------------------------------------------------------------------------------------
 
-	static
+	public static
 	function sessionStart($name, $limit = 0, $path = '/', $domain = null, $secure = null)
 	{
 
@@ -102,7 +102,7 @@ class d13_session
 	// This should be called whenever permission levels for a user change.
 	// ----------------------------------------------------------------------------------------
 
-	static
+	public static
 	function regenerateSession()
 	{
 
@@ -141,7 +141,7 @@ class d13_session
 	// @return bool
 	// ----------------------------------------------------------------------------------------
 
-	static protected
+	protected static
 	function validateSession()
 	{
 		if (isset($_SESSION['OBSOLETE']) && !isset($_SESSION['EXPIRES'])) return false;
@@ -156,7 +156,7 @@ class d13_session
 	// @return bool
 	// ----------------------------------------------------------------------------------------
 
-	static protected
+	protected static
 	function preventHijacking()
 	{
 		if (!isset($_SESSION['IPaddress']) || !isset($_SESSION['userAgent'])) return false;
@@ -173,4 +173,3 @@ class d13_session
 }
 
 // =====================================================================================EOF
-
