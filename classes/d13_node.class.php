@@ -568,7 +568,13 @@ class d13_node
 				$row = $d13->dbFetch($result);
 				if (!$row['count']) {
 				
-					$tmp_technology = new d13_technology($technologyId, $this);
+				
+					$args = array();
+					$args['supertype'] 	= 'technology';
+					$args['obj_id'] 	= $technologyId;
+					$args['node'] 		= $this;
+				
+					$tmp_technology = new d13_object_technology($args);
 				
 				
 					$technology['requirementsData'] = $this->checkRequirements($d13->getTechnology($this->data['faction'],$technologyId,'requirements'));
@@ -1008,7 +1014,12 @@ class d13_node
 			if (in_array($componentId, $d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'components'))) $okModule = 1;
 			if ($okModule) {
 			
-				$tmp_component = new d13_component($componentId, $this);
+				$args = array();
+				$args['supertype'] 	= 'component';
+				$args['obj_id'] 	= $componentId;
+				$args['node'] 		= $this;
+			
+				$tmp_component = new d13_object_component($args);
 			
 				$component['requirementsData'] = $this->checkRequirements($d13->getComponent($this->data['faction'], $componentId, 'requirements') , $quantity);
 				if ($component['requirementsData']['ok'])
@@ -1396,7 +1407,13 @@ class d13_node
 				if ($army[$key] > $group['value']) {
 					$okUnits = 0;
 				} else if ($army[$key] > 0) {
-					$tmp_unit = new d13_unit($key, $node);
+				
+					$args = array();
+					$args['supertype'] 	= 'unit';
+					$args['obj_id'] 	= $key;
+					$args['node'] 		= $node;
+				
+					$tmp_unit = new d13_object_unit($args);
 					$totalFuel += $tmp_unit->data['fuel'] * $army[$key];
 					if ($tmp_unit->data['speed'] < $speed) {
 						$speed = $tmp_unit->data['speed'];

@@ -47,7 +47,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        100
+        0
       ]
     },
     {
@@ -97,7 +97,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        101
+        1
       ]
     },
     {
@@ -147,7 +147,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        102
+        2
       ]
     },
     {
@@ -217,7 +217,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        103
+        3
       ],
       "components": [
         0,
@@ -364,7 +364,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        105
+        5
       ],
       "units": [
         0,
@@ -434,7 +434,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        106
+        6
       ],
       "units": [
         7,
@@ -491,7 +491,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        107
+        7
       ],
       "units": [
         11,
@@ -546,7 +546,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        108
+        8
       ],
       "technologies": [
         0,
@@ -612,7 +612,7 @@
         }
       ],
       "upgrades": [
-        109
+        9
       ]
     },
     {
@@ -685,7 +685,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        110
+        10
       ]
     },
     {
@@ -758,7 +758,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        111
+        11
       ]
     },
     {
@@ -831,7 +831,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        112
+        12
       ]
     },
     {
@@ -914,7 +914,7 @@
         "allianceRemoveMember": true
       },
       "upgrades": [
-        113
+        13
       ]
     },
     {
@@ -966,7 +966,7 @@
         
       ],
       "upgrades": [
-        114
+        14
       ],
       "options": {
         "inventoryList": true,
@@ -1045,7 +1045,7 @@
         
       ],
       "upgrades": [
-        115
+        15
       ]
     },
     {
@@ -1103,7 +1103,7 @@
         
       ],
       "upgrades": [
-        116
+        16
       ]
     },
     {
@@ -1150,7 +1150,7 @@
         "inventoryList": true
       },
       "upgrades": [
-        117
+        17
       ],
       "technologies": [
         100,
@@ -1221,7 +1221,7 @@
         }
       ],
       "upgrades": [
-        118
+        18
       ],
       "options": {
       	"inventoryList": true,

@@ -224,10 +224,16 @@ class d13_combatController extends d13_controller
 		foreach($this->node->units as $key => $unit) {
 			if ($unit['value'] > 0 && $d13->getUnit($this->node->data['faction'], $key, 'speed') > 0) {
 				if ( in_array($d13->getUnit($this->node->data['faction'], $key, 'movementType'), $d13->getCombat($_GET['type'], 'movementTypes') )) {
-
+					
 					$id = $d13->getUnit($this->node->data['faction'], $key, 'id');
-					$tmp_unit = new d13_unit($id, $this->node);
-	
+					
+					$args = array();
+					$args['supertype'] 	= 'unit';
+					$args['obj_id'] 	= $id;
+					$args['node'] 		= $this->node;
+				
+					$tmp_unit = new d13_object_unit($args);
+					
 					$d13->templateInject($d13->templateSubpage("sub.popup.unit", $tmp_unit->getTemplateVariables()));
 	
 					$tvars['tvar_unitName'] 	= $d13->getLangGL('units', $this->node->data['faction'], $id, 'name');

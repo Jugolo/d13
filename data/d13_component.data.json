@@ -2,7 +2,6 @@
   [
     {
       "id": 0,
-      "image": "0.png",
       "active": true,
       "priority": -1,
       "type": "component",
@@ -12,6 +11,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "0.png"
+        }
+      ],
       "cost": [
         {
           "resource": 0,
@@ -35,7 +40,6 @@
     },
     {
       "id": 1,
-      "image": "1.png",
       "active": true,
       "priority": -1,
       "type": "component",
@@ -45,6 +49,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
 	  "gainExperience": true,
+	  "images": [
+      	 {
+          "level": 0,
+          "image": "1.png"
+        }
+      ],
       "cost": [
         {
           "resource": 0,
@@ -68,7 +78,6 @@
     },
     {
       "id": 2,
-      "image": "2.png",
       "active": true,
       "priority": -1,
       "type": "component",
@@ -78,6 +87,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
 	  "gainExperience": true,
+	  "images": [
+      	 {
+          "level": 0,
+          "image": "2.png"
+        }
+      ],
       "cost": [
         {
           "resource": 0,
@@ -101,7 +116,6 @@
     },
     {
       "id": 3,
-      "image": "3.png",
       "active": true,
       "priority": -1,
       "type": "component",
@@ -111,6 +125,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
 	  "gainExperience": true,
+	  "images": [
+      	 {
+          "level": 0,
+          "image": "3.png"
+        }
+      ],
       "cost": [
         {
           "resource": 0,
@@ -134,7 +154,6 @@
     },
     {
       "id": 4,
-      "image": "4.png",
       "active": true,
       "priority": -1,
       "type": "component",
@@ -144,6 +163,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
 	  "gainExperience": true,
+	  "images": [
+      	 {
+          "level": 0,
+          "image": "4.png"
+        }
+      ],
       "cost": [
         {
           "resource": 0,
@@ -167,7 +192,6 @@
     },
     {
       "id": 5,
-      "image": "5.png",
       "active": true,
       "priority": -1,
       "type": "component",
@@ -177,6 +201,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
 	  "gainExperience": true,
+	  "images": [
+      	 {
+          "level": 0,
+          "image": "5.png"
+        }
+      ],
       "cost": [
         {
           "resource": 0,
@@ -200,7 +230,6 @@
     },
     {
       "id": 6,
-      "image": "6.png",
       "active": true,
       "priority": -1,
       "type": "component",
@@ -210,6 +239,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
 	  "gainExperience": true,
+	  "images": [
+      	 {
+          "level": 0,
+          "image": "6.png"
+        }
+      ],
       "cost": [
         {
           "resource": 0,
@@ -233,7 +268,6 @@
     },
     {
       "id": 7,
-      "image": "7.png",
       "active": true,
       "priority": -1,
       "type": "component",
@@ -243,6 +277,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
 	  "gainExperience": true,
+	  "images": [
+      	 {
+          "level": 0,
+          "image": "7.png"
+        }
+      ],
       "cost": [
         {
           "resource": 0,
@@ -266,7 +306,6 @@
     },
     {
       "id": 8,
-      "image": "8.png",
       "active": true,
       "priority": -1,
       "type": "component",
@@ -276,6 +315,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
 	  "gainExperience": true,
+	  "images": [
+      	 {
+          "level": 0,
+          "image": "8.png"
+        }
+      ],
       "cost": [
         {
           "resource": 0,
@@ -299,7 +344,6 @@
     },
     {
       "id": 9,
-      "image": "9.png",
       "active": true,
       "priority": -1,
       "type": "component",
@@ -309,6 +353,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
 	  "gainExperience": true,
+	  "images": [
+      	 {
+          "level": 0,
+          "image": "9.png"
+        }
+      ],
       "cost": [
         {
           "resource": 0,

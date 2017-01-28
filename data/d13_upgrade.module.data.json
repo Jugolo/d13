@@ -3,7 +3,7 @@
     {
       "active": true,
       "type": "harvest",
-      "id": 100,
+      "id": 0,
       "cost": [
         {
           "resource": 0,
@@ -39,7 +39,7 @@
     {
       "active": true,
       "type": "harvest",
-      "id": 101,
+      "id": 1,
       "cost": [
         {
           "resource": 0,
@@ -75,7 +75,7 @@
     {
       "active": true,
       "type": "harvest",
-      "id": 102,
+      "id": 2,
       "cost": [
         {
           "resource": 0,
@@ -111,7 +111,7 @@
     {
       "active": true,
       "type": "craft",
-      "id": 103,
+      "id": 3,
       "cost": [
         {
           "resource": 0,
@@ -139,7 +139,7 @@
     {
       "active": true,
       "type": "craft",
-      "id": 104,
+      "id": 4,
       "cost": [
         {
           "resource": 0,
@@ -167,7 +167,7 @@
     {
       "active": true,
       "type": "train",
-      "id": 105,
+      "id": 5,
       "cost": [
         {
           "resource": 0,
@@ -195,7 +195,7 @@
     {
       "active": true,
       "type": "train",
-      "id": 106,
+      "id": 6,
       "cost": [
         {
           "resource": 0,
@@ -223,7 +223,7 @@
     {
       "active": true,
       "type": "train",
-      "id": 107,
+      "id": 7,
       "cost": [
         {
           "resource": 0,
@@ -251,7 +251,7 @@
     {
       "active": true,
       "type": "research",
-      "id": 108,
+      "id": 8,
       "cost": [
         {
           "resource": 0,
@@ -279,7 +279,7 @@
     {
       "active": true,
       "type": "trade",
-      "id": 109,
+      "id": 9,
       "cost": [
         {
           "resource": 0,
@@ -307,7 +307,7 @@
     {
       "active": true,
       "type": "storage",
-      "id": 110,
+      "id": 10,
       "cost": [
         {
           "resource": 0,
@@ -335,7 +335,7 @@
     {
       "active": true,
       "type": "storage",
-      "id": 111,
+      "id": 11,
       "cost": [
         {
           "resource": 0,
@@ -363,7 +363,7 @@
     {
       "active": true,
       "type": "storage",
-      "id": 112,
+      "id": 12,
       "cost": [
         {
           "resource": 0,
@@ -391,7 +391,7 @@
     {
       "active": true,
       "type": "alliance",
-      "id": 113,
+      "id": 13,
       "cost": [
         {
           "resource": 0,
@@ -419,7 +419,7 @@
     {
       "active": true,
       "type": "command",
-      "id": 114,
+      "id": 14,
       "cost": [
         {
           "resource": 0,
@@ -441,13 +441,17 @@
         {
           "stat": "duration",
           "value": 0.5
+        },
+        {
+          "stat": "ratio",
+          "value": 0.5
         }
       ]
     },
     {
       "active": true,
       "type": "defense",
-      "id": 115,
+      "id": 15,
       "cost": [
         {
           "resource": 0,
@@ -471,15 +475,15 @@
           "value": 0.5
         },
         {
-          "stat": "all",
-          "value": 2
+          "stat": "maxInput",
+          "value": 1
         }
       ]
     },
     {
       "active": true,
       "type": "harvest",
-      "id": 116,
+      "id": 16,
       "cost": [
         {
           "resource": 0,
@@ -507,7 +511,7 @@
     {
       "active": true,
       "type": "research",
-      "id": 117,
+      "id": 17,
       "cost": [
         {
           "resource": 0,
@@ -535,7 +539,7 @@
     {
       "active": true,
       "type": "warfare",
-      "id": 118,
+      "id": 18,
       "cost": [
         {
           "resource": 0,

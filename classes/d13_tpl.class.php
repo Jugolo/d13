@@ -200,7 +200,7 @@ class d13_tpl
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function render($template, $vars="", $cache=TRUE, $cache_num=0)
+	function render($template, $vars=array(), $cache=TRUE, $cache_num=0)
 	{
 		
 		if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
@@ -210,13 +210,10 @@ class d13_tpl
 		
 		$tvars = array();
 		
-		if (isset($vars)) {
-			$tvars = array_merge($tvars, $vars);
-			$tvars = array_merge($tvars, $this->global_vars($vars, $cache_num));
-			$tvars = array_merge($tvars, $this->merge_ui_vars());
-		}
-		
-		
+		$tvars = array_merge($tvars, $vars);
+		$tvars = array_merge($tvars, $this->global_vars($vars, $cache_num));
+		$tvars = array_merge($tvars, $this->merge_ui_vars());
+
 		$name = 'tpl_' . md5(serialize($vars)) . ".".$template.".tpl";
 		$cacheFile = CONST_INCLUDE_PATH . 'cache/templates' . DIRECTORY_SEPARATOR . $name;
 
@@ -274,7 +271,7 @@ class d13_tpl
 
 	public
 
-	function render_page($template, $tvars = "")
+	function render_page($template, $tvars = array())
 	{
 		
 		if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
@@ -282,11 +279,9 @@ class d13_tpl
 		$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
 		}
 		
-		if (isset($tvars)) {
-			$tvars = array_merge($tvars, $this->global_vars($tvars));
-			$tvars = array_merge($tvars, $this->merge_ui_vars());
-		}
-
+		$tvars = array_merge($tvars, $this->global_vars($tvars));
+		$tvars = array_merge($tvars, $this->merge_ui_vars());
+		
 		$tvars["tpl_pvar_name"] = $template;
 		$tvars["tpl_page_leftPanel"] = '';
 		$tvars["tpl_page_rightPanel"] = '';

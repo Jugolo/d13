@@ -2,7 +2,6 @@
   [
     {
       "id": 0,
-      "image": "0.png",
       "active": true,
       "priority": 0,
       "type": "unit",
@@ -23,6 +22,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "0.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -55,12 +60,7 @@
       "requirements": [
         {
           "type": "components",
-          "id": 1,
-          "value": 1
-        },
-        {
-          "type": "components",
-          "id": 5,
+          "id": 0,
           "value": 1
         },
         {
@@ -75,7 +75,6 @@
     },
     {
       "id": 1,
-      "image": "1.png",
       "active": true,
       "priority": 1,
       "type": "unit",
@@ -96,6 +95,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "1.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -140,7 +145,6 @@
     },
     {
       "id": 2,
-      "image": "2.png",
       "active": true,
       "priority": 2,
       "type": "unit",
@@ -161,6 +165,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "2.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -205,7 +215,6 @@
     },
     {
       "id": 3,
-      "image": "3.png",
       "active": true,
       "priority": 3,
       "type": "unit",
@@ -226,6 +235,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "3.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -275,7 +290,6 @@
     },
     {
       "id": 4,
-      "image": "4.png",
       "active": true,
       "priority": 4,
       "type": "unit",
@@ -296,6 +310,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "4.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -350,7 +370,6 @@
     },
     {
       "id": 5,
-      "image": "5.png",
       "active": true,
       "priority": 5,
       "type": "unit",
@@ -371,6 +390,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "5.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -415,7 +440,6 @@
     },
     {
       "id": 6,
-      "image": "6.png",
       "active": true,
       "priority": 6,
       "type": "unit",
@@ -436,6 +460,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "6.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -485,7 +515,6 @@
     },
     {
       "id": 7,
-      "image": "7.png",
       "active": true,
       "priority": 7,
       "type": "unit",
@@ -506,6 +535,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "7.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -558,7 +593,6 @@
     },
     {
       "id": 8,
-      "image": "8.png",
       "active": true,
       "priority": 8,
       "type": "unit",
@@ -579,6 +613,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "8.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -631,7 +671,6 @@
     },
     {
       "id": 9,
-      "image": "9.png",
       "active": true,
       "priority": 9,
       "type": "unit",
@@ -652,6 +691,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "9.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -709,7 +754,6 @@
     },
     {
       "id": 10,
-      "image": "10.png",
       "active": true,
       "priority": 10,
       "type": "unit",
@@ -730,6 +774,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "10.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -779,7 +829,6 @@
     },
     {
       "id": 11,
-      "image": "11.png",
       "active": true,
       "priority": 11,
       "type": "unit",
@@ -800,6 +849,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "11.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -830,7 +885,6 @@
     },
     {
       "id": 12,
-      "image": "12.png",
       "active": true,
       "priority": 12,
       "type": "unit",
@@ -851,6 +905,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "12.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -881,7 +941,6 @@
     },
     {
       "id": 13,
-      "image": "13.png",
       "active": true,
       "priority": 13,
       "type": "unit",
@@ -902,6 +961,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "13.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -929,7 +994,6 @@
     },
     {
       "id": 14,
-      "image": "14.png",
       "active": true,
       "priority": 14,
       "type": "unit",
@@ -950,6 +1014,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "14.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -977,7 +1047,6 @@
     },
     {
       "id": 15,
-      "image": "15.png",
       "active": true,
       "priority": 15,
       "type": "unit",
@@ -998,6 +1067,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "15.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -1033,7 +1108,6 @@
     },
     {
       "id": 16,
-      "image": "16.png",
       "active": true,
       "priority": 16,
       "type": "unit",
@@ -1054,6 +1128,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "16.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -1089,7 +1169,6 @@
     },
     {
       "id": 17,
-      "image": "17.png",
       "active": false,
       "priority": -1,
       "type": "unit",
@@ -1111,6 +1190,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "17.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -1150,7 +1235,6 @@
     },
     {
       "id": 18,
-      "image": "18.png",
       "active": false,
       "priority": -1,
       "type": "unit",
@@ -1172,6 +1256,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "18.png"
+        }
+      ],
       "armyAttackModifier": [
         
       ],
@@ -1211,7 +1301,6 @@
     },
     {
       "id": 19,
-      "image": "hero_0.png",
       "active": true,
       "priority": 13,
       "type": "leader",
@@ -1232,6 +1321,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "hero_0.png"
+        }
+      ],
       "armyAttackModifier": [
         {
           "stat": "damage",
@@ -1267,7 +1362,6 @@
     },
     {
       "id": 20,
-      "image": "hero_1.png",
       "active": true,
       "priority": 13,
       "type": "leader",
@@ -1288,6 +1382,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "hero_1.png"
+        }
+      ],
       "armyAttackModifier": [
         {
           "stat": "armor",
@@ -1323,7 +1423,6 @@
     },
     {
       "id": 21,
-      "image": "hero_2.png",
       "active": true,
       "priority": 13,
       "type": "leader",
@@ -1344,6 +1443,12 @@
       "salvage": 0.5,
       "removeDuration": 1,
       "gainExperience": true,
+      "images": [
+      	 {
+          "level": 0,
+          "image": "hero_2.png"
+        }
+      ],
       "armyAttackModifier": [
         {
           "stat": "critical",

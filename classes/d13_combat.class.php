@@ -92,7 +92,7 @@ class d13_combat
 		$armyBonus = array();	
 		foreach($data['input']['attacker']['groups'] as $key => $group) {
 			if ($group['quantity'] > 0) {
-				$unit = new d13_unit($group['unitId'], $this->attackerNode);
+				$unit = new d13_object_unit($group['unitId'], $this->attackerNode);
 				if (!empty($unit->data['armyAttackModifier'])) {
 					foreach ($unit->data['armyAttackModifier'] as $modifier) {
 						$armyBonus[] = $modifier;
@@ -104,7 +104,7 @@ class d13_combat
 		foreach($data['input']['attacker']['groups'] as $key => $group) {
 			if ($group['quantity'] > 0) {
 			
-				$unit = new d13_unit($group['unitId'], $this->attackerNode);
+				$unit = new d13_object_unit($group['unitId'], $this->attackerNode);
 				$stats = $unit->getStats();
 				$upgrades = $unit->getUpgrades();
 			
@@ -184,7 +184,7 @@ class d13_combat
 		$armyBonus = array();	
 		foreach($data['input']['defender']['groups'] as $key => $group) {
 			if ($group['quantity'] > 0) {
-				$unit = new d13_unit($group['unitId'], $this->defenderNode);
+				$unit = new d13_object_unit($group['unitId'], $this->defenderNode);
 				if (!empty($unit->data['armyDefenseModifier'])) {
 					foreach ($unit->data['armyDefenseModifier'] as $modifier) {
 						$armyBonus[] = $modifier;
@@ -199,7 +199,7 @@ class d13_combat
 
 			if ($group['type'] == 'unit' && $group['quantity'] > 0) {
 			
-				$unit = new d13_unit($group['unitId'], $this->defenderNode);
+				$unit = new d13_object_unit($group['unitId'], $this->defenderNode);
 				$stats = $unit->getStats();
 				$upgrades = $unit->getUpgrades();
 				
@@ -245,9 +245,9 @@ class d13_combat
 
 			} else if ($group['type'] == 'module' && $group['input'] > 0) {
 			
-				$modulit = new d13_modulit($group['moduleId'], $group['level'], $group['input'], $group['unitId'], $this->defenderNode);
-				$stats = $modulit->getStats();
-				$upgrades = $modulit->getUpgrades();
+				$turret = new d13_turret($group['moduleId'], $group['level'], $group['input'], $group['unitId'], $this->defenderNode);
+				$stats = $turret->getStats();
+				$upgrades = $turret->getUpgrades();
 				
 				foreach($d13->getGeneral('stats') as $stat) {
 				
@@ -847,7 +847,7 @@ class d13_combat
 		if ($status == 'done') {
 		
 			foreach($data['input']['attacker']['groups'] as $key => $group) {
-				$unit = new d13_unit($group['unitId'], $this->attackerNode);
+				$unit = new d13_object_unit($group['unitId'], $this->attackerNode);
 				$stats = $unit->getStats();
 				$upgrades = $unit->getUpgrades();
 			
