@@ -410,7 +410,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(32) COLLATE utf8_bin NOT NULL,
   `avatar` int(10) NOT NULL DEFAULT '0',
   `access` tinyint(3) unsigned NOT NULL,
-  `level` int(10) unsigned NOT NULL,
+  `level` int(10) unsigned NOT NULL DEFAULT '0',
   `experience` int(10) unsigned NOT NULL,
   `trophies` int(10) unsigned NOT NULL DEFAULT '500',
   `joined` date NOT NULL,
