@@ -60,15 +60,15 @@ class d13_module
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
-	
+
 	public
-	
+
 	function checkUpgrades()
 	{
 		global $d13;
-		
+
 		$my_upgrades = array();
-				
+
 		// - - - - - - - - - - - - - - - MODULE UPGRADES
 		if (!empty($this->data['upgrades']) && $this->data['type'] != 'unit' && $this->data['level'] > 1) {
 			foreach ($this->data['upgrades'] as $upgrade_id) {
@@ -79,7 +79,7 @@ class d13_module
 				}
 			}
 		}
-		
+
 		// - - - - - - - - - - - - - - - TECHNOLOGY UPGRADES
 		$tmp_list = array();
 		foreach($this->node->technologies as $technology) {
@@ -91,21 +91,21 @@ class d13_module
 				}
 			}
 		}
-		
+
 		if (!empty($tmp_list)) {
 			foreach ($d13->getUpgradeModule($this->node->data['faction']) as $tmp_upgrade) {
 				if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $tmp_list)) {
-					
-					
+
+
 					$pass = false;
 					if (empty($tmp_upgrade['targets']) && ($tmp_upgrade['type'] == $this->data['type'])) {
 						$pass = true;
 					} else if (!empty($tmp_upgrade['targets']) && in_array($this->data['id'], $tmp_upgrade['targets'])) {
 						$pass = true;
 					}
-					
-					
-					
+
+
+
 					if ($pass) {
 						$tmp_upgrade['level'] = $tmp_levels[$tmp_upgrade['id']];
 						$my_upgrades[] = $tmp_upgrade;
@@ -114,21 +114,21 @@ class d13_module
 				}
 			}
 		}
-		
+
 		// - - - - - - - - - - - - - - - APPLY UPGRADES
 		if (!empty($my_upgrades)) {
 			foreach ($my_upgrades as $upgrade) {
-			
+
 				//- - - Cost Upgrade
 				if (isset($upgrade['cost'])) {
 					$this->data['upgrade_cost'] = $upgrade['cost'];
 				}
-		
+
 				//- - - Requirements Upgrade
 				if (isset($upgrade['requirements'])) {
 					$this->data['upgrade_requirements'] = $upgrade['requirements'];
 				}
-				
+
 				//- - - Attributes Upgrade
 				foreach ($upgrade['attributes'] as $attribute) {
 					if (isset($attribute['stat'])) {
@@ -145,10 +145,10 @@ class d13_module
 						}
 					}
 				}
-		
+
 			}
 		}
-	
+
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -177,25 +177,25 @@ class d13_module
 		$this->data['units'] = 0;
 		$this->data['totalIR'] = $this->node->modules[$slotId]['input'] * $this->data['ratio'];
 		$this->data['cost'] = $this->getCost();
-		
+
 		foreach($d13->getGeneral('stats') as $stat) {
 			$this->data['upgrade_' . $stat] = 0;
 		}
-		
+
 		if ($this->node->modules[$slotId]['level'] > 0) {
-			
+
 			$this->data['level'] = $this->node->modules[$slotId]['level'];
 			$this->checkUpgrades();
 			$this->data['cost'] = $this->getCost(true);
 		}
-		
+
 		$this->data['moduleImage'] = '';
 		$this->data['name'] = $d13->getLangGL('modules', $this->node->data['faction'], $this->data['moduleId'], 'name');
 		$this->data['description'] = $d13->getLangGL('modules', $this->node->data['faction'], $this->data['moduleId'], 'description');
 		$this->data['inputLimit'] = floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'], $this->node->modules[$this->data['slotId']]['input'])); #floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'] + $this->node->modules[$this->data['slotId']]['input']));
 		$this->data['costData'] = $this->node->checkCost($this->data['cost'], 'build');
 		$this->data['reqData'] = $this->node->checkRequirements($this->data['requirements']);
-		
+
 		if (isset($this->data['inputResource'])) {
 			$this->data['moduleInput'] = $this->data['inputResource'];
 			$this->data['moduleInputName'] = $d13->getLangGL('resources', $this->data['inputResource'], 'name');
@@ -221,9 +221,9 @@ class d13_module
 				$i++;
 			}
 		}
-		
+
 		$this->getModuleImage();
-		
+
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -239,13 +239,13 @@ class d13_module
 		global $d13;
 		$tvars = array();
 		$tvars = $this->getStats();
-		
+
 		foreach ($this->data as $key => $value) {
 			if (!is_array($value)) {
 				$tvars['tvar_'.$key] = $value;
 			}
 		}
-		
+
 		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
 		$tvars['tvar_nodeID'] = $this->node->data['id'];
 		$tvars['tvar_slotID'] = $this->data['slotId'];
@@ -255,12 +255,12 @@ class d13_module
 		$tvars['tvar_moduleItemContent'] 	= $this->getOptions();
 		$tvars['tvar_image'] = $this->data['image'];
 		$tvars['tvar_moduleDescription'] = d13_misc::toolTip($this->data['name'] . '<br>' . $this->data['description']);
-		
+
 		if ($this->data['level'] > 0) {
 			$tvars['tvar_popup'] = $this->getPopup();
 			$tvars['tvar_queue'] = $this->getQueue();
-			
-			
+
+
 			if ($this->node->resources[$this->data['inputResource']]['value'] < $this->data['maxInput']) {
 				$max = $this->node->modules[$this->data['slotId']]['input'] + $this->node->resources[$this->data['inputResource']]['value'];
 				$max = min($max, $this->data['maxInput']);
@@ -274,27 +274,27 @@ class d13_module
 			} else {
 				$min = $this->node->modules[$this->data['slotId']]['input'];
 			}
-			
+
 			$tvars['tvar_inputSlider'] = $this->getInputSlider(
-				"?p=module&action=set&nodeId=".$this->node->data['id']."&slotId=".$this->data['slotId'], 
-				$this->data['slotId'].'_'.$this->data['moduleId'], 
-				floor($min), 
-				floor($max), 
-				$this->node->modules[$this->data['slotId']]['input'], 
+				"?p=module&action=set&nodeId=".$this->node->data['id']."&slotId=".$this->data['slotId'],
+				$this->data['slotId'].'_'.$this->data['moduleId'],
+				floor($min),
+				floor($max),
+				$this->node->modules[$this->data['slotId']]['input'],
 				$this->data['busy']);
 		}
-		
+
 		$tvars['tvar_levelLabel'] = '';
 		if ($this->data['maxLevel'] > 1) {
 			$tvars['tvar_levelLabel'] = '('.$this->data['level'].'/'.$this->data['maxLevel'].')';
 		}
-		
+
 		$tvars['tvar_costData'] = $this->getCostList();
 		$tvars['tvar_requirementsData'] = $this->getRequirementsList();
 		$tvars['tvar_outputData'] = $this->getOutputList();
-		
+
 		if ($this->data['level'] <= 0) {
-		
+
 			if ($this->data['reqData']['ok']) {
 				$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.ok");
 			}
@@ -308,9 +308,9 @@ class d13_module
 			else {
 				$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
 			}
-		
+
 		}
-		
+
 		if (isset($this->data['storedResource'])) {
 			$i = 0;
 			while (isset($this->data['moduleStorageRes' . $i])) {
@@ -344,7 +344,7 @@ class d13_module
 	{
 		global $d13;
 		$this->data['image'] = '';
-		
+
 		foreach($this->data['images'] as $image) {
 			if ($image['level'] <= $this->data['level']) {
 				$this->data['image'] = $image['image'];
@@ -365,7 +365,7 @@ class d13_module
 	function getPendingImage()
 	{
 		global $d13;
-		
+
 		foreach($this->data['images'] as $image) {
 			if ($image['level'] == 0) {
 				return $image['image'];
@@ -382,34 +382,34 @@ class d13_module
 
 	function getInputSlider($action, $id, $min, $max, $value, $disabled=false, $tooltip=true)
 	{
-	
+
 		global $d13;
 
-		$vars = array();		
+		$vars = array();
 		$vars['tvar_formAction'] 		= $action;
 		$vars['tvar_sliderID'] 			= $id;
-				
+
 		if ($min < 10) { $min = "0".$min; }
 		if ($max < 10) { $max = "0".$max; }
 		if ($value < 10) { $value = "0".$value; }
-		
+
 		$vars['tvar_sliderValue'] 		= max($min, $value);
 		$vars['tvar_sliderMin'] 		= $min;
 		$vars['tvar_sliderMax'] 		= $max;
 		$vars['tvar_disableData']		= '';
 		$vars['tvar_sliderTooltip']		= '';
-		
+
 		if ($tooltip) {
 		$vars['tvar_sliderTooltip']		= d13_misc::toolTip($d13->getLangUI("tipRangeSliderTooltip"));
 		}
-		
+
 		if ($disabled || $max <= 0) {
 			$vars['tvar_disableData']	= 'disabled';
 			$vars['tvar_sliderTooltip']	= d13_misc::toolTip($d13->getLangUI("tipRangeSliderDisabled"));
 		}
-		
+
 		return $d13->templateSubpage("sub.range.slider", $vars);
-				
+
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -422,7 +422,7 @@ class d13_module
 	{
 		global $d13;
 		$html = '';
-		
+
 		if ($this->data['level'] > 0) {
 			if ($d13->getGeneral('options', 'moduleDemolish')) {
 				if ($this->node->modules[$this->data['slotId']]['input'] <= 0) {
@@ -441,7 +441,7 @@ class d13_module
 
 		return $html;
 	}
-	
+
 	// ----------------------------------------------------------------------------------------
 	// getModuleUpgrade
 	// generates and returns either a build or an upgrade button
@@ -453,11 +453,11 @@ class d13_module
 	{
 		global $d13;
 		$html = '';
-		
+
 		if ($this->data['level'] > 0 && $this->data['maxLevel'] == 1) {
 			return $html;
 		} else {
-		
+
 			if ($this->node->resources[$this->data['inputResource']]['value'] < $this->data['maxInput']) {
 				$max = $this->node->modules[$this->data['slotId']]['input'] + $this->node->resources[$this->data['inputResource']]['value'];
 				if ($max > $this->data['maxInput']) {
@@ -465,9 +465,9 @@ class d13_module
 				}
 			} else {
 				$max = $this->data['maxInput'];
-			}	
-			
-			
+			}
+
+
 			if ($this->data['reqData']['ok']) {
 				$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.ok");
 			}
@@ -481,11 +481,11 @@ class d13_module
 			else {
 				$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
 			}
-			
+
 			if ($this->data['level'] <= 0) {
-		
+
 				if (($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput']) > 0 && $this->data['costData']['ok'] && $this->data['reqData']['ok'] && ($this->node->getModuleCount($this->data['slotId'], $this->data['moduleId']) < $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'maxInstances'))) {
-					
+
 					$tvars['tvar_title'] 			= $d13->getLangUI("addModule");
 					$tvars['tvar_moduleInputName'] 	= $this->data['moduleInputName'];
 					$tvars['tvar_moduleInputImage'] = $d13->getResource($this->data['moduleInput'], 'image');
@@ -498,14 +498,14 @@ class d13_module
 					$tvars['tvar_moduleLimit'] 		= floor(min($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput'],$this->data['maxInput']));
 					$tvars['tvar_disableData'] 		= '';
 					$tvars['tvar_inputSlider'] 		= $this->getInputSlider(
-						'?p=module&action=add&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'], 
-						'b'.$this->data['slotId'].'_'.$this->data['moduleId'], 
-						1, 
-						floor($max), 
+						'?p=module&action=add&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'],
+						'b'.$this->data['slotId'].'_'.$this->data['moduleId'],
+						1,
+						floor($max),
 						0,
 						false,
 						false);
-					
+
 					$d13->templateInject($d13->templateSubpage("sub.popup.build" , $tvars, true));
 					$tooltip = d13_misc::toolTip($d13->getLangUI("addModule") . ' ' . $d13->getLangUI("tipModuleBuildup"));
 					$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
@@ -517,13 +517,13 @@ class d13_module
 					$html.= '<a href="#" class="button '.$tooltip.'">' . $d13->getLangUI("addModule") . " " . $d13->getLangUI("impossible") . '</a>';
 					$html.= '</p>';
 				}
-			
+
 			} else {
-				
+
 				if ($d13->getGeneral('options', 'moduleUpgrade')) {
 					if ($this->data['level'] < $this->data['maxLevel']) {
 						if (($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput']) > 0 && $this->data['costData']['ok'] && $this->data['reqData']['ok'] && $this->node->modules[$this->data['slotId']]['level'] < $this->data['maxLevel'] && $this->data['maxLevel'] > 1) {
-						
+
 							$tvars['tvar_title'] 			= $d13->getLangUI("upgrade");
 							$tvars['tvar_moduleInputName'] 	= $this->data['moduleInputName'];
 							$tvars['tvar_moduleInputImage'] = $d13->getResource($this->data['moduleInput'], 'image');
@@ -536,14 +536,14 @@ class d13_module
 							$tvars['tvar_moduleLimit'] 		= floor(min($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput'],$this->data['maxInput']));
 							$tvars['tvar_disableData'] 		= '';
 							$tvars['tvar_inputSlider']		= $this->getInputSlider(
-								'?p=module&action=upgrade&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'], 
-								'u'.$this->data['slotId'].'_'.$this->data['moduleId'], 
-								1, 
-								floor($max), 
+								'?p=module&action=upgrade&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'],
+								'u'.$this->data['slotId'].'_'.$this->data['moduleId'],
+								1,
+								floor($max),
 								$this->node->modules[$this->data['slotId']]['input'],
 								false,
 								false);
-				
+
 							$d13->templateInject($d13->templateSubpage("sub.popup.build" , $tvars, true));
 							$tooltip = d13_misc::toolTip($d13->getLangUI("upgrade") . ' ' . $d13->getLangUI("tipModuleBuildup"));
 							$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
@@ -563,9 +563,9 @@ class d13_module
 					}
 				}
 			}
-		
+
 		}
-		
+
 		return $html;
 
 	}
@@ -583,7 +583,7 @@ class d13_module
 		global $d13;
 		$html = '';
 		if ($d13->getGeneral('options', 'moduleUpgrade') && $this->data['level'] < $this->data['maxLevel']) {
-			
+
 			foreach($this->data['cost'] as $key => $cost) {
 				$html.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div><div class="cell">' . $cost['value'] . '</div>';
 			}
@@ -602,15 +602,15 @@ class d13_module
 
 	function getRequirementsList()
 	{
-	
+
 		global $d13;
 		$html = '';
-		
+
 		if (!count($this->data['requirements'])) {
 			$html = $d13->getLangUI('none');
 		} else {
 			foreach($this->data['requirements'] as $key => $requirement) {
-				
+
 				if (isset($requirement['level'])) {
 					$value = $requirement['level'];
 					$tooltip = $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . " [L".$value."]";
@@ -808,7 +808,7 @@ class d13_module_warfare extends d13_module
 		$tvars['tvar_listID'] = 0;
 		$html = '';
 		$i=0;
-		
+
 		if ($this->data['options']['inventoryList']) {
 			foreach($this->node->units as $uid => $unit) {
 				if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
@@ -819,7 +819,7 @@ class d13_module_warfare extends d13_module
 					$i++;
 				}
 			}
-			
+
 			if ($i>0) {
 				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryTrain"));
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
@@ -833,7 +833,7 @@ class d13_module_warfare extends d13_module
 				$html .= '</p>';
 			}
 		}
-		
+
 		$this->data['units'] = $i;
 
 		return $html;
@@ -849,14 +849,14 @@ class d13_module_warfare extends d13_module
 
 	function getPopup()
 	{
-	
+
 		global $d13;
 		$html = '';
 		$i = 0;
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 1;
-		
+
 		foreach ($d13->getCombat() as $key => $combatType) {
 			if ($combatType['active']) {
 				if (isset($this->data['options'][$key]) && $this->data['options'][$key]) {
@@ -871,7 +871,7 @@ class d13_module_warfare extends d13_module
 				}
 			}
 		}
-		
+
 		if ($i > 0) {
 			$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
@@ -882,7 +882,7 @@ class d13_module_warfare extends d13_module
 			$html.= '<a href="#" class="button">' . $d13->getLangUI("unit") . " " . $d13->getLangUI("launch") . " " . $d13->getLangUI("combat") .'</a>';
 			$html.= '</p>';
 		}
-		
+
 		return $html;
 
 	}
@@ -901,17 +901,17 @@ class d13_module_warfare extends d13_module
 		$html = '';
 
 		// - - - Check Queue
-		
+
 		$this->data['busy'] = false;
-		
+
 		if (count($this->node->queue['combat'])) {
 			foreach($this->node->queue['combat'] as $item) {
 				if ($item['slot'] == $this->data['slotId']) {
-					
+
 					$this->data['busy'] = true;
 					$stage = '';
 					$cancel = '';
-					
+
 					if (!$item['stage']) {
 						if ($item['sender'] == $this->node->data['id']) {
 							$stage = $d13->getLangUI('outgoing');
@@ -922,9 +922,9 @@ class d13_module_warfare extends d13_module
 					} else if ($item['sender'] == $this->node->data['id']) {
 						$stage = $d13->getLangUI('returning');
 					}
-					
+
 					$remaining = ($item['start'] + $item['duration']) - time();
-					
+
 					$otherNode = new d13_node();
 					if ($item['sender'] == $this->node->data['id']) {
 						$status = $otherNode->get('id', $item['recipient']);
@@ -932,25 +932,25 @@ class d13_module_warfare extends d13_module
 					else {
 						$status = $otherNode->get('id', $item['sender']);
 					}
-					
+
 					if ($status == 'done') {
 						$tvars = array();
 						$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/flag.png">';
 						$tvars['tvar_listLabel'] 	= $stage . ' ' . $d13->getLangUI("combat") . ' ' . $otherNode->data['name'];
 						$tvars['tvar_listAmount'] 	= '<span id="combat_' . $item['id'] . '">' . implode(':', d13_misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("combat_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> '.$cancel;
-				
-					
-				
+
+
+
 						$html = $d13->templateSubpage("sub.module.listcontent", $tvars);
 					}
-					
+
 				}
 			}
 		}
-		
+
 		// - - - Popover
-		
-		if ($this->data['busy'] == false) {
+
+		if ($this->data['busy'] === false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $this->data['units'] > 0) {
 				$tvars = array();
 				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
@@ -968,7 +968,7 @@ class d13_module_warfare extends d13_module
 
 			}
 		}
-		
+
 		return $html;
 	}
 
@@ -1038,9 +1038,9 @@ class d13_module_storage extends d13_module
 		$tvars['tvar_listID'] = 0;
 		$html = '';
 		$i=0;
-		
+
 		if (isset($this->data['options']['inventoryList']) && $this->data['options']['inventoryList']) {
-			
+
 			foreach($this->node->resources as $uid => $unit) {
 				if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
 					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $uid . '.png" title="' . $d13->getLangGL('resources', $uid, 'name') . '">';
@@ -1050,9 +1050,9 @@ class d13_module_storage extends d13_module
 					$i++;
 				}
 			}
-			
+
 			$this->data['units'] = $i;											// !important
-			
+
 			if ($i > 0) {
 				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryResource"));
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
@@ -1065,7 +1065,7 @@ class d13_module_storage extends d13_module
 				$html .= '<a href="#" class="button '.$tooltip.'">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
 				$html .= '</p>';
 			}
-		
+
 		}
 
 		return $html;
@@ -1176,9 +1176,9 @@ class d13_module_harvest extends d13_module
 		$tvars['tvar_listID'] = 0;
 		$html = '';
 		$i=0;
-		
+
 		if ($this->data['options']['inventoryList']) {
-			
+
 			foreach($this->node->resources as $rid => $res) {
 				if ($d13->getResource($res['id'], 'active') && $res['value'] > 0) {
 					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
@@ -1297,13 +1297,13 @@ class d13_module_craft extends d13_module
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 0;
 		$i=0;
-		
+
 		if ($this->data['options']['inventoryList']) {
 
 			foreach($this->node->components as $uid => $unit) {
 				if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
 					if ($unit['value'] > 0) {
-						
+
 						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'] . '">';
 						$tvars['tvar_listLabel'] = $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'];
 						$tvars['tvar_listAmount'] = $unit['value'];
@@ -1312,7 +1312,7 @@ class d13_module_craft extends d13_module
 					}
 				}
 			}
-			
+
 			if ($i>0) {
 				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryCraft"));
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
@@ -1361,10 +1361,10 @@ class d13_module_craft extends d13_module
 
 		foreach($d13->getComponent($this->node->data['faction']) as $cid => $component) {
 			if ($component['active'] && in_array($cid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
-				
-				
+
+
 				$tmp_component = new d13_component($cid, $this->node);
-				
+
 				// - - - - Cost and Requirements
 				$costData = $tmp_component->getCostList();
 				$requirementsData = $tmp_component->getRequirementList();
@@ -1424,7 +1424,7 @@ class d13_module_craft extends d13_module
 				$tvars['tvar_compResource'] = $component['storageResource'];
 				$tvars['tvar_compResourceName'] = $d13->getLangGL("resources", $component['storageResource'], "name");
 				$tvars['tvar_compMaxValue'] = $this->node->components[$cid]['value'] + $limitData;
-				
+
 				$tvars['tvar_sliderID'] 	= $cid;
 				$tvars['tvar_sliderMin'] 	= "00";
 				$tvars['tvar_sliderMax'] 	= $limitData;
@@ -1453,37 +1453,37 @@ class d13_module_craft extends d13_module
 		$html = '';
 
 		// - - - Check Queue
-		
+
 		$this->data['busy'] = false;
-		
+
 		if (count($this->node->queue['craft'])) {
 			foreach($this->node->queue['craft'] as $item) {
 				if ($item['slot'] == $this->data['slotId']) {
-					
+
 					$this->data['busy'] = true;
-					
+
 					if (!$item['stage']) {
 						$stage = $d13->getLangUI('craft');
 					} else {
 						$stage = $d13->getLangUI('remove');
 					}
-					
+
 					$remaining = d13_misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
-					
+
 					$tvars = array();
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $item['obj_id'] . '.png">';
 					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $d13->getLangGL("components", $this->node->data['faction'], $item['obj_id'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="craft_' . $item['id'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("craft_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelComponent&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&craftId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
-				
+
 					$html = $d13->templateSubpage("sub.module.listcontent", $tvars);
-				
+
 				}
 			}
 		}
 
 		// - - - Popover if Queue empty
 
-		if ($this->data['busy'] == false) {
+		if ($this->data['busy'] === false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
 				$tvars = array();
 				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
@@ -1570,7 +1570,7 @@ class d13_module_train extends d13_module
 		$tvars['tvar_listID'] = 0;
 		$html = '';
 		$i=0;
-		
+
 		if ($this->data['options']['inventoryList']) {
 			foreach($this->node->units as $uid => $unit) {
 				if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'units'))) {
@@ -1583,7 +1583,7 @@ class d13_module_train extends d13_module
 					}
 				}
 			}
-			
+
 			if ($i>0) {
 				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryTrain"));
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
@@ -1628,15 +1628,15 @@ class d13_module_train extends d13_module
 		$html = '';
 		$tvars = array();
 		$tvars['tvar_sub_popupswiper'] = '';
-		
+
 		foreach($d13->getUnit($this->node->data['faction']) as $uid => $unit) {
 			if ($unit['active'] && in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'units'))) {
-				
+
 				$tmp_unit = new d13_unit($uid, $this->node);
-				
+
 				$vars = array();
 				$vars = $tmp_unit->getTemplateVariables();
-				
+
 				$vars['tvar_duration'] = d13_misc::sToHMS((($tmp_unit->data['duration'] - $tmp_unit->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'train')) * 60, true);
 				$vars['tvar_uid'] = $uid;
 				$vars['tvar_nodeId'] = $this->node->data['id'];
@@ -1651,7 +1651,7 @@ class d13_module_train extends d13_module
 				$vars['tvar_sliderValue'] 	= "00";
 				$vars['tvar_unitDescription'] = $tmp_unit->data['description'];
 				$vars['tvar_unitMaxValue'] = $this->node->units[$tmp_unit->data['unitId']]['value'] + $tmp_unit->getMaxProduction();
-				
+
 				$tvars['tvar_sub_popupswiper'] .= $d13->templateSubpage("sub.module.train", $vars);
 			}
 		}
@@ -1675,36 +1675,36 @@ class d13_module_train extends d13_module
 		$html = '';
 
 		// - - - Check Queue
-		
+
 		$this->data['busy'] = false;
-		
+
 		if (count($this->node->queue['train'])) {
 			foreach($this->node->queue['train'] as $item) {
 				if ($item['slot'] == $this->data['slotId']) {
-					
+
 					$this->data['busy'] = true;
-					
+
 					if (!$item['stage']) {
 						$stage = $d13->getLangUI('train');
 					} else {
 						$stage = $d13->getLangUI('remove');
 					}
 					$remaining = d13_misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
-					
+
 					$tvars = array();
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $d13->getUnit($this->node->data['faction'], $item['obj_id'], 'image') . '">';
 					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $d13->getLangGL("units", $this->node->data['faction'], $item['obj_id'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="train_' . $item['id'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("train_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelUnit&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&trainId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
-				
+
 					$html = $d13->templateSubpage("sub.module.listcontent", $tvars);
-				
+
 				}
 			}
 		}
-		
+
 		// - - - Popover if Queue empty
 
-		if ($this->data['busy'] == false) {
+		if ($this->data['busy'] === false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
 				$tvars = array();
 				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
@@ -1724,7 +1724,7 @@ class d13_module_train extends d13_module
 
 		return $html;
 	}
-	
+
 	// ----------------------------------------------------------------------------------------
 	// getStats
 	// @
@@ -1790,7 +1790,7 @@ class d13_module_research extends d13_module
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 0;
 		$i=0;
-		
+
 		if ($this->data['options']['inventoryList']) {
 
 			foreach($d13->getTechnology($this->node->data['faction']) as $tid => $tech) {
@@ -1847,17 +1847,17 @@ class d13_module_research extends d13_module
 		global $d13;
 		$html = '';
 		$i = 0;
-		
+
 		// - - - Research Popup
 
 		$tvars['tvar_sub_popupswiper'] = "";
 		foreach($d13->getTechnology($this->node->data['faction']) as $tid => $technology) {
 			if ($technology['active'] && in_array($tid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'technologies')) && ($this->node->technologies[$tid]['level'] < $technology['maxLevel'])) {
-				
+
 				$i++;
-				
+
 				$tmp_technology = new d13_technology($tid, $this->node);
-				
+
 				// - - - - - Check Cost & Requirements
 				$costData = $tmp_technology->getCostList();
 				$requirementsData = $tmp_technology->getRequirementList();
@@ -1906,10 +1906,10 @@ class d13_module_research extends d13_module
 				$tvars['tvar_techMaxTier'] = $technology['maxLevel'];
 				$tvars['tvar_duration'] = d13_misc::sToHMS((($technology['duration'] - $technology['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'research')) * 60, true);
 				$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.research", $tvars);
-				
+
 			}
 		}
-		
+
 		$this->data['available'] = $i;
 		$d13->templateInject($d13->templateSubpage("sub.popup.swiper", $tvars));
 		$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
@@ -1930,32 +1930,32 @@ class d13_module_research extends d13_module
 		$html = '';
 
 		// - - - Check Queue
-		
+
 		$this->data['busy'] = false;
-		
+
 		if (count($this->node->queue['research'])) {
 			foreach($this->node->queue['research'] as $item) {
 				if ($item['slot'] == $this->data['slotId']) {
-					
+
 					$this->data['busy'] = true;
-					
-					
+
+
 					$remaining = ($item['start'] + $item['duration'] ) - time();
-					
+
 					$tvars = array();
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $d13->getTechnology($this->node->data['faction'], $item['obj_id'], 'image') .'">';
 					$tvars['tvar_listLabel'] 	= $d13->getLangGL("technologies", $this->node->data['faction'], $item['obj_id'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="research_' . $item['obj_id'] . '">' . implode(':', d13_misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("research_' . $item['obj_id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelTechnology&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&technologyId=' . $item['obj_id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
-				
+
 					$html = $d13->templateSubpage("sub.module.listcontent", $tvars);
-				
+
 				}
 			}
 		}
 
 		// - - - Popover if Queue empty
 
-		if ($this->data['busy'] == false) {
+		if ($this->data['busy'] === false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $this->data['available'] > 0) {
 				$tvars = array();
 				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
@@ -1974,7 +1974,7 @@ class d13_module_research extends d13_module
 		}
 		return $html;
 	}
-	
+
 	// ----------------------------------------------------------------------------------------
 	// getStats
 	// @
@@ -2048,9 +2048,9 @@ class d13_module_alliance extends d13_module
 
 	function getOptions()
 	{
-		
+
 		return '';
-		
+
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -2069,7 +2069,7 @@ class d13_module_alliance extends d13_module
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 1;
-		
+
 		// - - - - Option: Alliance List
 
 		if ($this->data['options']['allianceGet']) {
@@ -2124,7 +2124,7 @@ class d13_module_alliance extends d13_module
 			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
 			$i++;
 		}
-		
+
 		if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $i > 0) {
 			$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 			$tvars = array();
@@ -2141,7 +2141,7 @@ class d13_module_alliance extends d13_module
 			$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("alliance");
 			$html = $d13->templateSubpage("sub.module.listbutton", $tvars);
 		}
-		
+
 		return $html;
 	}
 
@@ -2155,9 +2155,9 @@ class d13_module_alliance extends d13_module
 
 	function getQueue()
 	{
-	
+
 		return '';
-		
+
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -2213,9 +2213,9 @@ class d13_module_command extends d13_module
 		$tvars['tvar_listID'] = 0;
 		$html = '';
 		$i=0;
-		
+
 		if ($this->data['options']['inventoryList']) {
-			
+
 			foreach($this->node->resources as $rid => $res) {
 				if ($d13->getResource($res['id'], 'active') && $res['value'] > 0) {
 					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
@@ -2265,15 +2265,15 @@ class d13_module_command extends d13_module
 
 	function getPopup()
 	{
-		
-	
+
+
 		global $d13;
 		$html = '';
 		$i = 0;
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 1;
-		
+
 		// - - - - Option: Remove Node
 		$nodes = $this->node->getList($_SESSION[CONST_PREFIX . 'User']['id']);
 		$t = count($nodes);
@@ -2311,7 +2311,7 @@ class d13_module_command extends d13_module
 			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
 			$i++;
 		}
-		
+
 		if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $i > 0) {
 			$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
 			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
@@ -2322,10 +2322,10 @@ class d13_module_command extends d13_module
 			$html.= '<a href="#" class="button">' . $d13->getLangUI("launch") . " " . $d13->getLangUI("command") .'</a>';
 			$html.= '</p>';
 		}
-		
+
 		return $html;
 
-	
+
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -2338,9 +2338,9 @@ class d13_module_command extends d13_module
 
 	function getQueue()
 	{
-		
+
 		return '';
-		
+
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -2657,7 +2657,7 @@ class d13_module_market extends d13_module
 		global $d13;
 		return $d13->getLangUI("none");
 	}
-	
+
 }
 
 // ----------------------------------------------------------------------------------------
@@ -2698,9 +2698,9 @@ class d13_module_storvest extends d13_module
 		$tvars['tvar_listID'] = 0;
 		$html = '';
 		$i=0;
-		
+
 		if (isset($this->data['options']['inventoryList']) && $this->data['options']['inventoryList']) {
-			
+
 			foreach($this->node->resources as $uid => $unit) {
 				if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
 					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $uid . '.png" title="' . $d13->getLangGL('resources', $uid, 'name') . '">';
@@ -2720,7 +2720,7 @@ class d13_module_storvest extends d13_module
 				$html.= '<a href="#" class="button">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
 				$html.= '</p>';
 			}
-		
+
 		}
 
 		return $html;
