@@ -420,7 +420,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `template` varchar(32) COLLATE utf8_bin NOT NULL,
   `color` varchar(32) COLLATE utf8_bin NOT NULL,
   `locale` varchar(32) COLLATE utf8_bin NOT NULL,
-  `sitter` varchar(32) COLLATE utf8_bin NOT NULL,
+  `sitter` varchar(32) COLLATE utf8_bin NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `email` (`email`)
