@@ -273,7 +273,7 @@ class d13_tpl
 
 	function render_page($template, $tvars = array())
 	{
-		
+
 		if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
 		$this->node	= new d13_node();
 		$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
@@ -281,7 +281,7 @@ class d13_tpl
 		
 		$tvars = array_merge($tvars, $this->global_vars($tvars));
 		$tvars = array_merge($tvars, $this->merge_ui_vars());
-		
+        $tvars['tvar_nodeFaction'] = '';
 		$tvars["tpl_pvar_name"] = $template;
 		$tvars["tpl_page_leftPanel"] = '';
 		$tvars["tpl_page_rightPanel"] = '';
