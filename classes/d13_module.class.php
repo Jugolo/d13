@@ -1033,7 +1033,7 @@ class d13_module_storage extends d13_module
 	function getInventory()
 	{
 		global $d13;
-		$tvars = array();;
+		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 0;
 		$html = '';
@@ -1171,7 +1171,7 @@ class d13_module_harvest extends d13_module
 	function getInventory()
 	{
 		global $d13;
-		$tvars = array();;
+		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 0;
 		$html = '';
@@ -1470,7 +1470,7 @@ class d13_module_craft extends d13_module
 					
 					$remaining = d13_misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
-					$tvars = array();;
+					$tvars = array();
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $item['obj_id'] . '.png">';
 					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $d13->getLangGL("components", $this->node->data['faction'], $item['obj_id'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="craft_' . $item['id'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("craft_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelComponent&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&craftId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
@@ -1565,7 +1565,7 @@ class d13_module_train extends d13_module
 	function getInventory()
 	{
 		global $d13;
-		$tvars = array();;
+		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 0;
 		$html = '';
@@ -1626,7 +1626,7 @@ class d13_module_train extends d13_module
 	{
 		global $d13;
 		$html = '';
-		$tvars = array();;
+		$tvars = array();
 		$tvars['tvar_sub_popupswiper'] = '';
 		
 		foreach($d13->getUnit($this->node->data['faction']) as $uid => $unit) {
@@ -1691,7 +1691,7 @@ class d13_module_train extends d13_module
 					}
 					$remaining = d13_misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
-					$tvars = array();;
+					$tvars = array();
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $d13->getUnit($this->node->data['faction'], $item['obj_id'], 'image') . '">';
 					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $d13->getLangGL("units", $this->node->data['faction'], $item['obj_id'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="train_' . $item['id'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("train_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelUnit&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&trainId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
@@ -1942,7 +1942,7 @@ class d13_module_research extends d13_module
 					
 					$remaining = ($item['start'] + $item['duration'] ) - time();
 					
-					$tvars = array();;
+					$tvars = array();
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $d13->getTechnology($this->node->data['faction'], $item['obj_id'], 'image') .'">';
 					$tvars['tvar_listLabel'] 	= $d13->getLangGL("technologies", $this->node->data['faction'], $item['obj_id'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="research_' . $item['obj_id'] . '">' . implode(':', d13_misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("research_' . $item['obj_id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelTechnology&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&technologyId=' . $item['obj_id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
@@ -2208,7 +2208,7 @@ class d13_module_command extends d13_module
 	function getInventory()
 	{
 		global $d13;
-		$tvars = array();;
+		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 0;
 		$html = '';
@@ -2396,12 +2396,12 @@ class d13_module_defense extends d13_module
 
 		$upgradeData = array();
 		$upgradeData = $unit->getUpgrades();
-		$tvars['tvar_unitHPPlus'] = "[+" . $upgradeData['hp'] . "]";
-		$tvars['tvar_unitDamagePlus'] = "[+" . $upgradeData['damage'] . "]";
-		$tvars['tvar_unitArmorPlus'] = "[+" . $upgradeData['armor'] . "]";
-		$tvars['tvar_unitSpeedPlus'] = "[+" . $upgradeData['speed'] . "]";
-		$tvars['tvar_unitVisionPlus'] = "[+" . $upgradeData['vision'] . "]";
-		$tvars['tvar_unitCriticalPlus'] = "[+" . $upgradeData['critical'] . "]";
+		$tvars['tvar_unitHPPlus'] = "[+" . $upgradeData['upgrade_hp'] . "]";
+		$tvars['tvar_unitDamagePlus'] = "[+" . $upgradeData['upgrade_damage'] . "]";
+		$tvars['tvar_unitArmorPlus'] = "[+" . $upgradeData['upgrade_armor'] . "]";
+		$tvars['tvar_unitSpeedPlus'] = "[+" . $upgradeData['upgrade_speed'] . "]";
+		$tvars['tvar_unitVisionPlus'] = "[+" . $upgradeData['upgrade_vision'] . "]";
+		$tvars['tvar_unitCriticalPlus'] = "[+" . $upgradeData['upgrade_critical'] . "]";
 		$tvars['tvar_unitType'] = $unit->data['type'];
 		$tvars['tvar_unitClass'] = $unit->data['class'];
 		$tvars['tvar_unitHP'] = $unit->data['hp'];
@@ -2693,7 +2693,7 @@ class d13_module_storvest extends d13_module
 	function getInventory()
 	{
 		global $d13;
-		$tvars = array();;
+		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 0;
 		$html = '';

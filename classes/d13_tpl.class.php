@@ -176,7 +176,7 @@ class d13_tpl
 			$tvars["tvar_global_notoolbar"] = "";
 		}
 
-		// - - - Setup the Message Box
+		// - - - Setup the Message Box (refactor to NOTES class later)
 
 		if (isset($vars["tvar_global_message"]) && !empty($vars["tvar_global_message"])) {
 			$tvars["tpl_pvar_message"] = $this->parse($this->get("sub.messagebox") , $vars);
@@ -209,9 +209,13 @@ class d13_tpl
 		}
 		
 		$tvars = array();
-		$tvars = array_merge($tvars, $vars);
-		$tvars = array_merge($tvars, $this->global_vars($vars, $cache_num));
-		$tvars = array_merge($tvars, $this->merge_ui_vars());
+		
+		if (isset($vars)) {
+			$tvars = array_merge($tvars, $vars);
+			$tvars = array_merge($tvars, $this->global_vars($vars, $cache_num));
+			$tvars = array_merge($tvars, $this->merge_ui_vars());
+		}
+		
 		
 		$name = 'tpl_' . md5(serialize($vars)) . ".".$template.".tpl";
 		$cacheFile = CONST_INCLUDE_PATH . 'cache/templates' . DIRECTORY_SEPARATOR . $name;
@@ -241,7 +245,7 @@ class d13_tpl
 	
 	// ----------------------------------------------------------------------------------------
 	// 
-	// @ Renders a page according to the given template and variables and returns it
+	// @ Clears the template cache directory file by file
 	// 3.0
 	// ----------------------------------------------------------------------------------------
 
@@ -277,11 +281,12 @@ class d13_tpl
 		$this->node	= new d13_node();
 		$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
 		}
+		
+		if (isset($tvars)) {
+			$tvars = array_merge($tvars, $this->global_vars($tvars));
+			$tvars = array_merge($tvars, $this->merge_ui_vars());
+		}
 
-		$tvars = array_merge($tvars, $this->global_vars($tvars));
-		$tvars = array_merge($tvars, $this->merge_ui_vars());
-		
-		
 		$tvars["tpl_pvar_name"] = $template;
 		$tvars["tpl_page_leftPanel"] = '';
 		$tvars["tpl_page_rightPanel"] = '';

@@ -4,11 +4,11 @@ d13 - open-source strategy browser game engine
 RELEASE CANDIDATE 0
 ------------------------------------------------------------------------------------------
 
-V017	--- UPCOMING UPDATE ---
+V018	--- UPCOMING UPDATE ---
 
 		* Map System
 
-V016	--- UPCOMING UPDATE ---
+V017	--- UPCOMING UPDATE ---
 		
 		* Finalize existing combat system:
 		
@@ -16,7 +16,10 @@ V016	--- UPCOMING UPDATE ---
 			- Scout Checks
 			- Sabotage Reports
 			- Sabotage Checks
-			
+
+V016	* Fixed a few more bugs (thanks to BlackScorp)
+		* Added autoload to classes
+
 V015	* Project now also on Github: https://github.com/CriticalHit-d13/d13
 		* Added pagination to league ranking list			
 		* Frontend Checking of Army Integrity finished

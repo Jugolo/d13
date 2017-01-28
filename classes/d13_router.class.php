@@ -30,7 +30,7 @@ class d13_router
 		
 		$this->sanitize_vars();
 		
-		$page_name = 'd13_IndexController';
+		$page_name = 'd13_indexController';
 		
 		if (isset($_GET['p'])) {
 			$page_access = $_GET['p'];
@@ -48,7 +48,7 @@ class d13_router
 				}
 
 				$page_object = new $page_name;
-				exit;
+				exit();
 			}
 		}
 		
@@ -58,6 +58,7 @@ class d13_router
 			include_once ($page);
 		} else {
 			header("location:index.php");
+			exit();
 		}
 		
 	}
