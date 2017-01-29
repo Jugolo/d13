@@ -244,7 +244,7 @@ class d13_module_craft extends d13_object_module
 
 		// - - - Popover if Queue empty
 
-		if ($this->data['busy'] == false) {
+		if ($this->data['busy'] === false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
 				$tvars = array();
 				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
