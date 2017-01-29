@@ -342,6 +342,13 @@ class d13_combatController extends d13_controller
 		
 				$idv = "";
 				$idr = "";
+				
+				$args = array();
+				$args['supertype'] 	= 'component';
+				$args['obj_id'] 	= $res['component'];
+				$args['node'] 		= $this->node;
+				
+				$tmp_component = new d13_object_component($args);
 		
 				$resource = $res['component'];
 				$cost =  $res['value'];
@@ -355,7 +362,7 @@ class d13_combatController extends d13_controller
 				}
 		
 				$tvars['tvar_resources'] .= '<input type="hidden" name="availableRes[]" id="'.$idv.'" value="'.floor($this->node->components[$resource]['value']).'">';
-				$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . "/" . $d13->getComponent($this->node->data['faction'], $resource, 'image') . '" title="' . $d13->getLangGL('components', $resource, 'name') . '"><span name="totalRes[]" id="'.$idr.'">'.$cost . '</span></span>';
+				$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . "/" . $tmp_component->data['image'] . '" title="' . $tmp_component->data['name'] . '"><span name="totalRes[]" id="'.$idr.'">'.$cost . '</span></span>';
 
 			}
 	

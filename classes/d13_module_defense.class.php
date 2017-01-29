@@ -48,7 +48,7 @@ class d13_module_defense extends d13_object_module
 		global $d13;
 		
 		$args = array();
-		$args['supertype'] 	= 'unit';
+		$args['supertype'] 	= 'turret';
 		$args['obj_id'] 	= $this->data['id'];
 		$args['level'] 		= $this->data['level'];
 		$args['input'] 		= $this->data['moduleInput'];

@@ -172,8 +172,8 @@ class d13_module_craft extends d13_object_module
 				$tvars['tvar_requirementsData'] = $requirementsData;
 				$tvars['tvar_disableData'] = $disableData;
 				$tvars['tvar_cid'] = $cid;
-				$tvars['tvar_componentName'] = $d13->getLangGL("components", $this->node->data['faction'], $cid) ["name"];
-				$tvars['tvar_componentDescription'] = $d13->getLangGL("components", $this->node->data['faction'], $cid, "description");
+				$tvars['tvar_componentName'] = $tmp_component->data['name'];
+				$tvars['tvar_componentDescription'] = $tmp_component->data['description'];
 				$tvars['tvar_duration'] = d13_misc::sToHMS( (($component['duration'] - $component['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'craft')) * 60, true);
 				$tvars['tvar_compLimit'] = $limitData;
 				$vars['tvar_disableData']		= '';

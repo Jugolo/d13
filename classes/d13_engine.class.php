@@ -215,6 +215,13 @@ class d13_engine
 
 	public
 
+	function getUpgradeTurret()
+	{
+		return $this->data->json['upgrade_turret']->get(func_get_args());
+	}
+
+	public
+
 	function getUpgradeModule()
 	{
 		return $this->data->json['upgrade_module']->get(func_get_args());

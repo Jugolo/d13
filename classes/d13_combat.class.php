@@ -244,8 +244,17 @@ class d13_combat
 			// - - - - - MODULES
 
 			} else if ($group['type'] == 'module' && $group['input'] > 0) {
-			
-				$turret = new d13_turret($group['moduleId'], $group['level'], $group['input'], $group['unitId'], $this->defenderNode);
+							
+				$args = array();
+				$args['supertype'] 	= 'turret';
+				$args['obj_id'] 	= $group['moduleId'];
+				$args['level'] 		= $group['level']];
+				$args['input'] 		= $group['input'];
+				$args['unitId'] 	= $group['unitId'];
+				$args['node'] 		= this->defenderNode;
+				
+				$turret = new d13_object_turret($args);
+				
 				$stats = $turret->getStats();
 				$upgrades = $turret->getUpgrades();
 				

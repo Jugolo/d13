@@ -126,7 +126,7 @@
     "critical",
     "stealth",
     "fuel",
-    "maxinput",
+    "maxInput",
     "ratio",
     "duration"
   ],

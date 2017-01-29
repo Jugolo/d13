@@ -163,11 +163,11 @@ class d13_module_research extends d13_object_module
 				$tvars['tvar_costData'] = $costData;
 				$tvars['tvar_requirementsData'] = $requirementsData;
 				$tvars['tvar_tid'] = $tid;
-				$tvars['tvar_image'] = $d13->GetTechnology($this->node->data['faction'], $tid, 'image');
-				$tvars['tvar_techName'] = $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['name'];
-				$tvars['tvar_techDescription'] = $d13->getLangGL('technologies', $this->node->data['faction'], $tid, 'description');
-				$tvars['tvar_techTier'] = $this->node->technologies[$tid]['level'];
-				$tvars['tvar_techMaxTier'] = $technology['maxLevel'];
+				$tvars['tvar_image'] = $tmp_technology->data['image'];
+				$tvars['tvar_techName'] = $tmp_technology->data['name'];
+				$tvars['tvar_techDescription'] = $tmp_technology->data['description'];
+				$tvars['tvar_techTier'] = $tmp_technology->data['level'];
+				$tvars['tvar_techMaxTier'] = $tmp_technology->data['maxLevel'];
 				$tvars['tvar_duration'] = d13_misc::sToHMS((($technology['duration'] - $technology['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'research')) * 60, true);
 				$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.research", $tvars);
 				

@@ -1,4 +1,4 @@
-<div class="popup popup-unit-{{tvar_unitId}}">
+<div class="popup popup-unit-{{tvar_id}}">
 	<div class="card no-border large-card">
 		<div class="card-header no-border">
 			<div class="d13-heading">

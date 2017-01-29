@@ -56,7 +56,7 @@ class d13_object_base
 	
 	// ----------------------------------------------------------------------------------------
 	// checkStatsBase
-	// @
+	// @ Calculates all basic stats of the object
 	//
 	// ----------------------------------------------------------------------------------------
 
@@ -113,6 +113,17 @@ class d13_object_base
 				$level 	= 0;
 				$type	= $d13->getUnit($this->node->data['faction'], $args['obj_id'], "type");
 				$input	= 0;
+				$ctype 	= 'train';
+				$slot	= 0;
+				$amount = $this->node->units[$args['obj_id']]['value'];
+				break;
+			case 'turret':
+				$data 	= $d13->getUnit($this->node->data['faction'], $args['unitId']);
+				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $args['unitId'], "name");
+				$desc 	= $d13->getLangGL("units", $this->node->data['faction'], $args['unitId'], "description");
+				$level 	= $args['level'];
+				$type	= $d13->getUnit($this->node->data['faction'], $args['unitId'], "type");
+				$input	= $args['input'];
 				$ctype 	= 'train';
 				$slot	= 0;
 				$amount = $this->node->units[$args['obj_id']]['value'];
@@ -180,91 +191,144 @@ class d13_object_base
 
 	// ----------------------------------------------------------------------------------------
 	// checkStatsUpgrade
-	// @
-	//
+	// @ Calculates and applies all bonus stats that affect this object. this includes upgrades
+	// via module level, components, technologies and other upgrades.
 	// ----------------------------------------------------------------------------------------
 
 	public
 
 	function checkStatsUpgrade()
 	{
+	
 		global $d13;
+		
+		$upgrade_list = array();
 
-		// - - - - - - - - - - - - - - - COST & ATTRIBUTES
-
-		foreach($d13->getUpgradeUnit($this->node->data['faction']) as $upgrade) {
+		// - - - - - - - - - - - - - - - CHECK OBJECT TYPE AND UPGRADE LIST
+		switch ($this->data['supertype'])
+		{
+			case 'module':
+				$upgrade_list = $d13->getUpgradeModule($this->node->data['faction']);
+				break;
+			case 'component':
+				$upgrade_list = $d13->getUpgradeComponent($this->node->data['faction']);
+				break;
+			case 'technology':
+				$upgrade_list = $d13->getUpgradeTechnology($this->node->data['faction']);
+				break;
+			case 'unit':
+				$upgrade_list = $d13->getUpgradeUnit($this->node->data['faction']);
+				break;
+			case 'turret':
+				$upgrade_list = $d13->getUpgradeTurret($this->node->data['faction']);
+				break;
+		}
+		
+		// - - - - - - - - - - - - - - - GATHER COST & ATTRIBUTES
+		foreach($upgrade_list as $upgrade) {
 			if ($upgrade['type'] == $this->data['type'] && $upgrade['id'] == $this->data['id']) {
 
 				// - - - - - - - - - - - - - - - COST
-
 				if (isset($upgrade['cost'])) {
 					$this->data['cost_upgrade'] = $upgrade['cost'];
 				}
 
 				// - - - - - - - - - - - - - - - ATTRIBUTES
-
 				if (isset($upgrade['attributes'])) {
 					$this->data['attributes_upgrade'] = $upgrade['attributes'];
 				}
 			}
 		}
-
-		// - - - - - - - - - - - - - - - Component Upgrades
-
-		$unit_comp = array();
+		
+		// - - - - - - - - - - - - - - - Gather Module Level Upgrades
+		if ($this->data['supertype'] == 'module' || $this->data['supertype'] == 'turret') {
+			if (!empty($this->data['upgrades']) && $this->data['level'] > 1) {
+				foreach ($this->data['upgrades'] as $upgrade_id) {
+					$tmp_upgrade = $d13->getUpgradeModule($this->node->data['faction'], $upgrade_id);
+					if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $this->data['upgrades'])) {
+						$tmp_upgrade['level'] = $this->data['level'];
+						$my_upgrades[] = $tmp_upgrade;
+					}
+				}
+			}
+		}
+				
+		// - - - - - - - - - - - - - - - Gather Component Upgrades
+		$object_components = array();
 		foreach($this->data['requirements'] as $requirement) {
 			if ($requirement['type'] == 'components') {
-				$unit_comp[] = array(
+				$object_components[] = array(
 					'id' => $requirement['id'],
 					'amount' => $requirement['value']
 				);
 			}
 		}
 
-		// - - - - - - - - - - - - - - - Technology Upgrades
-
-		$unit_upgrades = array();
+		// - - - - - - - - - - - - - - - Gather Technology Upgrades
+		$object_upgrades = array();
 		foreach($this->node->technologies as $technology) {
 			if ($technology['level'] > 0) {
-				foreach($unit_comp as $component) {
+			
+				// - - - - - - - - - - - - - - - Append Component Upgrades
+				foreach($object_components as $component) {
 					if ($component['id'] == $technology['id']) {
-						$unit_upgrades[] = array(
+						$object_upgrades[] = array(
 							'id' => $technology['id'],
 							'level' => $technology['level'] * $component['amount'],
-							'upgrades' => $d13->getTechnology($this->node->data['faction'], $technology['id'], 'upgrades')
+							'upgrades' => $d13->getComponent($this->node->data['faction'], $technology['id'], 'upgrades')
 						);
 					}
 				}
 
-				// - - - - - - - - - - - - - - - Technology Upgrades
-
-				$unit_upgrades[] = array(
+				// - - - - - - - - - - - - - - - Append Technology Upgrades
+				$object_upgrades[] = array(
 					'id' => $technology['id'],
 					'level' => $technology['level'],
 					'upgrades' => $d13->getTechnology($this->node->data['faction'], $technology['id'], 'upgrades')
 				);
 			}
 		}
+		
+		// - - - - - - - - - - - - - - - Append Module Level Upgrades
+		if (isset($my_upgrades)) {
+			$object_upgrades = array_merge($object_upgrades, $my_upgrades);
+		}
+		
+		// - - - - - - - - - - - - - - - Apply Component and Technology Stat Upgrades
+		foreach($object_upgrades as $my_upgrade) {
+			if ($my_upgrade['level'] > 0) {
 
-		// - - - - - - - - - - - - - - - Apply Upgrades
+				foreach ($upgrade_list as $tmp_upgrade) {
+				
+				
+				
+				#print_r($tmp_upgrade);
+				
+				
+				
+					if ($tmp_upgrade['id'] == $my_upgrade['id']) {
 
-		foreach($unit_upgrades as $technology) {
-			foreach($technology['upgrades'] as $upgrade) {
-				if ($d13->getUpgradeUnit($this->node->data['faction'], $upgrade, 'id') == $this->data['id'] && $d13->getUpgradeUnit($this->node->data['faction'], $upgrade, 'type') == $this->data['type']) {
-					foreach($d13->getUpgradeUnit($this->node->data['faction'], $upgrade, 'attributes') as $stats) {
-						if ($stats['stat'] == 'all') {
-							foreach($d13->getGeneral('stats') as $stat) {
-								$this->data['upgrade_' . $stat] = d13_misc::upgraded_value($stats['value'] * $technology['level'], $this->data[$stat]);
+						#print_r($tmp_upgrade['attributes']);
+						#exit();
+						
+						foreach($tmp_upgrade['attributes'] as $stats) {
+							if ($stats['stat'] == 'all') {
+								foreach($d13->getGeneral('stats') as $stat) {
+									$this->data['upgrade_' . $stat] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stat]);
+								}
+							} else {
+								$this->data['upgrade_' . $stats['stat']] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stats['stat']]);
 							}
 						}
-						else {
-							$this->data['upgrade_' . $stats['stat']] = d13_misc::upgraded_value($stats['value'] * $technology['level'], $this->data[$stats['stat']]);
-						}
+
+
+
 					}
 				}
 			}
+		}
 
-	}
+
 	
 	}
 	
@@ -558,14 +622,14 @@ class d13_object_base
 			switch ($this->data['supertype'])
 			{
 				case 'unit':
-					$nowUpkeep 	= $this->data['upkeep']; #$d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeep'))
-					$upRes		= $this->data['upkeepResource']; #$d13->getUnit($this->node->data['faction'], $this->data['unitId'], 'upkeepResource')
+					$nowUpkeep 	= $this->data['upkeep'];
+					$upRes		= $this->data['upkeepResource'];
 					$limit 		= $d13->getGeneral('types', $this->data['type'], 'limit');
 					break;
 				
 				case 'component':
-					$nowUpkeep 	= $this->data['upkeep']; #$d13->getComponent($this->node->data['faction'], $this->data['id'], 'upkeep'))
-					$upRes		= $this->data['upkeepResource']; #$d13->getComponent($this->node->data['faction'], $this->data['id'], 'upkeepResource')
+					$nowUpkeep 	= $this->data['upkeep'];
+					$upRes		= $this->data['upkeepResource'];
 					$limit 		= $d13->getGeneral('types', $this->data['type'], 'limit');
 					break;
 				
