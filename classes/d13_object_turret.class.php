@@ -28,30 +28,6 @@ class d13_object_turret extends d13_object_base
 		parent::__construct($args);
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// getTemplateVariables
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function getTemplateVariables()
-	{
-		global $d13;
-		$tvars = array();
-		$tvars = $this->getStats();
-		
-		foreach ($this->data as $key => $value) {
-			if (!is_array($value)) {
-				$tvars['tvar_'.$key] = $value;
-			}
-		}
-		
-		return $tvars;	
-	}
-
-
 }
 
 // =====================================================================================EOF

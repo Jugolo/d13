@@ -42,14 +42,11 @@ class d13_object_unit extends d13_object_base
 		global $d13;
 		$tvars = array();
 		
+		$tvars = parent::getTemplateVariables();
+		
 		$upgradeData = $this->getUpgrades();
 		
-		foreach ($this->data as $key => $value) {
-			if (!is_array($value)) {
-				$tvars['tvar_'.$key] = $value;
-			}
-		}
-		
+			
 		$tvars['tvar_id'] 				= $this->data['id'];
 		$tvars['tvar_type'] 			= $this->data['type'];
 		$tvars['tvar_class'] 			= $d13->getLangGL('classes', $this->data['class']);

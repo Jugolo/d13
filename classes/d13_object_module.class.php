@@ -97,14 +97,9 @@ class d13_object_module extends d13_object_base
 	{
 		global $d13;
 		$tvars = array();
-		$tvars = $this->getStats();
 		
-		foreach ($this->data as $key => $value) {
-			if (!is_array($value)) {
-				$tvars['tvar_'.$key] = $value;
-			}
-		}
-		
+		$tvars = parent::getTemplateVariables();
+				
 		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
 		$tvars['tvar_nodeID'] = $this->node->data['id'];
 		$tvars['tvar_slotID'] = $this->data['slotId'];
