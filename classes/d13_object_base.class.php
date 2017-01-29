@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// OBJECT.CLASS
+// OBJECT_BASE.CLASS
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
@@ -21,10 +21,8 @@ class d13_object_base
 
 	// ----------------------------------------------------------------------------------------
 	// construct
-	// @
-	//
+	// @ main contructor for all object types, sets up all basic attributes and stats
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function __construct($args = array())
@@ -38,8 +36,7 @@ class d13_object_base
 
 	// ----------------------------------------------------------------------------------------
 	// setNode
-	// @
-	//
+	// @ sets up the parent node this object belongs to
 	// ----------------------------------------------------------------------------------------
 	public
 
@@ -57,9 +54,7 @@ class d13_object_base
 	// ----------------------------------------------------------------------------------------
 	// checkStatsBase
 	// @ Calculates all basic stats of the object
-	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkStatsBase($args)
@@ -77,12 +72,10 @@ class d13_object_base
 				$type	= $d13->getModule($this->node->data['faction'], $args['obj_id'], 'type');
 				$input	= $this->node->modules[$args['slotId']]['input'];
 				$ctype 	= 'build';
-				$slot	= $args['slotId'];
-								
+				$slot	= $args['slotId'];	
 				$result = $d13->dbQuery('select count(*) as count from modules where node="' . $this->node->data['id'] . '" and module="' . $args['obj_id'] . '"');
 				$row = $d13->dbFetch($result);
 				$amount = $row['count'];
-			
 				break;				
 			case 'component':
 				$data 	= $d13->getComponent($this->node->data['faction'], $args['obj_id']);
@@ -344,13 +337,15 @@ class d13_object_base
 	{
 		global $d13;
 
-	
+		/*
+				MOVING TO CHILD CLASSES
+		*/
+		
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// getCheckRequirements
-	// @
-	//
+	// @ Return TRUE if requirements are met (tech, components etc.), otherwise returns FALSE
 	// ----------------------------------------------------------------------------------------
 
 	public
@@ -368,10 +363,8 @@ class d13_object_base
 
 	// ----------------------------------------------------------------------------------------
 	// getCheckCost
-	// @
-	//
+	// @ Returns TRUE if cost is covered (resources), otherwise returns FALSE
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getCheckCost()
@@ -387,9 +380,10 @@ class d13_object_base
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// getModuleImage
-	// @
-	//
+	// getObjectImage
+	// @ Return the current image of the object, according to it's level (modules only)
+	// Note: Currently only used by modules, but could be easily used by other object types as
+	// well in the future.
 	// ----------------------------------------------------------------------------------------
 
 	public
@@ -411,8 +405,7 @@ class d13_object_base
 
 	// ----------------------------------------------------------------------------------------
 	// getPendingImage
-	// @
-	//
+	// @ Return the very first image of the object, is used as pending image (modules only)
 	// ----------------------------------------------------------------------------------------
 	public
 
@@ -428,13 +421,10 @@ class d13_object_base
 		return NULL;
 	}
 
-
 	// ----------------------------------------------------------------------------------------
 	// getRequirements
-	// @
-	//
+	// @ Gather and return all requirements of this object as an array
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getRequirements()
@@ -462,10 +452,9 @@ class d13_object_base
 
 	// ----------------------------------------------------------------------------------------
 	// getCost
-	// @
-	//
+	// @ Gather and return all costs of this object as an array
+	// Note: Can optionally return UPGRADE costs instead of BUY costs (modules and tech only)
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getCost($upgrade = false)
@@ -501,10 +490,8 @@ class d13_object_base
 
 	// ----------------------------------------------------------------------------------------
 	// getStats
-	// @
-	//
+	// @ Gather and return all base stats of the object
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getStats()
@@ -520,10 +507,8 @@ class d13_object_base
 
 	// ----------------------------------------------------------------------------------------
 	// getUpgrades
-	// @
-	//
+	// @ Gather and return all upgrade bonus stats of the object
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getUpgrades()
@@ -537,12 +522,11 @@ class d13_object_base
 		return $stats;
 	}
 	
-		// ----------------------------------------------------------------------------------------
-	// getCostList
-	// @
-	//
 	// ----------------------------------------------------------------------------------------
-
+	// getCostList
+	// @ Gather and return a complete list of Costs ready for output
+	// Note: Todo: The markup should be moved to a template later.
+	// ----------------------------------------------------------------------------------------
 	public
 
 	function getCostList()
@@ -563,10 +547,9 @@ class d13_object_base
 	
 	// ----------------------------------------------------------------------------------------
 	// getRequirementsList
-	// @
-	//
+	// @ Gather and return a complete list of Requirements ready for output
+	// Note: Todo: The markup should be moved to a template later.
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getRequirementsList()
@@ -610,8 +593,8 @@ class d13_object_base
 
 	// ----------------------------------------------------------------------------------------
 	// getMaxProduction
-	// @
-	//
+	// @ Return the maximum amount of object instances that the player can currently build/buy/craft
+	// Note: This works for all object types including Modules (Buildings)
 	// ----------------------------------------------------------------------------------------
 	public
 
@@ -677,4 +660,3 @@ class d13_object_base
 }
 
 // =====================================================================================EOF
-

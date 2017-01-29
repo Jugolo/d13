@@ -16,12 +16,10 @@
 class d13_object_module extends d13_object_base
 
 {
-	#public $data, $node, $checkRequirements, $checkCost;
 
 	// ----------------------------------------------------------------------------------------
 	// construct
-	// @
-	//
+	// @ Calls base object constructor with an array based argument list
 	// ----------------------------------------------------------------------------------------
 
 	public
@@ -31,121 +29,9 @@ class d13_object_module extends d13_object_base
 		parent::__construct($args);
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// setNode
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-/*
-	public
-
-	function setNode($node)
-	{
-		$this->node = $node;
-		$this->node->getModules();
-		$this->node->getTechnologies();
-		$this->node->getComponents();
-		$this->node->getUnits();
-	}
-*/
-	// ----------------------------------------------------------------------------------------
-	// checkUpgrades
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-	/*
-	public
 	
-	function checkUpgrades()
-	{
-		global $d13;
-		
-		$my_upgrades = array();
-				
-		// - - - - - - - - - - - - - - - MODULE UPGRADES
-		if (!empty($this->data['upgrades']) && $this->data['type'] != 'unit' && $this->data['level'] > 1) {
-			foreach ($this->data['upgrades'] as $upgrade_id) {
-				$tmp_upgrade = $d13->getUpgradeModule($this->node->data['faction'], $upgrade_id);
-				if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $this->data['upgrades'])) {
-					$tmp_upgrade['level'] = $this->data['level'];
-					$my_upgrades[] = $tmp_upgrade;
-				}
-			}
-		}
-		
-		// - - - - - - - - - - - - - - - TECHNOLOGY UPGRADES
-		$tmp_list = array();
-		foreach($this->node->technologies as $technology) {
-			if ($technology['level'] > 0) {
-				$tmp_technology = $d13->getTechnology($this->node->data['faction'], $technology['id']);
-				foreach ($tmp_technology['upgrades'] as $tmp_upgrade) {
-					$tmp_levels[$tmp_upgrade] = $technology['level'];
-					$tmp_list[] = $tmp_upgrade;
-				}
-			}
-		}
-		
-		if (!empty($tmp_list)) {
-			foreach ($d13->getUpgradeModule($this->node->data['faction']) as $tmp_upgrade) {
-				if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $tmp_list)) {
-					
-					
-					$pass = false;
-					if (empty($tmp_upgrade['targets']) && ($tmp_upgrade['type'] == $this->data['type'])) {
-						$pass = true;
-					} else if (!empty($tmp_upgrade['targets']) && in_array($this->data['id'], $tmp_upgrade['targets'])) {
-						$pass = true;
-					}
-					
-					
-					
-					if ($pass) {
-						$tmp_upgrade['level'] = $tmp_levels[$tmp_upgrade['id']];
-						$my_upgrades[] = $tmp_upgrade;
-						unset($tmp_list[$tmp_upgrade['id']]);
-					}
-				}
-			}
-		}
-		
-		// - - - - - - - - - - - - - - - APPLY UPGRADES
-		if (!empty($my_upgrades)) {
-			foreach ($my_upgrades as $upgrade) {
-			
-				//- - - Cost Upgrade
-				if (isset($upgrade['cost'])) {
-					$this->data['upgrade_cost'] = $upgrade['cost'];
-				}
-		
-				//- - - Requirements Upgrade
-				if (isset($upgrade['requirements'])) {
-					$this->data['upgrade_requirements'] = $upgrade['requirements'];
-				}
-				
-				//- - - Attributes Upgrade
-				foreach ($upgrade['attributes'] as $attribute) {
-					if (isset($attribute['stat'])) {
-						if ($attribute['stat'] == 'all' && ($this->data['type'] == 'unit')) {
-							foreach($d13->getGeneral('stats') as $stat) {
-								$value = $attribute['value'] * $upgrade['level'];
-								$this->data[$stat] += $value;
-								$this->data['upgrade_' . strtolower($stat)] += $value;
-							}
-						} else if ($attribute['stat'] != 'all') {
-							$value = $attribute['value'] * $upgrade['level'];
-							$this->data[$attribute['stat']] += $value;
-							$this->data['upgrade_' . strtolower($attribute['stat'])] += $value;
-						}
-					}
-				}
-		
-			}
-		}
-	
-	}
-*/
 	// ----------------------------------------------------------------------------------------
-	// setAttributes
+	// checkStatsExtended
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
@@ -155,48 +41,17 @@ class d13_object_module extends d13_object_base
 	function checkStatsExtended()
 	{
 		global $d13;
-		
-		
-		
-		#$moduleId = $this->data['obj_id']; #obsolete
-		#$this->data['slotId'] = $this->data['slotId']; #obsolete
-		#$type = $this->data['type']; #obsolete
-		
-		
+				
 		$this->data['busy'] 		= false;			// is this building currently busy?
 		$this->data['count'] 		= 0;				// count of other objects in this building?
 		$this->data['available'] 	= 0;				// is any action available in this building?
 		
-		
-		#$this->data = array();
-		#$this->data = $d13->getModule($this->node->data['faction'], $moduleId);
-	
-		#$this->data['upgrade_cost'] = array();
-		#$this->data['upgrade_requirements'] = array();
 		$this->data['base_maxinput'] = $this->data['maxInput'];
 		$this->data['base_ratio'] = $this->data['ratio'];
-		#$this->data['moduleId'] = $moduleId;
-		#$this->data['slotId'] = $this->data['slotId'];
-		#$this->data['type'] = $type;
-		#$this->data['level'] = 0;
 		
 		$this->data['totalIR'] = $this->node->modules[$this->data['slotId']]['input'] * $this->data['ratio'];
 		$this->data['cost'] = $this->getCost();
 		
-		#foreach($d13->getGeneral('stats') as $stat) {
-		#	$this->data['upgrade_' . $stat] = 0;
-		#}
-		
-		#if ($this->node->modules[$this->data['slotId']]['level'] > 0) {
-			
-		#	$this->data['level'] = $this->node->modules[$this->data['slotId']]['level'];
-		#	$this->checkUpgrades();
-		#	$this->data['cost'] = $this->getCost(true);
-		#}
-		
-		#$this->data['moduleImage'] = '';
-		#$this->data['name'] = $d13->getLangGL('modules', $this->node->data['faction'], $this->data['moduleId'], 'name');
-		#$this->data['description'] = $d13->getLangGL('modules', $this->node->data['faction'], $this->data['moduleId'], 'description');
 		$this->data['inputLimit'] = floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'], $this->node->modules[$this->data['slotId']]['input'])); #floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'] + $this->node->modules[$this->data['slotId']]['input']));
 		
 		if (isset($this->data['inputResource'])) {
@@ -336,49 +191,6 @@ class d13_object_module extends d13_object_base
 		return $tvars;
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// getModuleImage
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-/*
-	public
-
-	function getModuleImage()
-	{
-		global $d13;
-		$this->data['image'] = '';
-		
-		foreach($this->data['images'] as $image) {
-			if ($image['level'] <= $this->data['level']) {
-				$this->data['image'] = $image['image'];
-			}
-			if ($image['level'] == 1) {
-				$this->data['trueimage'] = $image['image'];
-			}
-		}
-	}
-*/
-	// ----------------------------------------------------------------------------------------
-	// getPendingImage
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-/*
-	public
-
-	function getPendingImage()
-	{
-		global $d13;
-		
-		foreach($this->data['images'] as $image) {
-			if ($image['level'] == 0) {
-				return $image['image'];
-			}
-		}
-		return NULL;
-	}
-*/
 	// ----------------------------------------------------------------------------------------
 	// getInputSlider
 	// Generate and return a Range Input Slider with given parameters for min/max/disabling
@@ -576,75 +388,6 @@ class d13_object_module extends d13_object_base
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// getCostList
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-/*
-	public
-
-	function getCostList()
-	{
-		global $d13;
-		$html = '';
-		if ($d13->getGeneral('options', 'moduleUpgrade') && $this->data['level'] < $this->data['maxLevel']) {
-			
-			foreach($this->data['cost'] as $key => $cost) {
-				$html.= '<div class="cell"><a class="tooltip-left" data-tooltip="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></a></div><div class="cell">' . $cost['value'] . '</div>';
-			}
-		}
-
-		return $html;
-	}
-*/
-	// ----------------------------------------------------------------------------------------
-	// getRequirementsList
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-/*
-	public
-
-	function getRequirementsList()
-	{
-	
-		global $d13;
-		$html = '';
-		
-		if (!count($this->data['requirements'])) {
-			$html = $d13->getLangUI('none');
-		} else {
-			foreach($this->data['requirements'] as $key => $requirement) {
-				
-				if (isset($requirement['level'])) {
-					$value = $requirement['level'];
-					$tooltip = $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . " [L".$value."]";
-				}
-				else {
-					$value = $requirement['value'];
-					$tooltip = $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . " [x".$value."]";
-				}
-
-				if ($requirement['type'] == 'modules') {
-					$images = array();
-					$images = $d13->getModule($this->node->data['faction'], $requirement['id'], 'images');
-					$image = $images[1]['image'];
-				} else if ($requirement['type'] == 'technology') {
-					$image = $d13->getTechnology($this->node->data['faction'], $requirement['id'], 'image');
-				} else if ($requirement['type'] == 'component') {
-					$image = $d13->getComponent($this->node->data['faction'], $requirement['id'], 'image');
-				} else {
-					$image = $requirement['id'];
-				}
-
-				$html.= '<div class="cell">' . $value . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $tooltip . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div>';
-			}
-		}
-
-		return $html;
-	}
-*/
-	// ----------------------------------------------------------------------------------------
 	// getOutputList
 	// @
 	//
@@ -656,45 +399,6 @@ class d13_object_module extends d13_object_base
 	{
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// getCost
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-/*
-	public
-
-	function getCost($upgrade = false)
-	{
-		global $d13;
-		$cost_array = array();
-		foreach($this->data['cost'] as $key => $cost) {
-			$tmp_array = array();
-			$tmp_array['resource'] = $cost['resource'];
-			$tmp_array['value'] = $cost['value'] * $d13->getGeneral('users', 'cost', 'build');
-			$tmp_array['name'] = $d13->getLangGL('resources', $cost['resource'], 'name');
-			$tmp_array['icon'] = $cost['resource'] . '.png';
-			$tmp_array['factor'] = 1;
-			if ($upgrade && $this->data['level'] > 0 && !empty($this->data['upgrade_cost'])) {
-				foreach($this->data['upgrade_cost'] as $key => $upcost) {
-					$tmp2_array = array();
-					$tmp2_array['resource'] = $upcost['resource'];
-					$tmp2_array['value'] = $upcost['value'] * $d13->getGeneral('users', 'cost', 'build');
-					$tmp2_array['name'] = $d13->getLangGL('resources', $upcost['resource'], 'name');
-					$tmp2_array['icon'] = $d13->getResource($upcost['resource'], 'image');
-					$tmp2_array['factor'] = $upcost['factor'];
-					if ($tmp_array['resource'] == $tmp2_array['resource']) {
-						$tmp_array['value'] = $tmp_array['value'] + floor($tmp2_array['value'] * $tmp2_array['factor'] * $this->data['level']);
-					}
-				}
-			}
-
-			$cost_array[] = $tmp_array;
-		}
-
-		return $cost_array;
-	}
-*/
 	// ----------------------------------------------------------------------------------------
 	// getTemplate
 	// @
