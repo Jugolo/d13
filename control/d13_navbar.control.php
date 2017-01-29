@@ -82,7 +82,8 @@ class d13_navBarController extends d13_controller
 					
 						}
 				
-						$html = '<a class="tooltip-top link external" data-tooltip="' . $d13->getLangUI($nav['name']) . '" href="index.php?p=' . $nav['link'] . '&nodeId=' . $this->nodeId . '"><span><img class="'.$class.' d13-icon" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/' . $icon . '"></span></a>';
+						$html = '<a class="tooltip-top link external" data-tooltip="' . $d13->getLangUI($nav['name']) . '" href="index.php?p=' . $nav['link'] . '"><span><img class="'.$class.' d13-icon" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/' . $icon . '"></span></a>';
+
 						if ($nav['class'] == 'left') {
 							$html_left.= $html;
 						} else {
