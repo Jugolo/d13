@@ -14,7 +14,6 @@ This project uses images from the following sources:<br>
 This project, uses open-source code from the following sources:<br>
 - "Framework7" by Vladimir Kharlampidi from iDangero.us http://framework7.io<br>
 - "Animate CSS" by Daniel Eden https://daneden.github.io/animate.css/<br>
-- "Responsive Hexagon Grid" by web-tiki https://github.com/web-tiki/responsive-grid-of-hexagons<br>
 - "PHPMailer" class from http://phpmailer.sourceforge.net<br>
 - "Simple CSS Tooltip" by Chris Bracco https://chrisbracco.com<br>
 - "Bullet Proof Sessions" by Robert Hafner<br><br>
