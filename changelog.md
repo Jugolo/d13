@@ -19,6 +19,9 @@ V017	--- UPCOMING UPDATE ---
 
 V016	* Fixed a few more bugs (thanks to BlackScorp)
 		* Added autoload to classes
+		* Added LINUX line breaks
+		* most object classes are now derived from one base class
+		
 
 V015	* Project now also on Github: https://github.com/CriticalHit-d13/d13
 		* Added pagination to league ranking list			
