@@ -294,26 +294,20 @@ class d13_object_base
 				foreach ($upgrade_list as $tmp_upgrade) {
 				
 				
-				
-				#print_r($tmp_upgrade);
-				
-				
-				
 					if ($tmp_upgrade['id'] == $my_upgrade['id']) {
 
-						#print_r($tmp_upgrade['attributes']);
-						#exit();
 						
-						foreach($tmp_upgrade['attributes'] as $stats) {
-							if ($stats['stat'] == 'all') {
-								foreach($d13->getGeneral('stats') as $stat) {
-									$this->data['upgrade_' . $stat] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stat]);
+						if ($tmp_upgrade['attributes'] ) {
+							foreach($tmp_upgrade['attributes'] as $stats) {
+								if ($stats['stat'] == 'all') {
+									foreach($d13->getGeneral('stats') as $stat) {
+										$this->data['upgrade_' . $stat] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stat]);
+									}
+								} else {
+									$this->data['upgrade_' . $stats['stat']] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stats['stat']]);
 								}
-							} else {
-								$this->data['upgrade_' . $stats['stat']] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stats['stat']]);
 							}
 						}
-
 
 
 					}
