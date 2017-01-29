@@ -21,10 +21,8 @@ class d13_combat
 	
 	// ----------------------------------------------------------------------------------------
 	// construct
-	// @
-	//
+	// @ Creates a new combat instances and immediately starts the war using the provided data
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function __construct($data)
@@ -378,18 +376,22 @@ class d13_combat
 	{
 		
 		global $d13;
-		
-		// - - - Ignore if Scout was successful
-		if (!$data['combat']['requiresScoutCheck'] || ($data['combat']['requiresScoutCheck'] && $data['output']['attacker']['scoutCheck'] <= 0)) {
 
-			foreach($data['input']['attacker']['groups'] as $key => $group) {
-				if ($group['quantity'] > 0) {
-
-					$damage = 0;
-					$casualties = 0;
+		foreach($data['input']['attacker']['groups'] as $key => $group) {
+			if ($group['quantity'] > 0) {
+	
+				$baseDamage = 0;
+				$damage = 0;
+				$casualties = 0;
+				$bonusDamage = 0;
+						
+				// - - - Ignore if Scout was successful
+				if (!$data['combat']['requiresScoutCheck'] || ($data['combat']['requiresScoutCheck'] && $data['output']['attacker']['scoutCheck'] <= 0)) {
 					$baseDamage = $data['input']['defender']['trueDamage'];
-					$bonusDamage = 0;
-		
+				}
+						
+				if ($baseDamage > 0) {
+						
 					$class = $d13->getUnit($data['input']['attacker']['faction'], $group['unitId'], 'class');
 					foreach ($data['classes']['defender'] as $classKey => $damageMod) {
 						if ($classKey == $class) {
@@ -398,7 +400,6 @@ class d13_combat
 					}
 				
 					$damage = 1 + $baseDamage + $bonusDamage;
-				
 					$casualties = floor($damage / ($group['hp']/$group['quantity']));
 					$data['input']['defender']['trueDamage'] -= $casualties * $group['hp'];
 				
@@ -407,16 +408,11 @@ class d13_combat
 					$group['quantity'] -= $casualties;
 				
 					if ($group['quantity'] < 0) { $group['quantity'] = 0; }
-				
-					$data['output']['attacker']['groups'][$key] = $group;
-					$data['output']['defender']['totalDamage'] += $damage;
-			
+						
 				}
-			
-				//- - - leave if no more damage left
-				if ($data['input']['defender']['trueDamage'] <= 0) {
-					break;
-				}
+						
+				$data['output']['attacker']['groups'][$key] = $group;
+				$data['output']['defender']['totalDamage'] += $damage;
 			
 			}
 		
@@ -436,17 +432,22 @@ class d13_combat
 	
 		global $d13;
 	
-		// - - - Ignore if Scout was successful
-		if (!$data['combat']['requiresScoutCheck'] || ($data['combat']['requiresScoutCheck'] && $data['output']['attacker']['scoutCheck'] <= 0)) {
 		
-			foreach($data['input']['defender']['groups'] as $key => $group) {
-				if ($group['quantity'] > 0) {
+		foreach($data['input']['defender']['groups'] as $key => $group) {
+			if ($group['quantity'] > 0) {
 				
-					$damage = 0;
-					$casualties = 0;
-					$baseDamage = $data['input']['attacker']['trueDamage'];
-					$bonusDamage = 0;
-		
+				$baseDamage = 0;
+				$damage = 0;
+				$casualties = 0;
+				$bonusDamage = 0;
+					
+				// - - - Ignore if Scout was successful
+				if (!$data['combat']['requiresScoutCheck'] || ($data['combat']['requiresScoutCheck'] && $data['output']['attacker']['scoutCheck'] <= 0)) {
+					$baseDamage = $data['input']['attacker']['trueDamage'];	
+				}
+					
+				if ($baseDamage > 0) {
+					
 					$class = $d13->getUnit($data['input']['defender']['faction'], $group['unitId'], 'class');
 					foreach ($data['classes']['attacker'] as $classKey => $damageMod) {
 						if ($classKey == $class) {
@@ -455,7 +456,6 @@ class d13_combat
 					}
 				
 					$damage = 1 + $baseDamage + $bonusDamage;
-				
 					$casualties = floor($damage / ($group['hp']/$group['quantity']));
 					$data['input']['attacker']['trueDamage'] -= $casualties * $group['hp'];
 				
@@ -468,16 +468,11 @@ class d13_combat
 						$group['input'] -= $casualties;
 						if ($group['input'] < 0) { $group['input'] = 0; }
 					}
-
-					$data['output']['defender']['groups'][$key] = $group;
-					$data['output']['attacker']['totalDamage']	+= $damage;
-			
+					
 				}
-			
-				//- - - leave if no more damage left
-				if ($data['input']['attacker']['trueDamage'] <= 0) {
-					break;
-				}
+					
+				$data['output']['defender']['groups'][$key] = $group;
+				$data['output']['attacker']['totalDamage']	+= $damage;
 			
 			}
 		
@@ -642,7 +637,7 @@ class d13_combat
 		shuffle($tmp_result);
 		$tmp_result = d13_misc::record_sort($tmp_result, 'value', true);
 
-		$data['output']['attacker']['results'] = $tmp_result;
+		$data['output']['attacker']['results']['scout_units'] = $tmp_result;
 		
 		return $data;
 	
@@ -674,7 +669,7 @@ class d13_combat
 		shuffle($tmp_result);
 		$tmp_result = d13_misc::record_sort($tmp_result, 'level', true);
 		
-		$data['output']['attacker']['results'] = $tmp_result;
+		$data['output']['attacker']['results']['scout_technologies'] = $tmp_result;
 		
 		return $data;
 	
@@ -711,7 +706,7 @@ class d13_combat
 		$tmp_result = array_merge($tmp_result, $tmp_result2);
 		$tmp_result = d13_misc::record_sort($tmp_result, 'level', true);
 		
-		$data['output']['attacker']['results'] = $tmp_result;
+		$data['output']['attacker']['results']['scout_modules'] = $tmp_result;
 		
 		return $data;
 	
@@ -743,7 +738,7 @@ class d13_combat
 		shuffle($tmp_result);
 		$tmp_result = d13_misc::record_sort($tmp_result, 'rarity', true);
 		
-		$data['output']['attacker']['results'] = $tmp_result;
+		$data['output']['attacker']['results']['scout_resources'] = $tmp_result;
 		
 		return $data;
 	
@@ -788,37 +783,42 @@ class d13_combat
 	{
 		global $d13;
 		
-		$exp_value = 0;
-		$attackerTrophies = $d13->getGeneral('factors', 'experience') + count($d13->getLeague());
-		$defenderTrophies = $d13->getGeneral('factors', 'experience') + count($d13->getLeague());
+		// - - - Ignore if Scout was successful
+		if (!$data['combat']['requiresScoutCheck'] || ($data['combat']['requiresScoutCheck'] && $data['output']['attacker']['scoutCheck'] <= 0)) {
 		
-		$a = $this->attackerUser->data['trophies'] +1;
-		$b = $this->defenderUser->data['trophies'] +1;
-		$difference		= sqrt($a / $b);
+			$exp_value = 0;
+			$attackerTrophies = $d13->getGeneral('factors', 'experience') + count($d13->getLeague());
+			$defenderTrophies = $d13->getGeneral('factors', 'experience') + count($d13->getLeague());
 		
-		$exp_value 		= floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'experience'));
-		$attackerTrophies = floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'trophies'));
-		$defenderTrophies = floor(($difference * $defenderTrophies)  / $d13->getGeneral('factors', 'trophies'));
+			$a = $this->attackerUser->data['trophies'] +1;
+			$b = $this->defenderUser->data['trophies'] +1;
+			$difference		= sqrt($a / $b);
 		
-		if ($data['output']['attacker']['winner'] > 0) {
-			$attackerTrophies = abs($attackerTrophies);
-			$defenderTrophies = $defenderTrophies * -1;
-		} else {
-			$attackerTrophies = $attackerTrophies * -1;
-			$defenderTrophies = abs($defenderTrophies);
-		}
+			$exp_value 		= floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'experience'));
+			$attackerTrophies = floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'trophies'));
+			$defenderTrophies = floor(($difference * $defenderTrophies)  / $d13->getGeneral('factors', 'trophies'));
+		
+			if ($data['output']['attacker']['winner'] > 0) {
+				$attackerTrophies = abs($attackerTrophies);
+				$defenderTrophies = $defenderTrophies * -1;
+			} else {
+				$attackerTrophies = $attackerTrophies * -1;
+				$defenderTrophies = abs($defenderTrophies);
+			}
 
-		// - - - - - Attacker Stats
-		$status = $this->attackerUser->addStat('experience', $exp_value);
-		$status = $this->attackerUser->addStat('trophies', $attackerTrophies);
+			// - - - - - Attacker Stats
+			$status = $this->attackerUser->addStat('experience', $exp_value);
+			$status = $this->attackerUser->addStat('trophies', $attackerTrophies);
 		
-		// - - - - - Defender Stats
-		$status = $this->defenderUser->addStat('trophies', $defenderTrophies);
+			// - - - - - Defender Stats
+			$status = $this->defenderUser->addStat('trophies', $defenderTrophies);
 		
-		$data['output']['attacker']['userstat']['experience'] 	= $exp_value;
-		$data['output']['attacker']['userstat']['trophies'] 	= $attackerTrophies;
-		$data['output']['defender']['userstat']['trophies'] 	= $defenderTrophies;
-						
+			$data['output']['attacker']['userstat']['experience'] 	= $exp_value;
+			$data['output']['attacker']['userstat']['trophies'] 	= $attackerTrophies;
+			$data['output']['defender']['userstat']['trophies'] 	= $defenderTrophies;
+		
+		}
+			
 		return $data;
 		
 	}
@@ -967,10 +967,10 @@ class d13_combat
 		// ============================== Process Data
 		$d13->dbQuery('start transaction');
 		
-		$data['output']['defender']['results'] = $realResList;
+		$data['output']['defender']['results']['raid_resources'] = $realResList;
 		$ok = $this->defenderNode->setResources($realResList);
 		
-		$data['output']['attacker']['results'] = $realResList;
+		$data['output']['attacker']['results']['raid_resources'] = $realResList;
 		$ok = $this->attackerNode->setResources($realResList, 1);
 
 		if ($ok) {
@@ -1150,6 +1150,250 @@ class d13_combat
 	}
 	
 	// ----------------------------------------------------------------------------------------
+	// assembleRaidResources
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function assembleRaidResources($data)
+	{
+		
+		global $d13;
+	
+		$html = '';
+		$open = false;
+		$limit = 7;
+		$i = 0;
+		
+		foreach ($data['output']['attacker']['results']['raid_resources'] as $result) {
+					
+			if ($i == 0) {
+				$html .= '<div class="row">';
+				$open = true;
+			}
+					
+			$vars = array();
+			$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($result['resource'], 'image');
+			$vars['tvar_listLabel'] 	= $d13->getLangGL('resources', $result['resource'], 'name');
+			$vars['tvar_listAmount'] 	= '+'.$result['value'];
+			
+			$html .= $d13->templateSubpage("msg.combat.resource", $vars);
+				
+			if ($i == $limit) {
+				$html_result .= '</div>';
+				$i = -1;
+				$open = false;
+			}
+				
+			$i++;
+			
+		}
+				
+		if ($open) {
+			$html .= '</div>';
+		}
+			
+		return $html;
+	
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// assembleScoutResources
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function assembleScoutResources($data)
+	{
+		
+		global $d13;
+		
+		$html = '';
+		$open = false;
+		$limit = 7;
+		$i = 0;
+		
+		foreach ($data['output']['attacker']['results']['scout_resources'] as $result) {
+			
+			if ($i == 0) {
+				$html .= '<div class="row">';
+				$open = true;
+			}
+					
+			$vars = array();
+			$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($result['resource'], 'image');
+			$vars['tvar_listLabel'] 	= $d13->getLangGL('resources', $result['resource'], 'name');
+			$vars['tvar_listAmount'] 	= floor($result['value']);
+		
+			$html .= $d13->templateSubpage("msg.combat.resource", $vars);
+				
+			if ($i == $limit) {
+				$html .= '</div>';
+				$i = -1;
+				$open = false;
+			}
+				
+			$i++;
+			
+		}
+				
+		if ($open) {
+			$html .= '</div>';
+		}
+			
+		return $html;
+	
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// assembleScoutModules
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function assembleScoutModules($data)
+	{
+		
+		global $d13;
+		
+		$html = '';
+		$open = false;
+		$limit = 7;
+		$i = 0;
+		
+		foreach ($data['output']['attacker']['results']['scout_modules'] as $result) {
+					
+			if ($i == 0) {
+				$html .= '<div class="row">';
+				$open = true;
+			}
+
+			$tmp_module = $d13->getModule($this->defenderNode->data['faction'], $result['module']);
+			$image = $tmp_module['images'][0]['image'];
+			
+			$vars = array();
+			$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/modules/' . $this->defenderNode->data['faction'] . "/" . $image;
+			$vars['tvar_listLabel'] 	= $d13->getLangGL('modules', $this->defenderNode->data['faction'], $result['module'], 'name');
+			$vars['tvar_listAmount'] 	= 'L'.$result['level'];
+		
+			$html .= $d13->templateSubpage("msg.combat.resource", $vars);
+				
+			if ($i == $limit) {
+				$html .= '</div>';
+				$i = -1;
+				$open = false;
+			}
+				
+			$i++;
+			
+		}
+				
+		if ($open) {
+			$html .= '</div>';
+		}
+			
+		return $html;
+
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// assembleScoutTechnologies
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function assembleScoutTechnologies($data)
+	{
+
+		global $d13;
+		
+		$html = '';
+		$open = false;
+		$limit = 7;
+		$i = 0;
+		
+		foreach ($data['output']['attacker']['results']['scout_technologies'] as $result) {
+					
+			if ($i == 0) {
+				$html .= '<div class="row">';
+				$open = true;
+			}
+			
+			$tmp_technology = $d13->getTechnology($this->defenderNode->data['faction'], $result['technology']);
+			$image = $tmp_technology['images'][0]['image'];
+
+			$vars = array();
+			$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->defenderNode->data['faction'] . "/" . $image;
+			$vars['tvar_listLabel'] 	= $d13->getLangGL('technologies', $this->defenderNode->data['faction'], $result['technology'], 'name');
+			$vars['tvar_listAmount'] 	= 'L'.$result['level'];			
+		
+			$html .= $d13->templateSubpage("msg.combat.resource", $vars);
+				
+			if ($i == $limit) {
+				$html .= '</div>';
+				$i = -1;
+				$open = false;
+			}
+				
+			$i++;
+			
+		}
+				
+		if ($open) {
+			$html .= '</div>';
+		}
+			
+		return $html;
+
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// assembleScoutUnits
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function assembleScoutUnits($data)
+	{
+	
+		global $d13;
+	
+		$html = '';
+		$open = false;
+		$limit = 7;
+		$i = 0;
+		
+		foreach ($data['output']['attacker']['results']['scout_units'] as $result) {
+					
+			if ($i == 0) {
+				$html .= '<div class="row">';
+				$open = true;
+			}
+			
+			$tmp_unit = $d13->getUnit($this->defenderNode->data['faction'], $result['unit']);
+			$image = $tmp_unit['images'][0]['image'];
+
+			$vars = array();
+			$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->defenderNode->data['faction'] . "/" . $image;
+			$vars['tvar_listLabel'] 	= $d13->getLangGL('units', $this->defenderNode->data['faction'], $result['unit'], 'name');
+			$vars['tvar_listAmount'] 	= '#'.$result['value'];
+		
+			$html .= $d13->templateSubpage("msg.combat.resource", $vars);
+				
+			if ($i == $limit) {
+				$html .= '</div>';
+				$i = -1;
+				$open = false;
+			}
+				
+			$i++;
+			
+		}
+				
+		if ($open) {
+			$html .= '</div>';
+		}
+			
+		return $html;
+
+	}
+	
+	// ----------------------------------------------------------------------------------------
 	// assembleReport
 	// ----------------------------------------------------------------------------------------
 	private
@@ -1180,7 +1424,7 @@ class d13_combat
 			}
 		}
 
-		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  Report Attacker
+		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  Report Part Attacker
 		$html = '';
 		$totalAmount 	= 0;
 		$leftAmount 	= 0;
@@ -1189,7 +1433,7 @@ class d13_combat
 		$totalArmor 	= 0;
 		$totalVision 	= 0;
 		$totalStealth 	= 0;
-		$limit = 7;
+		
 		$i = 0;
 		$open = false;
 		
@@ -1270,7 +1514,7 @@ class d13_combat
 			$tvars['tvar_msgOtherRow'] = $html;
 		}
 
-		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Report Defender
+		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Report Part Defender
 		$html = '';
 		$totalAmount 	= 0;
 		$leftAmount 	= 0;
@@ -1282,8 +1526,11 @@ class d13_combat
 		$i = 0;
 		$open = false;
 		
-		// - - - - - 
-		foreach($data['output']['defender']['groups'] as $key => $group) {
+		// - - - Ignore if Scout was successful
+		if (!$data['combat']['requiresScoutCheck'] || ($data['combat']['requiresScoutCheck'] && $data['output']['attacker']['scoutCheck'] <= 0)) {
+		
+			// - - - - - 
+			foreach($data['output']['defender']['groups'] as $key => $group) {
 
 			if ($group['type'] == 'unit') {
 				// - - - - - Unit
@@ -1377,14 +1624,15 @@ class d13_combat
 			}
 		}
 		
-		if ($open) {
-			$html .= '</div>';
-		}
+			if ($open) {
+				$html .= '</div>';
+			}
+
+			if (empty($html)) {
+				$html = '<div class="row"><div class="col-auto">' . $d13->getLangUI('none') . '</div></div>';
+			}
 		
-		if (empty($html)) {
-			$html = '<div class="row"><div class="col-auto">' . $d13->getLangUI('none') . '</div></div>';
 		}
-		
 		// - - - - - Army Stats
 		$vars = array();
 		$vars['tvar_totalAmount'] 	= $totalAmount;
@@ -1407,7 +1655,7 @@ class d13_combat
 
 		// - - - - Report Results etc.
 		
-		$tvars['tvar_msgSelfResRowName'] = $d13->getLangUI("combat") . ' ' . $d13->getLangUI("result");
+		$tvars['tvar_msgSelfResRowName'] = $d13->getLangUI("combat") . ' ' . $d13->getLangUI("results");
 		$tvars['tvar_msgSelfResRow'] = '';
 		$html = '';
 		$i = 0;
@@ -1435,59 +1683,19 @@ class d13_combat
 				
 			}
 
-			// - - - - - Results (Resources, Scout, Sabotage etc.)
-			foreach ($data['output']['attacker']['results'] as $result) {
-				#foreach ($results as $result) {
-					
-					$vars = array();
-					
-					
-					
-					if ($result['type'] == 'scout_resources') {
-						$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($result['resource'], 'image');
-						$vars['tvar_listLabel'] 	= $d13->getLangGL('resources', $result['resource'], 'name');
-						$vars['tvar_listAmount'] 	= '#'.$result['value'];
-					} else if ($result['type'] == 'raid_resources') {
-						$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($result['resource'], 'image');
-						$vars['tvar_listLabel'] 	= $d13->getLangGL('resources', $result['resource'], 'name');
-						$vars['tvar_listAmount'] 	= '+'.$result['value'];
-					} else if ($result['type'] == 'scout_units') {
-						$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->defenderNode->data['faction'] . "/" . $d13->getUnit($result['unit'], 'image');
-						$vars['tvar_listLabel'] 	= $d13->getLangGL('units', $result['unit'], 'name');
-						$vars['tvar_listAmount'] 	= '#'.$result['value'];
-					} else if ($result['type'] == 'scout_modules') {
-						$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/modules/' . $this->defenderNode->data['faction'] . "/" . $d13->getModule($result['module'], 'image');
-						$vars['tvar_listLabel'] 	= $d13->getLangGL('modules', $result['module'], 'name');
-						$vars['tvar_listAmount'] 	= 'L'.$result['level'];
-					} else if ($result['type'] == 'scout_technologies') {
-						$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->defenderNode->data['faction'] . "/" . $d13->getTechnology($result['technology'], 'image');
-						$vars['tvar_listLabel'] 	= $d13->getLangGL('technologies', $result['technology'], 'name');
-						$vars['tvar_listAmount'] 	= 'L'.$result['level'];			
-					}
-					
-					if ($i == 0) {
-						$html .= '<div class="row">';
-						$open = true;
-					}
-		
-					$html .= $d13->templateSubpage("msg.combat.resource", $vars);
-				
-					if ($i == $limit) {
-						$html .= '</div>';
-						$i = 0;
-						$open = false;
-					}
-				
-					$i++;
+			// - - - - - Raid Results
+			$html .= $this->assembleRaidResources($data);
 			
-				}
-				
-				if ($open) {
-					$html .= '</div>';
-				}
-				
-			#}
-		
+			// - - - - - Scout Results
+			if ($data['combat']['requiresScoutCheck'] && ($data['combat']['requiresScoutCheck'] && $data['output']['attacker']['scoutCheck'] > 0)) {
+			
+				$html_scout_resources 		= $this->assembleScoutResources($data);
+				$html_scout_technologies 	= $this->assembleScoutTechnologies($data);
+				$html_scout_modules 	 	= $this->assembleScoutModules($data);
+				$html_scout_units	 		= $this->assembleScoutUnits($data);
+			
+			}	
+
 		} else {
 			
 			// - - - - - Trophies & Experience
@@ -1542,11 +1750,25 @@ class d13_combat
 	
 		}
 		
-		$tvars['tvar_msgSelfResRow'] = $html;
-					
 		// - - - - - Return Report
-		$html = $d13->templateSubpage("msg.combat", $tvars);
 		
+		// - - - Scout Template if Scout was succesfull
+		if (!$data['combat']['requiresScoutCheck'] || ($data['combat']['requiresScoutCheck'] && $data['output']['attacker']['scoutCheck'] <= 0)) {
+			$tvars['tvar_msgSelfResRow'] = $html;
+			$html = $d13->templateSubpage("msg.combat", $tvars);
+		// - - - Combat Template otherwise
+		} else {
+			$tvars['tvar_msgOtherRowName1'] = $d13->getLangUI("resource") . " " .$d13->getLangUI("report");
+			$tvars['tvar_msgOtherRow1'] 	= $html_scout_resources;
+			$tvars['tvar_msgOtherRowName2'] = $d13->getLangUI("module") . " " .$d13->getLangUI("report");
+			$tvars['tvar_msgOtherRow2'] 	= $html_scout_modules;
+			$tvars['tvar_msgOtherRowName3'] = $d13->getLangUI("technology") . " " .$d13->getLangUI("report");
+			$tvars['tvar_msgOtherRow3'] 	= $html_scout_technologies;
+			$tvars['tvar_msgOtherRowName4'] = $d13->getLangUI("unit") . " " .$d13->getLangUI("report");
+			$tvars['tvar_msgOtherRow4'] 	= $html_scout_units;
+			$html = $d13->templateSubpage("msg.combat.scout", $tvars);
+		}
+
 		return $html;
 	}
 

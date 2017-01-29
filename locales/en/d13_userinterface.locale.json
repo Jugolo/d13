@@ -276,6 +276,7 @@
   "new": "new",
   "outbox": "outbox",
   "admin": "admin",
+  "results": "results",
   "component": "component",
   "battle": "battle",
   "power": "power",
