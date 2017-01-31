@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// EMPTY.CONTROLLER
+// COMBAT.CONTROLLER
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)

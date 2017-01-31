@@ -27,6 +27,22 @@ class d13_object_technology extends d13_object_base
 		parent::__construct($args);
 	}
 
+		// ----------------------------------------------------------------------------------------
+	// checkStatsExtended
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function checkStatsExtended()
+	{
+		global $d13;
+
+		
+		
+	}
+
 
 }
 

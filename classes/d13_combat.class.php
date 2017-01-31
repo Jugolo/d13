@@ -87,6 +87,8 @@ class d13_combat
 		$this->attackerNode = new d13_node();
 		$status = $this->attackerNode->get('id', $data['input']['attacker']['nodeId']);
 		
+		shuffle($data['input']['attacker']['groups']);
+		
 		$armyBonus = array();	
 		foreach($data['input']['attacker']['groups'] as $key => $group) {
 			if ($group['quantity'] > 0) {
@@ -160,7 +162,9 @@ class d13_combat
 		
 			}
 		}
-
+		
+		$data['input']['attacker']['groups'] = d13_misc::record_sort($data['input']['attacker']['groups'], 'speed', true);
+		
 		return $data;
 
 	}
@@ -192,6 +196,8 @@ class d13_combat
 		$this->defenderNode = new d13_node();
 		$status = $this->defenderNode->get('id', $data['input']['defender']['nodeId']);
 		
+		shuffle($data['input']['defender']['groups']);
+
 		$armyBonus = array();	
 		foreach($data['input']['defender']['groups'] as $key => $group) {
 			if ($group['quantity'] > 0) {
@@ -326,7 +332,9 @@ class d13_combat
 
 			}
 		}
-
+		
+		$data['input']['defender']['groups'] =  d13_misc::record_sort($data['input']['defender']['groups'], 'speed', true);
+		
 		return $data;
 
 	}	
@@ -376,7 +384,7 @@ class d13_combat
 	{
 		
 		global $d13;
-
+				
 		foreach($data['input']['attacker']['groups'] as $key => $group) {
 			if ($group['quantity'] > 0) {
 	
@@ -418,6 +426,9 @@ class d13_combat
 		
 		}
 		
+		$data['input']['attacker']['groups'] = d13_misc::record_sort($data['input']['attacker']['groups'], 'speed', true);
+		$data['output']['attacker']['groups'] = d13_misc::record_sort($data['output']['attacker']['groups'], 'speed', true);
+		
 		return $data;
 		
 	}
@@ -431,8 +442,7 @@ class d13_combat
 	{
 	
 		global $d13;
-	
-		
+			
 		foreach($data['input']['defender']['groups'] as $key => $group) {
 			if ($group['quantity'] > 0) {
 				
@@ -477,6 +487,9 @@ class d13_combat
 			}
 		
 		}
+		
+		$data['input']['defender']['groups'] = d13_misc::record_sort($data['input']['defender']['groups'], 'speed', true);
+		$data['output']['defender']['groups'] = d13_misc::record_sort($data['output']['defender']['groups'], 'speed', true);
 		
 		return $data;
 	

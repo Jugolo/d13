@@ -1171,7 +1171,7 @@
       "id": 17,
       "active": false,
       "priority": -1,
-      "type": "unit",
+      "type": "turret",
       "class": "static",
       "movementType": 0,
       "armorType": "fortified",
@@ -1230,14 +1230,14 @@
         }
       ],
       "upgrades": [
-        115
+        0
       ]
     },
     {
       "id": 18,
       "active": false,
       "priority": -1,
-      "type": "unit",
+      "type": "turret",
       "class": "static",
       "movementType": 0,
       "armorType": "fortified",

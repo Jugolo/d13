@@ -3,7 +3,7 @@
     {
       "active": true,
       "type": "turret",
-      "id": 115,
+      "id": 0,
       "attributes": [
       	{
         "stat": "all",

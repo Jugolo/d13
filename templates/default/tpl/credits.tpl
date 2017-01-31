@@ -18,16 +18,10 @@ This project, uses open-source code from the following sources:<br>
 - "Simple CSS Tooltip" by Chris Bracco https://chrisbracco.com<br>
 - "Bullet Proof Sessions" by Robert Hafner<br><br>
 
-<div class="cell">
-<img class="d13-image" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/logos/logo-android.png">
-<img class="d13-image" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/logos/logo-mac.png">
-<img class="d13-image" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/logos/logo-win.png">
-</div>
 <br>
 <div class="cell">
 <a href="http://www.kenney.nl" target="_blank"><img class="d13-image" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/logos/logo-kenney.png"></a>
 <a href="http://www.critical-hit.biz" target="_blank"><img class="d13-image" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/logos/logo-critical-hit.png"></a>
-<a href="http://www.opensource.org" target="_blank"><img class="d13-image" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/logos/osi_standard_logo.png" width="150" height="300"></a>
 </div>
 
       </div>

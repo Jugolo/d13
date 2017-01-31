@@ -111,15 +111,15 @@ class d13_object_base
 				$amount = $this->node->units[$args['obj_id']]['value'];
 				break;
 			case 'turret':
-				$data 	= $d13->getUnit($this->node->data['faction'], $args['unitId']);
-				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $args['unitId'], "name");
-				$desc 	= $d13->getLangGL("units", $this->node->data['faction'], $args['unitId'], "description");
+				$data 	= $d13->getUnit($this->node->data['faction'], $args['obj_id']);
+				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $args['obj_id'], "name");
+				$desc 	= $d13->getLangGL("units", $this->node->data['faction'], $args['obj_id'], "description");
 				$level 	= $args['level'];
-				$type	= $d13->getUnit($this->node->data['faction'], $args['unitId'], "type");
+				$type	= $d13->getUnit($this->node->data['faction'], $args['obj_id'], "type");
 				$input	= $args['input'];
 				$ctype 	= 'train';
 				$slot	= 0;
-				$amount = $this->node->units[$args['obj_id']]['value'];
+				$amount = 0;
 				break;
 			default:
 				$data 	= NULL;
@@ -165,7 +165,7 @@ class d13_object_base
 					$base_stat = $d13->getTechnology($this->node->data['faction'], $args['obj_id'], $stat);
 					break;
 				case 'turret':
-					$base_stat = $d13->getModule($this->node->data['faction'], $args['obj_id'], $stat);
+					$base_stat = $d13->getUnit($this->node->data['faction'], $args['obj_id'], $stat);
 					break;
 				case 'unit':
 					$base_stat = $d13->getUnit($this->node->data['faction'], $args['obj_id'], $stat);
@@ -196,7 +196,8 @@ class d13_object_base
 		global $d13;
 		
 		$upgrade_list = array();
-
+		$object_upgrades = array();
+		
 		// - - - - - - - - - - - - - - - CHECK OBJECT TYPE AND UPGRADE LIST
 		switch ($this->data['supertype'])
 		{
@@ -237,71 +238,54 @@ class d13_object_base
 		if ($this->data['supertype'] == 'module' || $this->data['supertype'] == 'turret') {
 			if (!empty($this->data['upgrades']) && $this->data['level'] > 1) {
 				foreach ($this->data['upgrades'] as $upgrade_id) {
-					$tmp_upgrade = $d13->getUpgradeModule($this->node->data['faction'], $upgrade_id);
-					if ($tmp_upgrade['active'] && in_array($tmp_upgrade['id'], $this->data['upgrades'])) {
+					$tmp_upgrade = $upgrade_list[$upgrade_id];
+					if ($tmp_upgrade['active'] && $tmp_upgrade['type'] == $this->data['type'] && in_array($tmp_upgrade['id'], $this->data['upgrades'])) {
 						$tmp_upgrade['level'] = $this->data['level'];
-						$my_upgrades[] = $tmp_upgrade;
+						$object_upgrades[] = $tmp_upgrade;
 					}
 				}
-			}
-		}
-				
-		// - - - - - - - - - - - - - - - Gather Component Upgrades
-		$object_components = array();
-		foreach($this->data['requirements'] as $requirement) {
-			if ($requirement['type'] == 'components') {
-				$object_components[] = array(
-					'id' => $requirement['id'],
-					'amount' => $requirement['value']
-				);
 			}
 		}
 
 		// - - - - - - - - - - - - - - - Gather Technology Upgrades
-		$object_upgrades = array();
-		foreach($this->node->technologies as $technology) {
-			if ($technology['level'] > 0) {
-			
-				// - - - - - - - - - - - - - - - Append Component Upgrades
-				foreach($object_components as $component) {
-					if ($component['id'] == $technology['id']) {
-						$object_upgrades[] = array(
-							'id' => $technology['id'],
-							'level' => $technology['level'] * $component['amount'],
-							'upgrades' => $d13->getComponent($this->node->data['faction'], $technology['id'], 'upgrades')
-						);
+		foreach($this->node->technologies as $technologies) {
+			if ($technologies['level'] > 0) {
+				$technology = $d13->getTechnology($this->node->data['faction'], $technologies['id']);
+				if ($technology['type'] == $this->data['type'] && in_array($this->data['id'], $technology['upgrades'])) {
+					foreach ($technology['upgrades'] as $upgrade_id) {
+						$tmp_upgrade = array();
+						$tmp_upgrade = $upgrade_list[$upgrade_id];
+						$tmp_upgrade['id'] = $technologies['id'];
+						$tmp_upgrade['level'] = $technologies['level'];
+						$object_upgrades[] = $tmp_upgrade;
 					}
-				}
-
-				// - - - - - - - - - - - - - - - Append Technology Upgrades
-				$object_upgrades[] = array(
-					'id' => $technology['id'],
-					'level' => $technology['level'],
-					'upgrades' => $d13->getTechnology($this->node->data['faction'], $technology['id'], 'upgrades')
-				);
+				}			
 			}
 		}
-		
-		// - - - - - - - - - - - - - - - Append Module Level Upgrades
-		if (isset($my_upgrades)) {
-			$object_upgrades = array_merge($object_upgrades, $my_upgrades);
-		}
-		
-		// - - - - - - - - - - - - - - - Apply Component and Technology Stat Upgrades
+
+		// - - - - - - - - - - - - - - - Apply all Upgrades
 		foreach($object_upgrades as $my_upgrade) {
 			if ($my_upgrade['level'] > 0) {
 
-				foreach ($upgrade_list as $tmp_upgrade) {
+				#foreach ($upgrade_list as $tmp_upgrade) {
 				
-				
-					if ($tmp_upgrade['id'] == $my_upgrade['id']) {
+					#if ($tmp_upgrade['id'] == $my_upgrade['id']) {
 
-						
-						if ($tmp_upgrade['attributes'] ) {
-							foreach($tmp_upgrade['attributes'] as $stats) {
+
+								
+					
+						if (isset($my_upgrade['attributes']) && is_array($my_upgrade['attributes'])) {
+							
+							
+							foreach($my_upgrade['attributes'] as $stats) {
+								
+								
+								
+								
 								if ($stats['stat'] == 'all') {
 									foreach($d13->getGeneral('stats') as $stat) {
 										$this->data['upgrade_' . $stat] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stat]);
+										
 									}
 								} else {
 									$this->data['upgrade_' . $stats['stat']] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stats['stat']]);
@@ -310,8 +294,8 @@ class d13_object_base
 						}
 
 
-					}
-				}
+					#}
+				#}
 			}
 		}
 
@@ -319,23 +303,6 @@ class d13_object_base
 	
 	}
 	
-	// ----------------------------------------------------------------------------------------
-	// checkStatsExtended
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function checkStatsExtended()
-	{
-		global $d13;
-
-		/*
-				MOVING TO CHILD CLASSES
-		*/
-		
-	}
 
 	// ----------------------------------------------------------------------------------------
 	// getCheckRequirements
@@ -662,8 +629,8 @@ class d13_object_base
 	{
 		global $d13;
 		$tvars = array();
-		
-		$tvars = $this->getStats();
+			
+		$tvars = array_merge($this->getStats(), $this->getUpgrades());
 		
 		foreach ($this->data as $key => $value) {
 			if (!is_array($value)) {
