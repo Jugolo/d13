@@ -219,7 +219,7 @@ class d13_module_research extends d13_object_module
 
 		// - - - Popover if Queue empty
 
-		if ($this->data['busy'] === false) {
+		if ((boolean)$this->data['busy'] === false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $this->data['available'] > 0) {
 				$tvars = array();
 				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
