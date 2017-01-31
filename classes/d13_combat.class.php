@@ -1433,8 +1433,9 @@ class d13_combat
 		$totalArmor 	= 0;
 		$totalVision 	= 0;
 		$totalStealth 	= 0;
-		
+		$totalCritical 	= 0;
 		$i = 0;
+		$limit = 7;
 		$open = false;
 		
 		// - - - - - 
@@ -1450,6 +1451,7 @@ class d13_combat
 				$totalVision	+= $data['input']['attacker']['groups'][$key]['vision'];
 				$totalStealth 	+= $data['input']['attacker']['groups'][$key]['stealth'];
 				$totalDamage 	+= $data['input']['attacker']['groups'][$key]['damage'];
+				$totalCritical 	+= $data['input']['attacker']['groups'][$key]['critdmg'];
 				
 				$args = array();
 				$args['supertype'] 	= 'unit';
@@ -1503,6 +1505,7 @@ class d13_combat
 		$vars['tvar_totalArmor'] 	= $totalArmor;
 		$vars['tvar_totalVision'] 	= $totalVision;
 		$vars['tvar_totalStealth'] 	= $totalStealth;
+		$vars['tvar_totalCritical']	= $totalCritical;
 		
 		if (!$other) {
 			$tvars['tvar_msgSelfStats'] = $d13->templateSubpage("msg.combat.stats", $vars);
@@ -1523,6 +1526,7 @@ class d13_combat
 		$totalArmor 	= 0;
 		$totalVision 	= 0;
 		$totalStealth 	= 0;
+		$totalCritical 	= 0;
 		$i = 0;
 		$open = false;
 		
@@ -1544,6 +1548,7 @@ class d13_combat
 					$totalVision	+= $data['input']['defender']['groups'][$key]['vision'];
 					$totalStealth 	+= $data['input']['defender']['groups'][$key]['stealth'];
 					$totalDamage 	+= $data['input']['defender']['groups'][$key]['damage'];
+					$totalCritical 	+= $data['input']['defender']['groups'][$key]['critdmg'];
 					
 					$args = array();
 					$args['supertype'] 	= 'unit';
@@ -1589,6 +1594,7 @@ class d13_combat
 					$totalVision	+= $data['input']['defender']['groups'][$key]['vision'];
 					$totalStealth 	+= $data['input']['defender']['groups'][$key]['stealth'];
 					$totalDamage 	+= $data['input']['defender']['groups'][$key]['damage'];
+					$totalCritical 	+= $data['input']['defender']['groups'][$key]['critdmg'];
 					
 					$args = array();
 					$args['supertype'] 	= 'turret';
@@ -1642,6 +1648,7 @@ class d13_combat
 		$vars['tvar_totalArmor'] 	= $totalArmor;
 		$vars['tvar_totalVision'] 	= $totalVision;
 		$vars['tvar_totalStealth'] 	= $totalStealth;
+		$vars['tvar_totalCritical'] = $totalCritical;
 		
 		if (!$other) {
 			$tvars['tvar_msgOtherStats'] = $d13->templateSubpage("msg.combat.stats", $vars);

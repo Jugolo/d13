@@ -3,16 +3,16 @@
 		{{tvar_leftAmount}}/{{tvar_totalAmount}}
 	</span>
 </div>
-
-<div class="col-auto">
-	<span class="badge tooltip-bottom" data-tooltip="{{tvar_ui_army}} {{tvar_ui_speed}}">
-		<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_speed.png"> {{tvar_totalSpeed}}
-	</span>
-</div>	
 	
 <div class="col-auto">
 	<span class="badge tooltip-bottom" data-tooltip="{{tvar_ui_army}} {{tvar_ui_damage}}">
 		<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_damage.png"> {{tvar_totalDamage}}
+	</span>
+</div>	
+
+<div class="col-auto">
+	<span class="badge tooltip-bottom" data-tooltip="{{tvar_ui_army}} {{tvar_ui_critical}}">
+		<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_critical.png"> {{tvar_totalCritical}}
 	</span>
 </div>	
 	

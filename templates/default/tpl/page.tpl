@@ -22,9 +22,7 @@
 			
 			<div data-page="{{tpl_pvar_name}}" class="page {{tvar_global_notoolbar}} theme-{{tvar_global_color}} with-subnavbar" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/nodeBackground.png);">
 
-			  <div class="subnavbar">
-			  	{{tpl_page_subbar}}
-			  </div>
+			  {{tpl_page_subbar}}
 			  
 			  <div class="toolbar theme-{{tvar_global_color}}">
 				<div class="toolbar-inner">

@@ -950,7 +950,7 @@ class d13_module_warfare extends d13_module
 
 		// - - - Popover
 
-		if ($this->data['busy'] === false) {
+		if ($this->data['busy'] == false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $this->data['units'] > 0) {
 				$tvars = array();
 				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));

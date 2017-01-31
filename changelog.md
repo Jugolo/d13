@@ -12,8 +12,6 @@ V017	--- UPCOMING UPDATE ---
 		
 		* Finalize existing combat system:
 		
-			- Scout Reports
-			- Scout Checks
 			- Sabotage Reports
 			- Sabotage Checks
 
@@ -21,7 +19,12 @@ V016	* Fixed a few more bugs (thanks to BlackScorp)
 		* Added autoload to classes
 		* Added LINUX line breaks
 		* most object classes are now derived from one base class
+		* Even more bugfixes, refactoring and streamlining of the code
+		* renamed hybrid building/unit class into "turret"
 		
+		* Added Scout Checks to Combat System
+		* Added Scout Report to Combat System
+		* Enabled SCOUT Attack type
 
 V015	* Project now also on Github: https://github.com/CriticalHit-d13/d13
 		* Added pagination to league ranking list			
