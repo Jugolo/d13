@@ -36,7 +36,7 @@ class d13_engine
 		$this->logger 	= new d13_logger();
 		$this->data 	= new d13_data();
 		
-		$this->flags = new d13_flags();
+		$this->flags 	= new d13_flags();
 		
 		if (CONST_FLAG_PROFILER) {
 			$this->profiler = new d13_profiler();

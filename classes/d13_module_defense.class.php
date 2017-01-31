@@ -84,7 +84,7 @@ class d13_module_defense extends d13_object_module
 		}
 		
 		$tvars['tvar_unitType'] 			= $this->data['type'];
-		$tvars['tvar_unitClass'] 			= $d13->getLangGL('classes', $this->data['class']);
+		$tvars['tvar_unitClass'] 			= $d13->getLangGL('classes', $this->turret->data['class']);
 		$tvars['tvar_nodeFaction'] 		= $this->node->data['faction'];
 		
 		// - - - - - Base Stats
