@@ -28,7 +28,7 @@ class d13_object_turret extends d13_object_base
 		parent::__construct($args);
 	}
 
-		// ----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// checkStatsExtended
 	// @
 	//
@@ -43,6 +43,27 @@ class d13_object_turret extends d13_object_base
 		
 		
 	}
+
+	// ----------------------------------------------------------------------------------------
+	// getTemplateVariables
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+
+	function getTemplateVariables()
+	{
+	
+		global $d13;
+		$tvars = array();
+		
+		$tvars = parent::getTemplateVariables();
+		
+		return $tvars;
+			
+	}
+
 
 }
 

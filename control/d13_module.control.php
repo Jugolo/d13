@@ -392,7 +392,7 @@ class d13_moduleController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['componentId'], $_POST['quantity'])) {
-			$status = $this->node->removeComponent($_GET['componentId'], $_POST['quantity'], $node->modules[$_GET['slotId']]['module']);
+			$status = $this->node->removeComponent($_GET['componentId'], $_POST['quantity'], $node->modules[$_GET['slotId']]['module'], $_GET['slotId']);
 			if ($status == 'done') {
 				
 				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
@@ -474,7 +474,7 @@ class d13_moduleController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['unitId'], $_POST['quantity'])) {
-			$status = $this->node->removeUnit($_GET['unitId'], $_POST['quantity'], $this->node->modules[$_GET['slotId']]['module']);
+			$status = $this->node->removeUnit($_GET['unitId'], $_POST['quantity'], $this->node->modules[$_GET['slotId']]['module'], $_GET['slotId']);
 			if ($status == 'done') {
 				
 				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);

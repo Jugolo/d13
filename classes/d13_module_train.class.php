@@ -163,6 +163,7 @@ class d13_module_train extends d13_object_module
 		// - - - Check Queue
 		
 		$this->data['busy'] = false;
+		$this->node->getQueue('train');
 		
 		if (count($this->node->queue['train'])) {
 			foreach($this->node->queue['train'] as $item) {
@@ -177,8 +178,11 @@ class d13_module_train extends d13_object_module
 					}
 					$remaining = d13_misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
+					$image = $d13->getUnit($this->node->data['faction'], $item['obj_id'], 'images');
+					$image = $image[0]['image'];
+
 					$tvars = array();
-					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $d13->getUnit($this->node->data['faction'], $item['obj_id'], 'image') . '">';
+					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $image . '">';
 					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $d13->getLangGL("units", $this->node->data['faction'], $item['obj_id'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="train_' . $item['id'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("train_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelUnit&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&trainId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 				

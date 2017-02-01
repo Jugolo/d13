@@ -92,8 +92,8 @@
 			</div>
 		</div>
 		<div class="card-footer no-border">
-			<form style="display: inline;" action="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}" class="pure-form" id="componentForm" method="post" name="componentForm">
-				<select class="pure-input" onchange="change_maximum('input{{tvar_sliderID}}', {{tvar_compValue}}, 'componentForm', this.value)">
+			<form style="display: inline;" action="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}" class="pure-form" id="componentForm_{{tvar_cid}}" method="post" name="componentForm">
+				<select class="pure-input" onchange="change_maximum('input{{tvar_sliderID}}', {{tvar_compValue}}, 'componentForm_{{tvar_cid}}', this.value)">
 					<option value="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">{{tvar_ui_craft}}</option>
 					<option value="?p=module&action=removeComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">{{tvar_ui_remove}}</option>
 				</select>

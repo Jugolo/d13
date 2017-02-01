@@ -2,11 +2,12 @@
   [
   	{
       "active": true,
-      "type": "technology",
-      "id": 200,
+      "type": "harvest",
+      "id": 0,
       "attributes": [
         {
-          
+          "stat": "ratio",
+          "value": 0.5
         }
     	],
 	  "cost": [
@@ -15,18 +16,16 @@
          "factor": 1.5,
          "value": 100
      	}
-     	],
-      "targets": [
-    		
-    	]
+     	]
     },
     {
       "active": true,
-      "type": "technology",
-      "id": 201,
+      "type": "harvest",
+      "id": 1,
       "attributes": [
         {
-          
+          "stat": "ratio",
+          "value": 0.5
         }
     	],
 	  "cost": [
@@ -35,18 +34,16 @@
          "factor": 1.5,
          "value": 100
      	}
-     	],
-      "targets": [
-    		
-    	]
+     	]
     },
     {
       "active": true,
-      "type": "technology",
-      "id": 202,
+      "type": "harvest",
+      "id": 2,
       "attributes": [
         {
-          
+          "stat": "ratio",
+          "value": 0.5
         }
     	],
 	  "cost": [
@@ -55,10 +52,7 @@
          "factor": 1.5,
          "value": 100
      	}
-     	],
-      "targets": [
-    		
-    	]
+     	]
     },
     {
       "active": true,
@@ -75,10 +69,7 @@
          "factor": 1.5,
          "value": 10
      	}
-     	],
-      "targets": [
-    		0,1,2
-    	]
+     	]
     }
     
   ]

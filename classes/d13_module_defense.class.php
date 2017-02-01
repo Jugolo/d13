@@ -75,63 +75,15 @@ class d13_module_defense extends d13_object_module
 		
 		$tvars = parent::getTemplateVariables();
 		
-		#$baseData = array();
-		#$baseData = $this->turret->getStats();
-		
-		foreach($d13->getGeneral('stats') as $stat) {
-			$tvars['tvar_unit'.$stat] 			= $this->data[$stat];
-			$tvars['tvar_unit'.$stat.'Plus'] 	= "[+".$this->data['upgrade_'.$stat]."]";
-		}
-		
 		$tvars['tvar_unitType'] 			= $this->data['type'];
 		$tvars['tvar_unitClass'] 			= $d13->getLangGL('classes', $this->turret->data['class']);
 		$tvars['tvar_nodeFaction'] 		= $this->node->data['faction'];
-		
-		// - - - - - Base Stats
-		/*
-		foreach ($this->turret->data as $key => $stat) {
-			$this->data[$key] = $stat;
-			if (!is_array($stat)) {
-			$d13->logger($key." = ".$this->data[$key]);
-			}
+
+		foreach($d13->getGeneral('stats') as $stat) {
+			$tvars['tvar_unit'.$stat] 			= $this->turret->data[$stat];
+			$tvars['tvar_unit'.$stat.'Plus'] 	= "[+".$this->turret->data['upgrade_'.$stat]."]";
 		}
-		*/
-			
-		// - - - - - Check Upgrades
 
-
-
-/*
-		$upgradeData = array();
-		$upgradeData = $this->turret->getUpgrades();
-		
-		foreach ($upgradeData as $key => $stat) {
-			
-			$this->data['upgrade_'.$key] = $stat;
-			
-			if (!is_array($stat)) {
-			$d13->logger('upgrade_'.$key." = ".$this->data['upgrade_'.$key]);
-			}
-		}
-		*/
-		/*
-		$this->data['unitHPPlus'] 		= "[+" . $upgradeData['hp'] . "]";
-		$this->data['unitDamagePlus'] 	= "[+" . $upgradeData['damage'] . "]";
-		$this->data['unitArmorPlus'] 	= "[+" . $upgradeData['armor'] . "]";
-		$this->data['unitSpeedPlus'] 	= "[+" . $upgradeData['speed'] . "]";
-		$this->data['unitVisionPlus'] 	= "[+" . $upgradeData['vision'] . "]";
-		$this->data['unitCriticalPlus'] = "[+" . $upgradeData['critical'] . "]";
-		$this->data['unitType'] 		= $this->turret->data['type'];
-		$this->data['unitClass'] 		= $this->turret->data['class'];
-		$this->data['unitHP'] 			= $this->turret->data['hp'];
-		$this->data['unitDamage'] 		= $this->turret->data['damage'];
-		$this->data['unitArmor'] 		= $this->turret->data['armor'];
-		$this->data['unitSpeed'] 		= $this->turret->data['speed'];
-		$this->data['unitVision'] 		= $this->turret->data['vision'];
-		$this->data['unitCritical'] 	= $this->turret->data['critical'];
-		*/
-		
-		
 		return $tvars;
 	}
 	

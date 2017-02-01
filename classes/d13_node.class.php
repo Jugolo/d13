@@ -1081,7 +1081,7 @@ class d13_node
 
 	public
 
-	function removeComponent($componentId, $quantity, $moduleId)
+	function removeComponent($componentId, $quantity, $moduleId, $slotId)
 	{
 		global $d13;
 		$this->getModules();
@@ -1104,7 +1104,7 @@ class d13_node
 			$duration = $d13->getComponent($this->data['faction'], $componentId, 'removeDuration') * $quantity * 60;
 			$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'craft');
 			
-			$d13->dbQuery('insert into craft (node, obj_id, quantity, stage, start, duration) values ("' . $this->data['id'] . '", "' . $componentId . '", "' . $quantity . '", 1, "' . $start . '", "' . $duration . '")');
+			$d13->dbQuery('insert into craft (node, obj_id, quantity, stage, start, duration, slot) values ("' . $this->data['id'] . '", "' . $componentId . '", "' . $quantity . '", 1, "' . $start . '", "' . $duration . '", "' . $slotId . '")');
 			if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			if ($ok) $status = 'done';
 			else $status = 'error';
@@ -1214,17 +1214,22 @@ class d13_node
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 						}
 
-						foreach($d13->getUnit($this->data['faction'], $unitId, 'requirements') as $requirement)
-						if ($requirement['type'] == 'components') {
-							$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
-							$this->resources[$storageResource]['value'] += $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $quantity;
-							$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
-							if ($d13->dbAffectedRows() == - 1) $ok = 0;
-							$this->components[$requirement['id']]['value']-= $requirement['value'] * $quantity;
-							$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
-							if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						foreach($d13->getUnit($this->data['faction'], $unitId, 'requirements') as $requirement) {
+							if ($requirement['type'] == 'components') {
+								$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
+								$this->resources[$storageResource]['value'] += $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $requirement['value'] * $quantity;
+								$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
+								if ($d13->dbAffectedRows() == - 1) {
+									$ok = 0;
+								}
+								$this->components[$requirement['id']]['value'] -= $requirement['value'] * $quantity;
+								$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
+								if ($d13->dbAffectedRows() == - 1) {
+									$ok = 0;
+								}
+							}
 						}
-
+						
 						$this->getQueue('train', 'obj_id', $d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'units'));
 						
 						$start = strftime('%Y-%m-%d %H:%M:%S', time());
@@ -1257,7 +1262,7 @@ class d13_node
 
 	public
 
-	function removeUnit($unitId, $quantity, $moduleId)
+	function removeUnit($unitId, $quantity, $moduleId, $slotId)
 	{
 		global $d13;
 		$this->getModules();
@@ -1285,7 +1290,7 @@ class d13_node
 			$duration = $d13->getUnit($this->data['faction'], $unitId, 'removeDuration') * $quantity * 60;
 			$duration = ($duration - $duration * $totalIR) * $d13->getGeneral('users', 'speed', 'train');
 			
-			$d13->dbQuery('insert into train (node, obj_id, quantity, stage, start, duration) values ("' . $this->data['id'] . '", "' . $unitId . '", "' . $quantity . '", 1, "' . $start . '", "' . $duration . '")');
+			$d13->dbQuery('insert into train (node, obj_id, quantity, stage, start, duration, slot) values ("' . $this->data['id'] . '", "' . $unitId . '", "' . $quantity . '", 1, "' . $start . '", "' . $duration . '", "' . $slotId . '")');
 			if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			if ($ok) $status = 'done';
 			else $status = 'error';
@@ -1325,15 +1330,20 @@ class d13_node
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
 				}
 
-				foreach($d13->getUnit($this->data['faction'], $entry['obj_id'], 'requirements') as $requirement)
-				if ($requirement['type'] == 'components') {
-					$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
-					$this->resources[$storageResource]['value']-= $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $entry['quantity'];
-					$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
-					if ($d13->dbAffectedRows() == - 1) $ok = 0;
-					$this->components[$requirement['id']]['value']+= $requirement['value'] * $entry['quantity'];
-					$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
-					if ($d13->dbAffectedRows() == - 1) $ok = 0;
+				foreach($d13->getUnit($this->data['faction'], $entry['obj_id'], 'requirements') as $requirement) {
+					if ($requirement['type'] == 'components') {
+						$storageResource = $d13->getComponent($this->data['faction'], $requirement['id'], 'storageResource');
+						$this->resources[$storageResource]['value']-= $d13->getComponent($this->data['faction'], $requirement['id'], 'storage') * $requirement['value'] * $entry['quantity'];
+						$d13->dbQuery('update resources set value="' . $this->resources[$storageResource]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $storageResource . '"');
+						if ($d13->dbAffectedRows() == - 1) {
+							$ok = 0;
+						}
+						$this->components[$requirement['id']]['value'] += $requirement['value'] * $entry['quantity'];
+						$d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
+						if ($d13->dbAffectedRows() == - 1) {
+							$ok = 0;
+						}
+					}
 				}
 			}
 			else {

@@ -124,14 +124,16 @@ class d13_queue
 				break;
 
 			case 'build':
-				$icon 	= 'modules/'.$this->node->data['faction'].'/'.$d13->getModule($this->node->data['faction'], $item['obj_id'], 'images', 1, 'image');
+				$icon 	= $d13->getModule($this->node->data['faction'], $item['obj_id'], 'images');
+				$icon 	= 'modules/'.$this->node->data['faction'].'/'.$icon[1]['image'];
 				$action = $d13->getLangUI($item['action']);
 				$name 	= $d13->getLangGL("modules", $this->node->data['faction'], $item['obj_id'], "name");
 				$cancel = '<a class="external" href="?p=module&action=cancel&nodeId=' . $this->node->data['id'] . '&slotId=' . $item['slot'] . '">';
 				break;
 
 			case 'research':
-				$icon 	= 'technologies/'.$this->node->data['faction'].'/'.$d13->getTechnology($this->node->data['faction'], $item['obj_id'], 'image');
+				$icon 	= $d13->getTechnology($this->node->data['faction'], $item['obj_id'], 'images');
+				$icon 	= 'technologies/'.$this->node->data['faction'].'/'.$icon[0]['image'];
 				$action = $d13->getLangUI("research");
 				$name 	= $d13->getLangGL("technologies", $this->node->data['faction'], $item['obj_id'], "name");
 				$cancel = '<a class="external" href="?p=module&action=cancelTechnology&nodeId=' . $this->node->data['id'] . '&slotId=' . $item['slot'] . '&technologyId=' . $item['obj_id'] . '"> ';
@@ -143,7 +145,8 @@ class d13_queue
 				} else {
 					$action = $d13->getLangUI('remove');
 				}
-				$icon 	= 'components/'.$this->node->data['faction'].'/'.$d13->getComponent($this->node->data['faction'], $item['obj_id'], 'image'); 
+				$icon 	= $d13->getComponent($this->node->data['faction'], $item['obj_id'], 'images');
+				$icon 	= 'components/'.$this->node->data['faction'].'/'.$icon[0]['image'];
 				$name 	= $d13->getLangGL("components", $this->node->data['faction'], $item['obj_id'], "name");
 				$cancel = '<a class="external" href="?p=module&action=cancelComponent&nodeId=' . $this->node->data['id'] . '&slotId=' . $item['slot'] . '&craftId=' . $item['id'] . '"> ';
 				break;
@@ -154,7 +157,8 @@ class d13_queue
 				} else {
 					$action = $d13->getLangUI('remove');
 				}
-				$icon 	= 'units/'.$this->node->data['faction'].'/'.$d13->getUnit($this->node->data['faction'], $item['obj_id'], 'image');
+				$icon 	= $d13->getUnit($this->node->data['faction'], $item['obj_id'], 'images');
+				$icon 	= 'units/'.$this->node->data['faction'].'/'.$icon[0]['image'];
 				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $item['obj_id'], "name");
 				$cancel = '<a class="external" href="?p=module&action=cancelunit&nodeId=' . $this->node->data['id'] . '&slotId=' . $item['slot'] . '&trainId=' . $item['id'] . '"> ';
 				break;

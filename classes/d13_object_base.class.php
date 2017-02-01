@@ -254,7 +254,7 @@ class d13_object_base
 				if ($technology['type'] == $this->data['type'] && in_array($this->data['id'], $technology['upgrades'])) {
 					foreach ($technology['upgrades'] as $upgrade_id) {
 						$tmp_upgrade = array();
-						$tmp_upgrade = $upgrade_list[$upgrade_id];
+						$tmp_upgrade = $d13->getUpgradeTechnology($this->node->data['faction'], $upgrade_id);
 						$tmp_upgrade['id'] = $technologies['id'];
 						$tmp_upgrade['level'] = $technologies['level'];
 						$object_upgrades[] = $tmp_upgrade;
@@ -272,10 +272,10 @@ class d13_object_base
 					foreach($my_upgrade['battlestats'] as $stats) {
 						if ($stats['stat'] == 'all') {
 							foreach($d13->getGeneral('stats') as $stat) {
-								$this->data['upgrade_' . $stat] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stat]);
+								$this->data['upgrade_' . $stat] += d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stat]);
 							}
 						} else {
-							$this->data['upgrade_' . $stats['stat']] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stats['stat']]);
+							$this->data['upgrade_' . $stats['stat']] += d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stats['stat']]);
 						}
 					}
 				// - - - - - - - - - - Attributes scale on a fixed base
@@ -283,10 +283,10 @@ class d13_object_base
 					foreach($my_upgrade['attributes'] as $stats) {
 						if ($stats['stat'] == 'all') {
 							foreach($d13->getGeneral('stats') as $stat) {
-								$this->data['upgrade_' . $stat] = $stats['value'] * $my_upgrade['level'];
+								$this->data['upgrade_' . $stat] += $stats['value'] * $my_upgrade['level'];
 							}
 						} else {
-							$this->data['upgrade_' . $stats['stat']] = $stats['value'] * $my_upgrade['level'];
+							$this->data['upgrade_' . $stats['stat']] += $stats['value'] * $my_upgrade['level'];
 						}
 					}
 				}
