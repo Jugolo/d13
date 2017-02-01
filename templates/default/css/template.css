@@ -108,26 +108,10 @@ img {
 	overflow: hidden;
 	min-height: 75%;
 	max-height: 90%;
-    padding: 0;
-    margin: 0;
+    
 }
 
-.card-header {
-	max-height: 2%;
-	padding: 0;
-    margin: 0;
-}
 
-.card-footer {
-	max-height: 2%;
-	padding: 0;
-    margin: 0;
-}
-
-.card-content-inner {
-	padding: 0;
-    margin: 0;
-}
 
 .card-shadow {
 	-webkit-filter: drop-shadow(2px 2px 2px #222);

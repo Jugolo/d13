@@ -8,7 +8,7 @@
 		
 		<div class="card-header no-border">
 			<div class="d13-heading">{{tvar_ui_messages}} {{tvar_ui_list}}</div>
-			<a class="external" href="?p=node&action=list"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
+			<a class="external" href="?p=node&action=list"><img class="d13-icon hvr-pulse" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 		</div>
   
 		<div class="card-content">

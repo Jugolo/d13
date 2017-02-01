@@ -227,10 +227,14 @@ class d13_module_train extends d13_object_module
 	{
 		global $d13;
 		$html = '';
-		if (isset($this->node->data['units'])) {
-			foreach($this->node->data['units'] as $unit) {
+				
+		if (isset($this->data['units'])) {
+			foreach($this->data['units'] as $unit) {
 				if ($d13->getUnit($this->node->data['faction'], $unit, 'active')) {
-					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("units", $this->node->data['faction'], $unit) ["name"] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $unit . '.png" title="' . $d13->getLangGL("units", $this->node->data['faction'], $unit) ["name"] . '"></a>';
+					$id = $d13->getUnit($this->node->data['faction'], $unit, 'id');
+					$image = $d13->getUnit($this->node->data['faction'], $id, 'images');
+					$image = $image[0]['image'];
+					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("units", $this->node->data['faction'], $unit) ["name"] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangGL("units", $this->node->data['faction'], $unit) ["name"] . '"></a>';
 				}
 			}
 		}

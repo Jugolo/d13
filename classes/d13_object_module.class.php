@@ -107,7 +107,7 @@ class d13_object_module extends d13_object_base
 		$tvars['tvar_nodeID'] = $this->node->data['id'];
 		$tvars['tvar_slotID'] = $this->data['slotId'];
 		$tvars['tvar_demolishLink'] 		= $this->getDemolish();
-		$tvars['tvar_inventoryLink'] 		= $this->getInventory();
+		
 		$tvars['tvar_linkData'] 			= $this->getModuleUpgrade();
 		$tvars['tvar_moduleItemContent'] 	= $this->getOptions();
 		$tvars['tvar_image'] = $this->data['image'];
@@ -116,7 +116,7 @@ class d13_object_module extends d13_object_base
 		if ($this->data['level'] > 0) {
 			$tvars['tvar_popup'] = $this->getPopup();
 			$tvars['tvar_queue'] = $this->getQueue();
-			
+			$tvars['tvar_inventoryLink'] 	= $this->getInventory();
 			
 			if ($this->node->resources[$this->data['inputResource']]['value'] < $this->data['maxInput']) {
 				$max = $this->node->modules[$this->data['slotId']]['input'] + $this->node->resources[$this->data['inputResource']]['value'];

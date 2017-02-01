@@ -258,7 +258,10 @@ class d13_module_research extends d13_object_module
 		if (isset($this->data['technologies'])) {
 			foreach($this->data['technologies'] as $technology) {
 				if ($d13->getTechnology($this->node->data['faction'], $technology, 'active')) {
-					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology) ["name"] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $d13->getTechnology($this->node->data['faction'], $technology, 'image') . '" title="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology, "name") . '"></a>';
+					$id = $d13->getTechnology($this->node->data['faction'], $technology, 'id');
+					$image = $d13->getTechnology($this->node->data['faction'], $id, 'images');
+					$image = $image[0]['image'];
+					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology) ["name"] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology, "name") . '"></a>';
 				}
 			}
 		}

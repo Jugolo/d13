@@ -3,7 +3,7 @@
 		<div class="card-header no-border">
 			<div class="d13-heading">
 				{{tvar_name}}
-			</div><a class="close-popup" href="#"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
+			</div><a class="close-popup" href="#"><img class="d13-icon hvr-pulse" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
 		</div>
 		<div class="card-content">
 			<div class="card-content-inner">
@@ -261,7 +261,7 @@
 					</option>
 				</select>
 				
-				<input type="image" class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/submit.png"  value="{{tvar_ui_set}}" {{tvar_disableData}}>
+				<input type="image" class="d13-icon hvr-pulse" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/submit.png"  value="{{tvar_ui_set}}" {{tvar_disableData}}>
 				<input id="input{{tvar_sliderID}}" max="{{tvar_sliderMax}}" min="{{tvar_sliderMin}}" name="quantity" ondblclick="showMax('input{{tvar_sliderID}}', 'sliderRangeTrain{{tvar_sliderID}}')" onchange="showValue('sliderRangeTrain{{tvar_sliderID}}', this.value)" oninput="showValue('sliderRangeTrain{{tvar_sliderID}}', this.value)" onmousedown="mySwiper.lockSwipes()" onmouseup="mySwiper.unlockSwipes()" step="1" type="range" value="{{tvar_sliderValue}}" {{tvar_disableData}}>
 				<span class="badge" id="sliderRangeTrain{{tvar_sliderID}}">{{tvar_sliderValue}}</span>
 				

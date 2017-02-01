@@ -5,7 +5,7 @@
 			
   		<div class="card-header no-border">
   			<div class="left">{{tvar_ui_combat}}: {{tvar_combatType}}</div>
-  			<div class="right"><a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>
+  			<div class="right"><a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-icon hvr-pulse" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>
   		</div>
   
   		<div class="card-content">

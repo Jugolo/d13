@@ -12,7 +12,7 @@
 <link rel="stylesheet" type="text/css" href="{{tvar_global_directory}}plugins/framework7/css/framework7.ios.colors.min.css">
 <link rel="stylesheet" type="text/css" href="{{tvar_global_directory}}plugins/pure/forms-nr-min.css">
 <link rel="stylesheet" type="text/css" href="{{tvar_global_directory}}plugins/pure/buttons-min.css">
-
+<link rel="stylesheet" type="text/css" href="{{tvar_global_directory}}plugins/hover/css/hover-min.css">
 
 <link rel="stylesheet" type="text/css" href="{{tvar_global_directory}}templates/{{tvar_global_template}}/css/template.css">
 <link rel="stylesheet" type="text/css" href="{{tvar_global_directory}}templates/{{tvar_global_template}}/css/tooltip.css">
@@ -31,7 +31,7 @@
    		Left: false,
    		jumpAbove: true,
    		jumpLeft: false,
-   		content_source: 'class_id' // class holds id of element with tooltip content
+   		content_source: 'class_id'
 	}
 	dw_Tooltip.writeStyleRule();
 </script>
