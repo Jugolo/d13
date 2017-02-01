@@ -21,7 +21,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -49,7 +49,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -77,7 +77,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -105,7 +105,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -133,7 +133,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -161,7 +161,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -189,7 +189,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -217,7 +217,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -245,7 +245,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -273,7 +273,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -301,7 +301,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -329,7 +329,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -357,7 +357,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -385,7 +385,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -413,7 +413,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -441,7 +441,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -469,7 +469,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -498,7 +498,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -526,7 +526,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -554,7 +554,7 @@
           "value": 10
         }
       ],
-      "attributes": [
+      "battlestats": [
         {
           "stat": "all",
           "value": 2
@@ -569,7 +569,7 @@
       "active": false,
       "type": "unit",
       "id": 22,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -577,7 +577,7 @@
       "active": false,
       "type": "unit",
       "id": 23,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -585,7 +585,7 @@
       "active": false,
       "type": "unit",
       "id": 24,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -593,7 +593,7 @@
       "active": false,
       "type": "unit",
       "id": 25,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -601,7 +601,7 @@
       "active": false,
       "type": "unit",
       "id": 26,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -609,7 +609,7 @@
       "active": false,
       "type": "unit",
       "id": 27,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -617,7 +617,7 @@
       "active": false,
       "type": "unit",
       "id": 28,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -625,7 +625,7 @@
       "active": false,
       "type": "unit",
       "id": 29,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -633,7 +633,7 @@
       "active": false,
       "type": "unit",
       "id": 30,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -641,7 +641,7 @@
       "active": false,
       "type": "unit",
       "id": 31,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -649,7 +649,7 @@
       "active": false,
       "type": "unit",
       "id": 32,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -657,7 +657,7 @@
       "active": false,
       "type": "unit",
       "id": 33,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -665,7 +665,7 @@
       "active": false,
       "type": "unit",
       "id": 34,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -673,7 +673,7 @@
       "active": false,
       "type": "unit",
       "id": 35,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -681,7 +681,7 @@
       "active": false,
       "type": "unit",
       "id": 36,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -689,7 +689,7 @@
       "active": false,
       "type": "unit",
       "id": 37,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -697,7 +697,7 @@
       "active": false,
       "type": "unit",
       "id": 38,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -705,7 +705,7 @@
       "active": false,
       "type": "unit",
       "id": 39,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -713,7 +713,7 @@
       "active": false,
       "type": "unit",
       "id": 40,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -721,7 +721,7 @@
       "active": false,
       "type": "unit",
       "id": 41,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -729,7 +729,7 @@
       "active": false,
       "type": "unit",
       "id": 42,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -737,7 +737,7 @@
       "active": false,
       "type": "unit",
       "id": 43,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -745,7 +745,7 @@
       "active": false,
       "type": "unit",
       "id": 44,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -753,7 +753,7 @@
       "active": false,
       "type": "unit",
       "id": 45,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -761,7 +761,7 @@
       "active": false,
       "type": "unit",
       "id": 46,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -769,7 +769,7 @@
       "active": false,
       "type": "unit",
       "id": 47,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -777,7 +777,7 @@
       "active": false,
       "type": "unit",
       "id": 48,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -785,7 +785,7 @@
       "active": false,
       "type": "unit",
       "id": 49,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -793,7 +793,7 @@
       "active": false,
       "type": "unit",
       "id": 50,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -801,7 +801,7 @@
       "active": false,
       "type": "unit",
       "id": 51,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -809,7 +809,7 @@
       "active": false,
       "type": "unit",
       "id": 52,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -817,7 +817,7 @@
       "active": false,
       "type": "unit",
       "id": 53,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -825,7 +825,7 @@
       "active": false,
       "type": "unit",
       "id": 54,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -833,7 +833,7 @@
       "active": false,
       "type": "unit",
       "id": 55,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -841,7 +841,7 @@
       "active": false,
       "type": "unit",
       "id": 56,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -849,7 +849,7 @@
       "active": false,
       "type": "unit",
       "id": 57,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -857,7 +857,7 @@
       "active": false,
       "type": "unit",
       "id": 58,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -865,7 +865,7 @@
       "active": false,
       "type": "unit",
       "id": 59,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -873,7 +873,7 @@
       "active": false,
       "type": "unit",
       "id": 60,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -881,7 +881,7 @@
       "active": false,
       "type": "unit",
       "id": 61,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -889,7 +889,7 @@
       "active": false,
       "type": "unit",
       "id": 62,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -897,7 +897,7 @@
       "active": false,
       "type": "unit",
       "id": 63,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -905,7 +905,7 @@
       "active": false,
       "type": "unit",
       "id": 64,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -913,7 +913,7 @@
       "active": false,
       "type": "unit",
       "id": 65,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -921,7 +921,7 @@
       "active": false,
       "type": "unit",
       "id": 66,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -929,7 +929,7 @@
       "active": false,
       "type": "unit",
       "id": 67,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -937,7 +937,7 @@
       "active": false,
       "type": "unit",
       "id": 68,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -945,7 +945,7 @@
       "active": false,
       "type": "unit",
       "id": 69,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -953,7 +953,7 @@
       "active": false,
       "type": "unit",
       "id": 70,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -961,7 +961,7 @@
       "active": false,
       "type": "unit",
       "id": 71,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -969,7 +969,7 @@
       "active": false,
       "type": "unit",
       "id": 72,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -977,7 +977,7 @@
       "active": false,
       "type": "unit",
       "id": 73,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -985,7 +985,7 @@
       "active": false,
       "type": "unit",
       "id": 74,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -993,7 +993,7 @@
       "active": false,
       "type": "unit",
       "id": 75,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1001,7 +1001,7 @@
       "active": false,
       "type": "unit",
       "id": 76,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1009,7 +1009,7 @@
       "active": false,
       "type": "unit",
       "id": 77,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1017,7 +1017,7 @@
       "active": false,
       "type": "unit",
       "id": 78,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1025,7 +1025,7 @@
       "active": false,
       "type": "unit",
       "id": 79,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1033,7 +1033,7 @@
       "active": false,
       "type": "unit",
       "id": 80,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1041,7 +1041,7 @@
       "active": false,
       "type": "unit",
       "id": 81,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1049,7 +1049,7 @@
       "active": false,
       "type": "unit",
       "id": 82,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1057,7 +1057,7 @@
       "active": false,
       "type": "unit",
       "id": 83,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1065,7 +1065,7 @@
       "active": false,
       "type": "unit",
       "id": 84,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1073,7 +1073,7 @@
       "active": false,
       "type": "unit",
       "id": 85,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1081,7 +1081,7 @@
       "active": false,
       "type": "unit",
       "id": 86,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1089,7 +1089,7 @@
       "active": false,
       "type": "unit",
       "id": 87,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1097,7 +1097,7 @@
       "active": false,
       "type": "unit",
       "id": 88,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1105,7 +1105,7 @@
       "active": false,
       "type": "unit",
       "id": 89,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1113,7 +1113,7 @@
       "active": false,
       "type": "unit",
       "id": 90,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1121,7 +1121,7 @@
       "active": false,
       "type": "unit",
       "id": 91,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1130,7 +1130,7 @@
       "active": false,
       "type": "unit",
       "id": 92,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1138,7 +1138,7 @@
       "active": false,
       "type": "unit",
       "id": 93,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1146,7 +1146,7 @@
       "active": false,
       "type": "unit",
       "id": 94,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1154,7 +1154,7 @@
       "active": false,
       "type": "unit",
       "id": 95,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1162,7 +1162,7 @@
       "active": false,
       "type": "unit",
       "id": 96,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1170,7 +1170,7 @@
       "active": false,
       "type": "unit",
       "id": 97,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1178,7 +1178,7 @@
       "active": false,
       "type": "unit",
       "id": 98,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1186,7 +1186,7 @@
       "active": false,
       "type": "unit",
       "id": 99,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1194,7 +1194,7 @@
       "active": false,
       "type": "unit",
       "id": 100,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1202,7 +1202,7 @@
       "active": false,
       "type": "unit",
       "id": 101,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1211,7 +1211,7 @@
       "active": false,
       "type": "unit",
       "id": 102,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1219,7 +1219,7 @@
       "active": false,
       "type": "unit",
       "id": 103,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1227,7 +1227,7 @@
       "active": false,
       "type": "unit",
       "id": 104,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1235,7 +1235,7 @@
       "active": false,
       "type": "unit",
       "id": 105,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1243,7 +1243,7 @@
       "active": false,
       "type": "unit",
       "id": 106,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1251,7 +1251,7 @@
       "active": false,
       "type": "unit",
       "id": 107,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1259,7 +1259,7 @@
       "active": false,
       "type": "unit",
       "id": 108,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1267,7 +1267,7 @@
       "active": false,
       "type": "unit",
       "id": 109,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1275,7 +1275,7 @@
       "active": false,
       "type": "unit",
       "id": 110,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1283,7 +1283,7 @@
       "active": false,
       "type": "unit",
       "id": 111,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1291,7 +1291,7 @@
       "active": false,
       "type": "unit",
       "id": 112,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1299,7 +1299,7 @@
       "active": false,
       "type": "unit",
       "id": 113,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1307,7 +1307,7 @@
       "active": false,
       "type": "unit",
       "id": 114,
-      "attributes": [
+      "battlestats": [
         
       ]
     },
@@ -1315,7 +1315,7 @@
       "active": true,
       "type": "unit",
       "id": 115,
-      "attributes": [
+      "battlestats": [
       	{
         "stat": "all",
         "value": 2

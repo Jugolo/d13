@@ -197,7 +197,7 @@ class d13_object_base
 		
 		$upgrade_list = array();
 		$object_upgrades = array();
-		
+
 		// - - - - - - - - - - - - - - - CHECK OBJECT TYPE AND UPGRADE LIST
 		switch ($this->data['supertype'])
 		{
@@ -267,43 +267,35 @@ class d13_object_base
 		foreach($object_upgrades as $my_upgrade) {
 			if ($my_upgrade['level'] > 0) {
 
-				#foreach ($upgrade_list as $tmp_upgrade) {
-				
-					#if ($tmp_upgrade['id'] == $my_upgrade['id']) {
-
-
-								
-					
-						if (isset($my_upgrade['attributes']) && is_array($my_upgrade['attributes'])) {
-							
-							
-							foreach($my_upgrade['attributes'] as $stats) {
-								
-								
-								
-								
-								if ($stats['stat'] == 'all') {
-									foreach($d13->getGeneral('stats') as $stat) {
-										$this->data['upgrade_' . $stat] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stat]);
-										
-									}
-								} else {
-									$this->data['upgrade_' . $stats['stat']] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stats['stat']]);
-								}
+				// - - - - - - - - - - Battlestats scale on percentage base
+				if (isset($my_upgrade['battlestats']) && is_array($my_upgrade['battlestats'])) {
+					foreach($my_upgrade['battlestats'] as $stats) {
+						if ($stats['stat'] == 'all') {
+							foreach($d13->getGeneral('stats') as $stat) {
+								$this->data['upgrade_' . $stat] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stat]);
 							}
+						} else {
+							$this->data['upgrade_' . $stats['stat']] = d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stats['stat']]);
 						}
-
-
-					#}
-				#}
+					}
+				// - - - - - - - - - - Attributes scale on a fixed base
+				} else if (isset($my_upgrade['attributes']) && is_array($my_upgrade['attributes'])) {
+					foreach($my_upgrade['attributes'] as $stats) {
+						if ($stats['stat'] == 'all') {
+							foreach($d13->getGeneral('stats') as $stat) {
+								$this->data['upgrade_' . $stat] = $stats['value'] * $my_upgrade['level'];
+							}
+						} else {
+							$this->data['upgrade_' . $stats['stat']] = $stats['value'] * $my_upgrade['level'];
+						}
+					}
+				}
+				
 			}
 		}
 
-
-	
 	}
 	
-
 	// ----------------------------------------------------------------------------------------
 	// getCheckRequirements
 	// @ Return TRUE if requirements are met (tech, components etc.), otherwise returns FALSE

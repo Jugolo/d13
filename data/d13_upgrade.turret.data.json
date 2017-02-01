@@ -4,7 +4,7 @@
       "active": true,
       "type": "turret",
       "id": 0,
-      "attributes": [
+      "battlestats": [
       	{
         "stat": "all",
         "value": 2
