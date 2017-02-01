@@ -52,7 +52,7 @@ class d13_router
 			}
 		}
 		
-		
+		// this is obsolete once the remaining pages are refactored!
 		$page = CONST_INCLUDE_PATH . "pages/" . $page_access . ".php";
 		if (file_exists($page)) {
 			include_once ($page);
@@ -60,6 +60,7 @@ class d13_router
 			header("location:index.php");
 			exit();
 		}
+		// end obsolete
 		
 	}
 

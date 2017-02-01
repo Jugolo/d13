@@ -240,7 +240,7 @@ class d13_object_base
 				foreach ($this->data['upgrades'] as $upgrade_id) {
 					$tmp_upgrade = $upgrade_list[$upgrade_id];
 					if ($tmp_upgrade['active'] && $tmp_upgrade['type'] == $this->data['type'] && in_array($tmp_upgrade['id'], $this->data['upgrades'])) {
-						$tmp_upgrade['level'] = $this->data['level'];
+						$tmp_upgrade['level'] = $this->data['level']-1;		#!important 
 						$object_upgrades[] = $tmp_upgrade;
 					}
 				}
@@ -427,7 +427,7 @@ class d13_object_base
 			$tmp_array['resource'] = $cost['resource'];
 			$tmp_array['value'] = $cost['value'] * $d13->getGeneral('users', 'cost', $this->data['costType']);
 			$tmp_array['name'] = $d13->getLangGL('resources', $cost['resource'], 'name');
-			$tmp_array['icon'] = $cost['resource'] . '.png';
+			$tmp_array['icon'] = $cost['resource'] . '.png'; //TODO!
 			$tmp_array['factor'] = 1;
 			if ($upgrade) {
 				foreach($this->data['cost_upgrade'] as $key => $upcost) {
@@ -490,10 +490,10 @@ class d13_object_base
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function getCostList()
+	function getCostList($upgrade = false)
 	{
 	
-		$get_costs = $this->getCost();
+		$get_costs = $this->getCost($upgrade);
 		
 		$costData = '';
 		foreach($get_costs as $cost) {
