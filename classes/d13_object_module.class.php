@@ -80,6 +80,9 @@ class d13_object_module extends d13_object_base
 			}
 		}
 		
+		foreach($d13->getGeneral('stats') as $stat) {
+			$this->data[$stat] = $this->data[$stat] + $this->data['upgrade_'.$stat];
+		}
 		
 		
 		
