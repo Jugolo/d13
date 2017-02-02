@@ -113,10 +113,12 @@ class d13_object_module extends d13_object_base
 		$tvars['tvar_image'] = $this->data['image'];
 		$tvars['tvar_moduleDescription'] = d13_misc::toolTip($this->data['name'] . '<br>' . $this->data['description']);
 		
+		$tvars['tvar_inventoryLink'] 	= $this->getInventory();
+		
 		if ($this->data['level'] > 0) {
 			$tvars['tvar_popup'] = $this->getPopup();
 			$tvars['tvar_queue'] = $this->getQueue();
-			$tvars['tvar_inventoryLink'] 	= $this->getInventory();
+			
 			
 			if ($this->node->resources[$this->data['inputResource']]['value'] < $this->data['maxInput']) {
 				$max = $this->node->modules[$this->data['slotId']]['input'] + $this->node->resources[$this->data['inputResource']]['value'];

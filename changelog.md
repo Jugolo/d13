@@ -4,16 +4,20 @@ d13 - open-source strategy browser game engine
 RELEASE CANDIDATE 0
 ------------------------------------------------------------------------------------------
 
-V018	--- UPCOMING UPDATE ---
+V019	--- UPCOMING UPDATE ---
 
 		* Map System
 
-V017	--- UPCOMING UPDATE ---
+V018	--- UPCOMING UPDATE ---
 		
 		* Finalize existing combat system:
 		
 			- Sabotage Reports
 			- Sabotage Checks
+
+V017	--- SECOND STABLE VERSION
+
+		* Another bunch of more or less critical bugfixes and corrections
 
 V016	* Fixed a few more bugs (thanks to BlackScorp)
 		* Added autoload to classes
