@@ -92,15 +92,16 @@
 			</div>
 		</div>
 		<div class="card-footer no-border">
-			<form style="display: inline;" action="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}" class="pure-form" id="componentForm_{{tvar_cid}}" method="post" name="componentForm">
+			<form action="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}" class="pure-form" id="componentForm_{{tvar_cid}}" method="post" name="componentForm">
 				<select class="pure-input" onchange="change_maximum('input{{tvar_sliderID}}', {{tvar_compValue}}, 'componentForm_{{tvar_cid}}', this.value)">
 					<option value="?p=module&action=addComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">{{tvar_ui_craft}}</option>
 					<option value="?p=module&action=removeComponent&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&componentId={{tvar_cid}}">{{tvar_ui_remove}}</option>
 				</select>
 				
 				<input type="image" class="d13-icon hvr-pulse" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/submit.png" type="submit" {{tvar_disableData}} value="{{tvar_ui_set}}">
-				<input id="input{{tvar_sliderID}}" max="{{tvar_sliderMax}}" min="{{tvar_sliderMin}}" name="quantity" ondblclick="showMax('input{{tvar_sliderID}}', 'sliderRangeCraft{{tvar_sliderID}}')" onchange="showValue('sliderRangeCraft{{tvar_sliderID}}', this.value)" oninput="showValue('sliderRangeCraft{{tvar_sliderID}}', this.value)" onmousedown="mySwiper.lockSwipes()" onmouseup="mySwiper.unlockSwipes()" step="1" type="range" value="{{tvar_sliderValue}}" {{tvar_disableData}}>
-				<span class="badge" id="sliderRangeCraft{{tvar_sliderID}}">{{tvar_sliderValue}}</span>
+				<input id="input{{tvar_sliderID}}" max="{{tvar_sliderMax}}" min="{{tvar_sliderMin}}" name="quantity" ondblclick="showInputMax('input{{tvar_sliderID}}', 'sliderRangeCraft{{tvar_sliderID}}')" onchange="showInputValue('sliderRangeCraft{{tvar_sliderID}}', this.value)" oninput="showInputValue('sliderRangeCraft{{tvar_sliderID}}', this.value)" onmousedown="mySwiper.lockSwipes()" onmouseup="mySwiper.unlockSwipes()" step="1" type="range" value="{{tvar_sliderValue}}" {{tvar_disableData}}>
+				<input type="number" size="3" maxlength="3" class="pure-input" min="{{tvar_sliderMin}}" max="{{tvar_sliderMax}}" id="sliderRangeCraft{{tvar_sliderID}}" value="{{tvar_sliderValue}}" onInput="showInputValue('input{{tvar_sliderID}}', this.value)" onChange="showInputValue('input{{tvar_sliderID}}', this.value)">
+				
 				
 			
 			</form>

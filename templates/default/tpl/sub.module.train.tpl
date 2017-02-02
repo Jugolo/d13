@@ -251,7 +251,7 @@
 		
 		<div class="card-footer no-border">
 			
-			<form style="display: inline;" action="?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}" class="pure-form" id="unitForm_{{tvar_uid}}" method="post" name="unitForm_{{tvar_uid}}">
+			<form action="?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}" class="pure-form" id="unitForm_{{tvar_uid}}" method="post" name="unitForm_{{tvar_uid}}">
 				<select class="pure-input" onchange="change_maximum('input{{tvar_sliderID}}', {{tvar_unitValue}}, 'unitForm_{{tvar_uid}}', this.value)">
 					<option value="index.php?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}">
 						{{tvar_ui_train}}
@@ -262,8 +262,9 @@
 				</select>
 				
 				<input type="image" class="d13-icon hvr-pulse" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/submit.png"  value="{{tvar_ui_set}}" {{tvar_disableData}}>
-				<input id="input{{tvar_sliderID}}" max="{{tvar_sliderMax}}" min="{{tvar_sliderMin}}" name="quantity" ondblclick="showMax('input{{tvar_sliderID}}', 'sliderRangeTrain{{tvar_sliderID}}')" onchange="showValue('sliderRangeTrain{{tvar_sliderID}}', this.value)" oninput="showValue('sliderRangeTrain{{tvar_sliderID}}', this.value)" onmousedown="mySwiper.lockSwipes()" onmouseup="mySwiper.unlockSwipes()" step="1" type="range" value="{{tvar_sliderValue}}" {{tvar_disableData}}>
-				<span class="badge" id="sliderRangeTrain{{tvar_sliderID}}">{{tvar_sliderValue}}</span>
+				<input id="input{{tvar_sliderID}}" max="{{tvar_sliderMax}}" min="{{tvar_sliderMin}}" name="quantity" ondblclick="showInputMax('input{{tvar_sliderID}}', 'sliderRangeTrain{{tvar_sliderID}}')" onchange="showInputValue('sliderRangeTrain{{tvar_sliderID}}', this.value)" oninput="showInputValue('sliderRangeTrain{{tvar_sliderID}}', this.value)" onmousedown="mySwiper.lockSwipes()" onmouseup="mySwiper.unlockSwipes()" step="1" type="range" value="{{tvar_sliderValue}}" {{tvar_disableData}}>
+				<input type="number" size="3" maxlength="3" class="pure-input" min="{{tvar_sliderMin}}" max="{{tvar_sliderMax}}" id="sliderRangeTrain{{tvar_sliderID}}" value="{{tvar_sliderValue}}" onInput="showInputValue('input{{tvar_sliderID}}', this.value)" onChange="showInputValue('input{{tvar_sliderID}}', this.value)">
+				
 				
 			</form>
 			

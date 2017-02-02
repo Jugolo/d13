@@ -205,11 +205,6 @@ class d13_object_module extends d13_object_base
 		$vars = array();		
 		$vars['tvar_formAction'] 		= $action;
 		$vars['tvar_sliderID'] 			= $id;
-				
-		if ($min < 10) { $min = "0".$min; }
-		if ($max < 10) { $max = "0".$max; }
-		if ($value < 10) { $value = "0".$value; }
-		
 		$vars['tvar_sliderValue'] 		= max($min, $value);
 		$vars['tvar_sliderMin'] 		= $min;
 		$vars['tvar_sliderMax'] 		= $max;

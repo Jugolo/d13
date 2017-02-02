@@ -1,18 +1,17 @@
 /* -- D13 JS -------------------------------------------------------------------*/
 
-function showValue(id, newValue)
+function showInputValue(id, newValue)
 {
-	if (newValue < 10) { newValue = "0"+newValue; }
-	document.getElementById(id).innerHTML=newValue;
+	
+	document.getElementById(id).value = newValue;
 }
 
-function showMax(id, spanid)
+function showInputMax(id, spanid)
 {
 	obj = document.getElementById(id);
 	newValue = obj.max
-	if (newValue < 10) { newValue = "0"+newValue; }
-	obj.value=newValue;
-	showValue(spanid, newValue);
+	obj.value = newValue;
+	showInputValue(spanid, newValue);
 }
 
 function set_maximum(id, value) {
@@ -91,7 +90,6 @@ function armyCheck()
 function armyValue(id, newValue)
 {
 	
-	if (newValue < 10) { newValue = "0"+newValue; }
 	document.getElementById(id).innerHTML=newValue;
 	document.getElementById('attackerAmount_'+id).value=newValue;
 	
