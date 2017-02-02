@@ -43,6 +43,7 @@ class d13_module_harvest extends d13_object_module
 	{
 		parent::__construct($args);
 	}
+	
 	// ----------------------------------------------------------------------------------------
 	// getOptions
 	// @
@@ -156,4 +157,5 @@ class d13_module_harvest extends d13_object_module
 		return $html;
 	}
 }
+
 ?>

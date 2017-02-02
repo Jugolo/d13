@@ -247,12 +247,12 @@ class d13_module_research extends d13_object_module
 
 		if ((bool)$this->data['busy'] === false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $this->data['available'] > 0) {
-				$tvars = array();
-				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
-				$tvars['tvar_buttonColor'] 	= 'theme-'.$_SESSION[CONST_PREFIX.'User']['color'];
-				$tvars['tvar_buttonData'] 	= 'class="button active open-popup '.$tooltip.'" data-popup=".popup-swiper" onclick="swiperUpdate();"';
-				$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("research");
-				$html = $d13->templateSubpage("sub.module.listbutton", $tvars);
+				
+				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("research");
+				$vars['tvar_list_id'] 	 	 = "swiper";
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
+				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+			
 			} else {
 				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("research");
 				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleDisabled"));
