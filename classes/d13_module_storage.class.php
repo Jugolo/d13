@@ -88,16 +88,18 @@ class d13_module_storage extends d13_object_module
 			$this->data['units'] = $i;											// !important
 			
 			if ($i > 0) {
-				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryResource"));
+				
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
-				$html .= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-				$html .= '<a href="#" class="button active '.$tooltip.' open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
-				$html .= '</p>';
+				
+				$vars['tvar_button_name'] 	 = $d13->getLangUI("inventory");
+				$vars['tvar_list_id'] 	 	 = "list-0";
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryResource"));
+				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				
 			} else {
-				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
-				$html .= '<p class="buttons-row theme-gray">';
-				$html .= '<a href="#" class="button '.$tooltip.'">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
-				$html .= '</p>';
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory");
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryResource"));
+				$html = $d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		
 		}

@@ -87,12 +87,12 @@ class d13_module_defense extends d13_object_module
 		$tvars = parent::getTemplateVariables();
 		
 		$tvars['tvar_unitType'] 			= $this->data['type'];
-		$tvars['tvar_unitClass'] 			= $d13->getLangGL('classes', $this->turret->data['class']);
+		$tvars['tvar_Class'] 			= $d13->getLangGL('classes', $this->turret->data['class']);
 		$tvars['tvar_nodeFaction'] 		= $this->node->data['faction'];
 
 		foreach($d13->getGeneral('stats') as $stat) {
-			$tvars['tvar_unit'.$stat] 			= $this->turret->data[$stat];
-			$tvars['tvar_unit'.$stat.'Plus'] 	= "[+".$this->turret->data['upgrade_'.$stat]."]";
+			$tvars['tvar_'.$stat] 			= $this->turret->data[$stat];
+			$tvars['tvar_'.$stat.'Plus'] 	= "[+".$this->turret->data['upgrade_'.$stat]."]";
 		}
 
 		return $tvars;
@@ -163,5 +163,7 @@ class d13_module_defense extends d13_object_module
 		global $d13;
 		return $d13->getLangUI("none");
 	}
+	
 }
+
 ?>

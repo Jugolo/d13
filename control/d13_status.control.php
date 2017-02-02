@@ -55,7 +55,7 @@ class d13_statusController extends d13_controller
 	}
 	
 	// ----------------------------------------------------------------------------------------
-	// 
+	// doControl
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
@@ -161,13 +161,16 @@ class d13_statusController extends d13_controller
 			
 			if ($i > 0) {
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
-				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-				$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-1">' . $d13->getLangUI("set") . " " . $d13->getLangUI("avatar") . '</a>';
-				$html.= '</p>';
+				
+				$vars['tvar_button_name'] 	 = $d13->getLangUI("set") . " " . $d13->getLangUI("avatar");
+				$vars['tvar_list_id'] 		 = "list-1"; 
+				$vars['tvar_button_tooltip'] = ""; 
+				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				
 			} else {
-				$html.= '<p class="buttons-row theme-gray">';
-				$html.= '<a href="#" class="button">' . $d13->getLangUI("set") . " " . $d13->getLangUI("avatar") .'</a>';
-				$html.= '</p>';
+				$vars['tvar_button_name'] 	 = $d13->getLangUI("set") . " " . $d13->getLangUI("avatar");
+				$vars['tvar_button_tooltip'] = ""; 
+				$html = $d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		
 		}

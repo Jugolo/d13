@@ -271,10 +271,10 @@ class d13_tpl
 	
     	$dir = CONST_INCLUDE_PATH. 'cache/templates/';
     	$folder = dir($dir);
-		while ($dateiname = $folder->read()) {
-			if (filetype($dir.$dateiname) != "dir") {
-				if (strtotime("-60 minutes") > @filemtime($dir.$dateiname)) {
-					@unlink($dir.$dateiname);
+		while ($file = $folder->read()) {
+			if (filetype($dir.$file) != "dir") {
+				if (strtotime("-60 minutes") > @filemtime($dir.$file)) {
+					@unlink($dir.$file);
 				}
 			}
 		}

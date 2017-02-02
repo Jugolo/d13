@@ -82,16 +82,18 @@ class d13_module_craft extends d13_object_module
 			}
 			
 			if ($i>0) {
-				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryCraft"));
+				
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
-				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-				$html .= '<a href="#" class="button active '.$tooltip.' open-popup" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
-				$html.= '</p>';
+				
+				$vars['tvar_button_name'] 	 =  $this->data['name'] . " " . $d13->getLangUI("inventory");
+				$vars['tvar_list_id'] 	 	 = "list-0";
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryCraft"));
+				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				
 			} else {
-				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
-				$html.= '<p class="buttons-row theme-gray">';
-				$html .= '<a href="#" class="button '.$tooltip.'">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
-				$html.= '</p>';
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory");
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
+				$html = $d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		}
 		
@@ -265,19 +267,16 @@ class d13_module_craft extends d13_object_module
 
 		if ((bool)$this->data['busy'] === false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
-				$tvars = array();
-				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
-				$tvars['tvar_buttonColor'] 	= 'theme-'.$_SESSION[CONST_PREFIX.'User']['color'];
-				$tvars['tvar_buttonData'] 	= 'class="button active open-popup '.$tooltip.'" data-popup=".popup-swiper" onclick="swiperUpdate();"';
-				$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("craft");
-				$html = $d13->templateSubpage("sub.module.listbutton", $tvars);
+			
+				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("craft");
+				$vars['tvar_list_id'] 	 	 = "swiper";
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleInactive"));
+				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				
 			} else {
-				$tvars = array();
-				$tooltip = d13_misc::toolTip($d13->getLangUI('tipModuleDisabled'));
-				$tvars['tvar_buttonColor'] 	= 'theme-gray';
-				$tvars['tvar_buttonData'] 	= 'class="button '.$tooltip.'"';
-				$tvars['tvar_buttonName'] 	= $d13->getLangUI("launch") . ' ' . $d13->getLangUI("craft");
-				$html = $d13->templateSubpage("sub.module.listbutton", $tvars);
+				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("craft");
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleDisabled"));
+				$html = $d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		}
 

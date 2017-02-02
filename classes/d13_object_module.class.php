@@ -48,7 +48,7 @@ class d13_object_module extends d13_object_base
 	
 	// ----------------------------------------------------------------------------------------
 	// checkStatsExtended
-	// @
+	// @ check and setup stats that are unique to this object type
 	//
 	// ----------------------------------------------------------------------------------------
 
@@ -106,7 +106,7 @@ class d13_object_module extends d13_object_base
 
 	// ----------------------------------------------------------------------------------------
 	// getTemplateVariables
-	// @
+	// @ retrieve all template variables that the tpl class requires to display this object type
 	//
 	// ----------------------------------------------------------------------------------------
 
@@ -254,15 +254,17 @@ class d13_object_module extends d13_object_base
 		if ($this->data['level'] > 0) {
 			if ($d13->getGeneral('options', 'moduleDemolish')) {
 				if ($this->node->modules[$this->data['slotId']]['input'] <= 0) {
-					$tooltip = d13_misc::toolTip($d13->getLangUI("tipDemolishModule"));
-					$html .= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-					$html .= '<a href="?p=module&action=remove&nodeId='.$this->node->data['id'].'&slotId='.$this->data['slotId'].'" class="external button active '.$tooltip.'">'.$d13->getLangUI("removeModule").'</a>';
-					$html .= '</p>';
+
+					$vars['tvar_button_name'] 	 = $d13->getLangUI("removeModule");
+					$vars['tvar_button_link'] 	 = "?p=module&action=remove&nodeId='.$this->node->data['id'].'&slotId='.$this->data['slotId'].'";
+					$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipDemolishModule"));
+					$html = $d13->templateSubpage("button.external.enabled", $vars);
+					
 				} else {
-					$tooltip = d13_misc::toolTip($d13->getLangUI("tipRemoveWorkersfirst"));
-					$html .= '<p class="buttons-row">';
-					$html .= '<a href="#" class="external button '.$tooltip.'">'.$d13->getLangUI("removeModule").'</a>';
-					$html .= '</p>';
+					
+					$vars['tvar_button_name'] 	 = $d13->getLangUI("removeModule");
+					$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipRemoveWorkersfirst"));
+					$html = $d13->templateSubpage("button.popup.disabled", $vars);
 				}
 			}
 		}
@@ -272,7 +274,7 @@ class d13_object_module extends d13_object_base
 	
 	// ----------------------------------------------------------------------------------------
 	// getModuleUpgrade
-	// generates and returns either a build or an upgrade button
+	// generates and returns either a build or an upgrade button template snippet
 	// ----------------------------------------------------------------------------------------
 
 	public
@@ -280,6 +282,7 @@ class d13_object_module extends d13_object_base
 	function getModuleUpgrade()
 	{
 		global $d13;
+		
 		$html = '';
 		
 		if ($this->data['level'] > 0 && $this->data['maxLevel'] == 1) {
@@ -335,15 +338,16 @@ class d13_object_module extends d13_object_base
 						false);
 					
 					$d13->templateInject($d13->templateSubpage("sub.popup.build" , $tvars, true));
-					$tooltip = d13_misc::toolTip($d13->getLangUI("addModule") . ' ' . $d13->getLangUI("tipModuleBuildup"));
-					$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-					$html.= '<a href="#" class="button active open-popup '.$tooltip.'" data-popup=".popup-build-'.$this->data['moduleId'].'">' . $d13->getLangUI("addModule") . '</a>';
-					$html.= '</p>';
+									
+					$vars['tvar_button_name'] 	 = $d13->getLangUI("addModule");
+					$vars['tvar_list_id'] 	 	 = "build-".$this->data['moduleId'];
+					$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("addModule") . ' ' . $d13->getLangUI("tipModuleBuildup"));
+					$html.= $d13->templateSubpage("button.popup.enabled", $vars);
+					
 				} else {
-					$tooltip = d13_misc::toolTip($d13->getLangUI("tipModuleBuildupDisabled"));
-					$html.= '<p class="buttons-row theme-gray">';
-					$html.= '<a href="#" class="button '.$tooltip.'">' . $d13->getLangUI("addModule") . " " . $d13->getLangUI("impossible") . '</a>';
-					$html.= '</p>';
+					$vars['tvar_button_name'] 	 = $d13->getLangUI("addModule") . " " . $d13->getLangUI("impossible");
+					$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleBuildupDisabled"));
+					$html = $d13->templateSubpage("button.popup.disabled", $vars);
 				}
 			
 			} else {
@@ -373,21 +377,21 @@ class d13_object_module extends d13_object_base
 								false);
 				
 							$d13->templateInject($d13->templateSubpage("sub.popup.build" , $tvars, true));
-							$tooltip = d13_misc::toolTip($d13->getLangUI("upgrade") . ' ' . $d13->getLangUI("tipModuleBuildup"));
-							$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-							$html.= '<a href="#" class="button active open-popup '.$tooltip.'" data-popup=".popup-build-'.$this->data['moduleId'].'">' . $d13->getLangUI("upgrade") . '</a>';
-							$html.= '</p>';
+							
+							$vars['tvar_button_name'] 	 = $d13->getLangUI("upgrade");
+							$vars['tvar_list_id'] 	 	 = "build-".$this->data['moduleId'];
+							$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("upgrade") . ' ' . $d13->getLangUI("tipModuleBuildup"));
+							$html = $d13->templateSubpage("button.popup.enabled", $vars);
+							
 						} else {
-							$tooltip = d13_misc::toolTip($d13->getLangUI("tipModuleBuildupDisabled"));
-							$html.= '<p class="buttons-row theme-gray">';
-							$html.= '<a href="#" class="button '.$tooltip.'">' . $d13->getLangUI("upgrade") . " " . $d13->getLangUI("impossible") . '</a>';
-							$html.= '</p>';
+							$vars['tvar_button_name'] 	 = $d13->getLangUI("upgrade") . " " . $d13->getLangUI("impossible");
+							$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleBuildupDisabled"));
+							$html = $d13->templateSubpage("button.popup.disabled", $vars);
 						}
 					} else {
- 						$tooltip = d13_misc::toolTip($d13->getLangUI("tipModuleMaxLevel"));
-						$html.= '<p class="buttons-row theme-gray">';
-						$html.= '<a href="#" class="button '.$tooltip.'">' . $d13->getLangUI("maxModuleLevel") . '</a>';
-						$html.= '</p>';
+						$vars['tvar_button_name'] 	 = $d13->getLangUI("maxModuleLevel");
+						$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleMaxLevel"));
+						$html = $d13->templateSubpage("button.popup.disabled", $vars);
 					}
 				}
 			}

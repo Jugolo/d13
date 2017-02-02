@@ -74,16 +74,18 @@ class d13_module_command extends d13_object_module
 				}
 			}
 			if ($i>0) {
-				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryResource"));
+								
 				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
-				$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-				$html.= '<a href="#" class="button active open-popup '.$tooltip.'" data-popup=".popup-list-0">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . '</a>';
-				$html.= '</p>';
+
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory");
+				$vars['tvar_list_id'] 	 	 = "list-0";
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryResource"));
+				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+							
 			} else {
-				$tooltip = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
-				$html.= '<p class="buttons-row theme-gray">';
-				$html.= '<a href="#" class="button '.$tooltip.'">' . $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty") .'</a>';
-				$html.= '</p>';
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty");
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
+				$html = $d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		}
 
@@ -162,13 +164,15 @@ class d13_module_command extends d13_object_module
 		
 		if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $i > 0) {
 			$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
-			$html.= '<p class="buttons-row theme-' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">';
-			$html.= '<a href="#" class="button active open-popup" data-popup=".popup-list-1">' . $d13->getLangUI("launch") . " " . $d13->getLangUI("command") . '</a>';
-			$html .= '</p>';
+			
+			$vars['tvar_button_name'] 	 =$d13->getLangUI("launch") . " " . $d13->getLangUI("command");
+			$vars['tvar_list_id'] 	 	 = "list-1";
+			$vars['tvar_button_tooltip'] = "";
+			$html = $d13->templateSubpage("button.popup.enabled", $vars);
 		} else {
-			$html.= '<p class="buttons-row theme-gray">';
-			$html.= '<a href="#" class="button">' . $d13->getLangUI("launch") . " " . $d13->getLangUI("command") .'</a>';
-			$html.= '</p>';
+			$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . " " . $d13->getLangUI("command");
+			$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
+			$html = $d13->templateSubpage("button.popup.disabled", $vars);
 		}
 		
 		return $html;
@@ -205,4 +209,5 @@ class d13_module_command extends d13_object_module
 		return $d13->getLangUI("none");
 	}
 }
+
 ?>
