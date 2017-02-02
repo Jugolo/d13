@@ -11,6 +11,23 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// ABOUT OBJECTS:
+// 
+// The most important objects in the game have been grouped into a class "objects". This
+// includes modules, technologies, units, components and so on. 
+//
+// NOTES:
+//
+// Represents combat units like soldiers, space-ships, orcs, knights and so on. stationed
+// at a node (town), can march from and to nodes and participate in battles, scouts and
+// other activities. feature they own set of combat/scout related statistics that allow
+// to represent tactical strengths/weaknesses.
+//
 // ========================================================================================
 
 class d13_object_unit extends d13_object_base
@@ -28,12 +45,11 @@ class d13_object_unit extends d13_object_base
 		parent::__construct($args);
 	}
 	
-		// ----------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------
 	// checkStatsExtended
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkStatsExtended()

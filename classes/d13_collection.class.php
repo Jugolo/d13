@@ -1,14 +1,38 @@
 <?php
-// ----------------------------------------------------------------------------------------
-// d13_Collection
-// @
+
+// ========================================================================================
 //
-// ----------------------------------------------------------------------------------------
+// COLLECTION.CLASS
+//
+// # Author......................: Andrei Busuioc (Devman)
+// # Author......................: Tobias Strunz (Fhizban)
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo.................: https://github.com/CriticalHit-d13/d13
+// # Project Documentation.......: http://www.critical-hit.biz
+// # License.....................: https://creativecommons.org/licenses/by/4.0/
+//
+//
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// A wrapper class for IteratorAggregate used instead of arrays to handle large amounts
+// of data (Still arrays at their core). Allows to iterate through object lists in the
+// same way as arrays.
+//
+// ========================================================================================
 
 class d13_collection implements IteratorAggregate
 {
     private $data = array();
-
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	// ----------------------------------------------------------------------------------------
     public
 
     function __construct($data)
@@ -16,18 +40,30 @@ class d13_collection implements IteratorAggregate
         $this->data = $data;
     }
 
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	// ----------------------------------------------------------------------------------------
     public
 
     function getIterator()
     {
         return new ArrayIterator($this->data);
     }
-
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	// ----------------------------------------------------------------------------------------
     public function getAll()
     {
         return $this->data;
     }
-
+    
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	// ----------------------------------------------------------------------------------------
     public function getByKey($key, $field)
     {
         if (array_key_exists($key, $this->data)) {
@@ -36,7 +72,11 @@ class d13_collection implements IteratorAggregate
             return NULL;
         }
     }
-
+    
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	// ----------------------------------------------------------------------------------------
     public function getByID($id, $field = "")
     {
         foreach ($this->data as $entry) {
@@ -51,7 +91,11 @@ class d13_collection implements IteratorAggregate
 
         return NULL;
     }
-
+    
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	// ----------------------------------------------------------------------------------------
     public function get($indices)
     {
 
@@ -86,3 +130,5 @@ class d13_collection implements IteratorAggregate
 
     }
 }
+
+// ====================================================================================EOF

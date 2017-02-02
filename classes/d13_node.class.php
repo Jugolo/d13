@@ -11,6 +11,17 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// A node represents a town (planet etc.) in the game. This is one of the central classes
+// and compromises a lot of functionality. It is like a turning point for modules (buildings),
+// resources, technologies, task-queues, resource production and so on.
+//
 // ========================================================================================
 
 class d13_node

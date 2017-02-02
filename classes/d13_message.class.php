@@ -11,11 +11,25 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// Responsible for sending and retrieving text messages to/from users. Also takes blocklist
+// and profanity filter into consideration. A player cannot receive messages from users on
+// his/her blocklist and a player cannot send messages that include words from the blockwords
+// list. Blockwords list is located in locales directory as JSON file (cached as data).
+//
+// a few functions are still missing, but not vital:
+//
+// 1. sending a message to all alliance (guild/clan) members.
+// 2. sending a message to all players (admin only).
+// 3. adding resources to a message (gifts for friends or gifts from admin).
+//
 // ========================================================================================
-// ----------------------------------------------------------------------------------------
-//
-//
-// ----------------------------------------------------------------------------------------
 
 class d13_message
 

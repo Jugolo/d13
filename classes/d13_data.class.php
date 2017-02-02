@@ -12,9 +12,18 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// Reads data from JSON files and converts them into cached files. Also makes use of the
+// collection class in order to access data. Reads all json files from the data directory,
+// used to handle units, technologies and so on. Also reads all language data files.
+//
 // ========================================================================================
-
-
 
 // ----------------------------------------------------------------------------------------
 // d13_data
@@ -33,7 +42,6 @@ class d13_data
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function __construct()
@@ -130,11 +138,10 @@ class d13_data
 			throw  new Exception('Cannot read url: ' . $url);
 		}
 		$jsonData = json_decode($jsonString, true);
-		
-		
+			
 		$vars = var_export($jsonData, true);
 		$name = "d13_".$this->getRealName($name) ."_cache";
-		
+	
 		$cacheFileData = '';
 		$cacheFileData .= '<?php '.PHP_EOL;
 		$cacheFileData .= 'class '.$name.' extends d13_collection {'.PHP_EOL;
@@ -145,14 +152,13 @@ class d13_data
 		$cacheFileData .= '}'.PHP_EOL;
 		$cacheFileData .= 'return new '.$name.'();'.PHP_EOL;
 		$cacheFileData .= '?>';
-		
+	
 		file_put_contents($cacheFile, $cacheFileData);
 		$classConstruct = require_once $cacheFile;
 		return $classConstruct;
-		
+	
 	}
-
+	
 }
 
 // =====================================================================================EOF
-

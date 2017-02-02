@@ -11,6 +11,17 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// Used to organize the message blacklist of a player. Allows to check, add, remove and
+// retrieve entries to/from the blacklist. Blacklisting prevents a player from receiving
+// messages from other players on his/her blacklist in order to prevent spam/molesting.
+//
 // ========================================================================================
 
 class d13_blacklist

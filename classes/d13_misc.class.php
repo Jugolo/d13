@@ -11,6 +11,15 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// Includes some static functions for common stuff that is required everywhere.
+//
 // ========================================================================================
 
 class d13_misc
@@ -129,7 +138,6 @@ class d13_misc
 	// ----------------------------------------------------------------------------------------
 	// percentage
 	// ----------------------------------------------------------------------------------------
-
 	public static
 
 	function percentage($fraction, $total)
@@ -145,7 +153,6 @@ class d13_misc
 	// ----------------------------------------------------------------------------------------
 	// upgraded_value
 	// ----------------------------------------------------------------------------------------
-
 	public static
 	
 	function upgraded_value($fraction, $total)
@@ -169,7 +176,6 @@ class d13_misc
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public static
 
 	function clean($data, $type = 0)
@@ -197,7 +203,6 @@ class d13_misc
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public static
 
 	function newId($type)
@@ -220,7 +225,6 @@ class d13_misc
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public static
 
 	function sToHMS($seconds, $asString=false)
@@ -241,7 +245,6 @@ class d13_misc
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public static
 
 	function microTime()
@@ -249,7 +252,7 @@ class d13_misc
 		list($usec, $sec) = explode(" ", microtime());
 		return ((float)$usec + (float)$sec);
 	}
+	
 }
 
 // =====================================================================================EOF
-

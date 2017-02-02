@@ -11,6 +11,27 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// ABOUT OBJECTS:
+// 
+// The most important objects in the game have been grouped into a class "objects". This
+// includes modules, technologies, units, components and so on. 
+//
+// NOTES:
+//
+// This is the base object all other object classes are derived from. It was decided to use
+// this base object because they all share a lot of similarities. Even after months of
+// development, a new object type was never added. Therefore it was decided to keep it
+// that way.
+//
+// there is still a lot of object specific code in this class (with switch statements), but
+// the amount of non-specific code outweighs it. For example the upgrade system is the same
+// for all object types and can now be easily modified by altering this class only.
+//
 // ========================================================================================
 
 class d13_object_base

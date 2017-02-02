@@ -1,9 +1,29 @@
 <?php
 
-// ----------------------------------------------------------------------------------------
-// d13_module_factory
+// ========================================================================================
 //
-// ----------------------------------------------------------------------------------------
+// MODULE.FACTORY.CLASS
+//
+// # Author......................: Andrei Busuioc (Devman)
+// # Author......................: Tobias Strunz (Fhizban)
+// # Sourceforge Download........: https://sourceforge.net/projects/d13/
+// # Github Repo.................: https://github.com/CriticalHit-d13/d13
+// # Project Documentation.......: http://www.critical-hit.biz
+// # License.....................: https://creativecommons.org/licenses/by/4.0/
+//
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// A simple factory class that is responsible for creating new instances of modules.
+//
+// this whole class could be removed by refactoring actually as all module classes use
+// the same constructor arguments.
+//
+// ========================================================================================
 
 class d13_module_factory
 

@@ -17,6 +17,8 @@ error_reporting(E_ALL);
 header("Cache-Control: no-cache, must-revalidate"); 
 header("Pragma: no-cache");
 date_default_timezone_set('Europe/Berlin');
+ini_set('default_charset', 'UTF-8');
+
 ob_start();
 
 require_once("config/d13_core.inc.php");

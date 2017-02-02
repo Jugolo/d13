@@ -11,18 +11,29 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// This class accesses the map and is only responsible for retrieving a certain part of the
+// map table. It can return a single tile, several tiles (sector) or the whole map.
+//
+// The image and link creation functions are out of date and will be changed later to the
+// new system.
+//
 // ========================================================================================
 
 class d13_grid
 
 {
-	public $data = array(
-);
+	public $data = array();
 
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function get($x, $y)
@@ -35,7 +46,6 @@ class d13_grid
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getAll()
@@ -48,7 +58,6 @@ class d13_grid
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getFree()
@@ -70,7 +79,6 @@ class d13_grid
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public static
 
 	function getSector($x, $y)
@@ -84,7 +92,6 @@ class d13_grid
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getSectorImage($x, $y, &$i, $template)
@@ -105,7 +112,6 @@ class d13_grid
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getSectorLink($x, $y, &$i)

@@ -11,6 +11,17 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// The player (user) class organizes access and retrieval of user related data. Also allows
+// to add a new user or remove a user. Add experience to a user or alter it's avatar or other
+// database fields.
+//
 // ========================================================================================
 
 class d13_user

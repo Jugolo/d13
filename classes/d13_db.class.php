@@ -11,12 +11,28 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// Just a very simple wrapper for database access, like database abstraction layer.
+//
 // ========================================================================================
 
 class d13_db
 
 {
+
 	private $db;
+
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
 	public
 
 	function __construct()
@@ -24,7 +40,13 @@ class d13_db
 		$this->create(CONST_DB_HOST, CONST_DB_USER, CONST_DB_PASS, CONST_DB_NAME);
 	}
 
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
 	private
+	
 	function create($dbHost, $dbUser, $dbPass, $dbName)
 	{
 		$this->db = new mysqli($dbHost, $dbUser, $dbPass, $dbName);
@@ -33,6 +55,11 @@ class d13_db
 		}
 	}
 
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
 	public
 
 	function query($query)
@@ -47,6 +74,11 @@ class d13_db
 		return NULL;
 	}
 
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
 	public
 
 	function fetch($result)
@@ -54,6 +86,11 @@ class d13_db
 		return $result->fetch_array(MYSQLI_ASSOC);
 	}
 
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
 	public
 
 	function real_escape_string($string)
@@ -61,6 +98,11 @@ class d13_db
 		return $this->db->real_escape_string($string);
 	}
 
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
 	public
 
 	function affected_rows()
@@ -70,4 +112,3 @@ class d13_db
 }
 
 // =====================================================================================EOF
-

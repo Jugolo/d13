@@ -11,6 +11,21 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// A really simple router that interprets the current URL and all of its POST and GET parameters.
+// Compares the URL with an internal list, checks if login or admin access is required. Does not
+// allow to call any other URL besides those in the list (list is defined in data directory as
+// JSON file).
+//
+// also performs a rather bad sanitizing of all POST and GET parameters. after that, the
+// POST and GET vars can be used like usual.
+//
 // ========================================================================================
 
 class d13_router

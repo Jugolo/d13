@@ -11,6 +11,17 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// Nodes (towns) contain several Task-Queues. The queues are used to keep track of all
+// tasks that are currently active. This includes building, upgrading, crafting, training
+// and so on. Includes army movement/returning as well. 
+//
 // ========================================================================================
 
 class d13_queue

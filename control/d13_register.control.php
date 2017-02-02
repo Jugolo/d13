@@ -84,7 +84,7 @@ class d13_registerController extends d13_controller
 									$activation->data['code'] = $code;
 									$status = $activation->add();
 									if ($status == 'done') {
-										$status = email(CONST_GAME_TITLE, $user->data['email'], CONST_GAME_TITLE . ' ' . $d13->getLangUI("registration") , $body);
+										$status = d13_api::email(CONST_GAME_TITLE, $user->data['email'], CONST_GAME_TITLE . ' ' . $d13->getLangUI("registration") , $body);
 									}
 								}
 							}

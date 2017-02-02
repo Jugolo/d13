@@ -11,11 +11,30 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// Ah - the big, ugly engine class that is currently accessed in literally every other
+// class, function and piece of code using the 'global' keyword. This should be changed
+// later to some form of dependency injection.
+// 
+// This class holds all utility classes that are required all the time (like the database,
+// the template and the game data itself).
+//
+// features a series of wrapper functions to access the classes within.
+//
+// An OOP breaking global combined with the god-class anti-pattern.
+//
 // ========================================================================================
 
 class d13_engine
 
 {
+
 	public $flags, $data;
 
 	private $db, $tpl, $router, $logger, $session, $profiler;

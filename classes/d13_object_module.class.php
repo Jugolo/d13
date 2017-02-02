@@ -11,6 +11,22 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// ABOUT OBJECTS:
+// 
+// The most important objects in the game have been grouped into a class "objects". This
+// includes modules, technologies, units, components and so on. 
+//
+// NOTES:
+//
+// Modules represent Buildings and are always part of a Node (town). This is the most
+// complex object type and features several child classes as well. Almost all of the gameplay
+// functionality is represented using modules.
+//
 // ========================================================================================
 
 class d13_object_module extends d13_object_base

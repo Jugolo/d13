@@ -11,6 +11,19 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+//
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// Responsible for all calculations regarding a battle between two armies. Requires army
+// data of attacker/defender. Not responsible for movement and/or fuel costs. Handles all
+// aspects including damage, casualties, scouting, loot and sending combat reports to the
+// participants.
+//
 // ========================================================================================
 
 class d13_combat
@@ -1795,4 +1808,3 @@ class d13_combat
 }
 
 // =====================================================================================EOF
-

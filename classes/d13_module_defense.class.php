@@ -11,12 +11,23 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
-// ========================================================================================
-
-// ----------------------------------------------------------------------------------------
-// d13_module_defense
+// ABOUT CLASSES:
 //
-// ----------------------------------------------------------------------------------------
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// ABOUT MODULES:
+//
+// Modules are Building Objects. Each Node (Town) can contain one or more Modules. Modules
+// are the only objects that feature a level and can be upgraded directly. Most of the
+// main gameplay features are handled using modules. Modules require a worker resource in
+// order to be built/upgraded and require this worker resource in order to function as well.
+//
+// NOTES:
+//
+// 
+//
+// ========================================================================================
 
 class d13_module_defense extends d13_object_module
 

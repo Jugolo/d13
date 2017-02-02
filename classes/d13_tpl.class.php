@@ -11,6 +11,24 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
+// A simple, home-made template engine. This class is the middleman between the controller
+// classes and the template files.
+//
+// Creates a new template by replacing tokens {{inside curly brackets}} with the provided
+// data. Can merge data from the language files and some global data as well and combine
+// several templates before they are finally sent to the client. can optionally inject
+// additional code at the very end of a template (required to handle popup windows and
+// tooltips dynamically).
+//
+// allows to cache template files created that way for faster access later.
+//
 // ========================================================================================
 
 class d13_tpl
@@ -309,4 +327,3 @@ class d13_tpl
 }
 
 // =====================================================================================EOF
-

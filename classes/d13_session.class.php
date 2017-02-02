@@ -12,19 +12,31 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
-// ========================================================================================
-// ----------------------------------------------------------------------------------------
-// SessionManager
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// NOTES:
+//
 // This SessionManager starts starts the php session (regardless of which handler is set)
 // and secures it by locking down the cookie, restricting the session to a specific host and
 // browser, and regenerating the ID.
-// ----------------------------------------------------------------------------------------
+//
+// This is an attempt to secure the basic PHP sessions a little bit more.
+//
+// ========================================================================================
 
 class d13_session
 
 {
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
 	public
-
+	
 	function __construct()
 	{
 		$this->sessionStart(CONST_PREFIX, CONST_SESSION_LIFETIME + time() , '/', CONST_DOMAIN);
@@ -40,8 +52,8 @@ class d13_session
 	// @param string $domain Used to allow subdomains access to the cookie
 	// @param bool $secure If true the browser only sends the cookie over https
 	// ----------------------------------------------------------------------------------------
-
 	public static
+	
 	function sessionStart($name, $limit = 0, $path = '/', $domain = null, $secure = null)
 	{
 
