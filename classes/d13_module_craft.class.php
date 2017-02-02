@@ -57,7 +57,11 @@ class d13_module_craft extends d13_object_module
 				if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
 					if ($unit['value'] > 0) {
 						
-						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $uid . '.png" title="' . $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'] . '">';
+						$image = $d13->getComponent($this->node->data['faction'], $uid, 'images');
+						$image = $image[0]['image'];
+
+						
+						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'] . '">';
 						$tvars['tvar_listLabel'] = $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'];
 						$tvars['tvar_listAmount'] = $unit['value'];
 						$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);

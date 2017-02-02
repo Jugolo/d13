@@ -53,7 +53,12 @@ class d13_module_research extends d13_object_module
 			foreach($d13->getTechnology($this->node->data['faction']) as $tid => $tech) {
 				if ($tech['active'] && in_array($tid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'technologies'))) {
 					if ($this->node->technologies[$tid]['level'] > 0) {
-						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $tid . '.png" title="' . $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['name'] . '">';
+						
+						$image = $d13->getTechnology($this->node->data['faction'], $tid, 'images');
+						$image = $image[0]['image'];
+
+						
+						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $image .'" title="' . $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['name'] . '">';
 						$tvars['tvar_listLabel'] = $d13->getLangGL('technologies', $this->node->data['faction'], $tid) ['name'];
 						$tvars['tvar_listAmount'] = $d13->getLangUI("level") . " " . $this->node->technologies[$tid]['level'];
 						$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);

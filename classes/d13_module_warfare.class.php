@@ -65,7 +65,12 @@ class d13_module_warfare extends d13_object_module
 		if ($this->data['options']['inventoryList']) {
 			foreach($this->node->units as $uid => $unit) {
 				if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
-					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $d13->getUnit($this->node->data['faction'], $uid, 'image') . '" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
+					
+					
+					$image = $d13->getUnit($this->node->data['faction'], $uid, 'images');
+					$image = $image[0]['image'];
+
+					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
 					$tvars['tvar_listLabel'] = $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'];
 					$tvars['tvar_listAmount'] = $unit['value'];
 					$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
