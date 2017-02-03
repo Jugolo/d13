@@ -278,9 +278,7 @@ class d13_object_base
 		foreach($this->node->technologies as $technologies) {
 			if ($technologies['level'] > 0) {
 				$technology = $d13->getTechnology($this->node->data['faction'], $technologies['id']);
-				$d13->logger($this->data['name']);
 				if ($technology['type'] == $this->data['type'] && in_array($this->data['id'], $technology['targets'])) {
-					$d13->logger($this->data['name']);
 					foreach ($technology['upgrades'] as $upgrade_id) {
 						$tmp_upgrade = array();
 						$tmp_upgrade = $upgrade_list[$upgrade_id];

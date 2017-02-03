@@ -9,17 +9,17 @@
     "buff": "harvest",
     "modifier": 0.1,
     "cost": [
-	{
-	"resource": 0,
-	"value": 100
-	}
-	]
+		{
+		"resource": 0,
+		"value": 100
+		}
+	],
 	"requirements": [
-	{
-	"type": "modules",
-	"id": 14,
-	"level": 1
-	}
+		{
+		"type": "modules",
+		"id": 14,
+		"level": 1
+		}
 	]
   }
 ]

@@ -210,7 +210,14 @@ class d13_engine
 	{
 		return $this->data->json['shields']->get(func_get_args());
 	}
+	
+	public
 
+	function getBuff()
+	{
+		return $this->data->json['buff']->get(func_get_args());
+	}
+	
 	public
 
 	function getAvatar()

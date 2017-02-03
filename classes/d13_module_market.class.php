@@ -55,7 +55,74 @@ class d13_module_market extends d13_object_module
 
 	function getInventory()
 	{
-		return '';
+		global $d13;
+		
+		$html = '';
+		$inventoryData = '';
+		$tvars['tvar_sub_popuplist'] = '';
+		$tvars['tvar_listID'] = 0;
+		$i=0;
+		
+		if ($this->data['options']['inventoryList']) {
+
+			
+			foreach ($this->data['inventory'] as $item) {
+			
+				switch ($item['object'])
+				{
+					case "resource":
+						$name = $d13->getLangGL('resources', $item['id'], 'name');
+						$image = $d13->getResource($item['id'], 'image');
+						$dir = "resources";
+						break;
+					case "component":
+						$object = $d13->getComponent($this->node->data['faction'], $item['id']);
+						$name = $d13->getLangGL('components', $this->node->data['faction'], $item['id'], 'name');
+						$image = $this->node->data['faction'] . '/' . $object['images'][0]['image'];
+						$dir = "components";
+						break;
+					case "shield":
+						$name = $d13->getLangGL('shields', $item['id'], 'name');
+						$image = $d13->getShield($item['id'], 'image');
+						$dir = "icon";
+						break;
+					case "buff":
+						$name = $d13->getLangGL('buffs', $item['id'], 'name');
+						$image = $d13->getBuff($item['id'], 'image');
+						$dir = "icon";
+						break;
+				}
+			
+				
+
+				$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $dir . '/' . $image . '" title="' . $name . '">';
+				$tvars['tvar_listLabel'] = $name;
+				$tvars['tvar_listAmount'] = "";
+				$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
+				$i++;
+			
+			
+			}
+			
+			if ($i>0) {
+				
+				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+				
+				$vars['tvar_button_name'] 	 =  $this->data['name'] . " " . $d13->getLangUI("inventory");
+				$vars['tvar_list_id'] 	 	 = "list-0";
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryCraft"));
+				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				
+			} else {
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory");
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
+				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+			}
+		}
+		
+		$this->data['count'] = $i;
+		
+		return $html;
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -112,4 +179,5 @@ class d13_module_market extends d13_object_module
 	}
 	
 }
+
 ?>

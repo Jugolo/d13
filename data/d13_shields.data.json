@@ -13,17 +13,17 @@
     "raze": true,
     "skirmish": true,
     "cost": [
-	{
-	"resource": "integer",
-	"value": "integer"
-	}
-	]
+		{
+			"resource": 0,
+			"value": 150
+		}
+	],
 	"requirements": [
-	{
-	"type": "modules",
-	"id": "integer",
-	"level": "integer"
-	}
+		{
+			"type": "modules",
+			"id": 14,
+			"level": 1
+		}
 	]
   }
 ]

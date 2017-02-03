@@ -566,8 +566,7 @@
       "type": "market",
       "maxLevel": 1,
       "inputResource": 3,
-      "ratio": 0.1,
-      "maxRarity": 50,
+      "ratio": 1,
       "maxInput": 10,
       "duration": 10,
       "salvage": 0.5,
@@ -605,13 +604,18 @@
           "level": 1
         }
       ],
-      "options": [
-        {
-        	"resourceBuy": true,
-        	"resourceSell": true
-        }
-      ],
+       "options": {
+        "inventoryList": true
+      },
       "inventory": [
+      	 {
+      	  "object": "resource",
+      	  "id": 0
+      	 },
+      	 {
+      	  "object": "component",
+      	  "id": 0
+      	 },
       	 {
           "object": "shield",
           "id": 0

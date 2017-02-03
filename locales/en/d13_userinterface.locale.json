@@ -200,6 +200,8 @@
   "skirmish": "skirmish",
   "sabotage": "sabotage",
   "loot": "loot",
+  "refresh": "refresh",
+  "maxOffers": "maximum offers",
   "from": "from",
   "loginDisabled": "login disabled",
   "registrationDisabled": "registration disabled",
