@@ -176,6 +176,20 @@ CREATE TABLE IF NOT EXISTS `craft` (
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `buff`
+--
+
+CREATE TABLE IF NOT EXISTS `buff` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `node` int(10) unsigned NOT NULL,
+  `obj_id` int(10) unsigned NOT NULL,
+  `start` datetime NOT NULL,
+  `duration` float unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `shield`

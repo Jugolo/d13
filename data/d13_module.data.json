@@ -611,6 +611,16 @@
         	"resourceSell": true
         }
       ],
+      "inventory": [
+      	 {
+          "object": "shield",
+          "id": 0
+         },
+      	{
+          "object": "buff",
+          "id": 0
+         }
+      ],
       "upgrades": [
         9
       ]

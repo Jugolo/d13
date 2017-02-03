@@ -62,13 +62,13 @@ class d13_object_module extends d13_object_base
 		$this->data['count'] 		= 0;				// count of other objects in this building?
 		$this->data['available'] 	= 0;				// is any action available in this building?
 		
-		$this->data['base_maxinput'] = $this->data['maxInput'];
-		$this->data['base_ratio'] = $this->data['ratio'];
+		$this->data['base_maxinput'] 	 = $this->data['maxInput'];
+		$this->data['base_ratio']		 = $this->data['ratio'];
+		$this->data['moduleProduction']  = $this->data['ratio'] * $d13->getGeneral('users', 'efficiency', 'harvest') * $this->node->getBuff('efficiency', 'harvest') * $this->node->modules[$this->data['slotId']]['input'];
+		$this->data['totalIR'] 			 = $this->node->modules[$this->data['slotId']]['input'] * $this->data['ratio'];
+		$this->data['cost'] 			 = $this->getCost();
 		
-		$this->data['totalIR'] = $this->node->modules[$this->data['slotId']]['input'] * $this->data['ratio'];
-		$this->data['cost'] = $this->getCost();
-		
-		$this->data['inputLimit'] = floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'], $this->node->modules[$this->data['slotId']]['input'])); #floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'] + $this->node->modules[$this->data['slotId']]['input']));
+		$this->data['inputLimit'] = floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'], $this->node->modules[$this->data['slotId']]['input']));
 		
 		if (isset($this->data['inputResource'])) {
 			$this->data['moduleInput'] = $this->data['inputResource'];
@@ -77,7 +77,7 @@ class d13_object_module extends d13_object_base
 		}
 
 		if (isset($this->data['outputResource'])) {
-			$this->data['moduleProduction'] = $this->data['ratio'] * $d13->getGeneral('factors', 'production') * $this->node->modules[$this->data['slotId']]['input'];
+			
 			$i = 0;
 			foreach($this->data['outputResource'] as $res) {
 				$this->data['moduleOutput' . $i] = $res;
@@ -123,12 +123,11 @@ class d13_object_module extends d13_object_base
 		$tvars['tvar_nodeID'] = $this->node->data['id'];
 		$tvars['tvar_slotID'] = $this->data['slotId'];
 		$tvars['tvar_demolishLink'] 		= $this->getDemolish();
-		
 		$tvars['tvar_linkData'] 			= $this->getModuleUpgrade();
 		$tvars['tvar_moduleItemContent'] 	= $this->getOptions();
 		$tvars['tvar_image'] = $this->data['image'];
 		$tvars['tvar_moduleDescription'] = d13_misc::toolTip($this->data['name'] . '<br>' . $this->data['description']);
-		
+		$tvars['tvar_moduleProduction'] = $this->data['moduleProduction'];
 		$tvars['tvar_inventoryLink'] 	= $this->getInventory();
 		
 		if ($this->data['level'] > 0) {
@@ -196,6 +195,7 @@ class d13_object_module extends d13_object_base
 		}
 
 		if (isset($this->data['outputResource'])) {
+
 			$i = 0;
 			while (isset($this->data['moduleOutput' . $i])) {
 				$tvars['tvar_moduleOutput' . $i] = $this->data['moduleOutput' . $i];

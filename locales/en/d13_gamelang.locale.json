@@ -57,6 +57,12 @@
       "description": "Your town is protected from all attacks for some time."
     }
   ],
+  "buffs": [
+    {
+      "name": "production buff",
+      "description": "increases production speed of this town for a period of time."
+    }
+  ],  
   "factions": [
     {
       "name": "Empire",

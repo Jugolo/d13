@@ -84,7 +84,7 @@ class d13_combatController extends d13_controller
 		
 		$tvars = array();
 	
-		//----
+		//====================================================== ASSEMBLE ATTACK ARMY AND START COMBAT
 		
 		if (isset($_GET['type'], $_GET['slotId'])) {
 		
@@ -216,7 +216,7 @@ class d13_combatController extends d13_controller
 			$tvars['tvar_slotId'] 		= $_GET['slotId'];
 		}
 
-		// - - - - Available Units List
+		//====================================================== BUILD AVAILABLE UNITS LIST
 
 		$tvars['tvar_units'] = "";
 		$tvars['tvar_unitsHTML'] = "";
@@ -277,7 +277,8 @@ class d13_combatController extends d13_controller
 
 		$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
 
-		// - - - - Available Enemies List
+		//====================================================== BUILD AVAILABLE ENEMIES LIST
+		
 		$showAll = true;
 		$tvars['tvar_nodeList'] = '<option disabled>...</option>';
 		$target_nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id'], TRUE);

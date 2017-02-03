@@ -23,13 +23,13 @@
 </div>	
 	
 <div class="col-auto">
-	<span class="badge tooltip-bottom" data-tooltip="{{tvar_ui_army}} {{tvar_ui_vision}}">
-		<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_vision.png"> {{tvar_totalVision}}
+	<span class="badge tooltip-bottom" data-tooltip="{{tvar_ui_army}} {{tvar_ui_stealth}}">
+		<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_stealth.png"> {{tvar_totalStealth}}
 	</span>
 </div>
 
 <div class="col-auto">
-	<span class="badge tooltip-bottom" data-tooltip="{{tvar_ui_army}} {{tvar_ui_stealth}}">
-		<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_stealth.png"> {{tvar_totalStealth}}
+	<span class="badge tooltip-bottom" data-tooltip="{{tvar_ui_army}} {{tvar_ui_capacity}}">
+		<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_capacity.png"> {{tvar_totalCapacity}}
 	</span>
 </div>

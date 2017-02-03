@@ -440,7 +440,8 @@ class d13_user
 		
 			$tvars['tvar_userAllianceName']	= $d13->getLangUI("none");
 			$tvars['tvar_userAllianceImage'] = "alliance0.png";
-		
+			$tvars['tvar_userAllianceTag'] = "";
+			
 		}
 
 		//- - - - - Player League

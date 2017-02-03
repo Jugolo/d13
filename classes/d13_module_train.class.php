@@ -141,7 +141,7 @@ class d13_module_train extends d13_object_module
 				$vars = array();
 				$vars = $tmp_unit->getTemplateVariables();
 				
-				$vars['tvar_duration'] = d13_misc::sToHMS((($tmp_unit->data['duration'] - $tmp_unit->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'train')) * 60, true);
+				$vars['tvar_duration'] = d13_misc::sToHMS((($tmp_unit->data['duration'] - $tmp_unit->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'duration', 'train')) * 60, true);
 				$vars['tvar_uid'] = $uid;
 				$vars['tvar_nodeId'] = $this->node->data['id'];
 				$vars['tvar_slotId'] = $this->data['slotId'];
@@ -220,7 +220,7 @@ class d13_module_train extends d13_object_module
 				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("train");
 				$vars['tvar_list_id'] 	 	 = "swiper";
 				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
-				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				$html = $d13->templateSubpage("button.popup.swiper", $vars);
 				
 			} else {
 				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("train");

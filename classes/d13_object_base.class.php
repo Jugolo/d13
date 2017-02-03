@@ -223,7 +223,7 @@ class d13_object_base
 		switch ($this->data['supertype'])
 		{
 			case 'module':
-				$upgrade_list = $d13->getUpgradeModule($this->node->data['faction']);
+				$upgrade_list = $d13->getUpgradeTechnology($this->node->data['faction']);
 				break;
 			case 'component':
 				$upgrade_list = $d13->getUpgradeComponent($this->node->data['faction']);
@@ -259,8 +259,14 @@ class d13_object_base
 		if ($this->data['supertype'] == 'module' || $this->data['supertype'] == 'turret') {
 			if (!empty($this->data['upgrades']) && $this->data['level'] > 1) {
 				foreach ($this->data['upgrades'] as $upgrade_id) {
-					$tmp_upgrade = $upgrade_list[$upgrade_id];
-					if ($tmp_upgrade['active'] && $tmp_upgrade['type'] == $this->data['type'] && in_array($tmp_upgrade['id'], $this->data['upgrades'])) {
+										
+					if ($this->data['supertype'] == 'module') {
+						$tmp_upgrade = $d13->getUpgradeModule($this->node->data['faction'], $upgrade_id);
+					} else if ( $this->data['supertype'] == 'turret') {
+						$tmp_upgrade = $d13->getUpgradeTurret($this->node->data['faction'], $upgrade_id);
+					}
+										
+					if ($tmp_upgrade['active'] && $tmp_upgrade['type'] == $this->data['type'] && $tmp_upgrade['id'] == $this->data['id']) {
 						$tmp_upgrade['level'] = $this->data['level']-1;		#!important 
 						$object_upgrades[] = $tmp_upgrade;
 					}
@@ -272,10 +278,12 @@ class d13_object_base
 		foreach($this->node->technologies as $technologies) {
 			if ($technologies['level'] > 0) {
 				$technology = $d13->getTechnology($this->node->data['faction'], $technologies['id']);
-				if ($technology['type'] == $this->data['type'] && in_array($this->data['id'], $technology['upgrades'])) {
+				$d13->logger($this->data['name']);
+				if ($technology['type'] == $this->data['type'] && in_array($this->data['id'], $technology['targets'])) {
+					$d13->logger($this->data['name']);
 					foreach ($technology['upgrades'] as $upgrade_id) {
 						$tmp_upgrade = array();
-						$tmp_upgrade = $d13->getUpgradeTechnology($this->node->data['faction'], $upgrade_id);
+						$tmp_upgrade = $upgrade_list[$upgrade_id];
 						$tmp_upgrade['id'] = $technologies['id'];
 						$tmp_upgrade['level'] = $technologies['level'];
 						$object_upgrades[] = $tmp_upgrade;
@@ -438,7 +446,7 @@ class d13_object_base
 		foreach($this->data['cost'] as $key => $cost) {
 			$tmp_array = array();
 			$tmp_array['resource'] = $cost['resource'];
-			$tmp_array['value'] = $cost['value'] * $d13->getGeneral('users', 'cost', $this->data['costType']);
+			$tmp_array['value'] = $cost['value'] * $d13->getGeneral('users', 'efficiency', $this->data['costType']);
 			$tmp_array['name'] = $d13->getLangGL('resources', $cost['resource'], 'name');
 			$tmp_array['icon'] = $cost['resource'] . '.png'; //TODO!
 			$tmp_array['factor'] = 1;
@@ -446,7 +454,7 @@ class d13_object_base
 				foreach($this->data['cost_upgrade'] as $key => $upcost) {
 					$tmp2_array = array();
 					$tmp2_array['resource'] = $upcost['resource'];
-					$tmp2_array['value'] = $upcost['value'] * $d13->getGeneral('users', 'cost', $this->data['costType']);
+					$tmp2_array['value'] = $upcost['value'] * $d13->getGeneral('users', 'efficiency', $this->data['costType']);
 					$tmp2_array['name'] = $d13->getLangGL('resources', $upcost['resource'], 'name');
 					$tmp2_array['icon'] = $upcost['resource'] . '.png'; //TODO!
 					$tmp2_array['factor'] = $upcost['factor'];

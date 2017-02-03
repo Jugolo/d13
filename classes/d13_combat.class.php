@@ -60,7 +60,6 @@ class d13_combat
 		$data = $this->doCalculateDefenderStats($data);
 		$data = $this->doCalculateCombatSetup($data);
 		$data = $this->doScoutCheck($data);
-		
 		$data = $this->doCalculateAttackerCasualties($data);
 		$data = $this->doCalculateDefenderCasualties($data);
 		$data = $this->doCalculateWinner($data);
@@ -159,8 +158,8 @@ class d13_combat
 				}
 			
 				$data['input']['attacker']['groups'][$key]['critdmg'] = 0;
-				$crit = $stats['critical'] + $upgrades['critical'];
-			
+				$crit = $data['input']['attacker']['groups'][$key]['critical'];
+							
 				if ($crit > 100) { $crit = 100; }
 				if (rand(1,100) <= $crit) {
 					$data['input']['attacker']['groups'][$key]['critdmg'] += $data['input']['attacker']['groups'][$key]['damage'] * $d13->getGeneral('factors', 'critical');
@@ -176,7 +175,7 @@ class d13_combat
 			}
 		}
 		
-		$data['input']['attacker']['groups'] = d13_misc::record_sort($data['input']['attacker']['groups'], 'speed', true);
+		
 		
 		return $data;
 
@@ -209,144 +208,148 @@ class d13_combat
 		$this->defenderNode = new d13_node();
 		$status = $this->defenderNode->get('id', $data['input']['defender']['nodeId']);
 		
-		shuffle($data['input']['defender']['groups']);
+		if ($data['input']['defender']['groups']) {
+		
+			shuffle($data['input']['defender']['groups']);
 
-		$armyBonus = array();	
-		foreach($data['input']['defender']['groups'] as $key => $group) {
-			if ($group['quantity'] > 0) {
+			$armyBonus = array();	
+			foreach($data['input']['defender']['groups'] as $key => $group) {
+				if (isset($group['quantity']) && $group['quantity'] > 0) {
 			
-				$args = array();
-				$args['supertype'] 	= 'unit';
-				$args['obj_id'] 	= $group['unitId'];
-				$args['node'] 		= $this->defenderNode;
+					$args = array();
+					$args['supertype'] 	= 'unit';
+					$args['obj_id'] 	= $group['unitId'];
+					$args['node'] 		= $this->defenderNode;
 				
-				$unit = new d13_object_unit($args);
+					$unit = new d13_object_unit($args);
 			
-				if (!empty($unit->data['armyDefenseModifier'])) {
-					foreach ($unit->data['armyDefenseModifier'] as $modifier) {
-						$armyBonus[] = $modifier;
+					if (!empty($unit->data['armyDefenseModifier'])) {
+						foreach ($unit->data['armyDefenseModifier'] as $modifier) {
+							$armyBonus[] = $modifier;
+						}
 					}
 				}
 			}
-		}
 
-		foreach($data['input']['defender']['groups'] as $key => $group) {
+			foreach($data['input']['defender']['groups'] as $key => $group) {
 
-			// - - - - - UNITS
+				// - - - - - UNITS
 
-			if ($group['type'] == 'unit' && $group['quantity'] > 0) {
+				if (isset($group['quantity']) && $group['type'] == 'unit' && $group['quantity'] > 0) {
 				
-				$args = array();
-				$args['supertype'] 	= 'unit';
-				$args['obj_id'] 	= $group['unitId'];
-				$args['node'] 		= $this->defenderNode;
+					$args = array();
+					$args['supertype'] 	= 'unit';
+					$args['obj_id'] 	= $group['unitId'];
+					$args['node'] 		= $this->defenderNode;
 				
-				$unit = new d13_object_unit($args);
+					$unit = new d13_object_unit($args);
 				
-				$stats = $unit->getStats();
-				$upgrades = $unit->getUpgrades();
+					$stats = $unit->getStats();
+					$upgrades = $unit->getUpgrades();
 				
-				foreach($d13->getGeneral('stats') as $stat) {
+					foreach($d13->getGeneral('stats') as $stat) {
 				
-					$data['input']['defender']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['quantity'];
+						$data['input']['defender']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['quantity'];
 					
-					if (!empty($armyBonus)) {
+						if (!empty($armyBonus)) {
+							foreach ($armyBonus as $modifier) {
+								if ($modifier['stat'] == $stat) {
+									$data['input']['defender']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
+								}
+							}
+						}
+					
+						if (!empty($unit->data['defenseModifier'])) {
+							foreach ($unit->data['defenseModifier'] as $modifier) {
+								if ($modifier['stat'] == $stat) {
+									$data['input']['defender']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
+								}
+							}
+						}
+				
+						$data['input']['defender'][$stat] += $data['input']['defender']['groups'][$key][$stat];
+					
+					}
+				
+					$data['input']['defender']['groups'][$key]['critdmg'] = 0;
+					$crit = $data['input']['defender']['groups'][$key]['critical'];
+					if ($crit > 100) { $crit = 100; }
+					if (rand(1,100) <= $crit) {
+						$data['input']['defender']['groups'][$key]['critdmg'] += $data['input']['defender']['groups'][$key]['damage'] * $d13->getGeneral('factors', 'critical');
+						$data['input']['defender']['damage'] += $data['input']['defender']['groups'][$key]['damage'] * $d13->getGeneral('factors', 'critical');
+					}
+
+					//- - - - - Add to Class List
+					$class = $d13->getUnit($data['input']['defender']['faction'],$group['unitId'],'class');
+					foreach ($d13->getGeneral('classes', $class) as $classKey => $classMod) {
+						$data['classes']['defender'][$classKey] += $classMod;
+					}
+				
+				// - - - - - MODULES
+
+				} else if ($group['type'] == 'module' && $group['input'] > 0) {
+							
+					$args = array();
+					$args['supertype'] 	= 'turret';
+					$args['obj_id'] 	= $group['moduleId'];
+					$args['level'] 		= $group['level'];
+					$args['input'] 		= $group['input'];
+					$args['unitId'] 	= $group['unitId'];
+					$args['node'] 		= $this->defenderNode;
+				
+					$turret = new d13_object_turret($args);
+				
+					$stats = $turret->getStats();
+					$upgrades = $turret->getUpgrades();
+				
+					foreach($d13->getGeneral('stats') as $stat) {
+				
+						$data['input']['defender']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['level'];
+					
 						foreach ($armyBonus as $modifier) {
 							if ($modifier['stat'] == $stat) {
 								$data['input']['defender']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
 							}
 						}
-					}
-					
-					if (!empty($unit->data['defenseModifier'])) {
-						foreach ($unit->data['defenseModifier'] as $modifier) {
-							if ($modifier['stat'] == $stat) {
-								$data['input']['defender']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
+				
+						if (!empty($unit->data['defenseModifier'])) {
+							foreach ($unit->data['defenseModifier'] as $modifier) {
+								if ($modifier['stat'] == $stat) {
+									$data['input']['defender']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
+								}
 							}
 						}
-					}
-				
-					$data['input']['defender'][$stat] += $data['input']['defender']['groups'][$key][$stat];
-					
-				}
-				
-				$data['input']['defender']['groups'][$key]['critdmg'] = 0;
-				$crit = $stats['critical'] + $upgrades['critical'];
-				if ($crit > 100) { $crit = 100; }
-				if (rand(1,100) <= $crit) {
-					$data['input']['defender']['groups'][$key]['critdmg'] += $data['input']['defender']['groups'][$key]['damage'] * $d13->getGeneral('factors', 'critical');
-					$data['input']['defender']['damage'] += $data['input']['defender']['groups'][$key]['damage'] * $d13->getGeneral('factors', 'critical');
-				}
 
-				//- - - - - Add to Class List
-				$class = $d13->getUnit($data['input']['defender']['faction'],$group['unitId'],'class');
-				foreach ($d13->getGeneral('classes', $class) as $classKey => $classMod) {
-					$data['classes']['defender'][$classKey] += $classMod;
-				}
-				
-			// - - - - - MODULES
+						$data['input']['defender'][$stat]+= $data['input']['defender']['groups'][$key][$stat];
 
-			} else if ($group['type'] == 'module' && $group['input'] > 0) {
-							
-				$args = array();
-				$args['supertype'] 	= 'turret';
-				$args['obj_id'] 	= $group['moduleId'];
-				$args['level'] 		= $group['level'];
-				$args['input'] 		= $group['input'];
-				$args['unitId'] 	= $group['unitId'];
-				$args['node'] 		= $this->defenderNode;
-				
-				$turret = new d13_object_turret($args);
-				
-				$stats = $turret->getStats();
-				$upgrades = $turret->getUpgrades();
-				
-				foreach($d13->getGeneral('stats') as $stat) {
-				
-					$data['input']['defender']['groups'][$key][$stat] = ($stats[$stat] + $upgrades[$stat]) * $group['level'];
-					
-					foreach ($armyBonus as $modifier) {
-						if ($modifier['stat'] == $stat) {
-							$data['input']['defender']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
-						}
-					}
-				
-					if (!empty($unit->data['defenseModifier'])) {
-						foreach ($unit->data['defenseModifier'] as $modifier) {
-							if ($modifier['stat'] == $stat) {
-								$data['input']['defender']['groups'][$key][$stat] += floor($stats[$stat] * $modifier['value']);
-							}
-						}
 					}
 
-					$data['input']['defender'][$stat]+= $data['input']['defender']['groups'][$key][$stat];
+					// - - - - - Special rule for Module HP
 
-				}
-
-				// - - - - - Special rule for Module HP
-
-				if ($d13->getGeneral('options', 'defensiveModuleDamage')) {
-					$data['input']['defender']['groups'][$key]['hp'] = ($data['input']['defender']['groups'][$key]['input'] / $data['input']['defender']['groups'][$key]['maxInput']) * $data['input']['defender']['groups'][$key]['hp'];
-				}
+					if ($d13->getGeneral('options', 'defensiveModuleDamage')) {
+						$data['input']['defender']['groups'][$key]['hp'] = ($data['input']['defender']['groups'][$key]['input'] / $data['input']['defender']['groups'][$key]['maxInput']) * $data['input']['defender']['groups'][$key]['hp'];
+					}
 				
-				$data['input']['defender']['groups'][$key]['critdmg'] = 0;
-				$crit = $stats['critical'] + $upgrades['critical'];
-				if ($crit > 100) { $crit = 100; }
-				if (rand(1,100) <= $crit) {
-					$data['input']['defender']['groups'][$key]['critdmg'] += $data['input']['defender']['groups'][$key]['damage'] * $d13->getGeneral('factors', 'critical');
-					$data['input']['defender']['damage'] += $data['input']['defender']['groups'][$key]['damage'] * $d13->getGeneral('factors', 'critical');
-				}
+					$data['input']['defender']['groups'][$key]['critdmg'] = 0;
+					$crit = $data['input']['defender']['groups'][$key]['critical'];
+					if ($crit > 100) { $crit = 100; }
+					if (rand(1,100) <= $crit) {
+						$data['input']['defender']['groups'][$key]['critdmg'] += $data['input']['defender']['groups'][$key]['damage'] * $d13->getGeneral('factors', 'critical');
+						$data['input']['defender']['damage'] += $data['input']['defender']['groups'][$key]['damage'] * $d13->getGeneral('factors', 'critical');
+					}
 				
-				//- - - - - Add to Class List
-				$class = $d13->getUnit($data['input']['defender']['faction'],$group['unitId'],'class');
-				foreach ($d13->getGeneral('classes', $class) as $classKey => $classMod) {
-					$data['classes']['defender'][$classKey] += $classMod;
-				}
+					//- - - - - Add to Class List
+					$class = $d13->getUnit($data['input']['defender']['faction'],$group['unitId'],'class');
+					foreach ($d13->getGeneral('classes', $class) as $classKey => $classMod) {
+						$data['classes']['defender'][$classKey] += $classMod;
+					}
 
+				}
 			}
-		}
 		
-		$data['input']['defender']['groups'] =  d13_misc::record_sort($data['input']['defender']['groups'], 'speed', true);
+			
+		
+		}
 		
 		return $data;
 
@@ -366,6 +369,9 @@ class d13_combat
 		
 		$attackerRatio = 0;
 		$defenderRatio = 0;
+		
+		$data['output']['attacker']['trueDamage'] = 0;
+		$data['output']['defender']['trueDamage'] = 0;
 		
 		$data['input']['attacker']['damage']++;
 		$data['input']['defender']['damage']++;
@@ -399,7 +405,7 @@ class d13_combat
 		global $d13;
 				
 		foreach($data['input']['attacker']['groups'] as $key => $group) {
-			if ($group['quantity'] > 0) {
+			if (isset($group['quantity']) && $group['quantity'] > 0) {
 	
 				$baseDamage = 0;
 				$damage = 0;
@@ -439,9 +445,6 @@ class d13_combat
 		
 		}
 		
-		$data['input']['attacker']['groups'] = d13_misc::record_sort($data['input']['attacker']['groups'], 'speed', true);
-		$data['output']['attacker']['groups'] = d13_misc::record_sort($data['output']['attacker']['groups'], 'speed', true);
-		
 		return $data;
 		
 	}
@@ -455,54 +458,62 @@ class d13_combat
 	{
 	
 		global $d13;
-			
-		foreach($data['input']['defender']['groups'] as $key => $group) {
-			if ($group['quantity'] > 0) {
+		
+		if ($data['input']['defender']['groups']) {
+		
+			foreach($data['input']['defender']['groups'] as $key => $group) {
 				
-				$baseDamage = 0;
-				$damage = 0;
-				$casualties = 0;
-				$bonusDamage = 0;
+				
+					$baseDamage = 0;
+					$damage = 0;
+					$casualties = 0;
+					$bonusDamage = 0;
 					
-				// - - - Ignore if Scout was successful
-				if (!$data['combat']['requiresScoutCheck'] || ($data['combat']['requiresScoutCheck'] && $data['output']['attacker']['scoutCheck'] <= 0)) {
-					$baseDamage = $data['input']['attacker']['trueDamage'];	
-				}
+					// - - - Ignore if Scout was successful
+					if (!$data['combat']['requiresScoutCheck'] || ($data['combat']['requiresScoutCheck'] && $data['output']['attacker']['scoutCheck'] <= 0)) {
+						$baseDamage = $data['input']['attacker']['trueDamage'];	
+					}
 					
-				if ($baseDamage > 0) {
+					if ($baseDamage > 0) {
 					
-					$class = $d13->getUnit($data['input']['defender']['faction'], $group['unitId'], 'class');
-					foreach ($data['classes']['attacker'] as $classKey => $damageMod) {
-						if ($classKey == $class) {
-							$bonusDamage += floor($baseDamage * $damageMod);
+						$class = $d13->getUnit($data['input']['defender']['faction'], $group['unitId'], 'class');
+						foreach ($data['classes']['attacker'] as $classKey => $damageMod) {
+							if ($classKey == $class) {
+								$bonusDamage += floor($baseDamage * $damageMod);
+							}
 						}
-					}
 				
-					$damage = 1 + $baseDamage + $bonusDamage;
-					$casualties = floor($damage / ($group['hp']/$group['quantity']));
-					$data['input']['attacker']['trueDamage'] -= $casualties * $group['hp'];
+						$damage = 1 + $baseDamage + $bonusDamage;
+						
+						//-- ignore if enemy group is empty
+						if (isset($group['quantity']) && $group['quantity'] > 0) {
+							$casualties = floor($damage / ($group['hp']/$group['quantity']));
+							$data['input']['attacker']['trueDamage'] -= $casualties * $group['hp'];
+						}
+					
+						if ($casualties < 0) { $casualties = 0; }
 				
-					if ($casualties < 0) { $casualties = 0; }
-				
-					if ($group['type'] == 'unit') {
-						$group['quantity'] -= $casualties;
-						if ($group['quantity'] < 0) { $group['quantity'] = 0; }
-					} else if ($group['type'] == 'module') {
-						$group['input'] -= $casualties;
-						if ($group['input'] < 0) { $group['input'] = 0; }
+						if ($group['type'] == 'unit') {
+							$group['quantity'] -= $casualties;
+							if ($group['quantity'] < 0) { $group['quantity'] = 0; }
+						} else if ($group['type'] == 'module') {
+							$group['input'] -= $casualties;
+							if ($group['input'] < 0) { $group['input'] = 0; }
+						}
+					
 					}
 					
-				}
+					//-- ignore if enemy group is empty
+					if (isset($group['quantity']) && $group['quantity'] > 0) {
+						$data['output']['defender']['groups'][$key] = $group;
+					}
 					
-				$data['output']['defender']['groups'][$key] = $group;
-				$data['output']['attacker']['totalDamage']	+= $damage;
-			
+					//-- important for victory calculation
+					$data['output']['attacker']['totalDamage']	+= $damage;
+
 			}
 		
 		}
-		
-		$data['input']['defender']['groups'] = d13_misc::record_sort($data['input']['defender']['groups'], 'speed', true);
-		$data['output']['defender']['groups'] = d13_misc::record_sort($data['output']['defender']['groups'], 'speed', true);
 		
 		return $data;
 	
@@ -540,13 +551,18 @@ class d13_combat
 				$data['output']['defender']['winner'] = 0;
 			}
 
+			/*
 			if ((!$data['input']['attacker']['hp']) && (!$data['input']['defender']['hp'])) {
 				$data['output']['attacker']['winner'] = 0;
 				$data['output']['defender']['winner'] = 1;
 			} else if (($data['input']['attacker']['hp']) && (!$data['input']['defender']['hp'])) {
 				$data['output']['attacker']['winner'] = 1;
 				$data['output']['defender']['winner'] = 0;
-			}	
+			}
+			*/
+			
+			
+			
 		
 		}
 		
@@ -602,36 +618,18 @@ class d13_combat
 	
 	// ----------------------------------------------------------------------------------------
 	// doScout
+	// @ lookup all individual scout results and add them to data, then return
 	// ----------------------------------------------------------------------------------------
 	private
 	
 	function doScout($data)
 	{
-	
-		global $d13;
+			
+		$data = $this->doScoutTechnology($data);
+		$data = $this->doScoutResources($data);
+		$data = $this->doScoutModules($data);
+		$data = $this->doScoutUnits($data);
 		
-		$value = $data['output']['attacker']['scoutValue'];
-		
-		$threshold = $d13->getGeneral("spionage", "technology");
-		if ($value >= $threshold ) {
-			$data = $this->doScoutTechnology($data);
-		}
-		
-		$threshold = $d13->getGeneral("spionage", "resources");
-		if ($value >= $threshold ) {
-			$data = $this->doScoutResources($data);
-		}
-
-		$threshold = $d13->getGeneral("spionage", "modules");
-		if ($value >= $threshold ) {
-			$data = $this->doScoutModules($data);
-		}
-
-		$threshold = $d13->getGeneral("spionage", "unit");
-		if ($value >= $threshold ) {
-			$data = $this->doScoutUnits($data);
-		}
-
 		return $data;
 	
 	}
@@ -648,22 +646,32 @@ class d13_combat
 	
 		global $d13;
 	
-		$tmp_result = array();
-				
-		$this->defenderNode->getUnits();
-		$tmp_units = $this->defenderNode->units;
-	
-		foreach ($tmp_units as $unit) {
-			$tmp_unit = $d13->getUnit($this->defenderNode->data['faction'], $unit['id']);
-			if ($tmp_unit['active'] && $unit['value'] > 0 && $tmp_unit['stealth'] < $data['output']['attacker']['scoutValue']) {
-				$tmp_result[]= array('type'=>'scout_units','unit'=>$unit['id'], 'value'=>$unit['value']);
-			}
-		}
+		$value = $data['output']['attacker']['scoutValue'] - $d13->getGeneral("spionage", "unit");
 		
-		shuffle($tmp_result);
-		$tmp_result = d13_misc::record_sort($tmp_result, 'value', true);
+		if ($value > 0 ) {
+		
+			$tmp_result = array();
+				
+			$this->defenderNode->getUnits();
+			$tmp_units = $this->defenderNode->units;
+	
+			foreach ($tmp_units as $unit) {
+				$tmp_unit = $d13->getUnit($this->defenderNode->data['faction'], $unit['id']);
+				if ($tmp_unit['active'] && $unit['value'] > 0 && $tmp_unit['stealth'] < $data['output']['attacker']['scoutValue']) {
+					$tmp_result[]= array('type'=>'scout_units','unit'=>$unit['id'], 'value'=>$unit['value']);
+				}
+			}
+			
+			// limit amount of objects by scout value and threshold
+			$value = max(floor($value/$d13->getGeneral("spionage", "threshold")), 1);
+			shuffle($tmp_result);
+			$tmp_result = array_slice($tmp_result, 0, $value);
+			
+			$tmp_result = d13_misc::record_sort($tmp_result, 'value', true);
 
-		$data['output']['attacker']['results']['scout_units'] = $tmp_result;
+			$data['output']['attacker']['results']['scout_units'] = $tmp_result;
+		
+		}
 		
 		return $data;
 	
@@ -679,25 +687,36 @@ class d13_combat
 	{
 	
 		global $d13;
-	
-		$tmp_result = array();
+		
+		$value = $data['output']['attacker']['scoutValue'] - $d13->getGeneral("spionage", "technology");
+		
+		if ($value > 0 ) {
+		
+			$tmp_result = array();
 				
-		$this->defenderNode->getTechnologies();
-		$tmp_technology = $this->defenderNode->technologies;
+			$this->defenderNode->getTechnologies();
+			$tmp_technology = $this->defenderNode->technologies;
 	
-		foreach ($tmp_technology as $technology) {
-			$tmp_tech = $d13->getTechnology($this->defenderNode->data['faction'], $technology['id']);
-			if ($tmp_tech['active'] && $technology['level'] > 0) {
-				$tmp_result[]= array('type'=>'scout_technologies','technology'=>$technology['id'], 'level'=>$technology['level']);
+			foreach ($tmp_technology as $technology) {
+				$tmp_tech = $d13->getTechnology($this->defenderNode->data['faction'], $technology['id']);
+				if ($tmp_tech['active'] && $technology['level'] > 0) {
+					$tmp_result[]= array('type'=>'scout_technologies','technology'=>$technology['id'], 'level'=>$technology['level']);
+				}
 			}
+			
+			
+			// limit amount of objects by scout value and threshold
+			$value = max(floor($value/$d13->getGeneral("spionage", "threshold")), 1);
+			shuffle($tmp_result);
+			$tmp_result = array_slice($tmp_result, 0, $value);
+			
+			$tmp_result = d13_misc::record_sort($tmp_result, 'level', true);
+		
+			$data['output']['attacker']['results']['scout_technologies'] = $tmp_result;
+		
+			return $data;
+		
 		}
-		
-		shuffle($tmp_result);
-		$tmp_result = d13_misc::record_sort($tmp_result, 'level', true);
-		
-		$data['output']['attacker']['results']['scout_technologies'] = $tmp_result;
-		
-		return $data;
 	
 	}
 	
@@ -711,28 +730,40 @@ class d13_combat
 	{
 	
 		global $d13;
-	
-		$tmp_result = array();
-		$tmp_result2 = array();
 		
-		$this->defenderNode->getModules();
-		$tmp_modules = $this->defenderNode->modules;
+		$value = $data['output']['attacker']['scoutValue'] - $d13->getGeneral("spionage", "modules");
+		
+		if ($value > 0 ) {
+		
+			$tmp_result = array();
+			$tmp_result2 = array();
+		
+			$this->defenderNode->getModules();
+			$tmp_modules = $this->defenderNode->modules;
 	
-		foreach ($tmp_modules as $module) {
-			$tmp_mod = $d13->getModule($this->defenderNode->data['faction'], $module['module']);
-			if ($tmp_mod['active'] && $tmp_mod['type'] == 'defense' && $module['level'] > 0) {
-				$tmp_result[]= array('type'=>'scout_modules', 'module'=>$module['module'], 'level'=>$module['level']);
-			} else if ($tmp_mod['active'] && $tmp_mod['type'] != 'defense' && $module['level'] > 0) {
-				$tmp_result2[]= array('type'=>'scout_modules', 'module'=>$module['module'], 'level'=>$module['level']);
+			foreach ($tmp_modules as $module) {
+				$tmp_mod = $d13->getModule($this->defenderNode->data['faction'], $module['module']);
+				if ($tmp_mod['active'] && $tmp_mod['type'] == 'defense' && $module['level'] > 0) {
+					$tmp_result[]= array('type'=>'scout_modules', 'module'=>$module['module'], 'level'=>$module['level']);
+				} else if ($tmp_mod['active'] && $tmp_mod['type'] != 'defense' && $module['level'] > 0) {
+					$tmp_result2[]= array('type'=>'scout_modules', 'module'=>$module['module'], 'level'=>$module['level']);
+				}
 			}
+			
+			
+			// limit amount of objects by scout value and threshold
+			$value = max(floor($value/$d13->getGeneral("spionage", "threshold")), 1);
+			shuffle($tmp_result);
+			shuffle($tmp_result2);
+			$tmp_result = array_slice($tmp_result, 0, $value);
+			$tmp_result2 = array_slice($tmp_result2, 0, $value);
+			
+			$tmp_result = array_merge($tmp_result, $tmp_result2);
+			$tmp_result = d13_misc::record_sort($tmp_result, 'level', true);
+		
+			$data['output']['attacker']['results']['scout_modules'] = $tmp_result;
+		
 		}
-		
-		shuffle($tmp_result);
-		shuffle($tmp_result2);
-		$tmp_result = array_merge($tmp_result, $tmp_result2);
-		$tmp_result = d13_misc::record_sort($tmp_result, 'level', true);
-		
-		$data['output']['attacker']['results']['scout_modules'] = $tmp_result;
 		
 		return $data;
 	
@@ -748,23 +779,33 @@ class d13_combat
 	{
 	
 		global $d13;
-	
-		$tmp_result = array();
-			
-		$this->defenderNode->getResources();
-		$tmp_resources = $this->defenderNode->resources;
-	
-		foreach ($tmp_resources as $resource) {
-			$tmp_res = $d13->getResource($resource['id']);
-			if ($tmp_res['active'] && $tmp_res['carryable'] && $resource['value'] > 0) {
-				$tmp_result[]= array('type'=>'scout_resources', 'rarity'=>$tmp_res['rarity'], 'resource'=>$resource['id'], 'value'=>$resource['value']);
-			}
-		}
-
-		shuffle($tmp_result);
-		$tmp_result = d13_misc::record_sort($tmp_result, 'rarity', true);
 		
-		$data['output']['attacker']['results']['scout_resources'] = $tmp_result;
+		$value = $data['output']['attacker']['scoutValue'] - $d13->getGeneral("spionage", "resources");
+		
+		if ($value > 0 ) {
+		
+			$tmp_result = array();
+			
+			$this->defenderNode->getResources();
+			$tmp_resources = $this->defenderNode->resources;
+	
+			foreach ($tmp_resources as $resource) {
+				$tmp_res = $d13->getResource($resource['id']);
+				if ($tmp_res['active'] && $tmp_res['carryable'] && $resource['value'] > 0) {
+					$tmp_result[]= array('type'=>'scout_resources', 'rarity'=>$tmp_res['rarity'], 'resource'=>$resource['id'], 'value'=>$resource['value']);
+				}
+			}
+			
+			// limit amount of objects by scout value and threshold
+			$value = max(floor($value/$d13->getGeneral("spionage", "threshold")), 1);
+			shuffle($tmp_result);
+			$tmp_result = array_slice($tmp_result, 0, $value);
+				
+			$tmp_result = d13_misc::record_sort($tmp_result, 'rarity', true);
+		
+			$data['output']['attacker']['results']['scout_resources'] = $tmp_result;
+		
+		}
 		
 		return $data;
 	
@@ -820,9 +861,9 @@ class d13_combat
 			$b = $this->defenderUser->data['trophies'] +1;
 			$difference		= sqrt($a / $b);
 		
-			$exp_value 		= floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'experience'));
-			$attackerTrophies = floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'trophies'));
-			$defenderTrophies = floor(($difference * $defenderTrophies)  / $d13->getGeneral('factors', 'trophies'));
+			$exp_value 		  = 1+ floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'experience'));
+			$attackerTrophies = 1 + floor(($difference * $attackerTrophies)  / $d13->getGeneral('factors', 'trophies'));
+			$defenderTrophies = 1 + floor(($difference * $defenderTrophies)  / $d13->getGeneral('factors', 'trophies'));
 		
 			if ($data['output']['attacker']['winner'] > 0) {
 				$attackerTrophies = abs($attackerTrophies);
@@ -1190,34 +1231,36 @@ class d13_combat
 		$limit = 7;
 		$i = 0;
 		
-		foreach ($data['output']['attacker']['results']['raid_resources'] as $result) {
+		if (isset($data['output']['attacker']['results']['raid_resources'])) {
+			foreach ($data['output']['attacker']['results']['raid_resources'] as $result) {
 					
-			if ($i == 0) {
-				$html .= '<div class="row">';
-				$open = true;
-			}
+				if ($i == 0) {
+					$html .= '<div class="row">';
+					$open = true;
+				}
 					
-			$vars = array();
-			$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($result['resource'], 'image');
-			$vars['tvar_listLabel'] 	= $d13->getLangGL('resources', $result['resource'], 'name');
-			$vars['tvar_listAmount'] 	= '+'.$result['value'];
+				$vars = array();
+				$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($result['resource'], 'image');
+				$vars['tvar_listLabel'] 	= $d13->getLangGL('resources', $result['resource'], 'name');
+				$vars['tvar_listAmount'] 	= '+'.$result['value'];
 			
-			$html .= $d13->templateSubpage("msg.combat.resource", $vars);
+				$html .= $d13->templateSubpage("msg.combat.resource", $vars);
 				
-			if ($i == $limit) {
-				$html_result .= '</div>';
-				$i = -1;
-				$open = false;
+				if ($i == $limit) {
+					$html_result .= '</div>';
+					$i = -1;
+					$open = false;
+				}
+				
+				$i++;
+			
 			}
 				
-			$i++;
-			
+			if ($open) {
+				$html .= '</div>';
+			}
 		}
-				
-		if ($open) {
-			$html .= '</div>';
-		}
-			
+		
 		return $html;
 	
 	}
@@ -1292,7 +1335,7 @@ class d13_combat
 			}
 
 			$tmp_module = $d13->getModule($this->defenderNode->data['faction'], $result['module']);
-			$image = $tmp_module['images'][0]['image'];
+			$image = $tmp_module['images'][1]['image'];
 			
 			$vars = array();
 			$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/modules/' . $this->defenderNode->data['faction'] . "/" . $image;
@@ -1397,7 +1440,7 @@ class d13_combat
 			$vars = array();
 			$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->defenderNode->data['faction'] . "/" . $image;
 			$vars['tvar_listLabel'] 	= $d13->getLangGL('units', $this->defenderNode->data['faction'], $result['unit'], 'name');
-			$vars['tvar_listAmount'] 	= '#'.$result['value'];
+			$vars['tvar_listAmount'] 	= $result['value'];
 		
 			$html .= $d13->templateSubpage("msg.combat.resource", $vars);
 				
@@ -1460,6 +1503,7 @@ class d13_combat
 		$totalVision 	= 0;
 		$totalStealth 	= 0;
 		$totalCritical 	= 0;
+		$totalCapacity 	= 0;
 		$i = 0;
 		$limit = 7;
 		$open = false;
@@ -1478,6 +1522,7 @@ class d13_combat
 				$totalStealth 	+= $data['input']['attacker']['groups'][$key]['stealth'];
 				$totalDamage 	+= $data['input']['attacker']['groups'][$key]['damage'];
 				$totalCritical 	+= $data['input']['attacker']['groups'][$key]['critdmg'];
+				$totalCapacity 	+= $data['input']['attacker']['groups'][$key]['capacity'];
 				
 				$args = array();
 				$args['supertype'] 	= 'unit';
@@ -1532,15 +1577,16 @@ class d13_combat
 		$vars['tvar_totalVision'] 	= $totalVision;
 		$vars['tvar_totalStealth'] 	= $totalStealth;
 		$vars['tvar_totalCritical']	= $totalCritical;
+		$vars['tvar_totalCapacity'] = $totalCapacity;
 		
 		if (!$other) {
-			$tvars['tvar_msgSelfStats'] = $d13->templateSubpage("msg.combat.stats", $vars);
-			$tvars['tvar_msgSelfRowName'] = $this->attackerNode->data['name']."'s " . $d13->getLangUI('army');
-			$tvars['tvar_msgSelfRow'] = $html;
+			$tvars['tvar_msgSelfStats'] 	= $d13->templateSubpage("msg.combat.attackerstats", $vars);
+			$tvars['tvar_msgSelfRowName'] 	= $this->attackerNode->data['name']."'s " . $d13->getLangUI('army');
+			$tvars['tvar_msgSelfRow'] 		= $html;
 		} else {
-			$tvars['tvar_msgOtherStats'] = $d13->templateSubpage("msg.combat.stats", $vars);
-			$tvars['tvar_msgOtherRowName'] = $this->attackerNode->data['name']."'s " . $d13->getLangUI('army');
-			$tvars['tvar_msgOtherRow'] = $html;
+			$tvars['tvar_msgOtherStats'] 	= $d13->templateSubpage("msg.combat.attackerstats", $vars);
+			$tvars['tvar_msgOtherRowName'] 	= $this->attackerNode->data['name']."'s " . $d13->getLangUI('army');
+			$tvars['tvar_msgOtherRow'] 		= $html;
 		}
 
 		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Report Part Defender
@@ -1575,6 +1621,7 @@ class d13_combat
 					$totalStealth 	+= $data['input']['defender']['groups'][$key]['stealth'];
 					$totalDamage 	+= $data['input']['defender']['groups'][$key]['damage'];
 					$totalCritical 	+= $data['input']['defender']['groups'][$key]['critdmg'];
+					$totalCapacity 	+= $data['input']['defender']['groups'][$key]['capacity'];
 					
 					$args = array();
 					$args['supertype'] 	= 'unit';
@@ -1675,15 +1722,16 @@ class d13_combat
 		$vars['tvar_totalVision'] 	= $totalVision;
 		$vars['tvar_totalStealth'] 	= $totalStealth;
 		$vars['tvar_totalCritical'] = $totalCritical;
+		$vars['tvar_totalCapacity'] = $totalCapacity;
 		
 		if (!$other) {
-			$tvars['tvar_msgOtherStats'] = $d13->templateSubpage("msg.combat.stats", $vars);
-			$tvars['tvar_msgOtherRowName'] = $this->defenderNode->data['name']."'s " . $d13->getLangUI('army');
-			$tvars['tvar_msgOtherRow'] = $html;
+			$tvars['tvar_msgOtherStats'] 	= $d13->templateSubpage("msg.combat.defenderstats", $vars);
+			$tvars['tvar_msgOtherRowName'] 	= $this->defenderNode->data['name']."'s " . $d13->getLangUI('army');
+			$tvars['tvar_msgOtherRow'] 		= $html;
 		} else {
-			$tvars['tvar_msgSelfStats'] = $d13->templateSubpage("msg.combat.stats", $vars);
-			$tvars['tvar_msgSelfRowName'] = $this->defenderNode->data['name']."'s " . $d13->getLangUI('army');
-			$tvars['tvar_msgSelfRow'] = $html;
+			$tvars['tvar_msgSelfStats'] 	= $d13->templateSubpage("msg.combat.defenderstats", $vars);
+			$tvars['tvar_msgSelfRowName'] 	= $this->defenderNode->data['name']."'s " . $d13->getLangUI('army');
+			$tvars['tvar_msgSelfRow'] 		= $html;
 		}
 
 		// - - - - Report Results etc.

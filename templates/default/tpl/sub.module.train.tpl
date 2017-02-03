@@ -74,7 +74,7 @@
 											{{tvar_ui_hp}}:
 										</div>
 										<div class="item-after">
-											<span class="badge">{{tvar_unitHP}} {{tvar_unitHPPlus}}</span>
+											<span class="badge">{{tvar_unitHP}} +{{tvar_unitHPPlus}}</span>
 										</div>
 									</div>
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_damage.png"></div>
@@ -83,7 +83,7 @@
 											{{tvar_ui_damage}}:
 										</div>
 										<div class="item-after">
-											<span class="badge">{{tvar_unitDamage}} {{tvar_unitDamagePlus}}</span>
+											<span class="badge">{{tvar_unitDamage}} +{{tvar_unitDamagePlus}}</span>
 										</div>
 									</div>
 								</li>
@@ -95,7 +95,7 @@
 											{{tvar_ui_armor}}:
 										</div>
 										<div class="item-after">
-											<span class="badge">{{tvar_unitArmor}} {{tvar_unitArmorPlus}}</span>
+											<span class="badge">{{tvar_unitArmor}} +{{tvar_unitArmorPlus}}</span>
 										</div>
 									</div>
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_speed.png"></div>
@@ -104,7 +104,7 @@
 											{{tvar_ui_speed}}:
 										</div>
 										<div class="item-after">
-											<span class="badge">{{tvar_unitSpeed}} {{tvar_unitSpeedPlus}}</span>
+											<span class="badge">{{tvar_unitSpeed}} +{{tvar_unitSpeedPlus}}</span>
 										</div>
 									</div>
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_critical.png"></div>
@@ -113,7 +113,7 @@
 											{{tvar_ui_critical}}:
 										</div>
 										<div class="item-after">
-											<span class="badge">{{tvar_unitCritical}} {{tvar_unitCriticalPlus}}</span>
+											<span class="badge">{{tvar_unitCritical}} +{{tvar_unitCriticalPlus}}</span>
 										</div>
 									</div>
 									
@@ -126,7 +126,7 @@
 											{{tvar_ui_capacity}}:
 										</div>
 										<div class="item-after">
-											<span class="badge">{{tvar_unitCapacity}} {{tvar_unitCapacityPlus}}</span>
+											<span class="badge">{{tvar_unitCapacity}} +{{tvar_unitCapacityPlus}}</span>
 										</div>
 									</div>
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_vision.png"></div>
@@ -135,7 +135,7 @@
 											{{tvar_ui_vision}}:
 										</div>
 										<div class="item-after">
-											<span class="badge">{{tvar_unitVision}} {{tvar_unitVisionPlus}}</span>
+											<span class="badge">{{tvar_unitVision}} +{{tvar_unitVisionPlus}}</span>
 										</div>
 									</div>
 									<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_stealth.png"></div>
@@ -144,7 +144,7 @@
 											{{tvar_ui_stealth}}:
 										</div>
 										<div class="item-after">
-											<span class="badge">{{tvar_unitStealth}} {{tvar_unitStealthPlus}}</span>
+											<span class="badge">{{tvar_unitStealth}} +{{tvar_unitStealthPlus}}</span>
 										</div>
 									</div>
 								</li>

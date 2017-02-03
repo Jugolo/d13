@@ -190,7 +190,7 @@ class d13_module_research extends d13_object_module
 				$tvars['tvar_techDescription'] = $tmp_technology->data['description'];
 				$tvars['tvar_techTier'] = $tmp_technology->data['level'];
 				$tvars['tvar_techMaxTier'] = $tmp_technology->data['maxLevel'];
-				$tvars['tvar_duration'] = d13_misc::sToHMS((($technology['duration'] - $technology['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'research')) * 60, true);
+				$tvars['tvar_duration'] = d13_misc::sToHMS((($technology['duration'] - $technology['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'duration', 'research')) * 60, true);
 				$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.research", $tvars);
 				
 			}
@@ -251,7 +251,7 @@ class d13_module_research extends d13_object_module
 				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("research");
 				$vars['tvar_list_id'] 	 	 = "swiper";
 				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
-				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				$html = $d13->templateSubpage("button.popup.swiper", $vars);
 			
 			} else {
 				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("research");

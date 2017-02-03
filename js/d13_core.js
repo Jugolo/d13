@@ -2,7 +2,6 @@
 
 function showInputValue(id, newValue)
 {
-	
 	document.getElementById(id).value = newValue;
 }
 
@@ -90,8 +89,8 @@ function armyCheck()
 function armyValue(id, newValue)
 {
 	
-	document.getElementById(id).innerHTML=newValue;
-	document.getElementById('attackerAmount_'+id).value=newValue;
+	document.getElementById(id).value = newValue;
+	document.getElementById('attackerAmount_'+id).value = newValue;
 	
 	var fuelFactor		= document.getElementById('fuelFactor').value;
 	
@@ -213,6 +212,8 @@ function timedJump(objectId, url)
 		timerIds[objectId]=setTimeout("timedJump('"+objectId+"', '"+url+"')", 1000);
 	}
 }
+
+/* -- D13 JS -------------------------------------------------------------------*/
 
 function isset(variable)
 {

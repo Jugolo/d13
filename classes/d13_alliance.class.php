@@ -62,7 +62,7 @@ class d13_alliance
                     if ($setCostData['ok']) {
                         $ok = 1;
                         foreach ($setCost as $cost) {
-                            $node->resources[$cost['resource']]['value'] -= $cost['value'] * $d13->getGeneral('users', 'cost', 'alliance');
+                            $node->resources[$cost['resource']]['value'] -= $cost['value'] * $d13->getGeneral('users', 'efficiency', 'alliance');
                             $d13->dbQuery('update resources set value="' . $node->resources[$cost['resource']]['value'] . '" where node="' . $node->data['id'] . '" and id="' . $cost['resource'] . '"');
                             if ($d13->dbAffectedRows() == -1) $ok = 0;
                         }
@@ -95,7 +95,7 @@ class d13_alliance
                 if ($addCostData['ok']) {
                     $ok = 1;
                     foreach ($addCost as $cost) {
-                        $node->resources[$cost['resource']]['value'] -= $cost['value'] * $d13->getGeneral('users', 'cost', 'alliance');
+                        $node->resources[$cost['resource']]['value'] -= $cost['value'] * $d13->getGeneral('users', 'efficiency', 'alliance');
                         $d13->dbQuery('update resources set value="' . $node->resources[$cost['resource']]['value'] . '" where node="' . $node->data['id'] . '" and id="' . $cost['resource'] . '"');
                         if ($d13->dbAffectedRows() == -1) $ok = 0;
                     }

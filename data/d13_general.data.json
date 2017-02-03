@@ -11,21 +11,27 @@
       "tradeReports": 1,
       "extendedTooltips": 1
     },
-    "speed": {
+    "duration": {
       "research": 1,
       "build": 1,
       "craft": 1,
       "train": 1,
-      "trade": 1,
-      "combat": 1
-    },
-    "cost": {
-      "research": 1,
-      "build": 1,
-      "craft": 1,
-      "train": 1,
-      "trade": 1,
+      "shield": 1,
+      "buff": 1,
       "combat": 1,
+      "trade": 1
+    },
+    "efficiency": {
+      "research": 1,
+      "build": 1,
+      "craft": 1,
+      "train": 1,
+      "shield": 1,
+      "buff": 1,
+      "combat": 1,
+      "trade": 1,
+      "storage": 1,
+      "harvest": 1,
       "set": 1,
       "move": 1,
       "alliance": 1
@@ -58,13 +64,12 @@
   	"craft",
   	"train",
   	"shield",
+  	"buff",
   	"combat",
   	"trade"
   ],
   "factors": {
-    "storage": 1,
-    "production": 1,
-    "movement": 5,
+  	"distance": 5,
     "critical": 2,
     "experience": 10,
     "trophies": 100
@@ -172,12 +177,14 @@
     }
   },
   "spionage": {
+  	"threshold": 5,
   	"technology": 10,
   	"resources": 40,
   	"modules": 60,
   	"unit": 80
   },
   "sabotage": {
+  	"threshold": 5,
   	"technology": 10,
   	"resources": 40,
   	"modules": 60,

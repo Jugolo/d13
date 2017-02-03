@@ -123,7 +123,7 @@ class d13_object_unit extends d13_object_base
 		
 		foreach($d13->getGeneral('stats') as $stat) {
 			$tvars['tvar_unit'.$stat] 			= $this->data[$stat];
-			$tvars['tvar_unit'.$stat.'Plus'] 	= "[+".$this->data['upgrade_'.$stat]."]";
+			$tvars['tvar_unit'.$stat.'Plus'] 	= $this->data['upgrade_'.$stat];
 		}
 		
 		$tvars['tvar_costData'] = $this->getCostList();

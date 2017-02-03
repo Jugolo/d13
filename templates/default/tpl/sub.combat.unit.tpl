@@ -15,10 +15,10 @@
     	
     	<div class="card-footer no-border">
 			<div>
-			<span class="badge" id="sliderRange{{tvar_unitId}}">00</span>
-			<input type="range" name="attackerGroups[]" id="quantity{{tvar_unitId}}" min="0" max="{{tvar_unitAmount}}" value="0" step="1" ondblclick="showMax('quantity{{tvar_unitId}}', 'sliderRange{{tvar_unitId}}')" onMouseDown="mySwiper.lockSwipes()" onMouseUp="mySwiper.unlockSwipes()" onInput="armyValue('sliderRange{{tvar_unitId}}', this.value)" onInput="armyValue('sliderRange{{tvar_unitId}}', this.value)" onChange="armyValue('sliderRange{{tvar_unitId}}', this.value, {{tvar_unitId}})">
+				<input type="range" name="attackerGroups[]" id="quantity{{tvar_unitId}}" min="0" max="{{tvar_unitAmount}}" value="0" step="1" onMouseDown="mySwiper.lockSwipes()" onMouseUp="mySwiper.unlockSwipes()" ondblclick="showInputMax('quantity{{tvar_unitId}}', 'sliderRange{{tvar_unitId}}')" onInput="armyValue('sliderRange{{tvar_unitId}}', this.value)" onChange="armyValue('sliderRange{{tvar_unitId}}', this.value, {{tvar_unitId}})">
+				<input type="number" size="3" maxlength="3" class="pure-input" min="0" max="{{tvar_unitAmount}}" id="sliderRange{{tvar_unitId}}" value="0" onInput="showInputValue('quantity{{tvar_unitId}}', this.value)" onChange="showInputValue('quantity{{tvar_unitId}}', this.value)">
 			</div>
-			
+
 			<input type="hidden" name="attackerGroupUnitIds[]" value="{{tvar_unitId}}">
 			<input type="hidden" id="attackerAmount_sliderRange{{tvar_unitId}}" name="unitAmount[]" value="0">
 			<input type="hidden" name="unitFuel[]" value="{{tvar_unitFuel}}">

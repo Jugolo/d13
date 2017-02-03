@@ -18,6 +18,9 @@ V018	--- UPCOMING UPDATE ---
 V017	--- SECOND STABLE VERSION
 
 		* Another bunch of more or less critical bugfixes and corrections
+		* Reducing the remaining HTML in files (not much left anyways)
+		* corrected several CSS glitches
+		* expanded functionality of SCOUTing
 
 V016	* Fixed a few more bugs (thanks to BlackScorp)
 		* Added autoload to classes

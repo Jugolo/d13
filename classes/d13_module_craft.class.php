@@ -191,7 +191,7 @@ class d13_module_craft extends d13_object_module
 				$tvars['tvar_cid'] = $cid;
 				$tvars['tvar_componentName'] = $tmp_component->data['name'];
 				$tvars['tvar_componentDescription'] = $tmp_component->data['description'];
-				$tvars['tvar_duration'] = d13_misc::sToHMS( (($component['duration'] - $component['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'speed', 'craft')) * 60, true);
+				$tvars['tvar_duration'] = d13_misc::sToHMS( (($component['duration'] - $component['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'duration', 'craft')) * 60, true);
 				$tvars['tvar_compLimit'] = $limitData;
 				$vars['tvar_disableData']		= '';
 				if ($limitData <= 0) {
@@ -271,7 +271,7 @@ class d13_module_craft extends d13_object_module
 				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("craft");
 				$vars['tvar_list_id'] 	 	 = "swiper";
 				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleInactive"));
-				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				$html = $d13->templateSubpage("button.popup.swiper", $vars);
 				
 			} else {
 				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("craft");
