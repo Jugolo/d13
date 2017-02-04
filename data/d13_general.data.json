@@ -66,7 +66,8 @@
   	"shield",
   	"buff",
   	"combat",
-  	"trade"
+  	"trade",
+  	"market"
   ],
   "factors": {
   	"distance": 5,

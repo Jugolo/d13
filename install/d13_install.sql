@@ -177,6 +177,22 @@ CREATE TABLE IF NOT EXISTS `craft` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `market`
+--
+
+CREATE TABLE IF NOT EXISTS `market` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `node` int(10) unsigned NOT NULL,
+  `slot` int(10) unsigned NOT NULL,
+  `inventory` varchar(1024) NOT NULL,
+  `start` datetime NOT NULL,
+  `duration` float unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `buff`
 --
 

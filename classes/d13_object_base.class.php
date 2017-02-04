@@ -34,7 +34,7 @@
 //
 // ========================================================================================
 
-class d13_object_base
+abstract class d13_object_base
 
 {
 	
@@ -97,7 +97,9 @@ class d13_object_base
 				$result = $d13->dbQuery('select count(*) as count from modules where node="' . $this->node->data['id'] . '" and module="' . $args['obj_id'] . '"');
 				$row = $d13->dbFetch($result);
 				$amount = $row['count'];
-				break;				
+				$imgdir = 'modules' . '/' . $this->node->data['faction'];
+				break;
+						
 			case 'component':
 				$data 	= $d13->getComponent($this->node->data['faction'], $args['obj_id']);
 				$name 	= $d13->getLangGL("components", $this->node->data['faction'], $args['obj_id'], "name");
@@ -108,7 +110,9 @@ class d13_object_base
 				$ctype 	= 'craft';
 				$slot	= 0;
 				$amount = $this->node->components[$args['obj_id']]['value'];
+				$imgdir = 'components' . '/' . $this->node->data['faction'];
 				break;
+				
 			case 'technology':
 				$data 	= $d13->getTechnology($this->node->data['faction'], $args['obj_id']);
 				$name 	= $d13->getLangGL("technologies", $this->node->data['faction'], $args['obj_id'], "name");
@@ -119,7 +123,9 @@ class d13_object_base
 				$ctype 	= 'research';
 				$slot	= 0;
 				$amount = 0;
-				break;		
+				$imgdir = 'technologies' . '/' . $this->node->data['faction'];
+				break;	
+					
 			case 'unit':
 				$data 	= $d13->getUnit($this->node->data['faction'], $args['obj_id']);
 				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $args['obj_id'], "name");
@@ -130,7 +136,9 @@ class d13_object_base
 				$ctype 	= 'train';
 				$slot	= 0;
 				$amount = $this->node->units[$args['obj_id']]['value'];
+				$imgdir = 'units' . '/' . $this->node->data['faction'];
 				break;
+				
 			case 'turret':
 				$data 	= $d13->getUnit($this->node->data['faction'], $args['obj_id']);
 				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $args['obj_id'], "name");
@@ -141,7 +149,48 @@ class d13_object_base
 				$ctype 	= 'train';
 				$slot	= 0;
 				$amount = 0;
+				$imgdir = 'units' . '/' . $this->node->data['faction'];
 				break;
+				
+			case 'shield':
+				$data 	= $d13->getShield($args['obj_id']);
+				$name 	= $d13->getLangGL("shields", $args['obj_id'], "name");
+				$desc 	= $d13->getLangGL("shields", $args['obj_id'], "description");
+				$level 	= 0;
+				$type	= $args['supertype'];
+				$input	= 0;
+				$ctype 	= 'shield';
+				$slot	= 0;
+				$amount = 0;
+				$imgdir = 'icon';
+				break;		
+				
+			case 'buff':	
+				$data 	= $d13->getBuff($args['obj_id']);
+				$name 	= $d13->getLangGL("buffs", $args['obj_id'], "name");
+				$desc 	= $d13->getLangGL("buffs", $args['obj_id'], "description");
+				$level 	= 0;
+				$type	= $args['supertype'];
+				$input	= 0;
+				$ctype 	= 'buff';
+				$slot	= 0;
+				$amount = 0;
+				$imgdir = 'icon';
+				break;		
+			
+			case 'resource':	
+				$data 	= $d13->getResource($args['obj_id']);
+				$name 	= $d13->getLangGL("resources", $args['obj_id'], "name");
+				$desc 	= $d13->getLangGL("resources", $args['obj_id'], "description");
+				$level 	= 0;
+				$type	= $args['supertype'];
+				$input	= 0;
+				$ctype 	= '';
+				$slot	= 0;
+				$amount = $this->node->resources[$args['obj_id']]['value'];
+				$imgdir = 'resources';
+				break;		
+			
 			default:
 				$data 	= NULL;
 				$name 	= $d13->getLangUI("none");
@@ -167,6 +216,7 @@ class d13_object_base
 		$this->data['slotId'] 		= $slot;
 		$this->data['costType'] 	= $ctype;
 		$this->data['amount']		= $amount;
+		$this->data['imgdir']		= $imgdir;
 		
 		$this->data['costData'] = $this->getCheckCost();
 		$this->data['reqData'] = $this->getCheckRequirements();
@@ -591,14 +641,29 @@ class d13_object_base
 					break;
 				
 				case 'component':
-					$nowUpkeep 	= $this->data['upkeep'];
-					$upRes		= $this->data['upkeepResource'];
+					$nowUpkeep 	= $this->data['storage'];
+					$upRes		= $this->data['storageResource'];
 					$limit 		= $d13->getGeneral('types', $this->data['type'], 'limit');
 					break;
 				
 				case 'module':
 					$nowUpkeep 	= 1;
 					$limit 		= $d13->getModule($this->node->data['faction'], $this->data['id'], 'maxInstances');
+					break;
+				
+				case 'resource':
+					$nowUpkeep 	= 1;
+					$limit		= $this->node->storage[$this->data['id']];
+					break;
+					
+				case 'buff':
+					$nowUpkeep 	= 1;
+					$limit		= 1;
+					break;
+					
+				case 'shield':
+					$nowUpkeep 	= 1;
+					$limit		= 1;
 					break;
 				
 				default:

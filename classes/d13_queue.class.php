@@ -29,16 +29,60 @@ class d13_queue
 {
 	
 	private $node;
+	public $queue;
 	
 	// ----------------------------------------------------------------------------------------
-	// 
+	// construct
 	// ----------------------------------------------------------------------------------------
-	
 	public
 
 	function __construct($node)
 	{
+		
+		global $d13;
+			
 		$this->node = $node;
+		$this->queue = array();
+		
+		foreach ($d13->getGeneral('queues') as $type) {
+			$this->queue[$type] = array();
+		}
+		
+	}
+	
+	
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+
+	function getQueue($type, $field = 0, $values = 0)
+	{
+	
+		global $d13;
+			
+		switch ($type)
+		{
+		
+			case 'combat':
+				$result = $d13->dbQuery('select * from ' . $type . ' where sender="' . $this->node->data['id'] . '" or recipient="' . $this->node->data['id'] . '" order by start asc');
+				break;
+
+			default:
+				if ($field) {
+					$values = '(' . implode(', ', $values) . ')';
+					$result = $d13->dbQuery('select * from ' . $type . ' where node="' . $this->node->data['id'] . '" and ' . $field . ' in ' . $values . ' order by start asc');
+				} else {
+					$result = $d13->dbQuery('select * from ' . $type . ' where node="' . $this->node->data['id'] . '" order by start asc');
+				}
+				break;
+		}
+
+		for ($i = 0; $row = $d13->dbFetch($result); $i++) {
+			$this->queue[$type][$i] = $row;
+			$this->queue[$type][$i]['start'] = strtotime($this->queue[$type][$i]['start']);
+		}
+		
 	}
 	
 	// ----------------------------------------------------------------------------------------
@@ -53,8 +97,8 @@ class d13_queue
 		
 		$i = 0;
 		foreach ($d13->getGeneral('queues') as $queues) {
-			$this->node->getQueue($queues);
-			$i += count($this->node->queue[$queues]);
+			$this->getQueue($queues);
+			$i += count($this->queue[$queues]);
 		}
 		return $i;
 	
@@ -75,8 +119,8 @@ class d13_queue
 		$tmp_queues = array();
 		
 		foreach ($d13->getGeneral('queues') as $queues) {
-			$this->node->getQueue($queues);
-			foreach($this->node->queue[$queues] as $item) {
+			$this->getQueue($queues);
+			foreach($this->queue[$queues] as $item) {
 				$data = array();
 				$item['type'] = $queues;
 				$data['remaining'] = $item['start'] + $item['duration']  - time();
@@ -115,7 +159,11 @@ class d13_queue
 		
 		//- - some items do not feature all data, fill with dummy data
 		if (!isset($item['obj_id'])) {
-			$item['obj_id'] = $item['id'];
+			if (isset($item['id'])) {
+				$item['obj_id'] = $item['id'];
+			} else {
+				$item['obj_id'] = $item['slot'];
+			}
 		}
 		if (!isset($item['slot'])) {
 			$item['slot'] = 0;
@@ -140,7 +188,14 @@ class d13_queue
 				$name 	= $d13->getLangGL("buffs", $item['obj_id'], "name");
 				$cancel = '<a class="external" href="?p=node&action=cancelBuff&nodeId=' . $this->node->data['id'] . '&buffId=' . $item['obj_id'] . '">';
 				break;
-
+			
+			case 'market':
+				$icon 	= '/icon/refresh.png';
+				$action = $d13->getLangUI("refresh");
+				$name 	= $d13->getLangGL("modules", $this->node->data['faction'], $this->node->modules[$item['slot']]['module'], "name");
+				$cancel = '<a class="external" href="?p=node&action=cancelMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $item['slot'] . '">';
+				break;
+			
 			case 'build':
 				$icon 	= $d13->getModule($this->node->data['faction'], $item['obj_id'], 'images');
 				$icon 	= 'modules/'.$this->node->data['faction'].'/'.$icon[1]['image'];
@@ -245,9 +300,9 @@ class d13_queue
 		$tvars['tvar_queueItems'] = '';
 		
 		foreach ($d13->getGeneral('queues') as $queue) {
-			$this->node->getQueue($queue);
-			if (count($this->node->queue[$queue])) {
-				foreach($this->node->queue[$queue] as $item) {
+			$this->getQueue($queue);
+			if (count($this->queue[$queue])) {
+				foreach($this->queue[$queue] as $item) {
 					$item['type'] = $queue;
 					$tvars['tvar_queueItems'] .= $this->getQueueItem($item);
 				}

@@ -461,34 +461,7 @@ class d13_node
 	}
 
 
-	// ----------------------------------------------------------------------------------------
-	//
-	// ----------------------------------------------------------------------------------------
-	public
-
-	function getQueue($type, $field = 0, $values = 0)
-	{
-		global $d13;
-		$this->queue[$type] = array();
-		switch ($type) {
-		case 'combat':
-			$result = $d13->dbQuery('select * from ' . $type . ' where sender="' . $this->data['id'] . '" or recipient="' . $this->data['id'] . '" order by start asc');
-			break;
-
-		default:
-			if ($field) {
-				$values = '(' . implode(', ', $values) . ')';
-				$result = $d13->dbQuery('select * from ' . $type . ' where node="' . $this->data['id'] . '" and ' . $field . ' in ' . $values . ' order by start asc');
-			}
-			else $result = $d13->dbQuery('select * from ' . $type . ' where node="' . $this->data['id'] . '" order by start asc');
-			break;
-		}
-
-		for ($i = 0; $row = $d13->dbFetch($result); $i++) {
-			$this->queue[$type][$i] = $row;
-			$this->queue[$type][$i]['start'] = strtotime($this->queue[$type][$i]['start']);
-		}
-	}
+	
 	
 	// ----------------------------------------------------------------------------------------
 	// getBuff
@@ -503,9 +476,9 @@ class d13_node
 		$value = 1;
 		
 		$this->checkBuff(time());
-		$this->getQueue('buff');
+		$this->queues->getQueue('buff');
 		
-		foreach($this->queue['buff'] as $entry) {
+		foreach($this->queues->queue['buff'] as $entry) {
 			if ($d13->getBuff($entry['obj_id'])) {
 				$buff = $d13->getBuff($entry['obj_id']);
 				if ($buff['type'] == $type && $buff['buff'] == $buff) {
@@ -579,9 +552,9 @@ class d13_node
 		global $d13;
 	
 		$this->checkShield(time());
-		$this->getQueue('shield');
+		$this->queues->getQueue('shield');
 
-		foreach($this->queue['shield'] as $entry) {
+		foreach($this->queues->queue['shield'] as $entry) {
 			if ($d13->getShield($entry['obj_id'], $type)) {
 				return true;
 			} else {
@@ -643,6 +616,108 @@ class d13_node
 		}
 		else $status = 'noEntry';
 		return $status;
+	}
+	
+	
+	
+	
+	// ----------------------------------------------------------------------------------------
+	// getMarket
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getMarket($slot)
+	{
+
+		global $d13;
+		
+		$inventory = array();
+		
+		$result = $d13->dbQuery('select * from market where node="' . $this->data['id'] . '" and slot="' . $slot . '" order by id asc');
+		for ($i = 0; $row = $d13->dbFetch($result); $i++) {
+			$inventory[] = $row;
+		}
+		
+		return $inventory;
+		
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// cancelMarket
+	// ----------------------------------------------------------------------------------------
+	public
+
+	function cancelMarket($slotId)
+	{
+		global $d13;
+		
+		$result = $d13->dbQuery('select * from market where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+		$entry = $d13->dbFetch($result);
+		if (isset($entry['start'])) {
+			$ok = 1;
+			$d13->dbQuery('delete from market where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+			if ($d13->dbAffectedRows() == - 1) $ok = 0;
+			if ($ok) $status = 'done';
+			else $status = 'error';
+		} else {
+			$status = 'noEntry';
+		}
+		$d13->logger($status);
+		return $status;
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// addMarket
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function addMarket($slotId)
+	{
+		global $d13;
+		
+		$this->getModules();
+		
+		$ok 		= 1;
+		
+		if ($this->modules[$slotId]['module'] > -1) {
+			
+			$tmp_module = d13_module_factory::create($this->modules[$slotId]['module'], $slotId, $this);
+			
+			if (isset($tmp_module->data['inventory']) && $tmp_module->data['inventory']) {
+		
+				$duration = 24 - $tmp_module->data['totalIR'];				# TODO: move to config later
+				$duration = max($duration, 1) * 6; 							# DEBUG: incrase to 60
+				
+				$inventory = $tmp_module->data['inventory'];
+				shuffle($inventory);
+				$inventory = array_splice($inventory, 0, $tmp_module->data['totalIR']);
+				$inventory = json_encode($inventory);
+		
+				$start 		= strftime('%Y-%m-%d %H:%M:%S', time());
+		
+				$d13->dbQuery("insert into market (node, slot, start, duration, inventory) values ('" . $this->data['id'] . "', '" . $slotId . "', '" . $start . "', '" . $duration . "', '" . $inventory . "')");
+		
+				if ($d13->dbAffectedRows() == - 1) $ok = 0;
+		
+		
+		
+		
+			} else {
+				$ok = 0;
+			}
+		} else {
+			$ok = 0;
+		}
+		
+		if ($ok) {
+			$status = 'done';
+		} else {
+			$status = 'error';
+		}
+		
+
+		return $status;
+
 	}
 	
 	// ----------------------------------------------------------------------------------------
@@ -762,9 +837,9 @@ class d13_node
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			}
 
-			$this->getQueue('research', 'obj_id', $d13->getModule($this->data['faction'], $moduleId) ['technologies']);
+			$this->queues->getQueue('research', 'obj_id', $d13->getModule($this->data['faction'], $moduleId) ['technologies']);
 			$entry['duration'] = floor($entry['duration'] * 60);
-			foreach($this->queue['research'] as $queueEntry)
+			foreach($this->queues->queue['research'] as $queueEntry)
 			if ($queueEntry['start'] > $entry['start']) {
 				$d13->dbQuery('update research set start="' . strftime('%Y-%m-%d %H:%M:%S', $queueEntry['start'] - $entry['duration']) . '" where node="' . $this->data['id'] . '" and obj_id="' . $queueEntry['technology'] . '"');
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
@@ -853,9 +928,9 @@ class d13_node
 			$row = $d13->dbFetch($result);
 			$count = $row['count'];
 			
-			$this->getQueue("build");
-			if (count($this->queue["build"])) {
-				foreach($this->queue["build"] as $item) {
+			$this->queues->getQueue("build");
+			if (count($this->queues->queue["build"])) {
+				foreach($this->queues->queue["build"] as $item) {
 					if ($item['obj_id'] == $moduleId) {
 						$count++;
 					}
@@ -1045,9 +1120,9 @@ class d13_node
 			if ($d13->dbAffectedRows() == - 1) $ok = 0;
 
 			
-			$this->getQueue('build');
+			$this->queues->getQueue('build');
 			$entry['duration'] = floor($entry['duration'] * 60);
-			foreach($this->queue['build'] as $queueEntry) {
+			foreach($this->queues->queue['build'] as $queueEntry) {
 				if ($queueEntry['start'] > $entry['start']) {
 					$d13->dbQuery('update build set start="' . strftime('%Y-%m-%d %H:%M:%S', $queueEntry['start'] - $entry['duration']) . '" where node="' . $this->data['id'] . '" and slot="' . $queueEntry['slot'] . '"');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
@@ -1260,9 +1335,9 @@ class d13_node
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			}
 
-			$this->getQueue('craft', 'obj_id', $d13->getModule($this->data['faction'], $moduleId, 'components'));
+			$this->queues->getQueue('craft', 'obj_id', $d13->getModule($this->data['faction'], $moduleId, 'components'));
 			$entry['duration'] = floor($entry['duration'] * 60);
-			foreach($this->queue['craft'] as $queueEntry) {
+			foreach($this->queues->queue['craft'] as $queueEntry) {
 				if ($queueEntry['start'] > $entry['start']) {
 					$d13->dbQuery('update craft set start="' . strftime('%Y-%m-%d %H:%M:%S', $queueEntry['start'] - $entry['duration']) . '" where id="' . $queueEntry['id'] . '"');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
@@ -1330,7 +1405,7 @@ class d13_node
 							}
 						}
 						
-						$this->getQueue('train', 'obj_id', $d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'units'));
+						$this->queues->getQueue('train', 'obj_id', $d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'units'));
 						
 						$start = strftime('%Y-%m-%d %H:%M:%S', time());
 						$duration = $d13->getUnit($this->data['faction'], $unitId, 'duration') * $quantity;
@@ -1378,7 +1453,7 @@ class d13_node
 			$this->units[$unitId]['value']-= $quantity;
 			$d13->dbQuery('update units set value="' . $this->units[$unitId]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $unitId . '"');
 			if ($d13->dbAffectedRows() == - 1) $ok = 0;
-			$this->getQueue('train', 'obj_id', $d13->getModule($this->data['faction'], $moduleId) ['units']);
+			$this->queues->getQueue('train', 'obj_id', $d13->getModule($this->data['faction'], $moduleId) ['units']);
 			
 			$start = strftime('%Y-%m-%d %H:%M:%S', time());
 			$duration = $d13->getUnit($this->data['faction'], $unitId, 'removeDuration');
@@ -1448,9 +1523,9 @@ class d13_node
 				if ($d13->dbAffectedRows() == - 1) $ok = 0;
 			}
 
-			$this->getQueue('train', 'obj_id', $d13->getModule($this->data['faction'], $moduleId) ['units']);
+			$this->queues->getQueue('train', 'obj_id', $d13->getModule($this->data['faction'], $moduleId) ['units']);
 			$entry['duration'] = floor($entry['duration'] * 60);
-			foreach($this->queue['train'] as $queueEntry) {
+			foreach($this->queues->queue['train'] as $queueEntry) {
 				if ($queueEntry['start'] > $entry['start']) {
 					$d13->dbQuery('update train set start="' . strftime('%Y-%m-%d %H:%M:%S', $queueEntry['start'] - $entry['duration']) . '" where id="' . $queueEntry['id'] . '"');
 					if ($d13->dbAffectedRows() == - 1) $ok = 0;
@@ -1700,9 +1775,9 @@ class d13_node
 		global $d13;
 		$d13->dbQuery('start transaction');
 		
-		$this->getQueue('buff');
+		$this->queues->getQueue('buff');
 		$ok = 1;
-		foreach($this->queue['buff'] as $entry) {
+		foreach($this->queues->queue['buff'] as $entry) {
 			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			if ($entry['end'] <= $time) {
 				$d13->dbQuery('delete from buff where node="' . $this->data['id'] . '" and obj_id="' . $entry['obj_id'] . '"');
@@ -1726,9 +1801,9 @@ class d13_node
 		global $d13;
 		$d13->dbQuery('start transaction');
 		
-		$this->getQueue('shield');
+		$this->queues->getQueue('shield');
 		$ok = 1;
-		foreach($this->queue['shield'] as $entry) {
+		foreach($this->queues->queue['shield'] as $entry) {
 			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			if ($entry['end'] <= $time) {
 				$d13->dbQuery('delete from shield where node="' . $this->data['id'] . '" and obj_id="' . $entry['obj_id'] . '"');
@@ -1740,7 +1815,34 @@ class d13_node
 		else $d13->dbQuery('rollback');
 
 	}
-	
+
+	// ----------------------------------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+
+	function checkMarket($time)
+	{
+
+		global $d13;
+		$d13->dbQuery('start transaction');
+		
+		$this->queues->getQueue('market');
+		$ok = 1;
+		
+		foreach($this->queues->queue['market'] as $entry) {
+			$entry['end'] = $entry['start'] + floor($entry['duration']);
+			if ($entry['end'] <= $time) {
+				$d13->dbQuery('delete from market where node="' . $this->data['id'] . '" and slot="' . $entry['slot'] . '"');
+				if ($d13->dbAffectedRows() == - 1) $ok = 0;
+			}
+		}
+
+		if ($ok) $d13->dbQuery('commit');
+		else $d13->dbQuery('rollback');
+
+	}
+
 	// ----------------------------------------------------------------------------------------
 	// checkResearch
 	// ----------------------------------------------------------------------------------------
@@ -1751,9 +1853,9 @@ class d13_node
 		global $d13;
 		$d13->dbQuery('start transaction');
 		$this->getTechnologies();
-		$this->getQueue('research');
+		$this->queues->getQueue('research');
 		$ok = 1;
-		foreach($this->queue['research'] as $entry) {
+		foreach($this->queues->queue['research'] as $entry) {
 			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			if ($entry['end'] <= $time) {
 				$this->technologies[$entry['obj_id']]['level']++;
@@ -1784,10 +1886,10 @@ class d13_node
 		$this->getModules();
 		$this->getResources();
 		$this->getComponents();
-		$this->getQueue('build');
+		$this->queues->getQueue('build');
 		$ok = 1;
 
-		foreach($this->queue['build'] as $entry) {
+		foreach($this->queues->queue['build'] as $entry) {
 			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			if ($entry['end'] <= $time) {
 
@@ -1883,10 +1985,10 @@ class d13_node
 		$d13->dbQuery('start transaction');
 		$this->getResources();
 		$this->getComponents();
-		$this->getQueue('craft');
+		$this->queues->getQueue('craft');
 		$ok = 1;
 		
-		foreach($this->queue['craft'] as $entry) {
+		foreach($this->queues->queue['craft'] as $entry) {
 		
 			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			
@@ -1953,10 +2055,10 @@ class d13_node
 		$this->getResources();
 		$this->getComponents();
 		$this->getUnits();
-		$this->getQueue('train');
+		$this->queues->getQueue('train');
 		$ok = 1;
 		
-		foreach($this->queue['train'] as $entry) {
+		foreach($this->queues->queue['train'] as $entry) {
 		
 			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			
@@ -2018,10 +2120,10 @@ class d13_node
 	{
 		global $d13;
 		$d13->dbQuery('start transaction');
-		$this->getQueue('combat');
+		$this->queues->getQueue('combat');
 		$ok = 1;
 		
-		foreach($this->queue['combat'] as $combat) {
+		foreach($this->queues->queue['combat'] as $combat) {
 		
 			$combat['end'] = $combat['start'] + floor($combat['duration']);
 			if ($combat['end'] <= $time) {
@@ -2173,6 +2275,7 @@ class d13_node
 		$this->checkTrain($time);
 		$this->checkShield($time);
 		$this->checkBuff($time);
+		$this->checkMarket($time);
 		
 		// $this->checkTrade($time);
 
@@ -2429,8 +2532,8 @@ class d13_node
 		global $d13;
 		switch ($d13->getModule($this->data['faction'], $moduleId) ['type']) {
 		case 'research':
-			$this->getQueue('research', 'obj_id', $d13->getModule($this->data['faction'], $moduleId) ['technologies']);
-			$nr = count($this->queue['research']);
+			$this->queues->getQueue('research', 'obj_id', $d13->getModule($this->data['faction'], $moduleId) ['technologies']);
+			$nr = count($this->queues->queue['research']);
 			if ($nr) {
 				$newIR = $oldIR = 0;
 				$moduleCount = 0;
@@ -2443,19 +2546,19 @@ class d13_node
 
 				if ($useOldIR) $newIR = $oldIR;
 				for ($i = 0; $i < $nr; $i++) {
-					if ($i) $this->queue['research'][$i]['start'] = $this->queue['research'][$i - 1]['start'] + floor($this->queue['research'][$i - 1]['duration'] * 60);
-					$this->queue['research'][$i]['duration'] = $d13->getTechnology($this->data['faction'], $this->queue['research'][$i]['technology'], 'duration');
-					$this->queue['research'][$i]['duration'] = ($this->queue['research'][$i]['duration'] - $this->queue['research'][$i]['duration'] * $newIR) * $d13->getGeneral('users', 'duration', 'research') * $this->getBuff('duration', 'research');
-					$d13->dbQuery('update research set start="' . strftime('%Y-%m-%d %H:%M:%S', $this->queue['research'][$i]['start']) . '", duration="' . $this->queue['research'][$i]['duration'] . '" where node="' . $this->queue['research'][$i]['node'] . '" and technology="' . $this->queue['research'][$i]['technology'] . '"');
-					if (!$moduleCount) $this->cancelTechnology($this->queue['research'][$i]['technology'], $moduleId);
+					if ($i) $this->queues->queue['research'][$i]['start'] = $this->queues->queue['research'][$i - 1]['start'] + floor($this->queues->queue['research'][$i - 1]['duration'] * 60);
+					$this->queues->queue['research'][$i]['duration'] = $d13->getTechnology($this->data['faction'], $this->queues->queue['research'][$i]['technology'], 'duration');
+					$this->queues->queue['research'][$i]['duration'] = ($this->queues->queue['research'][$i]['duration'] - $this->queues->queue['research'][$i]['duration'] * $newIR) * $d13->getGeneral('users', 'duration', 'research') * $this->getBuff('duration', 'research');
+					$d13->dbQuery('update research set start="' . strftime('%Y-%m-%d %H:%M:%S', $this->queues->queue['research'][$i]['start']) . '", duration="' . $this->queues->queue['research'][$i]['duration'] . '" where node="' . $this->queues->queue['research'][$i]['node'] . '" and technology="' . $this->queues->queue['research'][$i]['technology'] . '"');
+					if (!$moduleCount) $this->cancelTechnology($this->queues->queue['research'][$i]['technology'], $moduleId);
 				}
 			}
 
 			break;
 
 		case 'craft':
-			$this->getQueue('craft', 'obj_id', $d13->getModule($this->data['faction'], $moduleId) ['components']);
-			$nr = count($this->queue['craft']);
+			$this->queues->getQueue('craft', 'obj_id', $d13->getModule($this->data['faction'], $moduleId) ['components']);
+			$nr = count($this->queues->queue['craft']);
 			if ($nr) {
 				$newIR = $oldIR = 0;
 				$moduleCount = 0;
@@ -2468,19 +2571,19 @@ class d13_node
 
 				if ($useOldIR) $newIR = $oldIR;
 				for ($i = 0; $i < $nr; $i++) {
-					if ($i) $this->queue['craft'][$i]['start'] = $this->queue['craft'][$i - 1]['start'] + floor($this->queue['craft'][$i - 1]['duration'] * 60);
-					$this->queue['craft'][$i]['duration'] = $d13->getComponent($this->data['faction'], $this->queue['craft'][$i]['component'], 'duration') * $this->queue['craft'][$i]['quantity'];
-					$this->queue['craft'][$i]['duration'] = ($this->queue['craft'][$i]['duration'] - $this->queue['craft'][$i]['duration'] * $newIR) * $d13->getGeneral('users', 'duration', 'craft') * $this->getBuff('duration', 'craft');
-					$d13->dbQuery('update craft set start="' . strftime('%Y-%m-%d %H:%M:%S', $this->queue['craft'][$i]['start']) . '", duration="' . $this->queue['craft'][$i]['duration'] . '" where id="' . $this->queue['craft'][$i]['id'] . '"');
-					if (!$moduleCount) $this->cancelComponent($this->queue['craft'][$i]['id'], $moduleId);
+					if ($i) $this->queues->queue['craft'][$i]['start'] = $this->queues->queue['craft'][$i - 1]['start'] + floor($this->queues->queue['craft'][$i - 1]['duration'] * 60);
+					$this->queues->queue['craft'][$i]['duration'] = $d13->getComponent($this->data['faction'], $this->queues->queue['craft'][$i]['component'], 'duration') * $this->queues->queue['craft'][$i]['quantity'];
+					$this->queues->queue['craft'][$i]['duration'] = ($this->queues->queue['craft'][$i]['duration'] - $this->queues->queue['craft'][$i]['duration'] * $newIR) * $d13->getGeneral('users', 'duration', 'craft') * $this->getBuff('duration', 'craft');
+					$d13->dbQuery('update craft set start="' . strftime('%Y-%m-%d %H:%M:%S', $this->queues->queue['craft'][$i]['start']) . '", duration="' . $this->queues->queue['craft'][$i]['duration'] . '" where id="' . $this->queues->queue['craft'][$i]['id'] . '"');
+					if (!$moduleCount) $this->cancelComponent($this->queues->queue['craft'][$i]['id'], $moduleId);
 				}
 			}
 
 			break;
 
 		case 'train':
-			$this->getQueue('train', 'obj_id', $d13->getModule($this->data['faction'], $moduleId) ['units']);
-			$nr = count($this->queue['train']);
+			$this->queues->getQueue('train', 'obj_id', $d13->getModule($this->data['faction'], $moduleId) ['units']);
+			$nr = count($this->queues->queue['train']);
 			if ($nr) {
 				$newIR = $oldIR = 0;
 				$moduleCount = 0;
@@ -2493,19 +2596,19 @@ class d13_node
 
 				if ($useOldIR) $newIR = $oldIR;
 				for ($i = 0; $i < $nr; $i++) {
-					if ($i) $this->queue['train'][$i]['start'] = $this->queue['train'][$i - 1]['start'] + floor($this->queue['train'][$i - 1]['duration'] * 60);
-					$this->queue['train'][$i]['duration'] = $d13->getUnit($this->data['faction'], $this->queue['train'][$i]['unit'], 'duration') * $this->queue['train'][$i]['quantity'];
-					$this->queue['train'][$i]['duration'] = ($this->queue['train'][$i]['duration'] - $this->queue['train'][$i]['duration'] * $newIR) * $d13->getGeneral('users', 'duration', 'train') * $this->getBuff('duration', 'train');
-					$d13->dbQuery('update train set start="' . strftime('%Y-%m-%d %H:%M:%S', $this->queue['train'][$i]['start']) . '", duration="' . $this->queue['train'][$i]['duration'] . '" where id="' . $this->queue['train'][$i]['id'] . '"');
-					if (!$moduleCount) $this->cancelComponent($this->queue['train'][$i]['id'], $moduleId);
+					if ($i) $this->queues->queue['train'][$i]['start'] = $this->queues->queue['train'][$i - 1]['start'] + floor($this->queues->queue['train'][$i - 1]['duration'] * 60);
+					$this->queues->queue['train'][$i]['duration'] = $d13->getUnit($this->data['faction'], $this->queues->queue['train'][$i]['unit'], 'duration') * $this->queues->queue['train'][$i]['quantity'];
+					$this->queues->queue['train'][$i]['duration'] = ($this->queues->queue['train'][$i]['duration'] - $this->queues->queue['train'][$i]['duration'] * $newIR) * $d13->getGeneral('users', 'duration', 'train') * $this->getBuff('duration', 'train');
+					$d13->dbQuery('update train set start="' . strftime('%Y-%m-%d %H:%M:%S', $this->queues->queue['train'][$i]['start']) . '", duration="' . $this->queues->queue['train'][$i]['duration'] . '" where id="' . $this->queues->queue['train'][$i]['id'] . '"');
+					if (!$moduleCount) $this->cancelComponent($this->queues->queue['train'][$i]['id'], $moduleId);
 				}
 			}
 
 			break;
 
 		case 'trade':
-			$this->getQueue('trade');
-			$nr = count($this->queue['trade']);
+			$this->queues->getQueue('trade');
+			$nr = count($this->queues->queue['trade']);
 			if ($nr) {
 				$newIR = $oldIR = 0;
 				$moduleCount = 0;
@@ -2518,12 +2621,12 @@ class d13_node
 
 				if ($useOldIR) $newIR = $oldIR;
 				for ($i = 0; $i < $nr; $i++) {
-					if ($i) $this->queue['trade'][$i]['start'] = $this->queue['trade'][$i - 1]['start'] + floor($this->queue['trade'][$i - 1]['duration'] * 60);
-					$this->queue['trade'][$i]['duration'] = $d13->getGeneral('users', 'duration', 'trade') * $this->getBuff('duration', 'trade') * $this->queue['trade'][$i]['distance'];
-					$this->queue['trade'][$i]['duration'] = $this->queue['trade'][$i]['duration'] - $this->queue['trade'][$i]['duration'] * $newIR;
-					$d13->dbQuery('update trade set start="' . strftime('%Y-%m-%d %H:%M:%S', $this->queue['trade'][$i]['start']) . '", duration="' . $this->queue['trade'][$i]['duration'] . '" where id="' . $this->queue['trade'][$i]['id'] . '"');
+					if ($i) $this->queues->queue['trade'][$i]['start'] = $this->queues->queue['trade'][$i - 1]['start'] + floor($this->queues->queue['trade'][$i - 1]['duration'] * 60);
+					$this->queues->queue['trade'][$i]['duration'] = $d13->getGeneral('users', 'duration', 'trade') * $this->getBuff('duration', 'trade') * $this->queues->queue['trade'][$i]['distance'];
+					$this->queues->queue['trade'][$i]['duration'] = $this->queues->queue['trade'][$i]['duration'] - $this->queues->queue['trade'][$i]['duration'] * $newIR;
+					$d13->dbQuery('update trade set start="' . strftime('%Y-%m-%d %H:%M:%S', $this->queues->queue['trade'][$i]['start']) . '", duration="' . $this->queues->queue['trade'][$i]['duration'] . '" where id="' . $this->queues->queue['trade'][$i]['id'] . '"');
 
-					// if (!$moduleCount) $this->cancelTrade($this->queue['trade'][$i]['id'], $moduleId);
+					// if (!$moduleCount) $this->cancelTrade($this->queues->queue['trade'][$i]['id'], $moduleId);
 
 				}
 			}

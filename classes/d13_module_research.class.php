@@ -99,19 +99,6 @@ class d13_module_research extends d13_object_module
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// getOptions
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function getOptions()
-	{
-		return '';
-	}
-
-	// ----------------------------------------------------------------------------------------
 	// getPopup
 	// @
 	//
@@ -219,8 +206,8 @@ class d13_module_research extends d13_object_module
 		
 		$this->data['busy'] = false;
 		
-		if (count($this->node->queue['research'])) {
-			foreach($this->node->queue['research'] as $item) {
+		if (count($this->node->queues->queue['research'])) {
+			foreach($this->node->queues->queue['research'] as $item) {
 				if ($item['slot'] == $this->data['slotId']) {
 					
 					$this->data['busy'] = true;
@@ -280,7 +267,7 @@ class d13_module_research extends d13_object_module
 					$id = $d13->getTechnology($this->node->data['faction'], $technology, 'id');
 					$image = $d13->getTechnology($this->node->data['faction'], $id, 'images');
 					$image = $image[0]['image'];
-					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology) ["name"] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology, "name") . '"></a>';
+					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/technologies/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangGL("technologies", $this->node->data['faction'], $technology, "name") . '"></a>';
 				}
 			}
 		}

@@ -74,7 +74,15 @@ class d13_nodeController extends d13_controller
 			case 'cancelShield':
 				return $this->nodeCancelShield();
 				break;
-				
+			
+			case 'cancelBuff':
+				return $this->nodeCancelBuff();
+				break;
+			
+			case 'cancelMarket':
+				return $this->nodeCancelMarket();
+				break;
+			
 			case 'list':
 				return $this->nodeList();
 				break;
@@ -109,8 +117,8 @@ class d13_nodeController extends d13_controller
 				$_SESSION[CONST_PREFIX . 'User']['node'] = $nodeId;
 				$this->node->checkAll(time());
 				$this->node->getLocation();
-				$this->node->getQueue('build');
-				$this->node->getQueue('combat');			
+				$this->node->queues->getQueue('build');
+				$this->node->queues->getQueue('combat');			
 				$tvars = $this->nodeRender();
 			} else {
 				$message = $d13->getLangUI("accessDenied");
@@ -323,6 +331,8 @@ class d13_nodeController extends d13_controller
 						$status = $this->node->remove($_GET['nodeId']);
 						if ($status == 'done') {
 							header('location: p=node&action=list');
+							exit();
+							
 						}
 						else {
 							$message = $d13->getLangUI($status);
@@ -405,6 +415,66 @@ class d13_nodeController extends d13_controller
 			$status = $this->node->cancelShield($_GET['shieldId']);
 			if ($status == 'done') {
 				header('Location: index.php?p=node&action=get&nodeId=' . $this->node->data['id']);
+				exit();
+				
+			} else {
+				$message = $d13->getLangUI($status);
+			}
+		}
+		else $message = $d13->getLangUI("insufficientData");
+			
+		return $tvars;
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function nodeCancelBuff()
+	{
+		global $d13;
+		$tvars = array();
+		
+		if (isset($_GET['buffId']) && isset($_GET['nodeId'])) {
+			$this->node = new d13_node();
+			$status = $this->node->get('id', $_GET['nodeId']);
+			$status = $this->node->cancelBuff($_GET['buffId']);
+			if ($status == 'done') {
+				header('Location: index.php?p=node&action=get&nodeId=' . $this->node->data['id']);
+				exit();
+				
+			} else {
+				$message = $d13->getLangUI($status);
+			}
+		}
+		else $message = $d13->getLangUI("insufficientData");
+			
+		return $tvars;
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function nodeCancelMarket()
+	{
+		global $d13;
+		$tvars = array();
+		
+		if (isset($_GET['slotId']) && isset($_GET['nodeId'])) {
+			$this->node = new d13_node();
+			$status = $this->node->get('id', $_GET['nodeId']);
+			$status = $this->node->cancelMarket($_GET['slotId']);
+			if ($status == 'done') {
+				header('Location: index.php?p=node&action=get&nodeId=' . $this->node->data['id']);
+				exit();
+				
 			} else {
 				$message = $d13->getLangUI($status);
 			}
@@ -475,7 +545,7 @@ class d13_nodeController extends d13_controller
 			$buildQueue[$i]['image'] = '';
 		}
 		
-		foreach($this->node->queue['build'] as $item) {
+		foreach($this->node->queues->queue['build'] as $item) {
 			$buildQueue[$item['slot']]['check'] = 1;
 			$buildQueue[$item['slot']]['image'] = $d13->getModule($this->node->data['faction'], $item['obj_id'], 'images');
 		}

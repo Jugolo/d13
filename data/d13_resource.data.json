@@ -14,7 +14,21 @@
     "carryable": true,
     "tradeable": true,
     "buyable": true,
-    "lootable": true
+    "lootable": true,
+    "cost": [
+		{
+			"resource": 0,
+			"value": 150
+		}
+	],
+	"requirements": [
+	],
+	"images": [
+      	 {
+          "level": 0,
+          "image": "0.png"
+        }
+      ]
   },
   {
     "id": 1,
@@ -31,7 +45,21 @@
     "carryable": true,
     "tradeable": true,
     "buyable": true,
-    "lootable": true
+    "lootable": true,
+    "cost": [
+		{
+			"resource": 0,
+			"value": 150
+		}
+	],
+	"requirements": [
+	],
+	"images": [
+      	 {
+          "level": 0,
+          "image": "1.png"
+        }
+      ]
   },
   {
     "id": 2,
@@ -48,7 +76,21 @@
     "carryable": true,
     "tradeable": true,
     "buyable": true,
-    "lootable": true
+    "lootable": true,
+    "cost": [
+		{
+			"resource": 0,
+			"value": 150
+		}
+	],
+	"requirements": [
+	],
+	"images": [
+      	 {
+          "level": 0,
+          "image": "2.png"
+        }
+      ]
   },
   {
     "id": 3,
@@ -65,7 +107,21 @@
     "carryable": false,
     "tradeable": true,
     "buyable": true,
-    "lootable": true
+    "lootable": true,
+    "cost": [
+		{
+			"resource": 0,
+			"value": 150
+		}
+	],
+	"requirements": [
+	],
+	"images": [
+      	 {
+          "level": 0,
+          "image": "3.png"
+        }
+      ]
   },
   {
     "id": 4,
@@ -82,7 +138,21 @@
     "carryable": false,
     "tradeable": true,
     "buyable": true,
-    "lootable": true
+    "lootable": true,
+    "cost": [
+		{
+			"resource": 0,
+			"value": 150
+		}
+	],
+	"requirements": [
+	],
+	"images": [
+      	 {
+          "level": 0,
+          "image": "4.png"
+        }
+      ]
   },
   {
     "id": 5,
@@ -98,6 +168,20 @@
     "carryable": false,
     "tradeable": true,
     "buyable": true,
-    "lootable": true
+    "lootable": true,
+    "cost": [
+		{
+			"resource": 0,
+			"value": 150
+		}
+	],
+	"requirements": [
+	],
+	"images": [
+      	 {
+          "level": 0,
+          "image": "5.png"
+        }
+      ]
   }
 ]

@@ -1,14 +1,18 @@
-d13 - open-source strategy browser game engine
+d13 - strategy browser game engine
 ==========================================================================================
 
 RELEASE CANDIDATE 0
 ------------------------------------------------------------------------------------------
 
-V019	--- UPCOMING UPDATE ---
-
+V0XX	--- PLANNED UPCOMING UPDATE(S) ---
+		
 		* Map System
-
-V018	--- UPCOMING UPDATE ---
+		
+		* Shop Building (Blackmarket): Buy resources, components, buff's, shield's
+		
+		* Trade Building (Tradepost): Trade resources/components with other users
+		
+		* Buff System: Add temporary speed/efficiency buff's to the current node (town)
 		
 		* Finalize existing combat system:
 		
@@ -22,7 +26,7 @@ V017	--- SECOND STABLE VERSION
 		* corrected several CSS glitches
 		* expanded functionality of SCOUTing
 
-V016	* Fixed a few more bugs (thanks to BlackScorp)
+V016	* Fixed a few more bugs
 		* Added autoload to classes
 		* Added LINUX line breaks
 		* most object classes are now derived from one base class

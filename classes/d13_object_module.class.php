@@ -124,7 +124,7 @@ class d13_object_module extends d13_object_base
 		$tvars['tvar_slotID'] = $this->data['slotId'];
 		$tvars['tvar_demolishLink'] 		= $this->getDemolish();
 		$tvars['tvar_linkData'] 			= $this->getModuleUpgrade();
-		$tvars['tvar_moduleItemContent'] 	= $this->getOptions();
+		
 		$tvars['tvar_image'] = $this->data['image'];
 		$tvars['tvar_moduleDescription'] = d13_misc::toolTip($this->data['name'] . '<br>' . $this->data['description']);
 		$tvars['tvar_moduleProduction'] = $this->data['moduleProduction'];
@@ -436,19 +436,6 @@ class d13_object_module extends d13_object_base
 	public
 
 	function getInventory()
-	{
-		return '';
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// getOptions
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function getOptions()
 	{
 		return '';
 	}

@@ -24,6 +24,12 @@
 			"id": 14,
 			"level": 1
 		}
-	]
+	],
+	"images": [
+      	 {
+          "level": 0,
+          "image": "shield.png"
+        }
+      ]
   }
 ]

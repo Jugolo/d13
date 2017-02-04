@@ -44,13 +44,11 @@ class d13_module_market extends d13_object_module
 		parent::__construct($args);
 	}
 
-
 	// ----------------------------------------------------------------------------------------
 	// getInventory
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getInventory()
@@ -59,48 +57,24 @@ class d13_module_market extends d13_object_module
 		
 		$html = '';
 		$inventoryData = '';
+		$data = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 0;
 		$i=0;
 		
 		if ($this->data['options']['inventoryList']) {
 
+			foreach ($this->data['inventory'] as $object) {
 			
-			foreach ($this->data['inventory'] as $item) {
-			
-				switch ($item['object'])
-				{
-					case "resource":
-						$name = $d13->getLangGL('resources', $item['id'], 'name');
-						$image = $d13->getResource($item['id'], 'image');
-						$dir = "resources";
-						break;
-					case "component":
-						$object = $d13->getComponent($this->node->data['faction'], $item['id']);
-						$name = $d13->getLangGL('components', $this->node->data['faction'], $item['id'], 'name');
-						$image = $this->node->data['faction'] . '/' . $object['images'][0]['image'];
-						$dir = "components";
-						break;
-					case "shield":
-						$name = $d13->getLangGL('shields', $item['id'], 'name');
-						$image = $d13->getShield($item['id'], 'image');
-						$dir = "icon";
-						break;
-					case "buff":
-						$name = $d13->getLangGL('buffs', $item['id'], 'name');
-						$image = $d13->getBuff($item['id'], 'image');
-						$dir = "icon";
-						break;
-				}
-			
+				$tmp_object = d13_object_factory::create($object['object'], $object['id'], $this->node);
 				
-
-				$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $dir . '/' . $image . '" title="' . $name . '">';
-				$tvars['tvar_listLabel'] = $name;
-				$tvars['tvar_listAmount'] = "";
-				$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
-				$i++;
-			
+				if ($tmp_object->data['active']) {
+					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $tmp_object->data['imgdir'] . '/' . $tmp_object->data['image'] . '" title="' . $tmp_object->data['name'] . '">';
+					$tvars['tvar_listLabel'] = $tmp_object->data['name'];
+					$tvars['tvar_listAmount'] = "";
+					$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
+					$i++;
+				}
 			
 			}
 			
@@ -124,31 +98,87 @@ class d13_module_market extends d13_object_module
 		
 		return $html;
 	}
-
-	// ----------------------------------------------------------------------------------------
-	// getOptions
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function getOptions()
-	{
-		return '';
-	}
-
+	
 	// ----------------------------------------------------------------------------------------
 	// getPopup
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getPopup()
 	{
-		return '';
+		
+		global $d13;
+		
+		$tvars['tvar_sub_popupswiper'] = '';
+		$html = '';
+		
+		$limit = 10;												# could go to config later
+		$i = 0;
+		
+		// - - - Market Popup
+
+		$this->node->queues->getQueue('market');
+		
+		if (count($this->node->queues->queue['market'])) {
+			foreach($this->node->queues->queue['market'] as $object) {
+				if ($object['slot'] == $this->data['slotId']) {
+				
+				$inventory = array();
+				$inventory = json_decode($object['inventory'], TRUE);
+				
+				foreach ($inventory as $item) {
+						
+					$tmp_object = d13_object_factory::create($item['object'], $item['id'], $this->node);
+					
+					if ($tmp_object->data['active']) {
+
+						$tvars['tvar_itemName'] 			= $tmp_object->data['name'];
+						$tvars['tvar_itemDescription'] 		= $tmp_object->data['description'];
+						$tvars['tvar_itemImageDirectory'] 	= $tmp_object->data['imgdir'];
+						$tvars['tvar_itemImage'] 			= $tmp_object->data['image'];
+					
+						
+						$tvars['tvar_itemResource'] 		= '';
+						$tvars['tvar_itemResourceName'] 	= '';
+					
+						$tvars['tvar_itemValue'] 			= $tmp_object->data['amount'];
+						$tvars['tvar_itemMaxValue'] 		= $tmp_object->getMaxProduction();
+						
+						
+						if ($tmp_object->getCheckCost()) {
+							$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
+						}
+						else {
+							$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
+						}
+						
+						$tvars['tvar_costData'] 			= $tmp_object->getCostList();
+					
+						$tvars['tvar_linkData'] 			= '';
+
+						$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.market", $tvars);
+						
+						$i++;
+						
+						if ($i == $limit) {
+							break;
+						}
+					
+					}
+				
+				}
+
+				}
+			}
+		}
+
+		$d13->templateInject($d13->templateSubpage("sub.popup.swiper", $tvars));
+		$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
+		
+		return $tvars['tvar_sub_popupswiper'];
+		
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -161,7 +191,66 @@ class d13_module_market extends d13_object_module
 
 	function getQueue()
 	{
-		return '';
+	
+		global $d13;
+		
+		$html = '';
+
+		// - - - Check Queue
+		
+		$this->data['busy'] = false;
+		$this->node->queues->getQueue('market');
+		
+		if (count($this->node->queues->queue['market'])) {
+			foreach($this->node->queues->queue['market'] as $item) {
+				if ($item['slot'] == $this->data['slotId']) {
+					
+					#$this->data['busy'] = true;
+								
+					$remaining = d13_misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
+					
+					$image = "refresh.png";
+					
+					$tvars = array();
+					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/refresh.png">';
+					$tvars['tvar_listLabel'] 	= $d13->getLangUI("refresh") . " " . $this->data['name'];
+					$tvars['tvar_listAmount'] 	= '<span id="market_' . $this->data['slotId'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("market_' . $this->data['slotId'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
+				
+					$html = $d13->templateSubpage("sub.module.listcontent", $tvars);
+				
+				}
+			}
+		}
+
+		// - - - Popover if Queue empty
+
+		if ((bool)$this->data['busy'] === false) {
+			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
+				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("market");
+				$vars['tvar_list_id'] 	 	 = "swiper";
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleInactive"));
+				$html = $d13->templateSubpage("button.popup.swiper", $vars);
+			} else {
+				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("market");
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleDisabled"));
+				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+			}
+			
+			// - - - Refresh Button
+			
+			$vars['tvar_button_name'] 	 = $d13->getLangUI("refresh") . ' ' . $d13->getLangUI("market");
+			$vars['tvar_button_link'] 	 = '?p=module&action=addMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'];
+			$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipRefreshMarket"));
+			$html .= $d13->templateSubpage("button.external.enabled", $vars);
+			
+			
+			
+			
+			
+		}
+
+		return $html;
+		
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -174,8 +263,29 @@ class d13_module_market extends d13_object_module
 
 	function getOutputList()
 	{
+	
 		global $d13;
-		return $d13->getLangUI("none");
+		
+		$html = '';
+		$data = array();
+		
+		if (isset($this->data['inventory'])) {
+			foreach($this->data['inventory'] as $object) {
+				
+				$tmp_object = d13_object_factory::create($object['object'], $object['id'], $this->node);
+				
+				if ($tmp_object->data['active']) {
+					$html.= '<a class="tooltip-left" data-tooltip="' . $tmp_object->data['name'] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $tmp_object->data['imgdir'] . '/' . $tmp_object->data['image'] . '" title="' . $tmp_object->data['name'] . '"></a>';
+				}
+			}
+		}
+
+		if (empty($html)) {
+			$html = $d13->getLangUI("none");
+		}
+
+		return $html;
+		
 	}
 	
 }

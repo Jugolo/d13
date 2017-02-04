@@ -101,19 +101,6 @@ class d13_module_train extends d13_object_module
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// getOptions
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function getOptions()
-	{
-		return '';
-	}
-
-	// ----------------------------------------------------------------------------------------
 	// getPopup
 	// @
 	//
@@ -181,10 +168,10 @@ class d13_module_train extends d13_object_module
 		// - - - Check Queue
 		
 		$this->data['busy'] = false;
-		$this->node->getQueue('train');
+		$this->node->queues->getQueue('train');
 		
-		if (count($this->node->queue['train'])) {
-			foreach($this->node->queue['train'] as $item) {
+		if (count($this->node->queues->queue['train'])) {
+			foreach($this->node->queues->queue['train'] as $item) {
 				if ($item['slot'] == $this->data['slotId']) {
 					
 					$this->data['busy'] = true;
@@ -251,7 +238,7 @@ class d13_module_train extends d13_object_module
 					$id = $d13->getUnit($this->node->data['faction'], $unit, 'id');
 					$image = $d13->getUnit($this->node->data['faction'], $id, 'images');
 					$image = $image[0]['image'];
-					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("units", $this->node->data['faction'], $unit) ["name"] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangGL("units", $this->node->data['faction'], $unit) ["name"] . '"></a>';
+					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("units", $this->node->data['faction'], $unit, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangGL("units", $this->node->data['faction'], $unit, "name") . '"></a>';
 				}
 			}
 		}

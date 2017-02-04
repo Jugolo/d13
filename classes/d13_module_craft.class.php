@@ -103,19 +103,6 @@ class d13_module_craft extends d13_object_module
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// getOptions
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function getOptions()
-	{
-		return '';
-	}
-
-	// ----------------------------------------------------------------------------------------
 	// getPopup
 	// @
 	//
@@ -233,10 +220,10 @@ class d13_module_craft extends d13_object_module
 		// - - - Check Queue
 		
 		$this->data['busy'] = false;
-		$this->node->getQueue('craft');
+		$this->node->queues->getQueue('craft');
 		
-		if (count($this->node->queue['craft'])) {
-			foreach($this->node->queue['craft'] as $item) {
+		if (count($this->node->queues->queue['craft'])) {
+			foreach($this->node->queues->queue['craft'] as $item) {
 				if ($item['slot'] == $this->data['slotId']) {
 					
 					$this->data['busy'] = true;
@@ -298,7 +285,7 @@ class d13_module_craft extends d13_object_module
 		if (isset($this->data['components'])) {
 			foreach($this->data['components'] as $component) {
 				if ($d13->getComponent($this->node->data['faction'], $component, 'active')) {
-					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("components", $this->node->data['faction'], $component) ["name"] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $component . '.png" title="' . $d13->getLangGL("components", $this->node->data['faction'], $component) ["name"] . '"></a>';
+					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("components", $this->node->data['faction'], $component, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $component . '.png" title="' . $d13->getLangGL("components", $this->node->data['faction'], $component, "name") . '"></a>';
 				}
 			}
 		}
@@ -309,6 +296,7 @@ class d13_module_craft extends d13_object_module
 
 		return $html;
 	}
+	
 }
 
 ?>

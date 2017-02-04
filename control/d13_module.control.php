@@ -87,7 +87,15 @@ class d13_moduleController extends d13_controller
 			case 'list':
 				return $this->moduleList();
 				break;
-		
+				
+			case 'addMarket':
+				return $this->moduleAddMarket();
+				break;
+			
+			case 'cancelMarket':
+				return $this->moduleCancelMarket();
+				break;
+			
 			case 'addTechnology':
 				return $this->moduleAddTechnology();
 				break;
@@ -297,6 +305,58 @@ class d13_moduleController extends d13_controller
 		
 	}
 
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function moduleAddMarket()
+	{
+		global $d13;
+		$tvars = array();
+		
+		if (isset($_GET['slotId'])) {
+			$status = $this->node->addMarket($_GET['slotId']);
+			if ($status == 'done') {
+				
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				exit();
+			} else {
+				$message = $d13->getLangUI($status);
+			}
+		}
+			
+		return $tvars;
+		
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function moduleCancelMarket()
+	{
+		global $d13;
+		$tvars = array();
+		
+		if (isset($_GET['slotId'])) {
+			$status = $this->node->cancelMarket($_GET['slotId']);
+			if ($status == 'done') {
+				
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				exit();
+			} else {
+				$message = $d13->getLangUI($status);
+			}
+		}
+
+		return $tvars;
+		
+	}
+	
 	// ----------------------------------------------------------------------------------------
 	// 
 	// @
