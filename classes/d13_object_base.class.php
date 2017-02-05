@@ -25,7 +25,7 @@
 //
 // This is the base object all other object classes are derived from. It was decided to use
 // this base object because they all share a lot of similarities. Even after months of
-// development, a new object type was never added. Therefore it was decided to keep it
+// development, a new object type was rarely added. Therefore it was decided to keep it
 // that way.
 //
 // there is still a lot of object specific code in this class (with switch statements), but
@@ -81,7 +81,13 @@ abstract class d13_object_base
 	function checkStatsBase($args)
 	{
 		global $d13;
-
+		
+		//add upgrade stat array entries
+		foreach($d13->getGeneral('stats') as $stat) {
+			$this->data[$stat] = 0;
+			$this->data['upgrade_' . $stat] = 0;
+		}
+		
 		switch ($args['supertype'])
 		{
 		
@@ -98,6 +104,8 @@ abstract class d13_object_base
 				$row = $d13->dbFetch($result);
 				$amount = $row['count'];
 				$imgdir = 'modules' . '/' . $this->node->data['faction'];
+				$resimg = $data['icon'];
+				$resname= $name;
 				break;
 						
 			case 'component':
@@ -111,6 +119,8 @@ abstract class d13_object_base
 				$slot	= 0;
 				$amount = $this->node->components[$args['obj_id']]['value'];
 				$imgdir = 'components' . '/' . $this->node->data['faction'];
+				$resimg = $data['icon'];
+				$resname= $d13->getLangGL("resources", $data['storageResource'], "name");
 				break;
 				
 			case 'technology':
@@ -124,6 +134,8 @@ abstract class d13_object_base
 				$slot	= 0;
 				$amount = 0;
 				$imgdir = 'technologies' . '/' . $this->node->data['faction'];
+				$resimg = $data['icon'];
+				$resname= $name;
 				break;	
 					
 			case 'unit':
@@ -137,6 +149,8 @@ abstract class d13_object_base
 				$slot	= 0;
 				$amount = $this->node->units[$args['obj_id']]['value'];
 				$imgdir = 'units' . '/' . $this->node->data['faction'];
+				$resimg = $data['icon'];
+				$resname= '';
 				break;
 				
 			case 'turret':
@@ -150,6 +164,8 @@ abstract class d13_object_base
 				$slot	= 0;
 				$amount = 0;
 				$imgdir = 'units' . '/' . $this->node->data['faction'];
+				$resimg = $data['icon'];
+				$resname= '';
 				break;
 				
 			case 'shield':
@@ -163,6 +179,8 @@ abstract class d13_object_base
 				$slot	= 0;
 				$amount = 0;
 				$imgdir = 'icon';
+				$resimg = $data['icon'];
+				$resname= $name;
 				break;		
 				
 			case 'buff':	
@@ -176,6 +194,8 @@ abstract class d13_object_base
 				$slot	= 0;
 				$amount = 0;
 				$imgdir = 'icon';
+				$resimg = $data['icon'];
+				$resname= $name;
 				break;		
 			
 			case 'resource':	
@@ -185,10 +205,12 @@ abstract class d13_object_base
 				$level 	= 0;
 				$type	= $args['supertype'];
 				$input	= 0;
-				$ctype 	= '';
+				$ctype 	= 'buy';
 				$slot	= 0;
 				$amount = $this->node->resources[$args['obj_id']]['value'];
 				$imgdir = 'resources';
+				$resimg = $data['icon'];
+				$resname= $name;
 				break;		
 			
 			default:
@@ -201,54 +223,30 @@ abstract class d13_object_base
 				$ctype 	= '';
 				$slot	= 0;
 				$amount = 0;
+				$imgdir = '';
+				$resimg = '';
+				$resname= $name;
 				break;
 		}
 		
-		$this->data 				= $data;
-		$this->data['id']			= $args['obj_id'];
-		$this->data['moduleId']		= $args['obj_id'];						#TODO! obsolete
-		$this->data['supertype'] 	= $args['supertype'];
-		$this->data['name'] 		= $name;
-		$this->data['description'] 	= $desc;
-		$this->data['level'] 		= $level;
-		$this->data['type'] 		= $type;
-		$this->data['input'] 		= $input;
-		$this->data['slotId'] 		= $slot;
-		$this->data['costType'] 	= $ctype;
-		$this->data['amount']		= $amount;
-		$this->data['imgdir']		= $imgdir;
+		$this->data 					= array_merge($this->data, $data);
+		$this->data['id']				= $args['obj_id'];
+		$this->data['moduleId']			= $args['obj_id'];						#TODO! obsolete
+		$this->data['supertype'] 		= $args['supertype'];
+		$this->data['name'] 			= $name;
+		$this->data['description'] 		= $desc;
+		$this->data['level'] 			= $level;
+		$this->data['type'] 			= $type;
+		$this->data['input'] 			= $input;
+		$this->data['slotId'] 			= $slot;
+		$this->data['costType'] 		= $ctype;
+		$this->data['amount']			= $amount;
+		$this->data['imgdir']			= $imgdir;
+		$this->data['storageResImg']	= $resimg;
+		$this->data['storageResName']	= $resname;
 		
-		$this->data['costData'] = $this->getCheckCost();
-		$this->data['reqData'] = $this->getCheckRequirements();
-
-		
-		
-		foreach($d13->getGeneral('stats') as $stat) {
-			switch ($args['supertype'])
-			{
-				case 'component':
-					$base_stat = $d13->getComponent($this->node->data['faction'], $args['obj_id'], $stat);
-					break;
-				case 'module':
-					$base_stat = $d13->getModule($this->node->data['faction'], $args['obj_id'], $stat);
-					break;
-				case 'technology':
-					$base_stat = $d13->getTechnology($this->node->data['faction'], $args['obj_id'], $stat);
-					break;
-				case 'turret':
-					$base_stat = $d13->getUnit($this->node->data['faction'], $args['obj_id'], $stat);
-					break;
-				case 'unit':
-					$base_stat = $d13->getUnit($this->node->data['faction'], $args['obj_id'], $stat);
-					break;
-				default:
-					$base_stat = 0;
-					break;
-			}
-			$this->data[$stat] = $base_stat;
-			$this->data['upgrade_' . $stat] = 0;
-		}
-		
+		$this->data['costData'] 		= $this->getCheckCost();
+		$this->data['reqData'] 			= $this->getCheckRequirements();
 		$this->getObjectImage();
 		
 	}
@@ -287,6 +285,9 @@ abstract class d13_object_base
 			case 'turret':
 				$upgrade_list = $d13->getUpgradeTurret($this->node->data['faction']);
 				break;
+				
+			#TODO: add upgradeBuff and upgradeShield as well
+			
 		}
 		
 		// - - - - - - - - - - - - - - - GATHER COST & ATTRIBUTES
@@ -377,7 +378,6 @@ abstract class d13_object_base
 	// getCheckRequirements
 	// @ Return TRUE if requirements are met (tech, components etc.), otherwise returns FALSE
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getCheckRequirements()
@@ -408,14 +408,43 @@ abstract class d13_object_base
 			return false;
 		}
 	}
+	
+	
+	// ----------------------------------------------------------------------------------------
+	// getCheckConvertedCost
+	// Converts the whole resource cost into a single cost of stated resource type.
+	// Returns TRUE if cost is covered (resources), otherwise returns FALSE
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getCheckConvertedCost($resid, $modifier=1)
+	{
+		
+		$convertedCost = 0;
+		foreach ($this->data['cost'] as $cost) {
+			$convertedCost += $cost['value'];
+		}
+		$convertedCost *= $modifier;
+	
+		$cost_array = array();
+		$cost_array['resource'] = $resid;
+		$cost_array['value'] = $convertedCost;
+	
+		$this->checkCost = $this->node->checkCost($cost_array, $this->data['costType']);
+		if ($this->checkCost['ok']) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	
+	
+	}
 
 	// ----------------------------------------------------------------------------------------
 	// getObjectImage
 	// @ Return the current image of the object, according to it's level (modules only)
-	// Note: Currently only used by modules, but could be easily used by other object types as
-	// well in the future.
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getObjectImage()
@@ -489,14 +518,16 @@ abstract class d13_object_base
 
 	function getCost($upgrade = false)
 	{
+	
 		global $d13;
+		
 		$cost_array = array();
 		foreach($this->data['cost'] as $key => $cost) {
 			$tmp_array = array();
 			$tmp_array['resource'] = $cost['resource'];
 			$tmp_array['value'] = $cost['value'] * $d13->getGeneral('users', 'efficiency', $this->data['costType']);
 			$tmp_array['name'] = $d13->getLangGL('resources', $cost['resource'], 'name');
-			$tmp_array['icon'] = $cost['resource'] . '.png'; //TODO!
+			$tmp_array['icon'] = $d13->getResource($cost['resource'], 'icon');
 			$tmp_array['factor'] = 1;
 			if ($upgrade) {
 				foreach($this->data['cost_upgrade'] as $key => $upcost) {
@@ -504,7 +535,7 @@ abstract class d13_object_base
 					$tmp2_array['resource'] = $upcost['resource'];
 					$tmp2_array['value'] = $upcost['value'] * $d13->getGeneral('users', 'efficiency', $this->data['costType']);
 					$tmp2_array['name'] = $d13->getLangGL('resources', $upcost['resource'], 'name');
-					$tmp2_array['icon'] = $upcost['resource'] . '.png'; //TODO!
+					$tmp2_array['icon'] = $d13->getResource($upcost['resource'], 'icon');
 					$tmp2_array['factor'] = $upcost['factor'];
 					if ($tmp_array['resource'] == $tmp2_array['resource']) {
 						$tmp_array['value'] = $tmp_array['value'] + floor($tmp2_array['value'] * $tmp2_array['factor'] * $this->data['level']);
@@ -517,6 +548,40 @@ abstract class d13_object_base
 
 		return $cost_array;
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getConvertedCost
+	// Gather and return the converted cost, converted into stated resource id
+	// Note: Can optionally return UPGRADE costs instead of BUY costs (modules and tech only)
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getConvertedCost($resid, $upgrade=false, $modifier=1)
+	{
+	
+		global $d13;
+		
+		$convertedCost = 0;
+		$cost_array = array();
+		$cost_array = $this->getCost($upgrade);
+		
+		foreach ($cost_array as $cost) {
+			$convertedCost += $cost['value'];
+		}
+		
+		$convertedCost *= $modifier;
+		
+		$converted_cost_array = array();
+		$converted_cost_array['resource'] 	= $resid;
+		$converted_cost_array['value'] 		= $convertedCost;
+		$converted_cost_array['name'] 		= $d13->getLangGL('resources', $resid, 'name');
+		$converted_cost_array['icon'] 		= $d13->getResource($resid, 'icon');
+		$converted_cost_array['factor'] 	= $modifier;
+					
+		return $converted_cost_array;
+	
+	
+	}
 
 	// ----------------------------------------------------------------------------------------
 	// getStats
@@ -526,7 +591,9 @@ abstract class d13_object_base
 
 	function getStats()
 	{
+	
 		global $d13;
+		
 		$stats = array();
 		foreach($d13->getGeneral('stats') as $stat) {
 			$stats[$stat] = $this->data[$stat];
@@ -561,10 +628,12 @@ abstract class d13_object_base
 
 	function getCostList($upgrade = false)
 	{
-	
+		global $d13;
+		
 		$get_costs = $this->getCost($upgrade);
 		
 		$costData = '';
+		
 		foreach($get_costs as $cost) {
 			if ($cost['value'] > 0) {
 				$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $cost['name'] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['icon'] . '" title="' . $cost['name'] . '"></a></div>';
@@ -573,6 +642,30 @@ abstract class d13_object_base
 
 		return $costData;
 
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getConvertedCostList
+	// @ 
+	// Note: Todo: The markup should be moved to a template later.
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getConvertedCostList($resid, $upgrade = false, $modifier = 1)
+	{
+		
+		global $d13;
+		
+		$cost = $this->getConvertedCost($resid, $upgrade, $modifier);
+		
+		$costData = $d13->getLangUI("none");
+		
+		if ($cost['value'] > 0) {
+			$costData = '<div class="cell">' . $cost['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $cost['name'] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['icon'] . '" title="' . $cost['name'] . '"></a></div>';
+		}
+		
+		return $costData;
+	
 	}
 	
 	// ----------------------------------------------------------------------------------------

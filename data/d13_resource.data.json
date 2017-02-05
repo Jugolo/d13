@@ -1,7 +1,7 @@
 [
   {
     "id": 0,
-    "image": "0.png",
+    "icon": "0.png",
     "color": "yellow",
     "active": true,
     "priority": 5,
@@ -32,7 +32,7 @@
   },
   {
     "id": 1,
-    "image": "1.png",
+    "icon": "1.png",
     "color": "black",
     "active": true,
     "priority": 4,
@@ -63,7 +63,7 @@
   },
   {
     "id": 2,
-    "image": "2.png",
+    "icon": "2.png",
     "color": "gray",
     "active": true,
     "priority": 3,
@@ -94,7 +94,7 @@
   },
   {
     "id": 3,
-    "image": "3.png",
+    "icon": "3.png",
     "color": "orange",
     "active": true,
     "priority": 2,
@@ -125,7 +125,7 @@
   },
   {
     "id": 4,
-    "image": "4.png",
+    "icon": "4.png",
     "color": "white",
     "active": true,
     "priority": 1,
@@ -156,7 +156,7 @@
   },
   {
     "id": 5,
-    "image": "5.png",
+    "icon": "5.png",
     "color": "red",
     "active": true,
     "priority": 0,

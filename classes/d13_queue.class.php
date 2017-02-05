@@ -191,7 +191,7 @@ class d13_queue
 			
 			case 'market':
 				$icon 	= '/icon/refresh.png';
-				$action = $d13->getLangUI("refresh");
+				$action = '';
 				$name 	= $d13->getLangGL("modules", $this->node->data['faction'], $this->node->modules[$item['slot']]['module'], "name");
 				$cancel = '<a class="external" href="?p=node&action=cancelMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $item['slot'] . '">';
 				break;

@@ -92,6 +92,10 @@ class d13_moduleController extends d13_controller
 				return $this->moduleAddMarket();
 				break;
 			
+			case 'buyMarket':
+				return $this->moduleBuyMarket();
+				break;
+			
 			case 'cancelMarket':
 				return $this->moduleCancelMarket();
 				break;
@@ -318,6 +322,33 @@ class d13_moduleController extends d13_controller
 		
 		if (isset($_GET['slotId'])) {
 			$status = $this->node->addMarket($_GET['slotId']);
+			if ($status == 'done') {
+				
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				exit();
+			} else {
+				$message = $d13->getLangUI($status);
+			}
+		}
+			
+		return $tvars;
+		
+	}
+
+
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function moduleBuyMarket()
+	{
+		global $d13;
+		$tvars = array();
+		
+		if (isset($_GET['slotId']) && isset($_GET['objType']) && isset($_GET['objId'])) {
+			$status = $this->node->buyMarket($_GET['slotId'], $_GET['objType'], $_GET['objId']);
 			if ($status == 'done') {
 				
 				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);

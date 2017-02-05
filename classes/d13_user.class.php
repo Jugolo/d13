@@ -455,7 +455,7 @@ class d13_user
 	
 		foreach($d13->getGeneral("userstats") as $stat) {
 			if ($stat['active']) {
-				$tvars['tvar_userImage'.$stat['name']] 		= $stat['image'];
+				$tvars['tvar_userImage'.$stat['name']] 		= $stat['icon'];
 				$tvars['tvar_userPercentage'.$stat['name']] = '';
 				if ($stat['isExp']) {
 				$tvars['tvar_user'.$stat['name']] 			= $this->data[$stat['value']] . '/' . d13_misc::nextlevelexp($this->data['level']);

@@ -126,7 +126,7 @@ class d13_object_module extends d13_object_base
 		$tvars['tvar_linkData'] 			= $this->getModuleUpgrade();
 		
 		$tvars['tvar_image'] = $this->data['image'];
-		$tvars['tvar_moduleDescription'] = d13_misc::toolTip($this->data['name'] . '<br>' . $this->data['description']);
+		$tvars['tvar_moduleDescription'] = $this->data['description'];
 		$tvars['tvar_moduleProduction'] = $this->data['moduleProduction'];
 		$tvars['tvar_inventoryLink'] 	= $this->getInventory();
 		

@@ -284,12 +284,15 @@
   "power": "power",
   "army": "army",
   "size": "size",
+  "open": "open",
+  "time": "time",
   "market": "market",
   "avatar": "avatar",
   "craft_short": "",
   "train_short": "",
   "remove_short": "-",
   "research_short": "",
+  "buy": "buy",
   "tag": "tag",
   "stealth": "stealth",
   "attack": "attack",
@@ -318,6 +321,7 @@
   "tipInventoryResource": "Shows a list of all resources stored at this town.",
   "tipInventoryTrain": "Shows a list of units stationed at this building.",
   "tipInventoryResearch": "Shows a list of technologies already researched at this building.",
+  "tipInventoryMarket": "Shows a list of items currently available for sale at this building.",
   "tipInventoryCraft": "Shows a list of components stored at this building.",
   "tipRefreshMarket": "refresh market to enlist new items (takes a while)."
   

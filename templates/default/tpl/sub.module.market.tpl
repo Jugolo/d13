@@ -32,7 +32,7 @@
 					<ul>
 						
 						<li class="item-content">
-							<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_itemResource}}.png" title="{{tvar_itemResourceName}}"></div>
+							<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/{{tvar_itemImageDirectory}}/{{tvar_itemResource}}" title="{{tvar_itemResourceName}}"></div>
 							<div class="item-inner">
 								<div class="item-title">
 									{{tvar_ui_stored}}:

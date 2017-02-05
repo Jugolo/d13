@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// MODULE.CLASS
+// MODULE.MARKET.CLASS
 //
 // # Author......................: Andrei Busuioc (Devman)
 // # Author......................: Tobias Strunz (Fhizban)
@@ -114,6 +114,9 @@ class d13_module_market extends d13_object_module
 		$tvars['tvar_sub_popupswiper'] = '';
 		$html = '';
 		
+		$resid = 0;
+		$modifier = 2;
+		
 		$limit = 10;												# could go to config later
 		$i = 0;
 		
@@ -138,25 +141,39 @@ class d13_module_market extends d13_object_module
 						$tvars['tvar_itemDescription'] 		= $tmp_object->data['description'];
 						$tvars['tvar_itemImageDirectory'] 	= $tmp_object->data['imgdir'];
 						$tvars['tvar_itemImage'] 			= $tmp_object->data['image'];
-					
 						
-						$tvars['tvar_itemResource'] 		= '';
-						$tvars['tvar_itemResourceName'] 	= '';
+						$tvars['tvar_itemResource'] 		= $tmp_object->data['storageResImg'];
+						$tvars['tvar_itemResourceName'] 	= $tmp_object->data['storageResName'];
 					
-						$tvars['tvar_itemValue'] 			= $tmp_object->data['amount'];
+						$tvars['tvar_itemValue'] 			= floor($tmp_object->data['amount']);
 						$tvars['tvar_itemMaxValue'] 		= $tmp_object->getMaxProduction();
 						
 						
-						if ($tmp_object->getCheckCost()) {
+						if ($tmp_object->getCheckConvertedCost($resid, $modifier)) {
 							$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
 						}
 						else {
 							$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
 						}
 						
-						$tvars['tvar_costData'] 			= $tmp_object->getCostList();
+						$tvars['tvar_costData'] 			= $tmp_object->getConvertedCostList($resid, false, $modifier);
 					
-						$tvars['tvar_linkData'] 			= '';
+						$linkData = '';
+						$objType = $item['object'];
+						$objId = $item['id'];
+						
+						if ($tmp_object->getCheckConvertedCost($resid, $modifier)) {
+							$vars['tvar_button_name'] 	 = $d13->getLangUI("buy");
+							$vars['tvar_button_link'] 	 = '?p=module&action=buyMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&objType=' . $objType . '&objId=' . $objId;
+							$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryResearch"));
+							$linkData .= $d13->templateSubpage("button.external.enabled", $vars);
+						} else {
+							$vars['tvar_button_name'] 	 = $d13->getLangUI("buy");
+							$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
+							$linkData.= $d13->templateSubpage("button.popup.disabled", $vars);
+						}
+						
+						$tvars['tvar_linkData'] 			= $linkData;
 
 						$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.market", $tvars);
 						
@@ -186,7 +203,6 @@ class d13_module_market extends d13_object_module
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getQueue()
@@ -205,7 +221,7 @@ class d13_module_market extends d13_object_module
 			foreach($this->node->queues->queue['market'] as $item) {
 				if ($item['slot'] == $this->data['slotId']) {
 					
-					#$this->data['busy'] = true;
+					$this->data['busy'] = true;
 								
 					$remaining = d13_misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
@@ -222,30 +238,29 @@ class d13_module_market extends d13_object_module
 			}
 		}
 
-		// - - - Popover if Queue empty
+		// - - - Refresh button if queue empty
 
 		if ((bool)$this->data['busy'] === false) {
-			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("market");
-				$vars['tvar_list_id'] 	 	 = "swiper";
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleInactive"));
-				$html = $d13->templateSubpage("button.popup.swiper", $vars);
-			} else {
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("market");
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleDisabled"));
-				$html = $d13->templateSubpage("button.popup.disabled", $vars);
-			}
-			
-			// - - - Refresh Button
 			
 			$vars['tvar_button_name'] 	 = $d13->getLangUI("refresh") . ' ' . $d13->getLangUI("market");
 			$vars['tvar_button_link'] 	 = '?p=module&action=addMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'];
 			$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipRefreshMarket"));
 			$html .= $d13->templateSubpage("button.external.enabled", $vars);
+		
+		// - - - Popover Button if queue full
 			
-			
-			
-			
+		} else {
+		
+			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
+				$vars['tvar_button_name'] 	 = $d13->getLangUI("open") . ' ' . $d13->getLangUI("market");
+				$vars['tvar_list_id'] 	 	 = "swiper";
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleInactive"));
+				$html = $d13->templateSubpage("button.popup.swiper", $vars);
+			} else {
+				$vars['tvar_button_name'] 	 = $d13->getLangUI("open") . ' ' . $d13->getLangUI("market");
+				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleDisabled"));
+				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+			}
 			
 		}
 
@@ -287,6 +302,30 @@ class d13_module_market extends d13_object_module
 		return $html;
 		
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getTemplateVariables
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+
+	
+	public function getTemplateVariables()
+	{
+	
+		global $d13;
+		$tvars = array();
+		
+		$tvars = parent::getTemplateVariables();
+		
+		
+		$tvars['tvar_refreshTime'] = 24 - $this->data['totalIR'];
+		
+		return $tvars;
+	
+	}
+	
+	
 	
 }
 

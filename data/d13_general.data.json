@@ -34,7 +34,8 @@
       "harvest": 1,
       "set": 1,
       "move": 1,
-      "alliance": 1
+      "alliance": 1,
+      "buy": 1
     }
   },
   "options": {
@@ -155,7 +156,7 @@
     	"isExp": false,
       	"name": "level",
       	"value": "level",
-      	"image": "level.png",
+      	"icon": "level.png",
       	"color": "yellow"
     },
     "experience": {
@@ -164,7 +165,7 @@
     	"isExp": true,
       	"name": "experience",
        	"value": "experience",
-      	"image": "experience.png",
+      	"icon": "experience.png",
       	"color": "yellow"
     },
     "trophies": {
@@ -173,7 +174,7 @@
     	"isExp": false,
       	"name": "trophies",
        	"value": "trophies",
-      	"image": "trophies.png",
+      	"icon": "trophies.png",
       	"color": "yellow"
     }
   },

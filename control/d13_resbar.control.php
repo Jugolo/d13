@@ -60,7 +60,7 @@ class d13_resBarController extends d13_controller
 		if ($status == 'done') {
 			foreach($d13->getGeneral("userstats") as $stat) {
 				if ($stat['active'] && $stat['visible']) {
-					$tvars['tvar_resImage'] 		= $stat['image'];
+					$tvars['tvar_resImage'] 		= $stat['icon'];
 					$tvars['tvar_resValue'] 		= $this->user->data[$stat['value']];
 					$tvars['tvar_resColor'] 		= $stat['color'];
 					if ($stat['isExp']) {
@@ -84,7 +84,7 @@ class d13_resBarController extends d13_controller
 			foreach($this->node->resources as $resource) {
 				if ($d13->getResource($resource['id'], 'active') && $d13->getResource($resource['id'], 'visible')) {
 				
-					$tvars['tvar_resImage'] = $d13->getResource($resource['id'], 'image');
+					$tvars['tvar_resImage'] = $d13->getResource($resource['id'], 'icon');
 					$tvars['tvar_resColor'] = $d13->getResource($resource['id'], 'color');
 					$tvars['tvar_resValue'] 	= 0;
 					$tvars['tvar_resPercentage'] = 0;

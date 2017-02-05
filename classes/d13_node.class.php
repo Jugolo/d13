@@ -40,7 +40,6 @@ class d13_node
 		
 		$this->queues = new d13_queue($this);
 		
-		
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -689,6 +688,12 @@ class d13_node
 				$duration = max($duration, 1) * 6; 							# DEBUG: incrase to 60
 				
 				$inventory = $tmp_module->data['inventory'];
+				$tmp_inventory = array();
+				
+				for ($i = 1; $i <= $tmp_module->data['totalIR']; $i++) {
+					$tmp_inventory[] = array_rand($inventory);
+				}
+				
 				shuffle($inventory);
 				$inventory = array_splice($inventory, 0, $tmp_module->data['totalIR']);
 				$inventory = json_encode($inventory);
@@ -718,6 +723,47 @@ class d13_node
 
 		return $status;
 
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// buyMarket
+	// @ 
+	// ----------------------------------------------------------------------------------------
+	public
+
+	function buyMarket($slotId, $objectType, $objectId)
+	{
+
+		global $d13;
+	
+		$this->getModules();
+		
+		$ok 		= 1;
+		
+		if ($this->modules[$slotId]['module'] > -1) {
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		} else {
+			$ok = 0;
+		}
+		
+		if ($ok) {
+			$status = 'done';
+		} else {
+			$status = 'error';
+		}
+		
+		return $status;
 	}
 	
 	// ----------------------------------------------------------------------------------------
