@@ -62,14 +62,13 @@ class d13_moduleListController extends d13_controller
 		
 		$tvars['tvar_sub_list'] = "";
 		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
-	
+		
+		$this->node->getQueue("build");
+		
 		foreach($d13->getModule($this->node->data['faction']) as $module) {
 		
-			$result = $d13->dbQuery('select count(*) as count from modules where node="' . $this->node->data['id'] . '" and module="' . $module['id'] . '"');
-			$row = $d13->dbFetch($result);
-			$count = $row['count'];
+			$count = $this->node->getModuleCount($module['id']);
 			
-			$this->node->getQueue("build");
 			if (count($this->node->queue["build"])) {
 				foreach($this->node->queue["build"] as $item) {
 					if ($item['obj_id'] == $module['id']) {
@@ -79,11 +78,9 @@ class d13_moduleListController extends d13_controller
 			}
 			
 			if ($count < $d13->getModule($this->node->data['faction'], $module['id'], 'maxInstances')) {
-		
 				$tmp_module = NULL;
 				$tmp_module = d13_module_factory::create($module['id'], $this->slotId, $this->node);
 				$tvars['tvar_sub_list'].= $d13->templateSubpage("sub.module.list", $tmp_module->getTemplateVariables());
-		
 			}
 		}
 		

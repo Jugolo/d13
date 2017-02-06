@@ -8,16 +8,20 @@ V0XX	--- PLANNED UPCOMING UPDATE(S) ---
 		
 		* Map System
 		
-		* Shop Building (Blackmarket): Buy resources, components, buff's, shield's
-		
-		* Trade Building (Tradepost): Trade resources/components with other users
-		
-		* Buff System: Add temporary speed/efficiency buff's to the current node (town)
-		
 		* Finalize existing combat system:
 		
 			- Sabotage Reports
 			- Sabotage Checks
+			
+		* Trade Building (Tradepost): Trade resources/components with other users
+
+V0XX	--- NEXT SCHEDULED UPDATE ---
+
+		* Shop Building (Blackmarket): Buy resources, components, buff's, shield's
+		
+		* Buff System: Add temporary speed/efficiency buff's to the current node (town)
+		
+		* Lottery Building: Allows to collect a random reward every X hours
 
 V017	--- SECOND STABLE VERSION
 

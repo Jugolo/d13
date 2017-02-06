@@ -617,7 +617,7 @@ class d13_moduleController extends d13_controller
 		
 		global $d13;
 		
-		$d13->templateRender($tvars['tvar_page'] , $tvars);
+		$d13->templateRender($tvars['tvar_page'] , $tvars, $this->node);
 		
 		
 	}

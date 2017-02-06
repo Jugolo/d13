@@ -60,7 +60,7 @@ class d13_queue
 	{
 	
 		global $d13;
-			
+		
 		switch ($type)
 		{
 		

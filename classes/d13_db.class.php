@@ -26,7 +26,7 @@ class d13_db
 
 {
 
-	private $db;
+	private $db, $queries, $lastquery;
 
 	// ----------------------------------------------------------------------------------------
 	// 
@@ -65,9 +65,18 @@ class d13_db
 	function query($query)
 	{
 		if ($result = $this->db->query($query)) {
+			
+			if (CONST_FLAG_PROFILER) {
+				if ($query != "commit" && $query != "start transaction") {
+					$this->lastquery = $query;
+				} else if ($query == "commit" && $query != "start transaction") {
+					$this->queries[] = $this->lastquery;
+				}
+			}
+			
 			return $result;
-		}
-		else {
+		
+		} else {
 			echo "Query:".$query." Error:".$this->db->error;
 		}
 
@@ -109,6 +118,32 @@ class d13_db
 	{
 		return $this->db->affected_rows;
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getQueryCount()
+	{
+		return count($this->queries);
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getQueries()
+	{
+	
+		return $this->queries;
+	
+	}
+	
+	
 }
 
 // =====================================================================================EOF

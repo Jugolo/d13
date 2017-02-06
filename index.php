@@ -31,4 +31,4 @@ function d13_error($errno, $errstr, $errfile, $errline) {
 set_error_handler("d13_error");
 
 $d13->routerRoute();
-
+exit();

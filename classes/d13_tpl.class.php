@@ -221,10 +221,14 @@ class d13_tpl
 	function render($template, $vars=array(), $cache=TRUE, $cache_num=0)
 	{
 		
-		if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
-		$this->node	= new d13_node();
-		$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
+		/*
+		if (!isset($this->node)) {
+			if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
+				$this->node	= new d13_node();
+				$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
+			}
 		}
+		*/
 		
 		$tvars = array();
 		
@@ -263,7 +267,6 @@ class d13_tpl
 	// @ Clears the template cache directory file by file
 	// 3.0
 	// ----------------------------------------------------------------------------------------
-
 	private
 
 	function clear_cache()
@@ -280,29 +283,36 @@ class d13_tpl
 		}
 		$folder->close();
 	}
-
+	
 	// ----------------------------------------------------------------------------------------
 	// tpl_render
 	// @ Renders a page according to the given template and variables and sends it to the client
 	// 3.0
 	// ----------------------------------------------------------------------------------------
-
 	public
 
-	function render_page($template, $tvars = array())
+	function render_page($template, $tvars = array(), $node=NULL)
 	{
-
-		$tvars["tpl_pvar_name"] = $template;
-		$tvars['tvar_nodeFaction'] = 0;
-		$tvars["tpl_page_leftPanel"] = '';
-		$tvars["tpl_page_rightPanel"] = '';
-		$tvars["tpl_page_navbar"] = "";
-		$tvars["tpl_page_subbar"] = "";
-
-		if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
-			$this->node	= new d13_node();
-			$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
-			$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
+		
+		global $d13;
+		
+		$tvars["tpl_pvar_name"] 		= $template;
+		$tvars['tvar_nodeFaction'] 		= 0;
+		$tvars["tpl_page_leftPanel"] 	= '';
+		$tvars["tpl_page_rightPanel"] 	= '';
+		$tvars["tpl_page_navbar"] 		= "";
+		$tvars["tpl_page_subbar"] 		= "";
+		
+		if (isset($node) && !empty($node)) {
+			$this->node = $node;
+		}
+		
+		if (!isset($this->node)) {
+			if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
+				$this->node	= new d13_node();
+				$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
+				$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
+			}
 		}
 		
 		$tvars = array_merge($tvars, $this->global_vars($tvars));
@@ -321,8 +331,15 @@ class d13_tpl
 		$tvars["tpl_page_meta_footer"] 	= $this->parse($this->get("meta.footer") , $tvars);
 		$tvars["tpl_page_content"] 		= $this->render($template, $tvars);
 		$tvars["tpl_page_cache"]		= $this->inject_get_all();
-		
+
 		echo $this->render("page", $tvars);
+		
+		if (CONST_FLAG_PROFILER) {
+			$d13->debugLog($tvars['tvar_page']);
+		}
+		
+		exit();
+		
 	}
 }
 

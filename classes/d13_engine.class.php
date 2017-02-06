@@ -158,6 +158,22 @@ class d13_engine
 		return $this->db->affected_rows();
 	}
 
+	public
+
+	function getQueries()
+	{
+		return $this->db->getQueries();
+	}
+
+
+	public
+
+	function getQueryCount()
+	{
+		return $this->db->getQueryCount();
+	}
+
+
 	// ========================================================================================
 	//								DATA WRAPPER METHODS
 	// ========================================================================================
@@ -326,6 +342,22 @@ class d13_engine
 	{
 		return $this->profiler->profile_get();
 	}
+	
+	public
+	
+	function debugLog($page)
+	{
+		$this->profiler->debugLog($page);
+	}
+	
+	public
+	
+	function generateCallTrace()
+	{
+		$this->profiler->generateCallTrace();
+	}
+	
+	
 }
 
 // =====================================================================================EOF

@@ -48,11 +48,15 @@ abstract class d13_object_base
 
 	function __construct($args = array())
 	{
+	
+		global $d13;
+		
 		$this->data = array();
 		$this->setNode($args);
 		$this->checkStatsBase($args);
 		$this->checkStatsUpgrade();
 		$this->checkStatsExtended();
+		
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -65,10 +69,10 @@ abstract class d13_object_base
 	{
 		if (isset($args['node'])) {
 			$this->node = $args['node'];
-			$this->node->getModules();
+			#$this->node->getModules();
 			$this->node->getTechnologies();
-			$this->node->getComponents();
-			$this->node->getUnits();
+			#$this->node->getComponents();
+			#$this->node->getUnits();
 		}
 	}
 	
@@ -100,9 +104,7 @@ abstract class d13_object_base
 				$input	= $this->node->modules[$args['slotId']]['input'];
 				$ctype 	= 'build';
 				$slot	= $args['slotId'];	
-				$result = $d13->dbQuery('select count(*) as count from modules where node="' . $this->node->data['id'] . '" and module="' . $args['obj_id'] . '"');
-				$row = $d13->dbFetch($result);
-				$amount = $row['count'];
+				$amount = $this->node->getModuleCount($args['obj_id']);
 				$imgdir = 'modules' . '/' . $this->node->data['faction'];
 				$resimg = $data['icon'];
 				$resname= $name;

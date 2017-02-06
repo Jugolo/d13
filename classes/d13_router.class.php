@@ -55,19 +55,20 @@ class d13_router
 		
 		foreach ($d13->getRoute() as $route) {
 			if ($route['page'] == $page_access && $route['active'] == TRUE) {
-			
 				if (($route['login'] && isset($_SESSION[CONST_PREFIX . 'User']['id'])) || (!$route['login'] && !isset($_SESSION[CONST_PREFIX . 'User']['id']))) {
 					if(!$route['admin'] || $nav['admin'] && (isset($_SESSION[CONST_PREFIX . 'User']['access'])) && ($_SESSION[CONST_PREFIX . 'User']['access'] >= 3)) {
 						$page_name = 'd13_' . $route['page'] . 'Controller';
+						break;
 					}
 				}
-
-				$page_object = new $page_name;
-				exit();
 			}
 		}
+				
+		$page_object = new $page_name;
+		exit();
 		
 		// this is obsolete once the remaining pages are refactored!
+		/*
 		$page = CONST_INCLUDE_PATH . "pages/" . $page_access . ".php";
 		if (file_exists($page)) {
 			include_once ($page);
@@ -75,6 +76,7 @@ class d13_router
 			header("location:index.php");
 			exit();
 		}
+		*/
 		// end obsolete
 		
 	}

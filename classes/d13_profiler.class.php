@@ -18,8 +18,7 @@
 // 
 // NOTES:
 //
-// a simple class to measure execution time. disabled in the demo project. messes up
-// caching of templates. should be replaced with a more sophisticated solution later. 
+// a simple class to measure execution time, queries and number of queries per page.
 //
 // ========================================================================================
 
@@ -32,7 +31,6 @@ class d13_profiler
 	//
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function __construct()
@@ -48,8 +46,8 @@ class d13_profiler
 	//
 	//
 	// ----------------------------------------------------------------------------------------
-
 	private
+	
 	function profile_start()
 	{
 		$this->starttime = $this->microtime_float();
@@ -59,8 +57,8 @@ class d13_profiler
 	//
 	//
 	// ----------------------------------------------------------------------------------------
-
 	private
+	
 	function profile_end($note = "")
 	{
 		$this->endtime = $this->microtime_float();
@@ -74,7 +72,8 @@ class d13_profiler
 	//
 	//
 	// ----------------------------------------------------------------------------------------
-
+	public
+	
 	function profile_get($note = "")
 	{
 		$this->profile_end($note);
@@ -85,13 +84,70 @@ class d13_profiler
 	//
 	//
 	// ----------------------------------------------------------------------------------------
-
 	private
+	
 	function microtime_float()
 	{
 		list($usec, $sec) = explode(" ", microtime());
 		return ((float)$usec + (float)$sec);
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// debugLog
+	// 
+	// 
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function debugLog($page)
+	{
+	
+		global $d13;
+	
+		$queries = array();
+		$count 		= $d13->getQueryCount();
+		$queries 	= $d13->getQueries();
+	
+		$d13->logger("======================= PROFILE (".$page.") =======================");
+		#$d13->logger(" Page..........: " . $page );
+		$d13->logger( "Execution Time: " . $d13->profileGet() . ' ' . $d13->getLangUI("ms"));
+
+		$d13->logger("-------------------- QUERIES (".$count.") --------------------");
+		#$this->generateCallTrace();
+		foreach ($queries as $query) {
+			$d13->logger($query);
+			$d13->logger($this->generateCallTrace());
+		}
+		$d13->logger("=================================================================");
+		
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// generateCallTrace
+	// 
+	// 
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function generateCallTrace()
+	{
+		$e = new Exception();
+		$trace = explode("\n", $e->getTraceAsString());
+		// reverse array to make steps line up chronologically
+		$trace = array_reverse($trace);
+		array_shift($trace); // remove {main}
+		array_pop($trace); // remove call to this method
+		$length = count($trace);
+		$result = array();
+	
+		for ($i = 0; $i < $length; $i++)
+		{
+			$result[] = ($i + 1)  . ')' . substr($trace[$i], strpos($trace[$i], ' ')); // replace '#someNum' with '$i)', set the right ordering
+		}
+	
+		return "\t" . implode("\n\t", $result);
+	}
+	
 }
 
 // =====================================================================================EOF

@@ -18,7 +18,7 @@
 	
 			<div class="col-40">
 				<div class="d13-module-detail" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
-				<img class="d13-module-inner" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_image}}">
+				<img class="d13-module-image" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_image}}">
 				</div>
 				<p class="d13-italic"> {{tvar_moduleDescription}}</p>
 				{{tvar_linkData}}

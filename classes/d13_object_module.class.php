@@ -42,7 +42,10 @@ class d13_object_module extends d13_object_base
 
 	function __construct($args)
 	{
+		global $d13;
+		
 		parent::__construct($args);
+		
 	}
 
 	

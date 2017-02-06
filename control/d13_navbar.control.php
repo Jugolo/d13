@@ -49,14 +49,7 @@ class d13_navBarController extends d13_controller
 		$html = '';
 		$html_left = '';
 		$html_right = '';
-		
-
-		// - - - Place Profiler
-
-		if (CONST_FLAG_PROFILER) {
-			$html_right.= "<div class=\"color-gray\">[" . $d13->profileGet() . ' ' . $d13->getLangUI("ms") . "]</div>&nbsp;";
-		}
-
+	
 		// - - - Place all Navigation Options
 		foreach($d13->getNavigation() as $nav) {
 			if ($nav['active']) {

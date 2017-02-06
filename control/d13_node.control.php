@@ -669,7 +669,7 @@ class d13_nodeController extends d13_controller
 		$tvars['tvar_nodeX'] 		= $this->node->data['x'];	// TODO; not always available
 		$tvars['tvar_nodeY'] 		= $this->node->data['y'];	// TODO: not always available
 	
-		$d13->templateRender($tvars['tvar_page'], $tvars);
+		$d13->templateRender($tvars['tvar_page'], $tvars, $this->node);
 		
 	}
 

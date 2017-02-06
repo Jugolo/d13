@@ -212,9 +212,9 @@ img {
  	background-repeat: repeat;
 }
 
-.d13-module-inner {
-    height: 100%;
-    width: auto;
+.d13-module-image {
+    max-width: 50%;
+    height: auto;
     margin: 0;
     padding: 0;
 }
