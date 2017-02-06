@@ -4,7 +4,7 @@
 //
 // PROFILER.CLASS
 //
-// # Author......................: Andrei Busuioc (Devman)
+// !!! THIS FREE PROJECT IS DEVELOPED AND MAINTAINED BY A SINGLE HOBBYIST !!!
 // # Author......................: Tobias Strunz (Fhizban)
 // # Sourceforge Download........: https://sourceforge.net/projects/d13/
 // # Github Repo.................: https://github.com/CriticalHit-d13/d13
@@ -113,10 +113,11 @@ class d13_profiler
 		$d13->logger( "Execution Time: " . $d13->profileGet() . ' ' . $d13->getLangUI("ms"));
 
 		$d13->logger("-------------------- QUERIES (".$count.") --------------------");
-		#$this->generateCallTrace();
+		
+		
 		foreach ($queries as $query) {
 			$d13->logger($query);
-			$d13->logger($this->generateCallTrace());
+			#$d13->logger($this->generateCallTrace());
 		}
 		$d13->logger("=================================================================");
 		

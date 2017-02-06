@@ -4,7 +4,7 @@
 //
 // QUEUE.CLASS
 //
-// # Author......................: Andrei Busuioc (Devman)
+// !!! THIS FREE PROJECT IS DEVELOPED AND MAINTAINED BY A SINGLE HOBBYIST !!!
 // # Author......................: Tobias Strunz (Fhizban)
 // # Sourceforge Download........: https://sourceforge.net/projects/d13/
 // # Github Repo.................: https://github.com/CriticalHit-d13/d13
@@ -60,27 +60,31 @@ class d13_queue
 	{
 	
 		global $d13;
+	
+		if (empty($this->queue[$type])) {
 		
-		switch ($type)
-		{
+			switch ($type)
+			{
 		
-			case 'combat':
-				$result = $d13->dbQuery('select * from ' . $type . ' where sender="' . $this->node->data['id'] . '" or recipient="' . $this->node->data['id'] . '" order by start asc');
-				break;
+				case 'combat':
+					$result = $d13->dbQuery('select * from ' . $type . ' where sender="' . $this->node->data['id'] . '" or recipient="' . $this->node->data['id'] . '" order by start asc');
+					break;
 
-			default:
-				if ($field) {
-					$values = '(' . implode(', ', $values) . ')';
-					$result = $d13->dbQuery('select * from ' . $type . ' where node="' . $this->node->data['id'] . '" and ' . $field . ' in ' . $values . ' order by start asc');
-				} else {
-					$result = $d13->dbQuery('select * from ' . $type . ' where node="' . $this->node->data['id'] . '" order by start asc');
-				}
-				break;
-		}
+				default:
+					if ($field) {
+						$values = '(' . implode(', ', $values) . ')';
+						$result = $d13->dbQuery('select * from ' . $type . ' where node="' . $this->node->data['id'] . '" and ' . $field . ' in ' . $values . ' order by start asc');
+					} else {
+						$result = $d13->dbQuery('select * from ' . $type . ' where node="' . $this->node->data['id'] . '" order by start asc');
+					}
+					break;
+			}
 
-		for ($i = 0; $row = $d13->dbFetch($result); $i++) {
-			$this->queue[$type][$i] = $row;
-			$this->queue[$type][$i]['start'] = strtotime($this->queue[$type][$i]['start']);
+			for ($i = 0; $row = $d13->dbFetch($result); $i++) {
+				$this->queue[$type][$i] = $row;
+				$this->queue[$type][$i]['start'] = strtotime($this->queue[$type][$i]['start']);
+			}
+		
 		}
 		
 	}

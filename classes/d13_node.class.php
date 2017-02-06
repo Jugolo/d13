@@ -4,7 +4,7 @@
 //
 // NODE.CLASS
 //
-// # Author......................: Andrei Busuioc (Devman)
+// !!! THIS FREE PROJECT IS DEVELOPED AND MAINTAINED BY A SINGLE HOBBYIST !!!
 // # Author......................: Tobias Strunz (Fhizban)
 // # Sourceforge Download........: https://sourceforge.net/projects/d13/
 // # Github Repo.................: https://github.com/CriticalHit-d13/d13
@@ -28,7 +28,9 @@ class d13_node
 
 {
 
-	public $data, $resources, $production, $storage, $technologies, $modules, $components, $queues, $buffs, $moduleCounts;
+	public $data, $resources, $production, $storage, $queues, $moduleCounts;
+	
+	public $technologies, $modules, $components, $units, $buffs;
 	
 	// ----------------------------------------------------------------------------------------
 	// 
@@ -42,8 +44,12 @@ class d13_node
 		
 		$this->queues = new d13_queue($this);
 		
-		$moduleCounts = array();
-		
+		$this->moduleCounts = array();
+		$this->buffs = array();
+		$this->technologies = array();
+		$this->modules = array();
+		$this->units = array();
+		$this->components = array();
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -379,7 +385,7 @@ class d13_node
 		
 		$ok = 1;
 		
-		$this->getResources();
+		#$this->getResources();
 
 		foreach ($resources as $res) {
 				
@@ -393,41 +399,6 @@ class d13_node
 	
 	}
 	
-	
-	/*
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-				todo - cache all get
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	*/
-	
-	
 	// ----------------------------------------------------------------------------------------
 	// getBuffs
 	// ----------------------------------------------------------------------------------------
@@ -435,10 +406,14 @@ class d13_node
 
 	function getBuffs()
 	{
+	
 		global $d13;
-		$this->buffs = array();
-		$result = $d13->dbQuery('select * from buff where node="' . $this->data['id'] . '" order by id asc');
-		for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->buffs[$i] = $row;
+		
+		if (empty($this->buffs)) {
+			$result = $d13->dbQuery('select * from buff where node="' . $this->data['id'] . '" order by id asc');
+			for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->buffs[$i] = $row;
+		}
+	
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -448,10 +423,14 @@ class d13_node
 
 	function getTechnologies()
 	{
+	
 		global $d13;
-		$this->technologies = array();
-		$result = $d13->dbQuery('select * from technologies where node="' . $this->data['id'] . '" order by id asc');
-		for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->technologies[$i] = $row;
+		
+		if (empty($this->technologies)) {
+			$result = $d13->dbQuery('select * from technologies where node="' . $this->data['id'] . '" order by id asc');
+			for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->technologies[$i] = $row;
+		}
+
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -461,10 +440,14 @@ class d13_node
 
 	function getModules()
 	{
+	
 		global $d13;
-		$this->modules = array();
-		$result = $d13->dbQuery('select * from modules where node="' . $this->data['id'] . '" order by slot asc');
-		while ($row = $d13->dbFetch($result)) $this->modules[$row['slot']] = $row;
+		
+		if (empty($this->modules)) {
+			$result = $d13->dbQuery('select * from modules where node="' . $this->data['id'] . '" order by slot asc');
+			while ($row = $d13->dbFetch($result)) $this->modules[$row['slot']] = $row;
+		}
+		
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -474,10 +457,14 @@ class d13_node
 
 	function getComponents()
 	{
+	
 		global $d13;
-		$this->components = array();
-		$result = $d13->dbQuery('select * from components where node="' . $this->data['id'] . '" order by id asc');
-		for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->components[$i] = $row;
+		
+		if (empty($this->components)) {
+			$result = $d13->dbQuery('select * from components where node="' . $this->data['id'] . '" order by id asc');
+			for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->components[$i] = $row;
+		}
+
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -487,10 +474,14 @@ class d13_node
 
 	function getUnits()
 	{
+	
 		global $d13;
-		$this->units = array();
-		$result = $d13->dbQuery('select * from units where node="' . $this->data['id'] . '" order by id asc');
-		while ($row = $d13->dbFetch($result)) $this->units[$row['id']] = $row;
+		
+		if (empty($this->units)) {
+			$result = $d13->dbQuery('select * from units where node="' . $this->data['id'] . '" order by id asc');
+			while ($row = $d13->dbFetch($result)) $this->units[$row['id']] = $row;
+		}
+		
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -999,11 +990,9 @@ class d13_node
 		global $d13;
 		
 		if (isset($this->moduleCounts[$moduleId])) {
-			$d13->logger("from cache");
 			return $this->moduleCounts[$moduleId];
 		} else {
-		
-			$result = $d13->dbQuery('select count(*) as count from modules where node="' . $this->data['id'] . '" and module="' . $moduleId . '"');
+			$result = $d13->dbQuery('select count(*) as count from modules where node="' . $this->data['id'] . '" and module = "' . $moduleId . '"');
 			$row = $d13->dbFetch($result);
 			$this->moduleCounts[$moduleId] = $row['count'];
 			return $this->moduleCounts[$moduleId];
@@ -1828,7 +1817,7 @@ class d13_node
 	{
 		global $d13;
 		$d13->dbQuery('start transaction');
-		$this->getModules();
+		#$this->getModules();
 		$this->getResources();
 		$elapsed = ($time - strtotime($this->data['lastCheck'])) / 3600;
 		$ok = 1;
@@ -1846,14 +1835,16 @@ class d13_node
 						$ok = 0;
 					}
 
-					$d13->dbQuery('update nodes set lastCheck="' . strftime('%Y-%m-%d %H:%M:%S', $time) . '" where id="' . $this->data['id'] . '"');
-					if ($d13->dbAffectedRows() == - 1) {
-						$ok = 0;
-					}
+					
 				}
 			}
 		}
-
+		
+		$d13->dbQuery('update nodes set lastCheck="' . strftime('%Y-%m-%d %H:%M:%S', $time) . '" where id="' . $this->data['id'] . '"');
+		if ($d13->dbAffectedRows() == - 1) {
+			$ok = 0;
+		}
+		
 		if ($ok) {
 			$d13->dbQuery('commit');
 		}

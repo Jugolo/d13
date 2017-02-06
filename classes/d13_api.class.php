@@ -4,7 +4,7 @@
 //
 // API.CLASS
 //
-// # Author......................: Andrei Busuioc (Devman)
+// !!! THIS FREE PROJECT IS DEVELOPED AND MAINTAINED BY A SINGLE HOBBYIST !!!
 // # Author......................: Tobias Strunz (Fhizban)
 // # Author......................: BlackScorp
 // # Sourceforge Download........: https://sourceforge.net/projects/d13/
