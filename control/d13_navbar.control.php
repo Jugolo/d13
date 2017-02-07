@@ -26,7 +26,7 @@ class d13_navBarController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct($node)
+	function __construct(&$node)
 	{
 		
 		$this->node = $node;

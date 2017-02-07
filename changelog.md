@@ -29,6 +29,7 @@ V017	--- SECOND STABLE VERSION
 		* Reducing the remaining HTML in files (not much left anyways)
 		* corrected several CSS glitches
 		* expanded functionality of SCOUTing
+		* A few tiny optimizations in order to reduce number of queries
 
 V016	* Fixed a few more bugs
 		* Added autoload to classes

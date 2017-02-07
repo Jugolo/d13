@@ -25,7 +25,7 @@ class d13_resBarController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct($node)
+	function __construct(&$node)
 	{
 		
 		$this->node 	= $node;

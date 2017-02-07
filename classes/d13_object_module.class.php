@@ -40,11 +40,10 @@ class d13_object_module extends d13_object_base
 
 	public
 
-	function __construct($args)
+	function __construct($args, &$node)
 	{
-		global $d13;
 		
-		parent::__construct($args);
+		parent::__construct($args, $node);
 		
 	}
 

@@ -46,34 +46,17 @@ abstract class d13_object_base
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct($args = array())
+	function __construct($args = array(), &$node)
 	{
 	
 		global $d13;
 		
 		$this->data = array();
-		$this->setNode($args);
+		$this->node = $node;
 		$this->checkStatsBase($args);
 		$this->checkStatsUpgrade();
 		$this->checkStatsExtended();
 		
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// setNode
-	// @ sets up the parent node this object belongs to
-	// ----------------------------------------------------------------------------------------
-	public
-
-	function setNode($args)
-	{
-		if (isset($args['node'])) {
-			$this->node = $args['node'];
-			#$this->node->getModules();
-			$this->node->getTechnologies();
-			#$this->node->getComponents();
-			#$this->node->getUnits();
-		}
 	}
 	
 	// ----------------------------------------------------------------------------------------
@@ -326,7 +309,7 @@ abstract class d13_object_base
 				}
 			}
 		}
-
+		
 		// - - - - - - - - - - - - - - - Gather Technology Upgrades
 		foreach($this->node->technologies as $technologies) {
 			if ($technologies['level'] > 0) {
@@ -373,6 +356,17 @@ abstract class d13_object_base
 				
 			}
 		}
+		
+		// - - - - - - - - - - - - - - - Gather Buff Upgrades
+		#foreach($d13->getGeneral('stats') as $stat) {		
+		$stat = "efficiency";
+		
+			if ($this->node->getBuff($stat, $this->data['type'])) {
+				$this->data['upgrade_ratio'] += $this->node->getBuff($stat, $this->data['type'], true);
+			}
+		#}
+		
+		$d13->logger($this->data['upgrade_ratio']);
 
 	}
 	
@@ -613,6 +607,7 @@ abstract class d13_object_base
 	function getUpgrades()
 	{
 		global $d13;
+		
 		$stats = array();
 		foreach($d13->getGeneral('stats') as $stat) {
 			$stats[$stat] = $this->data['upgrade_' . $stat];

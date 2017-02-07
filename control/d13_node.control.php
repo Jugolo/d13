@@ -559,7 +559,7 @@ class d13_nodeController extends d13_controller
 			
 			$offset_start = ($sector - 1) * $d13->getGeneral('users', 'maxModules');
 			$offset_end = $offset_start + $d13->getGeneral('users', 'maxModules');
-			$this->node->getModules();
+			#$this->node->getModules();
 			
 			$add = true;
 			$limit = 4;
@@ -585,11 +585,6 @@ class d13_nodeController extends d13_controller
 						$tvars['tvar_getHTMLNode'].= '<div class="row no-gutter">';
 					}
 
-					// - - - Add modules to row
-					if ($module['module'] > - 1) {
-						$the_module = d13_module_factory::create($module['module'], $module['slot'], $this->node);
-					}
-					
 					if ($buildQueue[$module['slot']]['check']) {
 						$tvars['tvar_moduleLink'] = "";
 						$tvars['tvar_moduleImage'] = $buildQueue[$module['slot']]['image'][0]['image'];
@@ -597,6 +592,9 @@ class d13_nodeController extends d13_controller
 						$tvars['tvar_moduleLabel'] = $d13->getLangUI("underConstruction");
 						$tvars['tvar_getHTMLNode'].= $d13->templateSubpage("sub.node.module", $tvars);
 					} else if ($module['module'] > - 1) {
+					
+						$the_module = d13_module_factory::create($module['module'], $module['slot'], $this->node);
+						
 						$tvars['tvar_moduleLink'] = "index.php?p=module&action=get&nodeId=" . $this->node->data['id'] . "&slotId=" . $module['slot'];
 						$tvars['tvar_moduleImage'] = $the_module->data['image'];
 						if (($module['input'] <= 0 && $d13->getModule($this->node->data['faction'], $module['module'], 'maxInput') > 0) || ($d13->getModule($this->node->data['faction'], $module['module'], 'type') == 'defense' && $module['input'] < $d13->getModule($this->node->data['faction'], $module['module'], 'maxInput'))) {

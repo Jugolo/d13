@@ -67,11 +67,7 @@ class d13_db
 		if ($result = $this->db->query($query)) {
 			
 			if (CONST_FLAG_PROFILER) {
-				if ($query != "commit" && $query != "start transaction") {
-					$this->lastquery = $query;
-				} else if ($query == "commit" && $query != "start transaction") {
-					$this->queries[] = $this->lastquery;
-				}
+				$this->queries[] = $query;
 			}
 			
 			return $result;

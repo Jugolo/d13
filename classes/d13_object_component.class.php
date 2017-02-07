@@ -43,9 +43,9 @@ class d13_object_component extends d13_object_base
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct($args)
+	function __construct($args, &$node)
 	{
-		parent::__construct($args);
+		parent::__construct($args, $node);
 	}
 
 		// ----------------------------------------------------------------------------------------

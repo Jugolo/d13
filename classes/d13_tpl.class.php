@@ -291,7 +291,7 @@ class d13_tpl
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function render_page($template, $tvars = array(), $node=NULL)
+	function render_page($template, $tvars = array(), &$node=NULL)
 	{
 		
 		global $d13;
@@ -307,7 +307,7 @@ class d13_tpl
 			$this->node = $node;
 		}
 		
-		if (!isset($this->node)) {
+		if (empty($this->node)) {
 			if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
 				$this->node	= new d13_node();
 				$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);

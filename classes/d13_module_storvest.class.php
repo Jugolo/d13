@@ -39,9 +39,9 @@ class d13_module_storvest extends d13_object_module
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct($args)
+	function __construct($args, &$node)
 	{
-		parent::__construct($args);
+		parent::__construct($args, $node);
 	}
 	
 	// ----------------------------------------------------------------------------------------

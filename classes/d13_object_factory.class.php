@@ -36,43 +36,42 @@ class d13_object_factory
         $args = array();
         $args['supertype']	= $type;
         $args['obj_id'] 	= $objectId;
-        $args['node'] 		= $node;
 
         switch ($args['supertype']) {
         
             case 'resource':
-                return new d13_object_resource($args);
+                return new d13_object_resource($args, $node);
                 break;
 
             case 'technology':
-                return new d13_object_technology($args);
+                return new d13_object_technology($args, $node);
                 break;
 
             case 'component':
-                return new d13_object_component($args);
+                return new d13_object_component($args, $node);
                 break;
 
             case 'unit':
-                return new d13_object_unit($args);
+                return new d13_object_unit($args, $node);
                 break;
 
             case 'turret':
-                return new d13_object_turret($args);
+                return new d13_object_turret($args, $node);
                 break;
 
 			case 'shield':
-                return new d13_object_shield($args);
+                return new d13_object_shield($args, $node);
                 break;
             
             case 'buff':
-                return new d13_object_buff($args);
+                return new d13_object_buff($args, $node);
                 break;
            
-			
             default:
                 return NULL;
                 break;
         }
+        
     }
     
 }

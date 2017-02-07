@@ -180,15 +180,15 @@ class d13_queue
 		{
 
 			case 'shield':
-				$icon 	= '/icon/'.$d13->getShield($item['obj_id'], 'image');
+				$icon 	= '/icon/'.$d13->getShield($item['obj_id'], 'icon');
 				$action = $d13->getLangUI("active");
 				$name 	= $d13->getLangGL("shields", $item['obj_id'], "name");
 				$cancel = '<a class="external" href="?p=node&action=cancelShield&nodeId=' . $this->node->data['id'] . '&shieldId=' . $item['obj_id'] . '">';
 				break;
 
 			case 'buff':
-				$icon 	= '/icon/'.$d13->getBuff($item['obj_id'], 'image');
-				$action = $d13->getLangUI("active");
+				$icon 	= '/icon/'.$d13->getBuff($item['obj_id'], 'icon');
+				$action = '';
 				$name 	= $d13->getLangGL("buffs", $item['obj_id'], "name");
 				$cancel = '<a class="external" href="?p=node&action=cancelBuff&nodeId=' . $this->node->data['id'] . '&buffId=' . $item['obj_id'] . '">';
 				break;
@@ -201,16 +201,14 @@ class d13_queue
 				break;
 			
 			case 'build':
-				$icon 	= $d13->getModule($this->node->data['faction'], $item['obj_id'], 'images');
-				$icon 	= 'modules/'.$this->node->data['faction'].'/'.$icon[1]['image'];
+				$icon 	= 'modules/'.$this->node->data['faction'].'/'.$d13->getModule($this->node->data['faction'], $item['obj_id'], 'icon');
 				$action = $d13->getLangUI($item['action']);
 				$name 	= $d13->getLangGL("modules", $this->node->data['faction'], $item['obj_id'], "name");
 				$cancel = '<a class="external" href="?p=module&action=cancel&nodeId=' . $this->node->data['id'] . '&slotId=' . $item['slot'] . '">';
 				break;
 
 			case 'research':
-				$icon 	= $d13->getTechnology($this->node->data['faction'], $item['obj_id'], 'images');
-				$icon 	= 'technologies/'.$this->node->data['faction'].'/'.$icon[0]['image'];
+				$icon 	= 'technologies/'.$this->node->data['faction'].'/'.$d13->getTechnology($this->node->data['faction'], $item['obj_id'], 'icon');
 				$action = $d13->getLangUI("research_short");
 				$name 	= $d13->getLangGL("technologies", $this->node->data['faction'], $item['obj_id'], "name");
 				$cancel = '<a class="external" href="?p=module&action=cancelTechnology&nodeId=' . $this->node->data['id'] . '&slotId=' . $item['slot'] . '&technologyId=' . $item['obj_id'] . '"> ';
@@ -222,8 +220,7 @@ class d13_queue
 				} else {
 					$action = $d13->getLangUI('remove_short');
 				}
-				$icon 	= $d13->getComponent($this->node->data['faction'], $item['obj_id'], 'images');
-				$icon 	= 'components/'.$this->node->data['faction'].'/'.$icon[0]['image'];
+				$icon 	= 'components/'.$this->node->data['faction'].'/'.$d13->getComponent($this->node->data['faction'], $item['obj_id'], 'icon');
 				$name 	= $d13->getLangGL("components", $this->node->data['faction'], $item['obj_id'], "name");
 				$cancel = '<a class="external" href="?p=module&action=cancelComponent&nodeId=' . $this->node->data['id'] . '&slotId=' . $item['slot'] . '&craftId=' . $item['id'] . '"> ';
 				break;
@@ -234,8 +231,7 @@ class d13_queue
 				} else {
 					$action = $d13->getLangUI('remove_short');
 				}
-				$icon 	= $d13->getUnit($this->node->data['faction'], $item['obj_id'], 'images');
-				$icon 	= 'units/'.$this->node->data['faction'].'/'.$icon[0]['image'];
+				$icon 	= 'units/'.$this->node->data['faction'].'/'.$d13->getUnit($this->node->data['faction'], $item['obj_id'], 'icon');
 				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $item['obj_id'], "name");
 				$cancel = '<a class="external" href="?p=module&action=cancelunit&nodeId=' . $this->node->data['id'] . '&slotId=' . $item['slot'] . '&trainId=' . $item['id'] . '"> ';
 				break;

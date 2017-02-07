@@ -34,6 +34,14 @@
 						<li class="item-content">
 							<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/{{tvar_itemImageDirectory}}/{{tvar_itemResource}}" title="{{tvar_itemResourceName}}"></div>
 							<div class="item-inner">
+							<div class="item-title">{{tvar_ui_available}}:</div>
+							<div class="item-after"><span class="badge">{{tvar_amount}}</span></div>
+							</div>
+						</li>
+						
+						<li class="item-content">
+							<div class="item-media"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/{{tvar_itemImageDirectory}}/{{tvar_itemResource}}" title="{{tvar_itemResourceName}}"></div>
+							<div class="item-inner">
 								<div class="item-title">
 									{{tvar_ui_stored}}:
 								</div>

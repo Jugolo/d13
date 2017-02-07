@@ -42,9 +42,9 @@ class d13_module_defense extends d13_object_module
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct($args)
+	function __construct($args, &$node)
 	{
-		parent::__construct($args);
+		parent::__construct($args, $node);
 	}
 	// ----------------------------------------------------------------------------------------
 	// getStats
@@ -67,7 +67,7 @@ class d13_module_defense extends d13_object_module
 		$args['input'] 		= $this->data['input'];
 		$args['node'] 		= $this->node;
 				
-		$this->turret = new d13_object_turret($args);
+		$this->turret = new d13_object_turret($args, $this->node);
 	
 	}
 	

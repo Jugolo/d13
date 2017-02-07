@@ -39,9 +39,9 @@ class d13_module_market extends d13_object_module
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct($args)
+	function __construct($args, &$node)
 	{
-		parent::__construct($args);
+		parent::__construct($args, $node);
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -114,11 +114,11 @@ class d13_module_market extends d13_object_module
 		$tvars['tvar_sub_popupswiper'] = '';
 		$html = '';
 		
-		$resid = 0;
-		$modifier = 2;
+		$resid 		= $this->data['paymentResource'];
 		
-		$limit = 10;												# could go to config later
-		$i = 0;
+		
+		$limit 		= 10;											# could go to config later
+		$i 			= 0;
 		
 		// - - - Market Popup
 
@@ -136,7 +136,9 @@ class d13_module_market extends d13_object_module
 					$tmp_object = d13_object_factory::create($item['object'], $item['id'], $this->node);
 					
 					if ($tmp_object->data['active']) {
-
+						
+						$modifier 	= $this->data['priceModifier'] * $item['amount'];
+						
 						$tvars['tvar_itemName'] 			= $tmp_object->data['name'];
 						$tvars['tvar_itemDescription'] 		= $tmp_object->data['description'];
 						$tvars['tvar_itemImageDirectory'] 	= $tmp_object->data['imgdir'];
@@ -148,7 +150,8 @@ class d13_module_market extends d13_object_module
 						$tvars['tvar_itemValue'] 			= floor($tmp_object->data['amount']);
 						$tvars['tvar_itemMaxValue'] 		= $tmp_object->getMaxProduction();
 						
-						
+						$tvars['tvar_amount']				= $item['amount'];
+										
 						if ($tmp_object->getCheckConvertedCost($resid, $modifier)) {
 							$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
 						}
@@ -156,7 +159,7 @@ class d13_module_market extends d13_object_module
 							$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
 						}
 						
-						$tvars['tvar_costData'] 			= $tmp_object->getConvertedCostList($resid, false, $modifier);
+						$tvars['tvar_costData'] 	= $tmp_object->getConvertedCostList($resid, false, $modifier);
 					
 						$linkData = '';
 						$objType = $item['object'];

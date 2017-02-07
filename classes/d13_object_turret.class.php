@@ -43,9 +43,9 @@ class d13_object_turret extends d13_object_base
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct($args)
+	function __construct($args, &$node)
 	{
-		parent::__construct($args);
+		parent::__construct($args, $node);
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ class d13_object_turret extends d13_object_base
 
 	function checkStatsExtended()
 	{
-		global $d13;
+		
 		
 	}
 
@@ -71,7 +71,7 @@ class d13_object_turret extends d13_object_base
 	function getTemplateVariables()
 	{
 	
-		global $d13;
+		
 		$tvars = array();
 		
 		$tvars = parent::getTemplateVariables();

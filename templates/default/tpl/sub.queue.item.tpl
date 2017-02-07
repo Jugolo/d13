@@ -6,4 +6,3 @@
 		{{tvar_itemTitle}} [{{tvar_itemTimer}} {{tvar_itemCancel}} {{tvar_itemScript}}
 	</div>
 </div>
-<br>

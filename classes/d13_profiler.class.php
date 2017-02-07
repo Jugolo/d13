@@ -109,15 +109,10 @@ class d13_profiler
 		$queries 	= $d13->getQueries();
 	
 		$d13->logger("======================= PROFILE (".$page.") =======================");
-		#$d13->logger(" Page..........: " . $page );
 		$d13->logger( "Execution Time: " . $d13->profileGet() . ' ' . $d13->getLangUI("ms"));
-
 		$d13->logger("-------------------- QUERIES (".$count.") --------------------");
-		
-		
 		foreach ($queries as $query) {
 			$d13->logger($query);
-			#$d13->logger($this->generateCallTrace());
 		}
 		$d13->logger("=================================================================");
 		
