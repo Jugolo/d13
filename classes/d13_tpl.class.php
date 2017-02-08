@@ -156,7 +156,7 @@ class d13_tpl
 		global $d13;
 		$vars = array();
 		
-		foreach($d13->data->json['userinterface'] as $key => $var) {
+		foreach($d13->getLangUI() as $key => $var) { #$d13->data->json['userinterface']
 			$vars["tvar_ui_" . $key] = $var;
 		}
 

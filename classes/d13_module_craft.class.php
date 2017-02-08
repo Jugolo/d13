@@ -29,7 +29,7 @@
 //
 // ========================================================================================
 
-class d13_module_craft extends d13_object_module
+class d13_module_craft extends d13_gameobject_module
 
 {
 
@@ -128,7 +128,7 @@ class d13_module_craft extends d13_object_module
 				$args['obj_id'] 	= $cid;
 				$args['node'] 		= $this->node;
 				
-				$tmp_component = new d13_object_component($args);
+				$tmp_component = new d13_gameobject_component($args);
 				
 				// - - - - Cost and Requirements
 				$costData = $tmp_component->getCostList();

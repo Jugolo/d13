@@ -23,16 +23,31 @@
 //
 // ========================================================================================
 
-class d13_object_factory
+class d13_factory_gameobject extends d13_factory_base
 
 {
-    public static
 
-    function create($type, $objectId, $node)
+	// ----------------------------------------------------------------------------------------
+	// constructor
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+
+	function __construct()
+	{
+	
+	
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// create
+	//
+	// ----------------------------------------------------------------------------------------
+    public
+
+    function create($type, $objectId, &$node)
     {
 
-        global $d13;
-        
         $args = array();
         $args['supertype']	= $type;
         $args['obj_id'] 	= $objectId;
@@ -40,33 +55,33 @@ class d13_object_factory
         switch ($args['supertype']) {
         
             case 'resource':
-                return new d13_object_resource($args, $node);
+                return new d13_gameobject_resource($args, $node);
                 break;
 
             case 'technology':
-                return new d13_object_technology($args, $node);
+                return new d13_gameobject_technology($args, $node);
                 break;
 
             case 'component':
-                return new d13_object_component($args, $node);
+                return new d13_gameobject_component($args, $node);
                 break;
 
             case 'unit':
-                return new d13_object_unit($args, $node);
+                return new d13_gameobject_unit($args, $node);
                 break;
 
             case 'turret':
-                return new d13_object_turret($args, $node);
+                return new d13_gameobject_turret($args, $node);
                 break;
 
 			case 'shield':
-                return new d13_object_shield($args, $node);
+                return new d13_gameobject_shield($args, $node);
                 break;
             
             case 'buff':
-                return new d13_object_buff($args, $node);
+                return new d13_gameobject_buff($args, $node);
                 break;
-           
+            
             default:
                 return NULL;
                 break;
@@ -75,3 +90,5 @@ class d13_object_factory
     }
     
 }
+
+// =====================================================================================EOF

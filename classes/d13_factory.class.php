@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// TURRET.CLASS
+// FACTORY.CLASS
 //
 // !!! THIS FREE PROJECT IS DEVELOPED AND MAINTAINED BY A SINGLE HOBBYIST !!!
 // # Author......................: Tobias Strunz (Fhizban)
@@ -16,72 +16,88 @@
 // Represents the lowest layer, next to the database. All logic checks must be performed
 // by a controller beforehand. Any class function calls directly access the database. 
 // 
-// ABOUT OBJECTS:
-// 
-// The most important objects in the game have been grouped into a class "objects". This
-// includes modules, technologies, units, components and so on. 
-//
 // NOTES:
 //
-// A rather quirky hybrid object that is both a unit and a module (town). This class
-// represents the unit part.
-//
-// Main difference: a turret cannot exist without a module and cannot march to war. A turret
-// features a level that is the same as it's modules (buildings) level!
+// 
 //
 // ========================================================================================
 
-// ========================================================================================
-
-class d13_object_turret extends d13_object_base
+class d13_factory
 
 {
-
+	
+	private $nodeFactory, $moduleFactory, $objectFactory, $gameObjectFactory;
+	
 	// ----------------------------------------------------------------------------------------
-	// construct
-	// @ Calls base object constructor with an array based argument list
-	// ----------------------------------------------------------------------------------------
-	public
-
-	function __construct($args, &$node)
-	{
-		parent::__construct($args, $node);
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// checkStatsExtended
-	// @
+	// constructor
 	//
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function checkStatsExtended()
-	{
-		
-		
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// getTemplateVariables
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-	public
-
-	function getTemplateVariables()
+	function __construct()
 	{
 	
-		
-		$tvars = array();
-		
-		$tvars = parent::getTemplateVariables();
-		
-		return $tvars;
-			
+		$this->nodeFactory 			= new d13_factory_node();
+		$this->moduleFactory		= new d13_factory_module();
+		$this->GameObjectFactory 	= new d13_factory_gameobject();
+		$this->objectFactory		= new d13_factory_object();
+	
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// createObject
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function createObject($type, $id=NULL)
+	{
+		
+		return $this->objectFactory->create($type, $id);
+		
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// createGameObject
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function createGameObject($type, $objectId, &$node)
+	{
+		
+		return $this->GameObjectFactory->create($type, $objectId, $node);
+		
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// createModule
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function createModule($moduleId, $slotId, &$node)
+	{
+	
+		return $this->moduleFactory->create($moduleId, $slotId, $node);
+	
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// createNode
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function createNode()
+	{
+		return $this->nodeFactory->create();
+	
+	}
+
+
 
 }
 
 // =====================================================================================EOF
 
-?>

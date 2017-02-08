@@ -85,7 +85,7 @@ class d13_loginController extends d13_controller
 		}
 
 		if (isset($name, $pass)) {
-			$user = new d13_user();
+			$user = $d13->createObject('user');
 			$status = $user->get('name', $name);
 			if ($status == 'done')
 			if ($d13->getGeneral('options', 'enabledLogin') || $user->data['access'] == 3)
@@ -127,7 +127,7 @@ class d13_loginController extends d13_controller
 		global $d13;
 		
 		if (isset($_POST['user'], $_POST['sitter'], $_POST['password'])) {
-			$user = new d13_user();
+			$user = $d13->createObject('user');
 			$status = $user->get('name', $_POST['user']);
 			if ($status == 'done') {
 				$sitter = new d13_user();

@@ -25,14 +25,10 @@ class d13_gridController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct($node)
+	function __construct(&$node)
 	{
-		if (isset($node) && !empty($node)) {
-			$this->node = $node;
-			$this->nodeId = $this->node->data['id'];
-		} else {
-			$this->nodeId = 0;
-		}	
+		$this->node = $node;
+		
 	}
 
 	// ----------------------------------------------------------------------------------------

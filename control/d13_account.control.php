@@ -153,8 +153,8 @@ class d13_accountController extends d13_controller
 		
 		global $d13;
 		
-		$user = new d13_user();
-		$user->get('id', $_SESSION[CONST_PREFIX . 'User']['id']);
+		$user = $d13->createObject('user', $_SESSION[CONST_PREFIX . 'User']['id']);
+		
 		if (isset($_GET['action'], $_POST['password'])) {
 		
 			switch ($_GET['action']) {

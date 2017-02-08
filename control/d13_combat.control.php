@@ -103,7 +103,7 @@ class d13_combatController extends d13_controller
 				if ($target->get('id', $_POST['id']) == 'done') {
 					
 					// - - - - Check Alliance Status
-					$targetUser = new d13_user();
+					$targetUser = $d13->createObject('user');
 					if ($targetUser->get('id', $target->data['user']) == 'done') {
 						$pass = true;
 						$alliance = new d13_alliance();
@@ -232,7 +232,7 @@ class d13_combatController extends d13_controller
 					$args['obj_id'] 	= $id;
 					$args['node'] 		= $this->node;
 				
-					$tmp_unit = new d13_object_unit($args);
+					$tmp_unit = new d13_gameobject_unit($args);
 					
 					$d13->templateInject($d13->templateSubpage("sub.popup.unit", $tmp_unit->getTemplateVariables()));
 	
@@ -349,7 +349,7 @@ class d13_combatController extends d13_controller
 				$args['obj_id'] 	= $res['component'];
 				$args['node'] 		= $this->node;
 				
-				$tmp_component = new d13_object_component($args);
+				$tmp_component = new d13_gameobject_component($args);
 		
 				$resource = $res['component'];
 				$cost =  $res['value'];

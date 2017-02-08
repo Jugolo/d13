@@ -96,7 +96,7 @@ class d13_collection implements IteratorAggregate
 	// 
 	// @
 	// ----------------------------------------------------------------------------------------
-    public function get($indices)
+    public function get($indices=NULL)
     {
 
         if (empty($indices)) {

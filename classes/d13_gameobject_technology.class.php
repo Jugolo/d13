@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// SHIELD.CLASS
+// TECHNOLOGY.CLASS
 //
 // !!! THIS FREE PROJECT IS DEVELOPED AND MAINTAINED BY A SINGLE HOBBYIST !!!
 // # Author......................: Tobias Strunz (Fhizban)
@@ -23,10 +23,14 @@
 //
 // NOTES:
 //
+// Represents technologies that a user can research. Allows to upgrade all other object
+// types or unlock new object types. Allows to create a "tech-tree".
+//
+// Technologies are UNIQUE to each node (town). There will be a share/trade option later.
 //
 // ========================================================================================
 
-class d13_object_shield extends d13_object_base
+class d13_gameobject_technology extends d13_gameobject_base
 {
 	
 	// ----------------------------------------------------------------------------------------

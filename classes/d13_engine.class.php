@@ -35,15 +35,14 @@ class d13_engine
 
 {
 
-	public $flags, $data;
+	public $flags;
 
-	private $db, $tpl, $router, $logger, $session, $profiler;
+	private $data, $db, $tpl, $router, $logger, $session, $profiler, $factory;
 
 	// ----------------------------------------------------------------------------------------
 	// constructor
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function __construct()
@@ -54,28 +53,57 @@ class d13_engine
 		$this->session 	= new d13_session();
 		$this->logger 	= new d13_logger();
 		$this->data 	= new d13_data();
-		
+		$this->factory  = new d13_factory();
 		$this->flags 	= new d13_flags();
-		
-		if (CONST_FLAG_PROFILER) {
-			$this->profiler = new d13_profiler();
-		}
+		$this->profiler = new d13_profiler();
 	}
 
+	// ========================================================================================
+	//								FACTORY WRAPPER METHODS
+	// ========================================================================================
+
+	public
+	
+	function createObject($type, $id=NULL)
+	{
+		return $this->factory->createObject($type, $id);
+	}
+
+	public
+	
+	function createGameObject($type, $objectId, &$node)
+	{
+		return $this->factory->createGameObject($type, $objectId, $node);
+	}
+	
+	public
+	
+	function createModule($moduleId, $slotId, &$node)
+	{
+		return $this->factory->createModule($moduleId, $slotId, $node);
+	}
+	
+	public
+	
+	function createNode()
+	{
+		return $this->factory->createNode(func_get_args());
+	}
+	
 	// ========================================================================================
 	//								LANG WRAPPER METHODS
 	// ========================================================================================
 
 	public
 
-	function getLangBW($index)
+	function getLangBW($index=NULL)
 	{
 		return $this->data->json['blockwords']->get($index);
 	}
 
 	public
 
-	function getLangUI($index)
+	function getLangUI($index=NULL)
 	{
 		return $this->data->json['userinterface']->get($index);
 	}
@@ -165,14 +193,12 @@ class d13_engine
 		return $this->db->getQueries();
 	}
 
-
 	public
 
 	function getQueryCount()
 	{
 		return $this->db->getQueryCount();
 	}
-
 
 	// ========================================================================================
 	//								DATA WRAPPER METHODS

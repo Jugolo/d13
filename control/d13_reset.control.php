@@ -45,7 +45,7 @@ class d13_resetController extends d13_controller
 		if (isset($_POST['name'], $_POST['email'])) {
 			
 			if ((($_POST['name'] != '')) && ($_POST['email'] != '')) {
-				$user = new d13_user();
+				$user = $d13->createObject('user');
 				$status = $user->get('name', $_POST['name']);
 				if ($status == 'done') {
 					$newPass = rand(1000000000, 9999999999);

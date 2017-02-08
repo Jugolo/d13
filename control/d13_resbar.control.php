@@ -28,10 +28,12 @@ class d13_resBarController extends d13_controller
 	function __construct(&$node)
 	{
 		
+		global $d13;
+		
 		$this->node 	= $node;
 		$this->node->getResources();
 	
-		$this->user 	= new d13_user();
+		$this->user = $d13->createObject('user', $_SESSION[CONST_PREFIX . 'User']['id']);
 		
 	}
 
@@ -56,8 +58,7 @@ class d13_resBarController extends d13_controller
 		$tvars['tvar_leftOptions'] 	= '';
 		
 		//- - - - - Player Stats
-		$status = $this->user->get('id', $_SESSION[CONST_PREFIX . 'User']['id']);
-		if ($status == 'done') {
+		if ($this->user->user_status == 'done') {
 			foreach($d13->getGeneral("userstats") as $stat) {
 				if ($stat['active'] && $stat['visible']) {
 					$tvars['tvar_resImage'] 		= $stat['icon'];

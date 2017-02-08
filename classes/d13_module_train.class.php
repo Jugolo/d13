@@ -29,7 +29,7 @@
 //
 // ========================================================================================
 
-class d13_module_train extends d13_object_module
+class d13_module_train extends d13_gameobject_module
 
 {
 	// ----------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ class d13_module_train extends d13_object_module
 				$args['obj_id'] 	= $uid;
 				$args['node'] 		= $this->node;
 				
-				$tmp_unit = new d13_object_unit($args);
+				$tmp_unit = new d13_gameobject_unit($args);
 				
 				$vars = array();
 				$vars = $tmp_unit->getTemplateVariables();

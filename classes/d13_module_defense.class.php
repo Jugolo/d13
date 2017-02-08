@@ -29,7 +29,7 @@
 //
 // ========================================================================================
 
-class d13_module_defense extends d13_object_module
+class d13_module_defense extends d13_gameobject_module
 
 {
 	
@@ -67,7 +67,7 @@ class d13_module_defense extends d13_object_module
 		$args['input'] 		= $this->data['input'];
 		$args['node'] 		= $this->node;
 				
-		$this->turret = new d13_object_turret($args, $this->node);
+		$this->turret = new d13_gameobject_turret($args, $this->node);
 	
 	}
 	

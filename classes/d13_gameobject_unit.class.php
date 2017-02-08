@@ -30,7 +30,7 @@
 //
 // ========================================================================================
 
-class d13_object_unit extends d13_object_base
+class d13_gameobject_unit extends d13_gameobject_base
 
 {
 

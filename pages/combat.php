@@ -224,7 +224,7 @@ if (isset($node)) {
 			if ( in_array($d13->getUnit($node->data['faction'], $key, 'movementType'), $d13->getCombat($_GET['type'], 'movementTypes') )) {
 
 				$id = $d13->getUnit($node->data['faction'], $key, 'id');
-				$tmp_unit = new d13_unit($id, $node);
+				$tmp_unit = $d13->createGameObject('unit', $id, $node);
 		
 				$d13->templateInject($d13->templateSubpage("sub.popup.unit", $tmp_unit->getTemplateVariables()));
 		

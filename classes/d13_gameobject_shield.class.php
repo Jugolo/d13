@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// EMPTY.CONTROLLER
+// SHIELD.CLASS
 //
 // !!! THIS FREE PROJECT IS DEVELOPED AND MAINTAINED BY A SINGLE HOBBYIST !!!
 // # Author......................: Tobias Strunz (Fhizban)
@@ -11,49 +11,52 @@
 // # Project Documentation.......: http://www.critical-hit.biz
 // # License.....................: https://creativecommons.org/licenses/by/4.0/
 //
+// ABOUT CLASSES:
+//
+// Represents the lowest layer, next to the database. All logic checks must be performed
+// by a controller beforehand. Any class function calls directly access the database. 
+// 
+// ABOUT OBJECTS:
+// 
+// The most important objects in the game have been grouped into a class "objects". This
+// includes modules, technologies, units, components and so on. 
+//
+// NOTES:
+//
+//
 // ========================================================================================
 
-class d13_emptyController extends d13_controller
+class d13_gameobject_shield extends d13_gameobject_base
 {
-	
-	private $node, $nodeId;
 	
 	// ----------------------------------------------------------------------------------------
 	// construct
-	// @
-	//
+	// @ Calls base object constructor with an array based argument list
 	// ----------------------------------------------------------------------------------------
 	public
-	
-	function __construct($node)
+
+	function __construct($args, &$node)
 	{
-		if (isset($node) && !empty($node)) {
-			$this->node = $node;
-			$this->nodeId = $this->node->data['id'];
-		} else {
-			$this->nodeId = 0;
-		}	
+		parent::__construct($args, $node);
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// getTemplate
+	// checkStatsExtended
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
+
 	public
-	
-	function getTemplate()
+
+	function checkStatsExtended()
 	{
-	
 		global $d13;
-		
-		$tvars = array();
-		$html = '';
+
 		
 		
 	}
+
 
 }
 
 // =====================================================================================EOF
-

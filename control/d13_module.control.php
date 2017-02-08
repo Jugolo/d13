@@ -154,7 +154,7 @@ class d13_moduleController extends d13_controller
 			$moduleId = $this->node->modules[$_GET['slotId']]['module'];
 		}
 		
-		$tmp_module = d13_module_factory::create($moduleId, $_GET['slotId'], $this->node);
+		$tmp_module = $d13->createModule($moduleId, $_GET['slotId'], $this->node);
 		
 		$tvars = $tmp_module->getTemplateVariables();
 		$tvars['tvar_page'] = $tmp_module->getTemplate();

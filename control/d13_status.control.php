@@ -42,8 +42,8 @@ class d13_statusController extends d13_controller
 				$this->own = true;
 			}
 
-			$this->user = new d13_user($userId);
-
+			$this->user = $d13->createObject('user', $userId);
+			
 		} else {
 			$this->own = false;
 			$message = $d13->getLangUI("accessDenied");

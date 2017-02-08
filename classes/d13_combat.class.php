@@ -110,7 +110,7 @@ class d13_combat
 				$args['obj_id'] 	= $group['unitId'];
 				$args['node'] 		= $this->attackerNode;
 				
-				$unit = new d13_object_unit($args);
+				$unit = new d13_gameobject_unit($args);
 				
 				if (!empty($unit->data['armyAttackModifier'])) {
 					foreach ($unit->data['armyAttackModifier'] as $modifier) {
@@ -128,7 +128,7 @@ class d13_combat
 				$args['obj_id'] 	= $group['unitId'];
 				$args['node'] 		= $this->attackerNode;
 				
-				$unit = new d13_object_unit($args);
+				$unit = new d13_gameobject_unit($args);
 				
 				$stats = $unit->getStats();
 				$upgrades = $unit->getUpgrades();
@@ -221,7 +221,7 @@ class d13_combat
 					$args['obj_id'] 	= $group['unitId'];
 					$args['node'] 		= $this->defenderNode;
 				
-					$unit = new d13_object_unit($args);
+					$unit = new d13_gameobject_unit($args);
 			
 					if (!empty($unit->data['armyDefenseModifier'])) {
 						foreach ($unit->data['armyDefenseModifier'] as $modifier) {
@@ -242,7 +242,7 @@ class d13_combat
 					$args['obj_id'] 	= $group['unitId'];
 					$args['node'] 		= $this->defenderNode;
 				
-					$unit = new d13_object_unit($args);
+					$unit = new d13_gameobject_unit($args);
 				
 					$stats = $unit->getStats();
 					$upgrades = $unit->getUpgrades();
@@ -297,7 +297,7 @@ class d13_combat
 					$args['unitId'] 	= $group['unitId'];
 					$args['node'] 		= $this->defenderNode;
 				
-					$turret = new d13_object_turret($args);
+					$turret = new d13_gameobject_turret($args);
 				
 					$stats = $turret->getStats();
 					$upgrades = $turret->getUpgrades();
@@ -955,7 +955,7 @@ class d13_combat
 				$args['obj_id'] 	= $group['unitId'];
 				$args['node'] 		= $this->defenderNode;
 				
-				$unit = new d13_object_unit($args);
+				$unit = new d13_gameobject_unit($args);
 				
 				$stats = $unit->getStats();
 				$upgrades = $unit->getUpgrades();
@@ -1529,7 +1529,7 @@ class d13_combat
 				$args['obj_id'] 	= $group['unitId'];
 				$args['node'] 		= $this->attackerNode;
 				
-				$unit = new d13_object_unit($args);
+				$unit = new d13_gameobject_unit($args);
 				
 				$name 			= $unit->data['name'];
 				$label 			= $group['quantity']. "/" .$data['input']['attacker']['groups'][$key]['quantity'];
@@ -1628,7 +1628,7 @@ class d13_combat
 					$args['obj_id'] 	= $group['unitId'];
 					$args['node'] 		= $this->defenderNode;
 				
-					$unit = new d13_object_unit($args);
+					$unit = new d13_gameobject_unit($args);
 					
 					$name 			= $unit->data['name'];
 					$label 			= $group['quantity']. "/" .$data['input']['defender']['groups'][$key]['quantity'];
@@ -1674,7 +1674,7 @@ class d13_combat
 					$args['obj_id'] 	= $group['unitId'];
 					$args['node'] 		= $this->defenderNode;
 				
-					$unit = new d13_object_unit($args);
+					$unit = new d13_gameobject_unit($args);
 					
 					$name 			= $unit->data['name'];
 					$label 			= $group['quantity']. "/" .$data['input']['defender']['groups'][$key]['quantity'];

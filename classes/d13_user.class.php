@@ -28,47 +28,55 @@ class d13_user
 
 {
 	
-	public $data, $alliance, $ally_status, $preferences, $blocklist;
+	public $data, $alliance, $ally_status, $user_status, $preferences, $blocklist;
 	
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// constructor
 	// ----------------------------------------------------------------------------------------	
 	public
 	
-	function __construct($id=0)
+	function __construct($id=NULL)
 	{
 		
-		$status 		= $this->get('id', $id);
-		$this->alliance	= new d13_alliance();
-		$this->ally_status 	= $this->alliance->get('id', $this->data['alliance']);
+		$this->user_status = $this->get('id', $id);
 		
 	}
 	
 	// ----------------------------------------------------------------------------------------
-	//
+	// 
 	// ----------------------------------------------------------------------------------------
 
 	public
 
-	function get($idType, $id)
+	function get($idType, $id=NULL)
 	{
 		global $d13;
 		
-		$lower = '';
-		if (is_string($id)) {
-			$id = strtolower($id);
-			$result = $d13->dbQuery('select * from users where LOWER(' . $idType . ')= LOWER("' . strtolower($id) . '")');
-		} else {
-			$result = $d13->dbQuery('select * from users where ' . $idType . '="' . $id . '"');
-		}
+		if (!empty($id)) {
 		
-		$this->data = $d13->dbFetch($result);
-		if (isset($this->data['id'])) {
-			$status = 'done';
+			$lower = '';
+			if (is_string($id)) {
+				$id = strtolower($id);
+				$result = $d13->dbQuery('select * from users where LOWER(' . $idType . ')= LOWER("' . strtolower($id) . '")');
+			} else {
+				$result = $d13->dbQuery('select * from users where ' . $idType . '="' . $id . '"');
+			}
+		
+			$this->data = $d13->dbFetch($result);
+		
+			if (isset($this->data['id'])) {
+				$this->alliance	= new d13_alliance();
+				$this->ally_status 	= $this->alliance->get('id', $this->data['alliance']);
+				$status = 'done';
+			} else {
+				$status = 'noUser';
+			}
+		
 		} else {
 			$status = 'noUser';
 		}
+		
 		return $status;
 	}
 	

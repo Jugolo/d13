@@ -34,7 +34,7 @@
 //
 // ========================================================================================
 
-abstract class d13_object_base
+abstract class d13_gameobject_base
 
 {
 	

@@ -97,7 +97,7 @@ class d13_messageController extends d13_controller
 						$msg->data['viewed'] = 1;
 						$msg->set();
 					}
-					$user = new d13_user();
+					$user = $d13->createObject('user');
 					$status = $user->get('id', $msg->data['sender']);
 					if ($status == 'done') {
 						$msg->data['senderName'] = $user->data['name'];
@@ -169,7 +169,7 @@ class d13_messageController extends d13_controller
 						
 		$recipient = $subject = $body = '';
 		if (isset($msg->data['id'])) {
-			$user = new d13_user();
+			$user = $d13->createObject('user');
 			$status = $user->get('id', $msg->data['sender']);
 			if ($status == 'done') {
 				$recipient = $user->data['name'];

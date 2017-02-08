@@ -169,7 +169,9 @@ class d13_alliance
     public function addInvitation($userId)
     {
         global $d13;
-        $user = new d13_user();
+        
+        $user = $d13->createObject('user');
+        
         if ($user->get('id', $userId) == 'done') {
             $result = $d13->dbQuery('select count(*) as count from invitations where alliance="' . $this->data['id'] . '" and user="' . $userId . '"');
             $row = $d13->dbFetch($result);
@@ -193,7 +195,9 @@ class d13_alliance
         global $d13;
         $alliance = new d13_alliance();
         if ($alliance->get('id', $allianceId) == 'done') {
-            $user = new d13_user();
+            
+            $user = $d13->createObject('user');
+           
             if ($user->get('id', $userId) == 'done') {
                 $result = $d13->dbQuery('select count(*) as count from invitations where alliance="' . $allianceId . '" and user="' . $userId . '"');
                 $row = $d13->dbFetch($result);
@@ -216,7 +220,9 @@ class d13_alliance
         global $d13;
         $alliance = new d13_alliance();
         if ($alliance->get('id', $allianceId) == 'done') {
-            $user = new d13_user();
+        
+            $user = $d13->createObject('user');
+            
             if ($user->get('id', $userId) == 'done')
                 if (!$user->data['alliance']) {
                     $result = $d13->dbQuery('select count(*) as count from invitations where alliance="' . $allianceId . '" and user="' . $userId . '"');
@@ -243,7 +249,9 @@ class d13_alliance
     public function removeMember($userId)
     {
         global $d13;
-        $user = new d13_user();
+        
+        $user = $d13->createObject('user');
+        
         if ($user->get('id', $userId) == 'done') {
             $d13->dbQuery('update users set alliance=0 where id="' . $userId . '"');
             if ($d13->dbAffectedRows() > -1) $status = 'done';

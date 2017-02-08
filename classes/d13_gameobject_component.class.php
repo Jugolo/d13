@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// BUFF.CLASS
+// COMPONENT.CLASS
 //
 // !!! THIS FREE PROJECT IS DEVELOPED AND MAINTAINED BY A SINGLE HOBBYIST !!!
 // # Author......................: Tobias Strunz (Fhizban)
@@ -23,10 +23,18 @@
 //
 // NOTES:
 //
+// Components are like material required in order to build buildings or train units.
+// Components are optional, other objects can be bought with resources alone if the game
+// designers wishes to do that. The reason for components is an extended economic system
+// that requires players to craft components before being able to train the more powerful
+// units (e.g. use resource "Iron" to craft a "Sword" - require "Swords" to train "Swordman").
+//
+// a system like this has been seen in the old PC game classic "Knights & Merchants"
 //
 // ========================================================================================
 
-class d13_object_buff extends d13_object_base
+class d13_gameobject_component extends d13_gameobject_base
+
 {
 	
 	// ----------------------------------------------------------------------------------------
@@ -40,7 +48,7 @@ class d13_object_buff extends d13_object_base
 		parent::__construct($args, $node);
 	}
 
-	// ----------------------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------
 	// checkStatsExtended
 	// @
 	//
@@ -60,3 +68,4 @@ class d13_object_buff extends d13_object_base
 }
 
 // =====================================================================================EOF
+

@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// MODULE.CLASS
+// BUFF.CLASS
 //
 // !!! THIS FREE PROJECT IS DEVELOPED AND MAINTAINED BY A SINGLE HOBBYIST !!!
 // # Author......................: Tobias Strunz (Fhizban)
@@ -16,26 +16,22 @@
 // Represents the lowest layer, next to the database. All logic checks must be performed
 // by a controller beforehand. Any class function calls directly access the database. 
 // 
-// ABOUT MODULES:
-//
-// Modules are Building Objects. Each Node (Town) can contain one or more Modules. Modules
-// are the only objects that feature a level and can be upgraded directly. Most of the
-// main gameplay features are handled using modules. Modules require a worker resource in
-// order to be built/upgraded and require this worker resource in order to function as well.
+// ABOUT OBJECTS:
+// 
+// The most important objects in the game have been grouped into a class "objects". This
+// includes modules, technologies, units, components and so on. 
 //
 // NOTES:
 //
-// 
 //
 // ========================================================================================
 
-class d13_module_trade extends d13_gameobject_module
-
+class d13_gameobject_buff extends d13_gameobject_base
 {
+	
 	// ----------------------------------------------------------------------------------------
 	// construct
-	// @
-	//
+	// @ Calls base object constructor with an array based argument list
 	// ----------------------------------------------------------------------------------------
 	public
 
@@ -43,59 +39,24 @@ class d13_module_trade extends d13_gameobject_module
 	{
 		parent::__construct($args, $node);
 	}
-	
+
 	// ----------------------------------------------------------------------------------------
-	// getInventory
+	// checkStatsExtended
 	// @
 	//
 	// ----------------------------------------------------------------------------------------
 
 	public
 
-	function getInventory()
-	{
-		return '';
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// getPopup
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function getPopup()
-	{
-		return '';
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// getQueue
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function getQueue()
-	{
-		return '';
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// getOutputList
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-
-	public
-
-	function getOutputList()
+	function checkStatsExtended()
 	{
 		global $d13;
-		return $d13->getLangUI("none");
+
+		
+		
 	}
+
+
 }
 
-?>
+// =====================================================================================EOF

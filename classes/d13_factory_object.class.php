@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// TECHNOLOGY.CLASS
+// OBJECT.FACTORY.CLASS
 //
 // !!! THIS FREE PROJECT IS DEVELOPED AND MAINTAINED BY A SINGLE HOBBYIST !!!
 // # Author......................: Tobias Strunz (Fhizban)
@@ -16,51 +16,54 @@
 // Represents the lowest layer, next to the database. All logic checks must be performed
 // by a controller beforehand. Any class function calls directly access the database. 
 // 
-// ABOUT OBJECTS:
-// 
-// The most important objects in the game have been grouped into a class "objects". This
-// includes modules, technologies, units, components and so on. 
-//
 // NOTES:
 //
-// Represents technologies that a user can research. Allows to upgrade all other object
-// types or unlock new object types. Allows to create a "tech-tree".
+// A simple factory class that is responsible for creating new instances of objects.
 //
-// Technologies are UNIQUE to each node (town). There will be a share/trade option later.
 //
 // ========================================================================================
 
-class d13_object_technology extends d13_object_base
+class d13_factory_object extends d13_factory_base
+
 {
-	
-	// ----------------------------------------------------------------------------------------
-	// construct
-	// @ Calls base object constructor with an array based argument list
-	// ----------------------------------------------------------------------------------------
-	public
-
-	function __construct($args, &$node)
-	{
-		parent::__construct($args, $node);
-	}
 
 	// ----------------------------------------------------------------------------------------
-	// checkStatsExtended
-	// @
+	// constructor
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
-	function checkStatsExtended()
+	function __construct()
 	{
-		global $d13;
-
-		
-		
+	
+	
 	}
 
+	// ----------------------------------------------------------------------------------------
+	// create
+	//
+	// ----------------------------------------------------------------------------------------
+    public
 
+    function create($type, $id=NULL)
+    {
+
+        
+        switch ($type) {
+        
+            case 'user':
+                return new d13_user($id);
+                break;
+
+            
+            
+            default:
+                return NULL;
+                break;
+        }
+        
+    }
+    
 }
 
 // =====================================================================================EOF

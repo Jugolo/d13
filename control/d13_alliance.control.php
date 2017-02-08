@@ -144,7 +144,9 @@ class d13_allianceController extends d13_controller
 
 				if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) $html.= '<div class="section" style="margin-top: 5px;"> -> {{tvar_ui_invitations}} | <a class="external" href="index.php?p=alliance&action=addInvitation">{{tvar_ui_invite}}</a></div>';
 				foreach($this->alliance->invitations as $invitation) {
-					$user = new d13_user();
+					
+					$user = $d13->createObject('user');
+					
 					if ($user->get('id', $invitation['user']) == 'done') {
 						$accept = '';
 						$removeLabel = 'x';
@@ -175,7 +177,8 @@ class d13_allianceController extends d13_controller
 				if ($invitations) {
 					$html.= '<div class="section"> -> {{tvar_ui_invitations}}</div>';
 					foreach($invitations as $invitation) {
-						$user = new d13_user();
+						$user = $d13->createObject('user');
+						
 						if ($user->get('id', $invitation['user']) == 'done') {
 							$accept = '';
 							$removeLabel = 'x';
@@ -405,7 +408,7 @@ class d13_allianceController extends d13_controller
 			if ($_POST['name'] != '')
 			if ($this->ally_status == 'done')
 			if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$user = new d13_user();
+				$user = $d13->createObject('user');
 				if ($user->get('name', $_POST['name']) == 'done') {
 					$status = $this->alliance->addInvitation($user->data['id']);
 					if ($status == 'done') {
@@ -561,7 +564,7 @@ class d13_allianceController extends d13_controller
 				if ($this->alliance->data['id'] != $recipientAlliance->data['id']) {
 					$status = $this->alliance->addWar($recipientAlliance->data['id']);
 					if ($status == 'done') {
-						$user = new d13_user();
+						$user = $d13->createObject('user');
 						if ($user->get('id', $recipientAlliance->data['user']) == 'done') {
 							$user->getPreferences('name');
 							if ($user->preferences['allianceReports']) {
@@ -687,7 +690,7 @@ class d13_allianceController extends d13_controller
 			if ($senderAlliance->get('id', $_GET['sender']) == 'done') {
 				$status = $this->alliance->acceptPeace($senderAlliance->data['id']);
 				if ($status == 'done') {
-					$user = new d13_user();
+					$user = $d13->createObject('user');
 					if ($user->get('id', $senderAlliance->data['user']) == 'done') {
 						$user->getPreferences('name');
 						if ($user->preferences['allianceReports']) {

@@ -596,7 +596,7 @@ class d13_nodeController extends d13_controller
 					// - - - Module built
 					} else if ($module['module'] > - 1) {
 					
-						$the_module = d13_module_factory::create($module['module'], $module['slot'], $this->node);
+						$the_module = $d13->createModule($module['module'], $module['slot'], $this->node);
 						
 						$tvars['tvar_moduleLink'] = "index.php?p=module&action=get&nodeId=" . $this->node->data['id'] . "&slotId=" . $module['slot'];
 						$tvars['tvar_moduleImage'] = $the_module->data['image'];

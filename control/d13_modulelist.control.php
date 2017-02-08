@@ -79,7 +79,7 @@ class d13_moduleListController extends d13_controller
 			
 			if ($count < $d13->getModule($this->node->data['faction'], $module['id'], 'maxInstances')) {
 				$tmp_module = NULL;
-				$tmp_module = d13_module_factory::create($module['id'], $this->slotId, $this->node);
+				$tmp_module = $d13->createModule($module['id'], $this->slotId, $this->node);
 				$tvars['tvar_sub_list'].= $d13->templateSubpage("sub.module.list", $tmp_module->getTemplateVariables());
 			}
 		}
