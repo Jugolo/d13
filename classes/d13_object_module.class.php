@@ -66,7 +66,7 @@ class d13_object_module extends d13_object_base
 		
 		$this->data['base_maxinput'] 	 = $this->data['maxInput'];
 		$this->data['base_ratio']		 = $this->data['ratio'];
-		$this->data['moduleProduction']  = $this->data['ratio'] * $d13->getGeneral('users', 'efficiency', 'harvest') * $this->node->getBuff('efficiency', 'harvest') * $this->node->modules[$this->data['slotId']]['input'];
+		$this->data['moduleProduction']  = ($this->data['ratio'] + $this->data['upgrade_ratio']) * $d13->getGeneral('users', 'efficiency', 'harvest') * $this->node->getBuff('efficiency', 'harvest') * $this->node->modules[$this->data['slotId']]['input'];
 		$this->data['totalIR'] 			 = $this->node->modules[$this->data['slotId']]['input'] * $this->data['ratio'];
 		$this->data['cost'] 			 = $this->getCost();
 		
@@ -258,7 +258,7 @@ class d13_object_module extends d13_object_base
 				if ($this->node->modules[$this->data['slotId']]['input'] <= 0) {
 
 					$vars['tvar_button_name'] 	 = $d13->getLangUI("removeModule");
-					$vars['tvar_button_link'] 	 = "?p=module&action=remove&nodeId='.$this->node->data['id'].'&slotId='.$this->data['slotId'].'";
+					$vars['tvar_button_link'] 	 = "?p=module&action=remove&nodeId=".$this->node->data['id']."&slotId=".$this->data['slotId'];
 					$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipDemolishModule"));
 					$html = $d13->templateSubpage("button.external.enabled", $vars);
 					
@@ -321,7 +321,7 @@ class d13_object_module extends d13_object_base
 					
 					$tvars['tvar_title'] 			= $d13->getLangUI("addModule");
 					$tvars['tvar_moduleInputName'] 	= $this->data['moduleInputName'];
-					$tvars['tvar_moduleInputImage'] = $d13->getResource($this->data['moduleInput'], 'image');
+					$tvars['tvar_moduleInputImage'] = $d13->getResource($this->data['moduleInput'], 'icon');
 					$tvars['tvar_moduleDuration'] 	= $this->data['duration'];
 					$tvars['tvar_costData'] = $this->getCostList();
 					$tvars['tvar_requirementsData'] = $this->getRequirementsList();
@@ -360,7 +360,7 @@ class d13_object_module extends d13_object_base
 						
 							$tvars['tvar_title'] 			= $d13->getLangUI("upgrade");
 							$tvars['tvar_moduleInputName'] 	= $this->data['moduleInputName'];
-							$tvars['tvar_moduleInputImage'] = $d13->getResource($this->data['moduleInput'], 'image');
+							$tvars['tvar_moduleInputImage'] = $d13->getResource($this->data['moduleInput'], 'icon');
 							$tvars['tvar_moduleDuration'] 	= $this->data['duration'];
 							$tvars['tvar_costData'] 		= $this->getCostList(true);
 							$tvars['tvar_requirementsData'] = $this->getRequirementsList();

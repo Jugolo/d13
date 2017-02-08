@@ -3,6 +3,6 @@
 		{{tvar_itemImage}}
 	</div>
 	<div class="chip-label">
-		{{tvar_itemTitle}} [{{tvar_itemTimer}} {{tvar_itemCancel}} {{tvar_itemScript}}
+		{{tvar_itemTitle}} {{tvar_itemTimer}} {{tvar_itemCancel}} {{tvar_itemScript}}
 	</div>
 </div>

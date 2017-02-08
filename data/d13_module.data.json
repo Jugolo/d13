@@ -519,7 +519,7 @@
       "maxLevel": 1,
       "inputResource": 3,
       "ratio": 0.05,
-      "maxInput": 10,
+      "maxInput": 30,
       "duration": 10,
       "salvage": 0.5,
       "removeDuration": 1,

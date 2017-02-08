@@ -59,8 +59,8 @@
   ],
   "buffs": [
     {
-      "name": "production buff",
-      "description": "increases production speed of this town for a period of time."
+      "name": "24 Hour Shift",
+      "description": "Increases production ratio of all harvest buildings inside this town for the next 24 hours."
     }
   ],  
   "factions": [
@@ -489,7 +489,7 @@
     [
       {
         "name": "Gold mine",
-        "description": "Gold mines produce gold."
+        "description": "The Gold Mine produces gold. Upgrade it to boost its production and worker capacity."
       },
       {
         "name": "Lumber mill",
@@ -521,11 +521,11 @@
       },
       {
         "name": "Laboratory",
-        "description": "New technologies are researched here."
+        "description": "The Laboratory allows you to research new Technologies in order to increase your Towns capabilities."
       },
       {
         "name": "Blackmarket",
-        "description": "Buy components, resources and other useful items."
+        "description": "Here at the Blackmarket, you can buy components, resources and other useful items."
       },
       {
         "name": "Gold Storage",

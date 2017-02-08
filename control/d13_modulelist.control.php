@@ -63,7 +63,7 @@ class d13_moduleListController extends d13_controller
 		$tvars['tvar_sub_list'] = "";
 		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
 		
-		$this->node->getQueue("build");
+		$this->node->queues->getQueue("build");
 		
 		foreach($d13->getModule($this->node->data['faction']) as $module) {
 		

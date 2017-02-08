@@ -42,6 +42,20 @@ Installation steps:
 
 End User Requirements: Up to date browser with HTML5 / CSS3 capability.
 
+EDITING THE GAME
+------------------------------------------------------------------------------------------
+If you want to create your own game using d13, you should ignore the sourcecode as whole
+and edit the data files instead. Change all file contents to your liking before installing
+the game:
+
+1. Edit all game data files inside /data
+2. Edit the language files inside /locales (new folders are added automatically to system)
+3. Edit the template in /templates by duplicating the default template
+
+New templates are added automatically and users can change their templates in the settings,
+you can also change the default template in /config
+
+
 CREDITS
 ------------------------------------------------------------------------------------------
 2008-2013 Andrei Busuioc (Devman)

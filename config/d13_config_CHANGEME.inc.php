@@ -39,9 +39,9 @@ define("CONST_SESSION_LIFETIME", 	2592000);
 define("CONST_COOKIE_LIFETIME", 	2592000);
 
 //- - - - - DEFAULT TEMPLATE SETTINGS
-define("CONST_DEFAULT_COLOR", 		"red");
-define("CONST_DEFAULT_TEMPLATE", 	"default");
-define("CONST_DEFAULT_LOCALE", 		"en");
+define("CONST_DEFAULT_COLOR", 		"red");									// one of the 10 iOS colors
+define("CONST_DEFAULT_TEMPLATE", 	"default");								// must be a folder in templates
+define("CONST_DEFAULT_LOCALE", 		"en");									// must be a folder in locales
 
 //=====================================================================================EOF
 

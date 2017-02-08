@@ -584,13 +584,16 @@ class d13_nodeController extends d13_controller
 					if ($i == 0) {
 						$tvars['tvar_getHTMLNode'].= '<div class="row no-gutter">';
 					}
-
+					
+					// - - - Module under construction
 					if ($buildQueue[$module['slot']]['check']) {
 						$tvars['tvar_moduleLink'] = "";
 						$tvars['tvar_moduleImage'] = $buildQueue[$module['slot']]['image'][0]['image'];
-						$tvars['tvar_moduleClass'] = '<img class="spinner resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/gear.png">';
+						$tvars['tvar_moduleSpinner'] = '<img class="spinner resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/gear.png">';
 						$tvars['tvar_moduleLabel'] = $d13->getLangUI("underConstruction");
 						$tvars['tvar_getHTMLNode'].= $d13->templateSubpage("sub.node.module", $tvars);
+						$tvars['tvar_moduleClass'] = "";
+					// - - - Module built
 					} else if ($module['module'] > - 1) {
 					
 						$the_module = d13_module_factory::create($module['module'], $module['slot'], $this->node);
@@ -598,7 +601,12 @@ class d13_nodeController extends d13_controller
 						$tvars['tvar_moduleLink'] = "index.php?p=module&action=get&nodeId=" . $this->node->data['id'] . "&slotId=" . $module['slot'];
 						$tvars['tvar_moduleImage'] = $the_module->data['image'];
 						if (($module['input'] <= 0 && $d13->getModule($this->node->data['faction'], $module['module'], 'maxInput') > 0) || ($d13->getModule($this->node->data['faction'], $module['module'], 'type') == 'defense' && $module['input'] < $d13->getModule($this->node->data['faction'], $module['module'], 'maxInput'))) {
-							$tvars['tvar_moduleClass'] = '<a href="#" class="tooltip-left" data-tooltip="' . $d13->getLangUI("no") . " " . $d13->getLangGL('resources', $the_module->data['inputResource'], 'name') . '"><img class="animated bounce resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/exclamation.png"></a>';
+							$tvars['tvar_moduleSpinner'] = '<a href="#" class="tooltip-left" data-tooltip="' . $d13->getLangUI("no") . " " . $d13->getLangGL('resources', $the_module->data['inputResource'], 'name') . '"><img class="animated bounce resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/exclamation.png"></a>';
+						} else {
+							$tvars['tvar_moduleSpinner'] = "";
+						}
+						if (isset($_GET['focusId']) && $_GET['focusId'] == $module['slot']) {
+							$tvars['tvar_moduleClass'] = "animated tada";
 						} else {
 							$tvars['tvar_moduleClass'] = "";
 						}
@@ -608,12 +616,15 @@ class d13_nodeController extends d13_controller
 							$tvars['tvar_moduleLabel'] = $d13->getLangGL("modules", $this->node->data['faction'], $module['module'], "name");
 						}
 						$tvars['tvar_getHTMLNode'].= $d13->templateSubpage("sub.node.module", $tvars);
+					
+					// - - - Empty Slot
 					} else {
 						$tvars['tvar_moduleLink'] = "index.php?p=module&action=list&nodeId=" . $this->node->data['id'] . "&slotId=" . $module['slot'];
 						mt_srand($module['slot']*$sector);
 						$imgid = mt_rand(0,9);
 						$tvars['tvar_moduleImage'] = "module_empty_".$imgid.".png";
 						$tvars['tvar_moduleClass'] = "";
+						$tvars['tvar_moduleSpinner'] = "";
 						$tvars['tvar_moduleLabel'] = $d13->getLangUI("emptySlot") . ' ' . $d13->getLangUI("clickToBuild");
 						$tvars['tvar_getHTMLNode'].= $d13->templateSubpage("sub.node.module", $tvars);
 					}

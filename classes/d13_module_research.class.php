@@ -120,12 +120,14 @@ class d13_module_research extends d13_object_module
 				
 				$i++;
 				
-				$args = array();
-				$args['supertype'] 	= 'technology';
-				$args['obj_id'] 	= $tid;
-				$args['node'] 		= $this->node;
+				#$args = array();
+				#$args['supertype'] 	= 'technology';
+				#$args['obj_id'] 	= $tid;
+				#$args['node'] 		= $this->node;
 				
-				$tmp_technology = new d13_object_technology($args);
+				#$tmp_technology = new d13_object_technology($args);
+				
+				$tmp_technology = d13_object_factory::create('technology', $tid, $this->node);
 				
 				// - - - - - Check Cost & Requirements
 				$costData = $tmp_technology->getCostList();

@@ -275,7 +275,7 @@ class d13_queue
 		$tvars['tvar_itemImage'] 		= '<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/'.$icon.'">';
 		$tvars['tvar_itemTitle'] 		= $action . ' ' . $name;
 		$tvars['tvar_itemTimer'] 		= '<span id="'.$item['type'].'_' . $token . '_' . $item['node'] . '_' . $item['slot'] . '_' .  $item['obj_id'] . '">' . implode(':', d13_misc::sToHMS($remaining)) . '</span>';
-		$tvars['tvar_itemScript']		= '<script type="text/javascript">timedJump("'.$item['type'].'_' . $token . '_' . $item['node'] . '_' . $item['slot'] . '_' . $item['obj_id'] .'", "index.php?p=node&action=get&nodeId=' . $this->node->data['id'] . '");</script>';
+		$tvars['tvar_itemScript']		= '<script type="text/javascript">timedJump("'.$item['type'].'_' . $token . '_' . $item['node'] . '_' . $item['slot'] . '_' . $item['obj_id'] .'", "index.php?p=node&action=get&nodeId=' . $this->node->data['id'] . '&focusId=' . $item['slot'] .'");</script>';
 		$tvars['tvar_itemCancel'] 		= $cancel . ' <img class="d13-micron" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 		$tvars['tvar_itemPercentage']	= d13_misc::percentage($remaining, $item['duration']);
 		$html .= $d13->templateSubpage("sub.queue.item", $tvars);

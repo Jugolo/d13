@@ -4,7 +4,7 @@
     "icon": "buff.png",
     "active": true,
     "priority": 5,
-    "duration": 60,
+    "duration": 1440,
     "type": "efficiency",
     "buff": "harvest",
     "modifier": 0.1,
