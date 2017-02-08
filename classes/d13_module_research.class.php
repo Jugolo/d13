@@ -119,8 +119,12 @@ class d13_module_research extends d13_gameobject_module
 			if ($technology['active'] && in_array($tid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'technologies')) && ($this->node->technologies[$tid]['level'] < $technology['maxLevel'])) {
 				
 				$i++;
-
-				$tmp_technology = $d13->createGameObject('technology', $tid, $this->node);
+				
+				$args = array();
+				$args['supertype'] = 'technology';
+				$args['id'] = $tid;
+				
+				$tmp_technology = $d13->createGameObject($args, $this->node);
 				
 				// - - - - - Check Cost & Requirements
 				$costData = $tmp_technology->getCostList();

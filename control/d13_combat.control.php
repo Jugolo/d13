@@ -228,11 +228,10 @@ class d13_combatController extends d13_controller
 					$id = $d13->getUnit($this->node->data['faction'], $key, 'id');
 					
 					$args = array();
-					$args['supertype'] 	= 'unit';
-					$args['obj_id'] 	= $id;
-					$args['node'] 		= $this->node;
-				
-					$tmp_unit = new d13_gameobject_unit($args);
+					$args['supertype'] = 'unit';
+					$args['id'] = $id;
+					
+					$tmp_unit = $d13->createGameObject($args, $this->node);
 					
 					$d13->templateInject($d13->templateSubpage("sub.popup.unit", $tmp_unit->getTemplateVariables()));
 	
@@ -337,7 +336,7 @@ class d13_combatController extends d13_controller
 				}
 		
 				$tvars['tvar_resources'] .= '<input type="hidden" name="availableRes[]" id="'.$idv.'" value="'.floor($this->node->resources[$resource]['value']).'">';
-				$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'image') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '"><span name="totalRes[]" id="'.$idr.'">'.$cost . '</span></span>';
+				$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'icon') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '"><span name="totalRes[]" id="'.$idr.'">'.$cost . '</span></span>';
 
 			} else if (isset($res['component'])) {
 		
@@ -346,7 +345,7 @@ class d13_combatController extends d13_controller
 				
 				$args = array();
 				$args['supertype'] 	= 'component';
-				$args['obj_id'] 	= $res['component'];
+				$args['id'] 		= $res['component'];
 				$args['node'] 		= $this->node;
 				
 				$tmp_component = new d13_gameobject_component($args);

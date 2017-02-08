@@ -309,7 +309,11 @@ class d13_node
 					if ($item['object'] == $objectType && $item['id'] == $objectId) {
 						$ok = 1;
 						
-						$tmp_object = $d13->createGameObject($item['object'], $item['id'], $this);
+						$args = array();
+						$args['supertype'] = $item['object'];
+						$args['id'] = $item['id'];
+						
+						$tmp_object = $d13->createGameObject($args, $this);
 						$total = $item['amount']+$tmp_module->data['priceModifier'];
 						
 						if ($tmp_object->getCheckConvertedCost($tmp_module->data['paymentResource'], $total)) {
@@ -413,8 +417,12 @@ class d13_node
 				$result = $d13->dbQuery('select count(*) as count from research where node="' . $this->data['id'] . '" and obj_id="' . $technologyId . '"');
 				$row = $d13->dbFetch($result);
 				if (!$row['count']) {
-
-					$tmp_technology = $d13->createGameObject('technology', $technologyId, $this);
+					
+					$args = array();
+					$args['supertype'] = 'technology';
+					$args['id'] = $technologyId;
+					
+					$tmp_technology = $d13->createGameObject($args, $this);
 					
 					$technology['requirementsData'] = $this->checkRequirements($d13->getTechnology($this->data['faction'],$technologyId,'requirements'));
 					if ($technology['requirementsData']['ok']) {
@@ -742,8 +750,12 @@ class d13_node
 			if (isset($this->modules[$slotId]['module']))
 			if (in_array($componentId, $d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'components'))) $okModule = 1;
 			if ($okModule) {
-			
-				$tmp_component = $d13->createGameObject('component', $componentId, $this);
+				
+				$args = array();
+				$args['supertype'] = 'component';
+				$args['id'] = $componentId;
+				
+				$tmp_component = $d13->createGameObject($args, $this);
 			
 				$component['requirementsData'] = $this->checkRequirements($d13->getComponent($this->data['faction'], $componentId, 'requirements') , $quantity);
 				if ($component['requirementsData']['ok'])
@@ -1004,8 +1016,12 @@ class d13_node
 				if ($army[$key] > $group['value']) {
 					$okUnits = 0;
 				} else if ($army[$key] > 0) {
-				
-					$tmp_unit = $d13->createGameObject('unit', $key, $node);
+					
+					$args = array();
+					$args['supertype'] = 'unit';
+					$args['id'] = $key;
+					
+					$tmp_unit = $d13->createGameObject($args, $node);
 					
 					$totalFuel += $tmp_unit->data['fuel'] * $army[$key];
 					if ($tmp_unit->data['speed'] < $speed) {

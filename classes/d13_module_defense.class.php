@@ -62,7 +62,7 @@ class d13_module_defense extends d13_gameobject_module
 		
 		$args = array();
 		$args['supertype'] 	= 'turret';
-		$args['obj_id'] 	= $this->data['unitId'];
+		$args['id'] 		= $this->data['unitId'];
 		$args['level'] 		= $this->data['level'];
 		$args['input'] 		= $this->data['input'];
 		$args['node'] 		= $this->node;

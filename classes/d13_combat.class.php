@@ -107,10 +107,9 @@ class d13_combat
 
 				$args = array();
 				$args['supertype'] 	= 'unit';
-				$args['obj_id'] 	= $group['unitId'];
-				$args['node'] 		= $this->attackerNode;
-				
-				$unit = new d13_gameobject_unit($args);
+				$args['id']	= $group['unitId'];
+								
+				$unit = $d13->createGameObject($args, $this->attackerNode);
 				
 				if (!empty($unit->data['armyAttackModifier'])) {
 					foreach ($unit->data['armyAttackModifier'] as $modifier) {
@@ -125,10 +124,9 @@ class d13_combat
 			
 				$args = array();
 				$args['supertype'] 	= 'unit';
-				$args['obj_id'] 	= $group['unitId'];
-				$args['node'] 		= $this->attackerNode;
+				$args['id']	= $group['unitId'];
 				
-				$unit = new d13_gameobject_unit($args);
+				$unit = $d13->createGameObject($args, $this->attackerNode);
 				
 				$stats = $unit->getStats();
 				$upgrades = $unit->getUpgrades();
@@ -215,14 +213,13 @@ class d13_combat
 			$armyBonus = array();	
 			foreach($data['input']['defender']['groups'] as $key => $group) {
 				if (isset($group['quantity']) && $group['quantity'] > 0) {
-			
+					
 					$args = array();
-					$args['supertype'] 	= 'unit';
-					$args['obj_id'] 	= $group['unitId'];
-					$args['node'] 		= $this->defenderNode;
+					$args['supertype'] = 'unit';
+					$args['id'] = $group['unitId'];
 				
-					$unit = new d13_gameobject_unit($args);
-			
+					$unit = $d13->createGameObject($args, $this->defenderNode);
+					
 					if (!empty($unit->data['armyDefenseModifier'])) {
 						foreach ($unit->data['armyDefenseModifier'] as $modifier) {
 							$armyBonus[] = $modifier;
@@ -236,14 +233,13 @@ class d13_combat
 				// - - - - - UNITS
 
 				if (isset($group['quantity']) && $group['type'] == 'unit' && $group['quantity'] > 0) {
-				
+					
 					$args = array();
-					$args['supertype'] 	= 'unit';
-					$args['obj_id'] 	= $group['unitId'];
-					$args['node'] 		= $this->defenderNode;
-				
-					$unit = new d13_gameobject_unit($args);
-				
+					$args['supertype'] = 'unit';
+					$args['id'] = $group['unitid'];
+					
+					$unit = $d13->createGameObject($args, $this->defenderNode);
+					
 					$stats = $unit->getStats();
 					$upgrades = $unit->getUpgrades();
 				
@@ -291,14 +287,13 @@ class d13_combat
 							
 					$args = array();
 					$args['supertype'] 	= 'turret';
-					$args['obj_id'] 	= $group['moduleId'];
+					$args['id']	= $group['moduleId'];
 					$args['level'] 		= $group['level'];
 					$args['input'] 		= $group['input'];
 					$args['unitId'] 	= $group['unitId'];
-					$args['node'] 		= $this->defenderNode;
-				
-					$turret = new d13_gameobject_turret($args);
-				
+					
+					$turret = $d13->createGameObject($args, $this->defenderNode);
+					
 					$stats = $turret->getStats();
 					$upgrades = $turret->getUpgrades();
 				
@@ -952,11 +947,11 @@ class d13_combat
 				
 				$args = array();
 				$args['supertype'] 	= 'unit';
-				$args['obj_id'] 	= $group['unitId'];
+				$args['id']	= $group['unitId'];
 				$args['node'] 		= $this->defenderNode;
 				
-				$unit = new d13_gameobject_unit($args);
-				
+				$unit = $d13->createGameObject($args, $this->defenderNode);
+								
 				$stats = $unit->getStats();
 				$upgrades = $unit->getUpgrades();
 			
@@ -1240,7 +1235,7 @@ class d13_combat
 				}
 					
 				$vars = array();
-				$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($result['resource'], 'image');
+				$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($result['resource'], 'icon');
 				$vars['tvar_listLabel'] 	= $d13->getLangGL('resources', $result['resource'], 'name');
 				$vars['tvar_listAmount'] 	= '+'.$result['value'];
 			
@@ -1288,7 +1283,7 @@ class d13_combat
 			}
 					
 			$vars = array();
-			$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($result['resource'], 'image');
+			$vars['tvar_listImage'] 	= CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($result['resource'], 'icon');
 			$vars['tvar_listLabel'] 	= $d13->getLangGL('resources', $result['resource'], 'name');
 			$vars['tvar_listAmount'] 	= floor($result['value']);
 		
@@ -1526,10 +1521,9 @@ class d13_combat
 				
 				$args = array();
 				$args['supertype'] 	= 'unit';
-				$args['obj_id'] 	= $group['unitId'];
-				$args['node'] 		= $this->attackerNode;
+				$args['id']	= $group['unitId'];
 				
-				$unit = new d13_gameobject_unit($args);
+				$unit = $d13->createGameObject($args, $this->attackerNode);
 				
 				$name 			= $unit->data['name'];
 				$label 			= $group['quantity']. "/" .$data['input']['attacker']['groups'][$key]['quantity'];
@@ -1625,10 +1619,9 @@ class d13_combat
 					
 					$args = array();
 					$args['supertype'] 	= 'unit';
-					$args['obj_id'] 	= $group['unitId'];
-					$args['node'] 		= $this->defenderNode;
-				
-					$unit = new d13_gameobject_unit($args);
+					$args['id']	= $group['unitId'];
+									
+					$unit = $d13->createGameObject($args, $this->defenderNode);
 					
 					$name 			= $unit->data['name'];
 					$label 			= $group['quantity']. "/" .$data['input']['defender']['groups'][$key]['quantity'];
@@ -1671,10 +1664,9 @@ class d13_combat
 					
 					$args = array();
 					$args['supertype'] 	= 'turret';
-					$args['obj_id'] 	= $group['unitId'];
-					$args['node'] 		= $this->defenderNode;
-				
-					$unit = new d13_gameobject_unit($args);
+					$args['id']	= $group['unitId'];
+										
+					$unit = $d13->createGameObject($args, $this->defenderNode);
 					
 					$name 			= $unit->data['name'];
 					$label 			= $group['quantity']. "/" .$data['input']['defender']['groups'][$key]['quantity'];

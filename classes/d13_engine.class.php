@@ -71,9 +71,9 @@ class d13_engine
 
 	public
 	
-	function createGameObject($type, $objectId, &$node)
+	function createGameObject($args, &$node)
 	{
-		return $this->factory->createGameObject($type, $objectId, $node);
+		return $this->factory->createGameObject($args, $node);
 	}
 	
 	public

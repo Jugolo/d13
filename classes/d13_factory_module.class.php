@@ -55,7 +55,7 @@ class d13_factory_module extends d13_factory_base
         $args = array();
         $args['type']		= $d13->getModule($node->data['faction'], $moduleId, 'type');
         $args['supertype'] 	= 'module';
-        $args['obj_id'] 	= $moduleId;
+        $args['id'] 		= $moduleId;
         $args['slotId'] 	= $slotId;
 
         switch ($args['type']) {

@@ -65,8 +65,12 @@ class d13_module_market extends d13_gameobject_module
 		if ($this->data['options']['inventoryList']) {
 
 			foreach ($this->data['inventory'] as $object) {
-			
-				$tmp_object = $d13->createGameObject($object['object'], $object['id'], $this->node);
+				
+				$args = array();
+				$args['supertype'] = $item['object'];
+				$args['id'] = $item['id'];
+				
+				$tmp_object = $d13->createGameObject($args, $this->node);
 				
 				if ($tmp_object->data['active']) {
 					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $tmp_object->data['imgdir'] . '/' . $tmp_object->data['image'] . '" title="' . $tmp_object->data['name'] . '">';
@@ -132,8 +136,12 @@ class d13_module_market extends d13_gameobject_module
 				$inventory = json_decode($object['inventory'], TRUE);
 				
 				foreach ($inventory as $item) {
-						
-					$tmp_object = $d13->createGameObject($item['object'], $item['id'], $this->node);
+					
+					$args = array();
+					$args['supertype'] = $item['object'];
+					$args['id'] = $item['id'];
+				
+					$tmp_object = $d13->createGameObject($args, $this->node);
 					
 					if ($tmp_object->data['active']) {
 						
@@ -290,7 +298,11 @@ class d13_module_market extends d13_gameobject_module
 		if (isset($this->data['inventory'])) {
 			foreach($this->data['inventory'] as $object) {
 				
-				$tmp_object = $d13->createGameObject($object['object'], $object['id'], $this->node);
+				$args = array();
+				$args['supertype'] = $object['unit'];
+				$args['id'] = $object['id'];
+				
+				$tmp_object = $d13->createGameObject($args, $this->node);
 				
 				if ($tmp_object->data['active']) {
 					$html.= '<a class="tooltip-left" data-tooltip="' . $tmp_object->data['name'] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $tmp_object->data['imgdir'] . '/' . $tmp_object->data['image'] . '" title="' . $tmp_object->data['name'] . '"></a>';

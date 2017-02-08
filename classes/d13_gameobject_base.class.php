@@ -79,40 +79,40 @@ abstract class d13_gameobject_base
 		{
 		
 			case 'module':
-				$data 	= $d13->getModule($this->node->data['faction'], $args['obj_id']);
-				$name 	= $d13->getLangGL("modules", $this->node->data['faction'], $args['obj_id'], "name");
-				$desc 	= $d13->getLangGL("modules", $this->node->data['faction'], $args['obj_id'], "description");
+				$data 	= $d13->getModule($this->node->data['faction'], $args['id']);
+				$name 	= $d13->getLangGL("modules", $this->node->data['faction'], $args['id'], "name");
+				$desc 	= $d13->getLangGL("modules", $this->node->data['faction'], $args['id'], "description");
 				$level 	= $this->node->modules[$args['slotId']]['level'];
-				$type	= $d13->getModule($this->node->data['faction'], $args['obj_id'], 'type');
+				$type	= $d13->getModule($this->node->data['faction'], $args['id'], 'type');
 				$input	= $this->node->modules[$args['slotId']]['input'];
 				$ctype 	= 'build';
 				$slot	= $args['slotId'];	
-				$amount = $this->node->getModuleCount($args['obj_id']);
+				$amount = $this->node->getModuleCount($args['id']);
 				$imgdir = 'modules' . '/' . $this->node->data['faction'];
 				$resimg = $data['icon'];
 				$resname= $name;
 				break;
 						
 			case 'component':
-				$data 	= $d13->getComponent($this->node->data['faction'], $args['obj_id']);
-				$name 	= $d13->getLangGL("components", $this->node->data['faction'], $args['obj_id'], "name");
-				$desc 	= $d13->getLangGL("components", $this->node->data['faction'], $args['obj_id'], "description");
+				$data 	= $d13->getComponent($this->node->data['faction'], $args['id']);
+				$name 	= $d13->getLangGL("components", $this->node->data['faction'], $args['id'], "name");
+				$desc 	= $d13->getLangGL("components", $this->node->data['faction'], $args['id'], "description");
 				$level 	= 0;
 				$type	= $args['supertype'];
 				$input	= 0;
 				$ctype 	= 'craft';
 				$slot	= 0;
-				$amount = $this->node->components[$args['obj_id']]['value'];
+				$amount = $this->node->components[$args['id']]['value'];
 				$imgdir = 'components' . '/' . $this->node->data['faction'];
 				$resimg = $data['icon'];
 				$resname= $d13->getLangGL("resources", $data['storageResource'], "name");
 				break;
 				
 			case 'technology':
-				$data 	= $d13->getTechnology($this->node->data['faction'], $args['obj_id']);
-				$name 	= $d13->getLangGL("technologies", $this->node->data['faction'], $args['obj_id'], "name");
-				$desc 	= $d13->getLangGL("technologies", $this->node->data['faction'], $args['obj_id'], "description");
-				$level 	= $this->node->technologies[$args['obj_id']]['level'];
+				$data 	= $d13->getTechnology($this->node->data['faction'], $args['id']);
+				$name 	= $d13->getLangGL("technologies", $this->node->data['faction'], $args['id'], "name");
+				$desc 	= $d13->getLangGL("technologies", $this->node->data['faction'], $args['id'], "description");
+				$level 	= $this->node->technologies[$args['id']]['level'];
 				$type	= $args['supertype'];
 				$input	= 0;
 				$ctype 	= 'research';
@@ -124,26 +124,26 @@ abstract class d13_gameobject_base
 				break;	
 					
 			case 'unit':
-				$data 	= $d13->getUnit($this->node->data['faction'], $args['obj_id']);
-				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $args['obj_id'], "name");
-				$desc 	= $d13->getLangGL("units", $this->node->data['faction'], $args['obj_id'], "description");
+				$data 	= $d13->getUnit($this->node->data['faction'], $args['id']);
+				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $args['id'], "name");
+				$desc 	= $d13->getLangGL("units", $this->node->data['faction'], $args['id'], "description");
 				$level 	= 0;
-				$type	= $d13->getUnit($this->node->data['faction'], $args['obj_id'], "type");
+				$type	= $d13->getUnit($this->node->data['faction'], $args['id'], "type");
 				$input	= 0;
 				$ctype 	= 'train';
 				$slot	= 0;
-				$amount = $this->node->units[$args['obj_id']]['value'];
+				$amount = $this->node->units[$args['id']]['value'];
 				$imgdir = 'units' . '/' . $this->node->data['faction'];
 				$resimg = $data['icon'];
 				$resname= '';
 				break;
 				
 			case 'turret':
-				$data 	= $d13->getUnit($this->node->data['faction'], $args['obj_id']);
-				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $args['obj_id'], "name");
-				$desc 	= $d13->getLangGL("units", $this->node->data['faction'], $args['obj_id'], "description");
+				$data 	= $d13->getUnit($this->node->data['faction'], $args['id']);
+				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $args['id'], "name");
+				$desc 	= $d13->getLangGL("units", $this->node->data['faction'], $args['id'], "description");
 				$level 	= $args['level'];
-				$type	= $d13->getUnit($this->node->data['faction'], $args['obj_id'], "type");
+				$type	= $d13->getUnit($this->node->data['faction'], $args['id'], "type");
 				$input	= $args['input'];
 				$ctype 	= 'train';
 				$slot	= 0;
@@ -154,9 +154,9 @@ abstract class d13_gameobject_base
 				break;
 				
 			case 'shield':
-				$data 	= $d13->getShield($args['obj_id']);
-				$name 	= $d13->getLangGL("shields", $args['obj_id'], "name");
-				$desc 	= $d13->getLangGL("shields", $args['obj_id'], "description");
+				$data 	= $d13->getShield($args['id']);
+				$name 	= $d13->getLangGL("shields", $args['id'], "name");
+				$desc 	= $d13->getLangGL("shields", $args['id'], "description");
 				$level 	= 0;
 				$type	= $args['supertype'];
 				$input	= 0;
@@ -169,9 +169,9 @@ abstract class d13_gameobject_base
 				break;		
 				
 			case 'buff':	
-				$data 	= $d13->getBuff($args['obj_id']);
-				$name 	= $d13->getLangGL("buffs", $args['obj_id'], "name");
-				$desc 	= $d13->getLangGL("buffs", $args['obj_id'], "description");
+				$data 	= $d13->getBuff($args['id']);
+				$name 	= $d13->getLangGL("buffs", $args['id'], "name");
+				$desc 	= $d13->getLangGL("buffs", $args['id'], "description");
 				$level 	= 0;
 				$type	= $args['supertype'];
 				$input	= 0;
@@ -184,15 +184,15 @@ abstract class d13_gameobject_base
 				break;		
 			
 			case 'resource':	
-				$data 	= $d13->getResource($args['obj_id']);
-				$name 	= $d13->getLangGL("resources", $args['obj_id'], "name");
-				$desc 	= $d13->getLangGL("resources", $args['obj_id'], "description");
+				$data 	= $d13->getResource($args['id']);
+				$name 	= $d13->getLangGL("resources", $args['id'], "name");
+				$desc 	= $d13->getLangGL("resources", $args['id'], "description");
 				$level 	= 0;
 				$type	= $args['supertype'];
 				$input	= 0;
 				$ctype 	= 'buy';
 				$slot	= 0;
-				$amount = $this->node->resources[$args['obj_id']]['value'];
+				$amount = $this->node->resources[$args['id']]['value'];
 				$imgdir = 'resources';
 				$resimg = $data['icon'];
 				$resname= $name;
@@ -215,8 +215,8 @@ abstract class d13_gameobject_base
 		}
 		
 		$this->data 					= array_merge($this->data, $data);
-		$this->data['id']				= $args['obj_id'];
-		$this->data['moduleId']			= $args['obj_id'];						#TODO! obsolete
+		$this->data['id']				= $args['id'];
+		$this->data['moduleId']			= $args['id'];						#TODO! obsolete
 		$this->data['supertype'] 		= $args['supertype'];
 		$this->data['name'] 			= $name;
 		$this->data['description'] 		= $desc;

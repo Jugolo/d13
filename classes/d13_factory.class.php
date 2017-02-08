@@ -63,10 +63,10 @@ class d13_factory
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function createGameObject($type, $objectId, &$node)
+	function createGameObject($args, &$node)
 	{
 		
-		return $this->GameObjectFactory->create($type, $objectId, $node);
+		return $this->GameObjectFactory->create($args, $node);
 		
 	}
 	

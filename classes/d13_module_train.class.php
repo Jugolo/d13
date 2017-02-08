@@ -119,11 +119,10 @@ class d13_module_train extends d13_gameobject_module
 			if ($unit['active'] && in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['id'], 'units'))) {
 				
 				$args = array();
-				$args['supertype'] 	= 'unit';
-				$args['obj_id'] 	= $uid;
-				$args['node'] 		= $this->node;
+				$args['supertype'] = 'unit';
+				$args['id'] = $uid;
 				
-				$tmp_unit = new d13_gameobject_unit($args);
+				$tmp_unit = $d13->createGameObject($args, $this->node);
 				
 				$vars = array();
 				$vars = $tmp_unit->getTemplateVariables();

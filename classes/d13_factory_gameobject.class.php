@@ -45,13 +45,10 @@ class d13_factory_gameobject extends d13_factory_base
 	// ----------------------------------------------------------------------------------------
     public
 
-    function create($type, $objectId, &$node)
+    function create($args, &$node)
     {
 
-        $args = array();
-        $args['supertype']	= $type;
-        $args['obj_id'] 	= $objectId;
-
+        
         switch ($args['supertype']) {
         
             case 'resource':
