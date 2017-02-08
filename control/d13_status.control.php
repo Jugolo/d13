@@ -28,6 +28,8 @@ class d13_statusController extends d13_controller
 	function __construct($userId=0)
 	{
 		
+		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {

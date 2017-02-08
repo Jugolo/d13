@@ -346,9 +346,8 @@ class d13_combatController extends d13_controller
 				$args = array();
 				$args['supertype'] 	= 'component';
 				$args['id'] 		= $res['component'];
-				$args['node'] 		= $this->node;
 				
-				$tmp_component = new d13_gameobject_component($args);
+				$tmp_component = new d13_gameobject_component($args, $this->node);
 		
 				$resource = $res['component'];
 				$cost =  $res['value'];

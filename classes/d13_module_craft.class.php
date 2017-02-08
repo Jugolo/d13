@@ -126,9 +126,8 @@ class d13_module_craft extends d13_gameobject_module
 				$args = array();
 				$args['supertype'] 	= 'component';
 				$args['id'] 		= $cid;
-				$args['node'] 		= $this->node;
 				
-				$tmp_component = new d13_gameobject_component($args);
+				$tmp_component = new d13_gameobject_component($args, $this->node);
 				
 				// - - - - Cost and Requirements
 				$costData = $tmp_component->getCostList();
