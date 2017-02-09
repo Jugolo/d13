@@ -224,8 +224,6 @@
 									{{tvar_requirementsData}}
 								</div>
 							</div>
-						</li>
-						<li class="item-content">
 							<div class="item-media">
 								{{tvar_costIcon}}
 							</div>
@@ -238,7 +236,7 @@
 								</div>
 							</div>
 						</li>
-				
+										
 					</ul>
 				</div>
 				

@@ -69,8 +69,8 @@ class d13_moduleListController extends d13_controller
 		
 			$count = $this->node->getModuleCount($module['id']);
 			
-			if (count($this->node->queue["build"])) {
-				foreach($this->node->queue["build"] as $item) {
+			if (count($this->node->queues->queue["build"])) {
+				foreach($this->node->queues->queue["build"] as $item) {
 					if ($item['obj_id'] == $module['id']) {
 						$count++;
 					}

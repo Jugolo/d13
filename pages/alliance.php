@@ -22,7 +22,7 @@ $d13->dbQuery('start transaction');
 
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
-	$node = new d13_node();
+	$node = $d13->createNode();
 	$status = $node->get('id', $_GET['nodeId']);
 	$alliance = new d13_alliance();
 	$status = $alliance->get('id', $_SESSION[CONST_PREFIX . 'User']['alliance']);
@@ -60,7 +60,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 			if (($status == 'done') && (isset($_POST['nodeId'], $_POST['name'])))
 			if ($_POST['name'] != '')
 			if ($alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$node = new d13_node();
+				$node = $d13->createNode();
 				$status = $node->get('id', $_POST['nodeId']);
 				if ($status == 'done')
 				if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -92,7 +92,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 					if (isset($_POST['nodeId'], $_POST['name']))
 					if ($_POST['name'] != '') {
 						$alliance = new d13_alliance();
-						$node = new d13_node();
+						$node = $d13->createNode();
 						$status = $node->get('id', $_POST['nodeId']);
 						if ($status == 'done')
 						if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {

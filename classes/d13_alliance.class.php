@@ -54,7 +54,7 @@ class d13_alliance
         $alliance = new d13_alliance();
         if ($alliance->get('id', $this->data['id']) == 'done')
             if ($alliance->get('name', $this->data['name']) == 'noAlliance') {
-                $node = new d13_node();
+                $node = $d13->createNode();
                 if ($node->get('id', $nodeId) == 'done') {
                     $node->getResources();
                     $setCost = $d13->getFaction($node->data['faction'], 'costs', 'alliance');
@@ -87,7 +87,7 @@ class d13_alliance
         global $d13;
         $alliance = new d13_alliance();
         if ($alliance->get('name', $this->data['name']) == 'noAlliance') {
-            $node = new d13_node();
+            $node = $d13->createNode();
             if ($node->get('id', $nodeId) == 'done') {
                 $node->checkResources(time());
                 $addCost = $d13->getFaction($node->data['faction'], 'costs', 'alliance');

@@ -15,14 +15,15 @@ V0XX	--- PLANNED UPCOMING UPDATE(S) ---
 			
 		* Trade Building (Tradepost): Trade resources/components with other users
 
-V0XX	--- NEXT SCHEDULED UPDATE ---
+		* Comfort Features
 
-		* Shop Building (Blackmarket): Buy resources, components, buff's, shield's
+V0XX	--- NEXT SCHEDULED UPDATE ---
 		
+		* Get rid of the dreaded global keyword and switch to dependency injection
+
+V018	* Shop Building (Blackmarket): Buy resources, components, buff's, shield's
 		* Buff System: Add temporary speed/efficiency buff's to the current node (town)
 		
-		* Lottery Building: Allows to collect a random reward every X hours
-
 V017	--- SECOND STABLE VERSION
 
 		* Another bunch of more or less critical bugfixes and corrections

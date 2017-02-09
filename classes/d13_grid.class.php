@@ -119,7 +119,7 @@ class d13_grid
 		if ((isset($this->data[$i])) && ($this->data[$i]['x'] == $x) && ($this->data[$i]['y'] == $y)) {
 			if ($this->data[$i]['type'] != 2) $output = 'href="javascript: fetch(\'getGrid.php\', \'x=' . $x . '&y=' . $y . '\')" onMouseOver="setSectorData(labels[' . $this->data[$i]['type'] . '], \'-\', \'-\')" onMouseOut="setSectorData(\'-\', \'-\', \'-\')"';
 			else {
-				$node = new d13_node();
+				$node = $d13->createNode();
 				$node->get('id', $this->data[$i]['id']);
 				$user = new d13_user();
 				$user->get('id', $node->data['user']);

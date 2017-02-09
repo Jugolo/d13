@@ -38,6 +38,18 @@ class d13_tpl
 	private $node;
 	
 	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function __construct()
+	{
+	
+	
+	}
+	
+	// ----------------------------------------------------------------------------------------
 	// tpl_get
 	// @ Retrieves the content of a template file and returns it
 	// 3.0
@@ -177,16 +189,16 @@ class d13_tpl
 		
 		$tvars["tvar_global_pagetitle"] = CONST_GAME_TITLE;
 		$tvars["tvar_global_directory"] = CONST_DIRECTORY;
-		$tvars["tvar_global_basepath"] = CONST_BASE_PATH;
-		$tvars["tvar_global_template"] = $_SESSION[CONST_PREFIX . 'User']['template'];
-		$tvars["tvar_global_color"] = $_SESSION[CONST_PREFIX . 'User']['color'];
+		$tvars["tvar_global_basepath"] 	= CONST_BASE_PATH;
+		$tvars["tvar_global_layout"]	= CONST_DEFAULT_LAYOUT;
+		$tvars["tvar_global_template"] 	= $_SESSION[CONST_PREFIX . 'User']['template'];
+		$tvars["tvar_global_color"] 	= $_SESSION[CONST_PREFIX . 'User']['color'];
+		
 		if($this->node){
             $tvars["tvar_nodeFaction"] = $this->node->data['faction'];
         }
 
-		
 		// - - - Hide Bottom Toolbar while logged in
-
 		if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 			$tvars["tvar_global_notoolbar"] = "no-toolbar";
 		}
@@ -195,7 +207,6 @@ class d13_tpl
 		}
 
 		// - - - Setup the Message Box (refactor to NOTES class later)
-
 		if (isset($vars["tvar_global_message"]) && !empty($vars["tvar_global_message"])) {
 			$tvars["tpl_pvar_message"] = $this->parse($this->get("sub.messagebox") , $vars);
 		}

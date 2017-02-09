@@ -164,8 +164,8 @@ class d13_module_warfare extends d13_gameobject_module
 		
 		$this->data['busy'] = false;
 		
-		if (count($this->node->queue['combat'])) {
-			foreach($this->node->queue['combat'] as $item) {
+		if (count($this->node->queues->queue['combat'])) {
+			foreach($this->node->queues->queue['combat'] as $item) {
 				if ($item['slot'] == $this->data['slotId']) {
 					
 					$this->data['busy'] = true;

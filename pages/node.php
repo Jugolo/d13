@@ -31,7 +31,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
 	case 'get':
 		if (isset($_GET['nodeId'])) {
-			$node = new d13_node();
+			$node = $d13->createNode();
 			$status = $node->get('id', $_GET['nodeId']);
 			if ($status == 'done') {
 				if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -70,7 +70,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
 	case 'set':
 		if (isset($_GET['nodeId'])) {
-			$node = new d13_node();
+			$node = $d13->createNode();
 			$status = $node->get('id', $_GET['nodeId']);
 			if ($status == 'done') {
 				if ((isset($_POST['name'], $_POST['focus'])) && ($_POST['name']))
@@ -105,7 +105,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 	case 'add':
 		if (isset($_POST['faction'], $_POST['name'], $_POST['x'], $_POST['y'])) {
 			if ($_POST['faction'] != '' && !empty($_POST['name']) && !empty($_POST['x']) && !empty($_POST['y'])) {
-				$node = new d13_node();
+				$node = $d13->createNode();
 				$node->data['faction'] = $_POST['faction'];
 				$node->data['user'] = $_SESSION[CONST_PREFIX . 'User']['id'];
 				$node->data['name'] = $_POST['name'];
@@ -131,7 +131,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 				$coord = array();
 				$grid = new d13_grid();
 				$coord = $grid->getFree();
-				$node = new d13_node();
+				$node = $d13->createNode();
 				$node->data['faction'] = $_POST['faction'];
 				$node->data['user'] = $_SESSION[CONST_PREFIX . 'User']['id'];
 				$node->data['name'] = $_SESSION[CONST_PREFIX . 'User']['name'];
@@ -151,7 +151,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
 	case 'remove':
 		if (isset($_GET['nodeId'])) {
-			$node = new d13_node();
+			$node = $d13->createNode();
 			$status = $node->get('id', $_GET['nodeId']);
 			if ($status == 'done') {
 				if ((isset($_GET['go'])) && ($_GET['go'])) {
@@ -183,7 +183,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
 	case 'move':
 		if (isset($_GET['nodeId'])) {
-			$node = new d13_node();
+			$node = $d13->createNode();
 			$status = $node->get('id', $_GET['nodeId']);
 			if ($status == 'done') {
 				if (isset($_POST['x'], $_POST['y']))
@@ -201,7 +201,7 @@ if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'])) {
 
 	case 'cancelShield':
 		if (isset($_GET['shieldId'])) {
-			$node = new d13_node();
+			$node = $d13->createNode();
 			$status = $node->get('id', $_GET['nodeId']);
 			$status = $node->cancelShield($_GET['shieldId']);
 			if ($status == 'done') {

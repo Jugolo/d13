@@ -228,7 +228,7 @@ class d13_allianceController extends d13_controller
 			if (isset($_POST['nodeId'], $_POST['name']))
 			if ($_POST['name'] != '')
 			if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$node = new d13_node();
+				$node = $d13->createNode();
 				$status = $node->get('id', $_POST['nodeId']);
 				if ($status == 'done')
 				if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -303,7 +303,7 @@ class d13_allianceController extends d13_controller
 					if (isset($_POST['nodeId'], $_POST['name']))
 					if ($_POST['name'] != '') {
 						$alliance = new d13_alliance();
-						$node = new d13_node();
+						$node = $d13->createNode();
 						$status = $node->get('id', $_POST['nodeId']);
 						if ($status == 'done') {
 							if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {

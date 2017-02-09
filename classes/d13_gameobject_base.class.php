@@ -38,7 +38,7 @@ abstract class d13_gameobject_base
 
 {
 	
-	public $data, $node, $checkRequirements, $checkCost;
+	public $data, $node, $checkRequirements;
 
 	// ----------------------------------------------------------------------------------------
 	// construct
@@ -395,15 +395,9 @@ abstract class d13_gameobject_base
 	function getCheckCost()
 	{
 	
-		$this->checkCost = $this->node->checkCost($this->data['cost'], $this->data['costType']);
-		if ($this->checkCost['ok']) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return $this->node->checkCost($this->data['cost'], $this->data['costType']);
+		
 	}
-	
 	
 	// ----------------------------------------------------------------------------------------
 	// getCheckConvertedCost
@@ -415,25 +409,83 @@ abstract class d13_gameobject_base
 	function getCheckConvertedCost($resid, $modifier=1)
 	{
 		
+		global $d13;
+
+		return $this->node->checkConvertedCost($this->getConvertedCost($resid, false, $modifier), $this->data['costType'], $modifier);
+
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getConvertedCost
+	// Gather and return the converted cost, converted into stated resource id
+	// Note: Can optionally return UPGRADE costs instead of BUY costs (modules and tech only)
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getConvertedCost($resid, $upgrade=false, $modifier=1)
+	{
+	
+		global $d13;
+		
 		$convertedCost = 0;
-		foreach ($this->data['cost'] as $cost) {
+		$cost_array = array();
+		$cost_array = $this->getCost($upgrade);
+		
+		foreach ($cost_array as $cost) {
 			$convertedCost += $cost['value'];
 		}
+		
 		$convertedCost *= $modifier;
+		
+		$converted_cost_array = array();
+		$converted_cost_array['resource'] 	= $resid;
+		$converted_cost_array['value'] 		= $convertedCost;
+		$converted_cost_array['name'] 		= $d13->getLangGL('resources', $resid, 'name');
+		$converted_cost_array['icon'] 		= $d13->getResource($resid, 'icon');
+		$converted_cost_array['factor'] 	= $modifier;
+		
+		return $converted_cost_array;
 	
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getCost
+	// @ Gather and return all costs of this object as an array
+	// Note: Can optionally return UPGRADE costs instead of BUY costs (modules and tech only)
+	// ----------------------------------------------------------------------------------------
+	public
+
+	function getCost($upgrade = false)
+	{
+	
+		global $d13;
+		
 		$cost_array = array();
-		$cost_array['resource'] = $resid;
-		$cost_array['value'] = $convertedCost;
-	
-		$this->checkCost = $this->node->checkCost($cost_array, $this->data['costType']);
-		if ($this->checkCost['ok']) {
-			return true;
+		foreach($this->data['cost'] as $key => $cost) {
+			$tmp_array = array();
+			$tmp_array['resource'] = $cost['resource'];
+			$tmp_array['value'] = $cost['value'] * $d13->getGeneral('users', 'efficiency', $this->data['costType']);
+			$tmp_array['name'] = $d13->getLangGL('resources', $cost['resource'], 'name');
+			$tmp_array['icon'] = $d13->getResource($cost['resource'], 'icon');
+			$tmp_array['factor'] = 1;
+			if ($upgrade) {
+				foreach($this->data['cost_upgrade'] as $key => $upcost) {
+					$tmp2_array = array();
+					$tmp2_array['resource'] = $upcost['resource'];
+					$tmp2_array['value'] = $upcost['value'] * $d13->getGeneral('users', 'efficiency', $this->data['costType']);
+					$tmp2_array['name'] = $d13->getLangGL('resources', $upcost['resource'], 'name');
+					$tmp2_array['icon'] = $d13->getResource($upcost['resource'], 'icon');
+					$tmp2_array['factor'] = $upcost['factor'];
+					if ($tmp_array['resource'] == $tmp2_array['resource']) {
+						$tmp_array['value'] = $tmp_array['value'] + floor($tmp2_array['value'] * $tmp2_array['factor'] * $this->data['level']);
+					}
+				}
+			}
+
+			$cost_array[] = $tmp_array;
 		}
-		else {
-			return false;
-		}
-	
-	
+
+		return $cost_array;
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -503,81 +555,7 @@ abstract class d13_gameobject_base
 
 		return $req_array;
 	}
-
-	// ----------------------------------------------------------------------------------------
-	// getCost
-	// @ Gather and return all costs of this object as an array
-	// Note: Can optionally return UPGRADE costs instead of BUY costs (modules and tech only)
-	// ----------------------------------------------------------------------------------------
-	public
-
-	function getCost($upgrade = false)
-	{
 	
-		global $d13;
-		
-		$cost_array = array();
-		foreach($this->data['cost'] as $key => $cost) {
-			$tmp_array = array();
-			$tmp_array['resource'] = $cost['resource'];
-			$tmp_array['value'] = $cost['value'] * $d13->getGeneral('users', 'efficiency', $this->data['costType']);
-			$tmp_array['name'] = $d13->getLangGL('resources', $cost['resource'], 'name');
-			$tmp_array['icon'] = $d13->getResource($cost['resource'], 'icon');
-			$tmp_array['factor'] = 1;
-			if ($upgrade) {
-				foreach($this->data['cost_upgrade'] as $key => $upcost) {
-					$tmp2_array = array();
-					$tmp2_array['resource'] = $upcost['resource'];
-					$tmp2_array['value'] = $upcost['value'] * $d13->getGeneral('users', 'efficiency', $this->data['costType']);
-					$tmp2_array['name'] = $d13->getLangGL('resources', $upcost['resource'], 'name');
-					$tmp2_array['icon'] = $d13->getResource($upcost['resource'], 'icon');
-					$tmp2_array['factor'] = $upcost['factor'];
-					if ($tmp_array['resource'] == $tmp2_array['resource']) {
-						$tmp_array['value'] = $tmp_array['value'] + floor($tmp2_array['value'] * $tmp2_array['factor'] * $this->data['level']);
-					}
-				}
-			}
-
-			$cost_array[] = $tmp_array;
-		}
-
-		return $cost_array;
-	}
-	
-	// ----------------------------------------------------------------------------------------
-	// getConvertedCost
-	// Gather and return the converted cost, converted into stated resource id
-	// Note: Can optionally return UPGRADE costs instead of BUY costs (modules and tech only)
-	// ----------------------------------------------------------------------------------------
-	public
-	
-	function getConvertedCost($resid, $upgrade=false, $modifier=1)
-	{
-	
-		global $d13;
-		
-		$convertedCost = 0;
-		$cost_array = array();
-		$cost_array = $this->getCost($upgrade);
-		
-		foreach ($cost_array as $cost) {
-			$convertedCost += $cost['value'];
-		}
-		
-		$convertedCost *= $modifier;
-		
-		$converted_cost_array = array();
-		$converted_cost_array['resource'] 	= $resid;
-		$converted_cost_array['value'] 		= $convertedCost;
-		$converted_cost_array['name'] 		= $d13->getLangGL('resources', $resid, 'name');
-		$converted_cost_array['icon'] 		= $d13->getResource($resid, 'icon');
-		$converted_cost_array['factor'] 	= $modifier;
-					
-		return $converted_cost_array;
-	
-	
-	}
-
 	// ----------------------------------------------------------------------------------------
 	// getStats
 	// @ Gather and return all base stats of the object

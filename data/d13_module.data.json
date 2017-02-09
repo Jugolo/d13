@@ -577,7 +577,7 @@
       "maxLevel": 1,
       "inputResource": 3,
       "paymentResource": 0,
-      "priceModifier": 2,
+      "priceModifier": 1,
       "ratio": 1,
       "maxInput": 10,
       "duration": 10,
@@ -622,17 +622,17 @@
       "inventory": [
       	 {
       	  "object": "resource",
-      	  "amount": 50,
+      	  "amount": 100,
       	  "id": 1
       	 },
       	 {
       	  "object": "resource",
-      	  "amount": 50,
+      	  "amount": 100,
       	  "id": 2
       	 },
       	 {
       	  "object": "component",
-      	  "amount": 50,
+      	  "amount": 100,
       	  "id": 0
       	 },
       	 {

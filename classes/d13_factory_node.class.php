@@ -47,6 +47,9 @@ class d13_factory_node extends d13_factory_base
 	{
 	
 	
+		return new d13_node();
+		
+	
 	}
 
 	

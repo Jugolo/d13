@@ -18,7 +18,7 @@ $message = "";
 $d13->dbQuery('start transaction');
 
 if (isset($_SESSION[CONST_PREFIX . 'User']['id'], $_GET['action'], $_GET['nodeId'])) {
-	$node = new d13_node();
+	$node = $d13->createNode();
 	if ($node->get('id', $_GET['nodeId']) == 'done') {
 		$node->checkAll(time());
 		

@@ -63,24 +63,26 @@ class d13_module_market extends d13_gameobject_module
 		$i=0;
 		
 		if ($this->data['options']['inventoryList']) {
-
-			foreach ($this->data['inventory'] as $object) {
+	
+			
+				foreach ($this->data['inventory'] as $object) {
 				
-				$args = array();
-				$args['supertype'] = $item['object'];
-				$args['id'] = $item['id'];
+					$args = array();
+					$args['supertype'] = $object['object'];
+					$args['id'] = $object['id'];
 				
-				$tmp_object = $d13->createGameObject($args, $this->node);
+					$tmp_object = $d13->createGameObject($args, $this->node);
 				
-				if ($tmp_object->data['active']) {
-					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $tmp_object->data['imgdir'] . '/' . $tmp_object->data['image'] . '" title="' . $tmp_object->data['name'] . '">';
-					$tvars['tvar_listLabel'] = $tmp_object->data['name'];
-					$tvars['tvar_listAmount'] = "";
-					$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
-					$i++;
+					if ($tmp_object->data['active']) {
+						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $tmp_object->data['imgdir'] . '/' . $tmp_object->data['image'] . '" title="' . $tmp_object->data['name'] . '">';
+						$tvars['tvar_listLabel'] = $tmp_object->data['name'];
+						$tvars['tvar_listAmount'] = "";
+						$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
+						$i++;
+					}
+			
 				}
 			
-			}
 			
 			if ($i>0) {
 				
@@ -120,7 +122,6 @@ class d13_module_market extends d13_gameobject_module
 		
 		$resid 		= $this->data['paymentResource'];
 		
-		
 		$limit 		= 10;											# could go to config later
 		$i 			= 0;
 		
@@ -136,6 +137,8 @@ class d13_module_market extends d13_gameobject_module
 				$inventory = json_decode($object['inventory'], TRUE);
 				
 				foreach ($inventory as $item) {
+				
+					$modifier 	= $this->data['priceModifier'] * $item['amount'];
 					
 					$args = array();
 					$args['supertype'] = $item['object'];
@@ -144,41 +147,33 @@ class d13_module_market extends d13_gameobject_module
 					$tmp_object = $d13->createGameObject($args, $this->node);
 					
 					if ($tmp_object->data['active']) {
-						
-						$modifier 	= $this->data['priceModifier'] * $item['amount'];
-						
+
 						$tvars['tvar_itemName'] 			= $tmp_object->data['name'];
 						$tvars['tvar_itemDescription'] 		= $tmp_object->data['description'];
 						$tvars['tvar_itemImageDirectory'] 	= $tmp_object->data['imgdir'];
 						$tvars['tvar_itemImage'] 			= $tmp_object->data['image'];
-						
 						$tvars['tvar_itemResource'] 		= $tmp_object->data['storageResImg'];
 						$tvars['tvar_itemResourceName'] 	= $tmp_object->data['storageResName'];
-					
 						$tvars['tvar_itemValue'] 			= floor($tmp_object->data['amount']);
 						$tvars['tvar_itemMaxValue'] 		= $tmp_object->getMaxProduction();
-						
 						$tvars['tvar_amount']				= $item['amount'];
-										
-						if ($tmp_object->getCheckConvertedCost($resid, $modifier)) {
-							$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
-						}
-						else {
-							$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
-						}
 						
-						$tvars['tvar_costData'] 	= $tmp_object->getConvertedCostList($resid, false, $modifier);
-					
 						$linkData = '';
 						$objType = $item['object'];
 						$objId = $item['id'];
-						
-						if ($tmp_object->getCheckConvertedCost($resid, $modifier)) {
+
+						if ($tmp_object->getCheckConvertedCost($resid, $modifier) && ($tmp_object->data['amount']+$item['amount'] <= $tmp_object->getMaxProduction()) ) {
+							
+							$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
+							
 							$vars['tvar_button_name'] 	 = $d13->getLangUI("buy");
 							$vars['tvar_button_link'] 	 = '?p=module&action=buyMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&objType=' . $objType . '&objId=' . $objId;
 							$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryResearch"));
 							$linkData .= $d13->templateSubpage("button.external.enabled", $vars);
 						} else {
+							
+							$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
+							
 							$vars['tvar_button_name'] 	 = $d13->getLangUI("buy");
 							$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
 							$linkData.= $d13->templateSubpage("button.popup.disabled", $vars);
@@ -186,6 +181,8 @@ class d13_module_market extends d13_gameobject_module
 						
 						$tvars['tvar_linkData'] 			= $linkData;
 
+						$tvars['tvar_costData'] 			= $tmp_object->getConvertedCostList($resid, false, $modifier);
+					
 						$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.market", $tvars);
 						
 						$i++;
@@ -299,7 +296,7 @@ class d13_module_market extends d13_gameobject_module
 			foreach($this->data['inventory'] as $object) {
 				
 				$args = array();
-				$args['supertype'] = $object['unit'];
+				$args['supertype'] = $object['object'];
 				$args['id'] = $object['id'];
 				
 				$tmp_object = $d13->createGameObject($args, $this->node);

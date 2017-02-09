@@ -86,7 +86,7 @@ class d13_node
 	{
 		global $d13;
 		$sector = d13_grid::getSector($this->location['x'], $this->location['y']);
-		$node = new d13_node();
+		$node = $d13->createNode();
 		$status = 0;
 		if ($sector['type'] == 1) {
 			if ($node->get('name', $this->data['name']) == 'noNode') {
@@ -177,7 +177,7 @@ class d13_node
 	{
 		global $d13;
 		
-		$node = new d13_node();
+		$node = $d13->createNode();
 		
 		if ($node->get('id', $id) == 'done') {
 		
@@ -246,21 +246,21 @@ class d13_node
 			$tmp_module = $d13->createModule($this->modules[$slotId]['module'], $slotId, $this);
 			
 			if (isset($tmp_module->data['inventory']) && $tmp_module->data['inventory']) {
-		
-				$duration = 24 - $tmp_module->data['totalIR'];				# TODO: move to config later
-				$duration = max($duration, 1) * 60;
 				
 				$inventory = $tmp_module->data['inventory'];
+				
+				$duration = 24 - $tmp_module->data['totalIR'];				# TODO: move to config later
+				$duration = max($duration, 1) * 60;
+				$limit	  = max($tmp_module->data['totalIR'], 1); 					# could go to config later
+				
 				$tmp_inventory = array();
-				
-				for ($i = 1; $i <= $tmp_module->data['totalIR']; $i++) {
-					$tmp_inventory[] = array_rand($inventory);
-				}
-				
-				shuffle($inventory);
-				$inventory = array_splice($inventory, 0, $tmp_module->data['totalIR']);
-				$inventory = json_encode($inventory);
-		
+
+    			for ($i = 1; $i <= $limit; $i++) {
+    				$key = array_rand($inventory);
+    				$tmp_inventory[] = $inventory[$key];
+    			}
+
+				$inventory = json_encode($tmp_inventory);
 				$start 		= strftime('%Y-%m-%d %H:%M:%S', time());
 		
 				$d13->dbQuery("insert into market (node, slot, start, duration, inventory) values ('" . $this->data['id'] . "', '" . $slotId . "', '" . $start . "', '" . $duration . "', '" . $inventory . "')");
@@ -280,7 +280,6 @@ class d13_node
 			$status = 'error';
 		}
 		
-
 		return $status;
 
 	}
@@ -314,14 +313,14 @@ class d13_node
 						$args['id'] = $item['id'];
 						
 						$tmp_object = $d13->createGameObject($args, $this);
-						$total = $item['amount']+$tmp_module->data['priceModifier'];
+						$total = $item['amount'] * $tmp_module->data['priceModifier'];
 						
 						if ($tmp_object->getCheckConvertedCost($tmp_module->data['paymentResource'], $total)) {
-					
-							$cost = $tmp_object->getConvertedCost($tmp_module->data['paymentResource'], false, $tmp_module->data['priceModifier']);
+	
+							$cost = $tmp_object->getConvertedCost($tmp_module->data['paymentResource'], false, $total);
 							
 							// Pay amount of resources
-							$this->resources[$cost['resource']]['value'] -= $cost['value'] * $d13->getGeneral('users', 'efficiency', 'research') * $this->getBuff('efficiency', 'research');
+							$this->resources[$cost['resource']]['value'] -= $cost['value'];
 							$d13->dbQuery('update resources set value="' . $this->resources[$cost['resource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $cost['resource'] . '"');
 							if ($d13->dbAffectedRows() == - 1) $ok = 0;
 							
@@ -995,7 +994,7 @@ class d13_node
 		$this->getResources();
 		$this->getUnits();
 		$this->getLocation();
-		$node = new d13_node();
+		$node = $d13->createNode();
 		$node->get('id', $nodeId);
 		$okUnits = 1;
 		
@@ -1222,36 +1221,78 @@ class d13_node
 			'ok' => 1,
 			'cost' => $cost
 		);
-		
-		foreach($data['cost'] as $key => $thecost) {
-			if ($thecost['value'] > 0) {
-				
+
+		foreach($cost as $key => $thecost) {
+			
+			$value = 0;
+			$costObj = '';
+			$totalcost = 0;
+			
+			if (isset($thecost['resource'])) {
+				$costObj = 'resource';
+				$value = $this->resources[$thecost[$costObj]]['value'];
+			} else if (isset($thecost['component'])) {
+				$costObj = 'component';
+				$value = $this->components[$thecost[$costObj]]['value'];
+			}
+			
 				if (isset($thecost['isFuel']) && $thecost['isFuel']) {
 					$tmp_quantity = $quantity * $fuel;
 				} else {
 					$tmp_quantity = $quantity;
 				}
 			
-				if (isset($thecost['resource'])) {
-					if ($this->resources[$thecost['resource']]['value'] < ($thecost['value'] * $tmp_quantity * $d13->getGeneral('users', 'efficiency', $costType) * $this->getBuff('efficiency', $costType))) {
-						$data['cost'][$key]['ok'] = 0;
-						$data['ok'] = 0;
-					} else {
-						$data['cost'][$key]['ok'] = 1;
-					}
-				} else if (isset($thecost['component'])) {
-					if ($this->components[$thecost['component']]['value'] < ($thecost['value'] * $tmp_quantity * $d13->getGeneral('users', 'efficiency', $costType) * $this->getBuff('efficiency', $costType))) {
-						$data['cost'][$key]['ok'] = 0;
-						$data['ok'] = 0;
-					} else {
-						$data['cost'][$key]['ok'] = 1;
-					}
-				}
+				$totalcost = $thecost['value'] * $tmp_quantity * $d13->getGeneral('users', 'efficiency', $costType) * $this->getBuff('efficiency', $costType);
 				
-			}
+				if ($value < $totalcost) {
+					$data['cost'][$key]['ok'] = 0;
+					$data['ok'] = 0;
+				} else {
+					$data['cost'][$key]['ok'] = 1;
+				}
+			
+		}
+		
+		return $data;
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// checkConvertedCost
+	// ----------------------------------------------------------------------------------------
+	public
+
+	function checkConvertedCost($cost, $costType, $quantity=1, $fuel=1)
+	{
+	
+		global $d13;
+		
+		$pass = true;
+		
+		$value = 0;
+		$costObj = '';
+		$totalcost = 0;
+		
+		if (isset($cost['resource'])) {
+			$costObj = 'resource';
+			$value = $this->resources[$cost[$costObj]]['value'];
+		} else if (isset($cost['component'])) {
+			$costObj = 'component';
+			$value = $this->components[$cost[$costObj]]['value'];
+		}
+		
+		if (isset($cost['isFuel']) && $cost['isFuel']) {
+			$tmp_quantity = $quantity * $fuel;
+		} else {
+			$tmp_quantity = $quantity;
+		}
+	
+		$totalcost = $cost['value'] * $tmp_quantity * $d13->getGeneral('users', 'efficiency', $costType) * $this->getBuff('efficiency', $costType);
+		
+		if ($value < $totalcost) {
+			$pass = false;
 		}
 
-		return $data;
+		return $pass;
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -1477,7 +1518,7 @@ class d13_node
 		$distance = ceil(sqrt(pow($this->location['x'] - $x, 2) + pow($this->location['y'] - $y, 2)));
 		$moveCostData = $this->checkCost($moveCost, 'move');
 		if ($moveCostData['ok']) {
-			$node = new d13_node();
+			$node = $d13->createNode();
 			if ($node->get('id', $this->data['id']) == 'done') {
 				$sector = d13_grid::getSector($x, $y);
 				if ($sector['type'] == 1) {
@@ -2148,7 +2189,7 @@ class d13_node
 		$setCost = $d13->getFaction($this->data['faction'], 'costs', 'set');
 		$setCostData = $this->checkCost($setCost, 'set');
 		if ($setCostData['ok']) {
-			$node = new d13_node();
+			$node = $d13->createNode();
 			if ($node->get('id', $this->data['id']) == 'done')
 			if (($node->data['name'] == $this->data['name']) || ($node->get('name', $this->data['name']) == 'noNode')) {
 				$ok = 1;

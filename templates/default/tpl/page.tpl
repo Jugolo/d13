@@ -16,22 +16,22 @@
        		{{tpl_page_rightPanel}}
     	</div>
 	
-	  <div class="views"  >
-		<div class="view view-main" >
+	  <div class="views">
+		<div class="view view-main">
 		  <div class="pages toolbar-through">
 			
 			<div data-page="{{tpl_pvar_name}}" class="page {{tvar_global_notoolbar}} theme-{{tvar_global_color}} with-subnavbar" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/nodeBackground.png);">
 
 			  {{tpl_page_subbar}}
 			  
-			  <div class="toolbar theme-{{tvar_global_color}}">
+			  <div class="toolbar ">
 				<div class="toolbar-inner">
 				  {{tpl_page_navbar}}
 				  
 				</div>
 			  </div>
  
-			  <div class="page-content messages-content">
+			  <div class="page-content messages-content theme-{{tvar_global_color}}">
 			  	{{tpl_pvar_message}}
 				{{tpl_page_content}}
 			  </div>
