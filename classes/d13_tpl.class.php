@@ -35,7 +35,7 @@ class d13_tpl
 
 {
 	
-	private $node;
+	protected $d13;
 	
 	// ----------------------------------------------------------------------------------------
 	// 
@@ -43,10 +43,9 @@ class d13_tpl
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct(d13_engine &$d13)
 	{
-	
-	
+		$this->d13 = $d13;
 	}
 	
 	// ----------------------------------------------------------------------------------------
@@ -54,7 +53,6 @@ class d13_tpl
 	// @ Retrieves the content of a template file and returns it
 	// 3.0
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function get($templatename)
@@ -75,7 +73,6 @@ class d13_tpl
 	// @ Replaces all array variables inside a template file that must be provided
 	// 3.0
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function parse($template, $vars)
@@ -165,10 +162,10 @@ class d13_tpl
 	
 	function merge_ui_vars()
 	{
-		global $d13;
+		
 		$vars = array();
 		
-		foreach($d13->getLangUI() as $key => $var) { #$d13->data->json['userinterface']
+		foreach($this->d13->getLangUI() as $key => $var) { #$this->d13->data->json['userinterface']
 			$vars["tvar_ui_" . $key] = $var;
 		}
 
@@ -184,7 +181,7 @@ class d13_tpl
 	
 	function global_vars($vars = "", $cache_num=0)
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		$tvars["tvar_global_pagetitle"] = CONST_GAME_TITLE;
@@ -194,29 +191,27 @@ class d13_tpl
 		$tvars["tvar_global_template"] 	= $_SESSION[CONST_PREFIX . 'User']['template'];
 		$tvars["tvar_global_color"] 	= $_SESSION[CONST_PREFIX . 'User']['color'];
 		
-		if($this->node){
-            $tvars["tvar_nodeFaction"] = $this->node->data['faction'];
+		if($this->d13->node){
+            $tvars["tvar_nodeFaction"] = $this->d13->node->data['faction'];
         }
 
 		// - - - Hide Bottom Toolbar while logged in
 		if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 			$tvars["tvar_global_notoolbar"] = "no-toolbar";
-		}
-		else {
+		} else {
 			$tvars["tvar_global_notoolbar"] = "";
 		}
 
 		// - - - Setup the Message Box (refactor to NOTES class later)
 		if (isset($vars["tvar_global_message"]) && !empty($vars["tvar_global_message"])) {
 			$tvars["tpl_pvar_message"] = $this->parse($this->get("sub.messagebox") , $vars);
-		}
-		else {
+		} else {
 			$tvars["tpl_pvar_message"] = "";
 		}
 		
 		// - - - Setup possible sub-cache
 		if ($cache_num > 0) {
-		$tvars["tpl_page_cache"]		= $this->inject_get($cache_num);
+			$tvars["tpl_page_cache"]		= $this->inject_get($cache_num);
 		}
 
 		return $tvars;
@@ -232,17 +227,7 @@ class d13_tpl
 	function render($template, $vars=array(), $cache=TRUE, $cache_num=0)
 	{
 		
-		/*
-		if (!isset($this->node)) {
-			if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
-				$this->node	= new d13_node();
-				$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
-			}
-		}
-		*/
-		
 		$tvars = array();
-		
 		$tvars = array_merge($tvars, $vars);
 		$tvars = array_merge($tvars, $this->global_vars($vars, $cache_num));
 		$tvars = array_merge($tvars, $this->merge_ui_vars());
@@ -302,11 +287,9 @@ class d13_tpl
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function render_page($template, $tvars = array(), &$node=NULL)
+	function render_page($template, $tvars = array())
 	{
-		
-		global $d13;
-		
+				
 		$tvars["tpl_pvar_name"] 		= $template;
 		$tvars['tvar_nodeFaction'] 		= 0;
 		$tvars["tpl_page_leftPanel"] 	= '';
@@ -314,28 +297,18 @@ class d13_tpl
 		$tvars["tpl_page_navbar"] 		= "";
 		$tvars["tpl_page_subbar"] 		= "";
 		
-		if (isset($node) && !empty($node)) {
-			$this->node = $node;
-		}
-		
-		if (empty($this->node)) {
-			if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
-				$this->node	= new d13_node();
-				$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
-				$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
-			}
-		}
-		
 		$tvars = array_merge($tvars, $this->global_vars($tvars));
 		$tvars = array_merge($tvars, $this->merge_ui_vars());
-
-		$navBar = new d13_navBarController($this->node);
+		
+		$navBar = $this->d13->createController('d13_navBarController');
+		#$navBar = new d13_navBarController($this->d13->node);
 		$tvars["tpl_page_navbar"] = $navBar->getTemplate();
 		
-		if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
-			$resBar = new d13_resBarController($this->node);
+		if (isset($this->d13->node) && !empty($this->d13->node)) {
+			$resBar = $this->d13->createController('d13_resBarController');
+			#$resBar = new d13_resBarController($this->d13->node);
 			$tvars["tpl_page_subbar"] = $resBar->getTemplate();
-			$tvars["tpl_page_rightPanel"] = $this->node->queues->getQueuesList();
+			$tvars["tpl_page_rightPanel"] = $this->d13->node->queues->getQueuesList();
 		}
 
 		$tvars["tpl_page_meta_header"] 	= $this->parse($this->get("meta.header") , $tvars);
@@ -346,7 +319,7 @@ class d13_tpl
 		echo $this->render("page", $tvars);
 		
 		if (CONST_FLAG_PROFILER) {
-			$d13->debugLog($tvars['tvar_page']);
+			$this->d13->debugLog($tvars['tvar_page']);
 		}
 		
 		exit();

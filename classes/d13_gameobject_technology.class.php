@@ -39,9 +39,9 @@ class d13_gameobject_technology extends d13_gameobject_base
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct($args, &$node)
+	function __construct($args, &$node, d13_engine &$d13)
 	{
-		parent::__construct($args, $node);
+		parent::__construct($args, $node, $d13);
 	}
 
 	// ----------------------------------------------------------------------------------------

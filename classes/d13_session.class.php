@@ -31,14 +31,16 @@ class d13_session
 
 {
 	
+	protected $d13;
+	
 	// ----------------------------------------------------------------------------------------
-	// 
-	//
+	// constructor
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct(d13_engine &$d13)
 	{
+		$this->d13 = $d13;
 		$this->sessionStart(CONST_PREFIX, CONST_SESSION_LIFETIME + time() , '/', CONST_DOMAIN);
 	}
 
@@ -113,8 +115,8 @@ class d13_session
 	// This function regenerates a new ID and invalidates the old session.
 	// This should be called whenever permission levels for a user change.
 	// ----------------------------------------------------------------------------------------
-
 	public static
+	
 	function regenerateSession()
 	{
 
@@ -152,8 +154,8 @@ class d13_session
 	// This function is used to see if a session has expired or not.
 	// @return bool
 	// ----------------------------------------------------------------------------------------
-
 	protected static
+	
 	function validateSession()
 	{
 		if (isset($_SESSION['OBSOLETE']) && !isset($_SESSION['EXPIRES'])) return false;
@@ -167,8 +169,8 @@ class d13_session
 	// On new visits and hacking attempts this function will return false.
 	// @return bool
 	// ----------------------------------------------------------------------------------------
-
 	protected static
+	
 	function preventHijacking()
 	{
 		if (!isset($_SESSION['IPaddress']) || !isset($_SESSION['userAgent'])) return false;
@@ -182,6 +184,7 @@ class d13_session
 		if ($_SESSION['userAgent'] != $_SERVER['HTTP_USER_AGENT']) return false;
 		return true;
 	}
+	
 }
 
 // =====================================================================================EOF

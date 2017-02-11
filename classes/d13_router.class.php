@@ -32,23 +32,22 @@ class d13_router
 
 {
 
+	protected $d13;
 
 	// ----------------------------------------------------------------------------------------
-	// 
-	//
+	// constructor
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct(d13_engine &$d13)
 	{
-	
+		$this->d13 = $d13;
 	
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// route
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function route()
@@ -76,8 +75,9 @@ class d13_router
 				}
 			}
 		}
-				
-		$page_object = new $page_name;
+		
+		$page_object = $this->d13->createController($page_name);
+		
 		exit();
 		
 		// this is obsolete once the remaining pages are refactored!

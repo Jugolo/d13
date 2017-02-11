@@ -16,8 +16,6 @@
 class d13_moduleController extends d13_controller
 {
 	
-	private $node, $node_status;
-	
 	// ----------------------------------------------------------------------------------------
 	// construct
 	// @
@@ -25,21 +23,13 @@ class d13_moduleController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct($args=NULL, d13_engine &$d13)
 	{
-		
-		global $d13;
+		parent::__construct($d13);
 		
 		$tvars 				= array();
-		$this->node 		= new d13_node();
-		$this->node_status 	= $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
 		
-		if ($this->node_status == 'done') {
-			$this->node->getModules();
-			$this->node->checkAll(time());
-			$this->node->getLocation();
-		}
-		
+				
 		$tvars = $this->doControl();
 		$this->getTemplate($tvars);
 
@@ -55,7 +45,7 @@ class d13_moduleController extends d13_controller
 	function doControl()
 	{
 	
-		global $d13;
+		
 				
 		switch ($_GET['action'])
 		{
@@ -145,16 +135,16 @@ class d13_moduleController extends d13_controller
 	function moduleGet()
 	{
 	
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['moduleId'])) {
 			$moduleId = $_GET['moduleId'];
 		} else {
-			$moduleId = $this->node->modules[$_GET['slotId']]['module'];
+			$moduleId = $this->d13->node->modules[$_GET['slotId']]['module'];
 		}
 		
-		$tmp_module = $d13->createModule($moduleId, $_GET['slotId'], $this->node);
+		$tmp_module = $this->d13->createModule($moduleId, $_GET['slotId'], $this->d13->node);
 		
 		$tvars = $tmp_module->getTemplateVariables();
 		$tvars['tvar_page'] = $tmp_module->getTemplate();
@@ -171,17 +161,17 @@ class d13_moduleController extends d13_controller
 	
 	function moduleSet()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_POST['input'])) {
-			$status = $this->node->setModule($_GET['slotId'], $_POST['input']);
+			$status = $this->d13->node->setModule($_GET['slotId'], $_POST['input']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		}
 		
@@ -197,17 +187,17 @@ class d13_moduleController extends d13_controller
 	
 	function moduleAdd()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['moduleId'])) {
-			$status = $this->node->addModule($_GET['slotId'], $_GET['moduleId'], $_POST['input']);
+			$status = $this->d13->node->addModule($_GET['slotId'], $_GET['moduleId'], $_POST['input']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=node&action=get&nodeId=' . $this->node->data['id']);
+				header('Location: index.php?p=node&action=get&nodeId=' . $this->d13->node->data['id']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		}
 				
@@ -223,17 +213,17 @@ class d13_moduleController extends d13_controller
 	
 	function moduleUpgrade()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['slotId']) && isset($_GET['moduleId'])) {
-			$status = $this->node->upgradeModule($_GET['slotId'], $_GET['moduleId'], $_POST['input']);
+			$status = $this->d13->node->upgradeModule($_GET['slotId'], $_GET['moduleId'], $_POST['input']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=node&action=get&nodeId=' . $this->node->data['id']);
+				header('Location: index.php?p=node&action=get&nodeId=' . $this->d13->node->data['id']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		}
 				
@@ -249,16 +239,16 @@ class d13_moduleController extends d13_controller
 	
 	function moduleRemove()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
-		$status = $this->node->removeModule($_GET['slotId']);
+		$status = $this->d13->node->removeModule($_GET['slotId']);
 		if ($status == 'done') {
 			
-			header('Location: index.php?p=node&action=get&nodeId=' . $this->node->data['id']);
+			header('Location: index.php?p=node&action=get&nodeId=' . $this->d13->node->data['id']);
 			exit();
 		} else {
-			$message = $d13->getLangUI($status);
+			$message = $this->d13->getLangUI($status);
 		}
 				
 		return $tvars;
@@ -273,16 +263,16 @@ class d13_moduleController extends d13_controller
 	
 	function moduleCancel()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
-		$status = $this->node->cancelModule($_GET['slotId']);
+		$status = $this->d13->node->cancelModule($_GET['slotId']);
 		if ($status == 'done') {
 			
-			header('Location: index.php?p=node&action=get&nodeId=' . $this->node->data['id']);
+			header('Location: index.php?p=node&action=get&nodeId=' . $this->d13->node->data['id']);
 			exit();
 		} else {
-			$message = $d13->getLangUI($status);
+			$message = $this->d13->getLangUI($status);
 		}
 			
 		return $tvars;
@@ -297,11 +287,12 @@ class d13_moduleController extends d13_controller
 	
 	function moduleList()
 	{
-		global $d13;
+		
+		$args = array();
+		$args['slotId'] = $_GET['slotId'];
+		$moduleList = $this->d13->createController('d13_moduleListController', $args);
+		
 		$tvars = array();
-		
-		$moduleList = new d13_moduleListController($this->node, $_GET['slotId']);
-		
 		$tvars = $moduleList->getTemplateVariables();
 		$tvars['tvar_page'] = $moduleList->getTemplate();
 		
@@ -317,17 +308,17 @@ class d13_moduleController extends d13_controller
 	
 	function moduleAddMarket()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['slotId'])) {
-			$status = $this->node->addMarket($_GET['slotId']);
+			$status = $this->d13->node->addMarket($_GET['slotId']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		}
 			
@@ -344,17 +335,17 @@ class d13_moduleController extends d13_controller
 	
 	function moduleBuyMarket()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['slotId']) && isset($_GET['objType']) && isset($_GET['objId'])) {
-			$status = $this->node->buyMarket($_GET['slotId'], $_GET['objType'], $_GET['objId']);
+			$status = $this->d13->node->buyMarket($_GET['slotId'], $_GET['objType'], $_GET['objId']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		}
 			
@@ -370,17 +361,17 @@ class d13_moduleController extends d13_controller
 	
 	function moduleCancelMarket()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['slotId'])) {
-			$status = $this->node->cancelMarket($_GET['slotId']);
+			$status = $this->d13->node->cancelMarket($_GET['slotId']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		}
 
@@ -396,17 +387,17 @@ class d13_moduleController extends d13_controller
 	
 	function moduleAddTechnology()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['technologyId'])) {
-			$status = $this->node->addTechnology($_GET['technologyId'], $_GET['slotId']);
+			$status = $this->d13->node->addTechnology($_GET['technologyId'], $_GET['slotId']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		}
 			
@@ -422,17 +413,17 @@ class d13_moduleController extends d13_controller
 	
 	function moduleCancelTechnology()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['technologyId'])) {
-			$status = $this->node->cancelTechnology($_GET['technologyId'], $this->node->modules[$_GET['slotId']]['module']);
+			$status = $this->d13->node->cancelTechnology($_GET['technologyId'], $this->d13->node->modules[$_GET['slotId']]['module']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		}
 
@@ -448,22 +439,22 @@ class d13_moduleController extends d13_controller
 	
 	function moduleAddComponent()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['componentId'], $_POST['quantity'])) {
 			if ($_POST['quantity'] > 0) {
-				$status = $this->node->addComponent($_GET['componentId'], $_POST['quantity'], $_GET['slotId']);
+				$status = $this->d13->node->addComponent($_GET['componentId'], $_POST['quantity'], $_GET['slotId']);
 				if ($status == 'done') {
 					
-					header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+					header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 					exit();
 				} else {
-					$message = $d13->getLangUI($status);
+					$message = $this->d13->getLangUI($status);
 				}
 			} else {
 				
-				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 				exit();
 			}
 		}
@@ -479,17 +470,17 @@ class d13_moduleController extends d13_controller
 	
 	function moduleRemoveComponent()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['componentId'], $_POST['quantity'])) {
-			$status = $this->node->removeComponent($_GET['componentId'], $_POST['quantity'], $node->modules[$_GET['slotId']]['module'], $_GET['slotId']);
+			$status = $this->d13->node->removeComponent($_GET['componentId'], $_POST['quantity'], $node->modules[$_GET['slotId']]['module'], $_GET['slotId']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		}
 		
@@ -505,17 +496,17 @@ class d13_moduleController extends d13_controller
 	
 	function moduleCancelComponent()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['craftId'])) {
-			$status = $this->node->cancelComponent($_GET['craftId'], $this->node->modules[$_GET['slotId']]['module']);
+			$status = $this->d13->node->cancelComponent($_GET['craftId'], $this->d13->node->modules[$_GET['slotId']]['module']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		}
 			
@@ -531,21 +522,21 @@ class d13_moduleController extends d13_controller
 	
 	function moduleAddUnit()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['unitId'], $_POST['quantity']) && $_POST['quantity'] > 0) {
-			$status = $this->node->addUnit($_GET['unitId'], $_POST['quantity'], $_GET['slotId']);
+			$status = $this->d13->node->addUnit($_GET['unitId'], $_POST['quantity'], $_GET['slotId']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		} else {
 			
-			header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+			header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 			exit();
 		}
 
@@ -561,17 +552,17 @@ class d13_moduleController extends d13_controller
 	
 	function moduleRemoveUnit()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['unitId'], $_POST['quantity'])) {
-			$status = $this->node->removeUnit($_GET['unitId'], $_POST['quantity'], $this->node->modules[$_GET['slotId']]['module'], $_GET['slotId']);
+			$status = $this->d13->node->removeUnit($_GET['unitId'], $_POST['quantity'], $this->d13->node->modules[$_GET['slotId']]['module'], $_GET['slotId']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		}
 				
@@ -587,17 +578,17 @@ class d13_moduleController extends d13_controller
 	
 	function moduleCancelUnit()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		if (isset($_GET['trainId'])) {
-			$status = $this->node->cancelUnit($_GET['trainId'], $this->node->modules[$_GET['slotId']]['module']);
+			$status = $this->d13->node->cancelUnit($_GET['trainId'], $this->d13->node->modules[$_GET['slotId']]['module']);
 			if ($status == 'done') {
 				
-				header('Location: index.php?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $_GET['slotId']);
+				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
 				exit();
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		}
 			
@@ -615,9 +606,9 @@ class d13_moduleController extends d13_controller
 	function getTemplate($tvars)
 	{
 		
-		global $d13;
 		
-		$d13->templateRender($tvars['tvar_page'] , $tvars, $this->node);
+		
+		$this->d13->outputPage($tvars['tvar_page'] , $tvars, $this->d13->node);
 		
 		
 	}

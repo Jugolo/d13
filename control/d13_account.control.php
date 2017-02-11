@@ -15,9 +15,7 @@
 
 class d13_accountController extends d13_controller
 {
-	
-	private $node, $nodeId;
-	
+		
 	// ----------------------------------------------------------------------------------------
 	// construct
 	// @
@@ -25,9 +23,9 @@ class d13_accountController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct($args=NULL, d13_engine &$d13)
 	{
-		
+		parent::__construct($d13);
 		$tvars = array();
 		$tvars = $this->doControl();
 		$this->getTemplate($tvars);
@@ -72,7 +70,7 @@ class d13_accountController extends d13_controller
 	function accountLocales()
 	{
 	
-		global $d13;
+		
 		$locales = '';
 		
 		$locales = '<option value="' . $_SESSION[CONST_PREFIX . 'User']['locale'] . '">' . $_SESSION[CONST_PREFIX . 'User']['locale'] . '</option>';
@@ -101,7 +99,7 @@ class d13_accountController extends d13_controller
 	function accountTemplates()
 	{
 	
-		global $d13;
+		
 		$templates = '';
 		
 		$templates = '<option value="' . $_SESSION[CONST_PREFIX . 'User']['template'] . '">' . $_SESSION[CONST_PREFIX . 'User']['template'] . '</option>';
@@ -128,11 +126,11 @@ class d13_accountController extends d13_controller
 	function accountColors()
 	{
 	
-		global $d13;
+		
 		$colors = '';
 		
 		$colors = '<option value="' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">' . $_SESSION[CONST_PREFIX . 'User']['color'] . '</option>';
-		foreach($d13->getGeneral('colors') as $color) {
+		foreach($this->d13->getGeneral('colors') as $color) {
 			if ($_SESSION[CONST_PREFIX . 'User']['color'] != $color) {
 				$colors.= '<option value="' . $color . '">' . $color . '</option>';
 			}
@@ -151,9 +149,9 @@ class d13_accountController extends d13_controller
 	function accountUser()
 	{
 		
-		global $d13;
 		
-		$user = $d13->createObject('user', $_SESSION[CONST_PREFIX . 'User']['id']);
+		
+		$user = $this->d13->createObject('user', $_SESSION[CONST_PREFIX . 'User']['id']);
 		
 		if (isset($_GET['action'], $_POST['password'])) {
 		
@@ -166,41 +164,41 @@ class d13_accountController extends d13_controller
 					$user->data['locale'] = $_SESSION[CONST_PREFIX . 'User']['locale'] = $_POST['locale'];
 					$user->data['color'] = $_SESSION[CONST_PREFIX . 'User']['color'] = $_POST['color'];
 					$user->data['template'] = $_SESSION[CONST_PREFIX . 'User']['template'] = $_POST['template'];
-					$message = $d13->getLangUI($user->set());
+					$message = $this->d13->getLangUI($user->set());
 				}
 				else {
-					$message = $d13->getLangUI("wrongPassword");
+					$message = $this->d13->getLangUI("wrongPassword");
 				}
 
 				break;
 
 			case 'preferences':
-				if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) $message = $d13->getLangUI($user->setPreference($_POST['name'], $_POST['value']));
-				else $message = $d13->getLangUI("wrongPassword");
+				if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) $message = $this->d13->getLangUI($user->setPreference($_POST['name'], $_POST['value']));
+				else $message = $this->d13->getLangUI("wrongPassword");
 				break;
 
 			case 'blocklist':
-				if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) $message = $d13->getLangUI($user->setBlocklist($_POST['name']));
-				else $message = $d13->getLangUI("wrongPassword");
+				if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) $message = $this->d13->getLangUI($user->setBlocklist($_POST['name']));
+				else $message = $this->d13->getLangUI("wrongPassword");
 				break;
 
 			case 'password':
 				if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password']))
 				if ($_POST['newPassword'] == $_POST['rePassword']) {
 					$user->data['password'] = $_SESSION[CONST_PREFIX . 'User']['password'] = sha1($_POST['newPassword']);
-					$message = $d13->getLangUI($user->set());
+					$message = $this->d13->getLangUI($user->set());
 				}
-				else $message = $d13->getLangUI("rePassNotMatch");
-				else $message = $d13->getLangUI("wrongPassword");
+				else $message = $this->d13->getLangUI("rePassNotMatch");
+				else $message = $this->d13->getLangUI("wrongPassword");
 				break;
 
 			case 'remove':
 				if ($_SESSION[CONST_PREFIX . 'User']['password'] == sha1($_POST['password'])) {
 					$status = d13_user::remove($user->data['id']);
 					if ($status == 'done') header('Location: index.php?p=logout');
-					else $message = $d13->getLangUI($status);
+					else $message = $this->d13->getLangUI($status);
 				}
-				else $message = $d13->getLangUI("wrongPassword");
+				else $message = $this->d13->getLangUI("wrongPassword");
 				break;
 			}
 		}
@@ -209,7 +207,7 @@ class d13_accountController extends d13_controller
 		$preferenceNames = '';
 		$preferenceValues = array();
 		foreach($user->preferences as $key => $preference) {
-			$preferenceNames.= '<option value="' . $preference['name'] . '">' . $d13->getLangUI($preference['name']) . '</option>';
+			$preferenceNames.= '<option value="' . $preference['name'] . '">' . $this->d13->getLangUI($preference['name']) . '</option>';
 			$preferenceValues[$key] = '"' . $preference['value'] . '"';
 		}
 
@@ -234,13 +232,13 @@ class d13_accountController extends d13_controller
 	function getTemplate($tvars)
 	{
 	
-		global $d13;
+		
 		
 		
 		$tvars['tvar_user_email'] = $_SESSION[CONST_PREFIX . 'User']['email'];
 		$tvars['tvar_user_sitter'] = $_SESSION[CONST_PREFIX . 'User']['sitter'];
 		
-		$d13->templateRender("account", $tvars);
+		$this->d13->outputPage("account", $tvars);
 		
 	}
 

@@ -25,8 +25,9 @@ class d13_loginController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct($args=NULL, d13_engine &$d13)
 	{
+		parent::__construct($d13);
 		$this->actionId = $_GET['action'];
 		$this->doControl();
 		
@@ -69,7 +70,7 @@ class d13_loginController extends d13_controller
 	function doLogin()
 	{
 		
-		global $d13;
+		
 		
 		if (isset($_POST['name'], $_POST['password'])) {
 			$name = strtolower($_POST['name']);
@@ -85,10 +86,10 @@ class d13_loginController extends d13_controller
 		}
 
 		if (isset($name, $pass)) {
-			$user = $d13->createObject('user');
+			$user = $this->d13->createObject('user');
 			$status = $user->get('name', $name);
 			if ($status == 'done')
-			if ($d13->getGeneral('options', 'enabledLogin') || $user->data['access'] == 3)
+			if ($this->d13->getGeneral('options', 'enabledLogin') || $user->data['access'] == 3)
 			if ($user->data['password'] == $pass)
 			if ($user->data['access']) {
 				$user->data['ip'] = $_SERVER['REMOTE_ADDR'];
@@ -106,10 +107,10 @@ class d13_loginController extends d13_controller
 
 				header('Location: index.php?p=node&action=list');
 			}
-			else $message = $d13->getLangUI("inactive");
-			else $message = $d13->getLangUI("wrongPassword");
-			else $message = $d13->getLangUI("loginDisabled");
-			else $message = $d13->getLangUI($status);
+			else $message = $this->d13->getLangUI("inactive");
+			else $message = $this->d13->getLangUI("wrongPassword");
+			else $message = $this->d13->getLangUI("loginDisabled");
+			else $message = $this->d13->getLangUI($status);
 		}
 	
 	}
@@ -124,10 +125,10 @@ class d13_loginController extends d13_controller
 	function doAssist()
 	{
 	
-		global $d13;
+		
 		
 		if (isset($_POST['user'], $_POST['sitter'], $_POST['password'])) {
-			$user = $d13->createObject('user');
+			$user = $this->d13->createObject('user');
 			$status = $user->get('name', $_POST['user']);
 			if ($status == 'done') {
 				$sitter = new d13_user();
@@ -141,11 +142,11 @@ class d13_loginController extends d13_controller
 					$_SESSION[CONST_PREFIX . 'User'] = $user->data;
 					header('Location: index.php');
 				}
-				else $message = $d13->getLangUI("accessDenied");
-				else $message = $d13->getLangUI("wrongPassword");
-				else $message = $d13->getLangUI($status);
+				else $message = $this->d13->getLangUI("accessDenied");
+				else $message = $this->d13->getLangUI("wrongPassword");
+				else $message = $this->d13->getLangUI($status);
 			}
-			else $message = $d13->getLangUI($status);
+			else $message = $this->d13->getLangUI($status);
 		}
 	
 	
@@ -161,7 +162,7 @@ class d13_loginController extends d13_controller
 	function getTemplate()
 	{
 	
-		global $d13;
+		
 		
 		$tvars = array();
 		
@@ -170,20 +171,20 @@ class d13_loginController extends d13_controller
 	
 			case 'sit':
 
-			$d13->templateInject($d13->templateSubpage("sub.assist", $tvars));
-			$d13->templateRender("login", $tvars);
+			$this->d13->templateInject($this->d13->templateSubpage("sub.assist", $tvars));
+			$this->d13->outputPage("login", $tvars);
 			break;
 
 			case 'login':
 
-			$d13->templateInject($d13->templateSubpage("sub.login", $tvars));
-			$d13->templateRender("login", $tvars);
+			$this->d13->templateInject($this->d13->templateSubpage("sub.login", $tvars));
+			$this->d13->outputPage("login", $tvars);
 			break;
 		
 			default:
 			
-			$d13->templateInject($d13->templateSubpage("sub.login", $tvars));
-			$d13->templateRender("login", $tvars);
+			$this->d13->templateInject($this->d13->templateSubpage("sub.login", $tvars));
+			$this->d13->outputPage("login", $tvars);
 			break;
 		
 		}

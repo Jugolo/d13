@@ -24,9 +24,9 @@ class d13_termsController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct($args=NULL, d13_engine &$d13)
 	{
-		
+		parent::__construct($d13);
 		$this->getTemplate();
 	}
 
@@ -40,11 +40,10 @@ class d13_termsController extends d13_controller
 	function getTemplate()
 	{
 	
-		global $d13;
 		
 		$tvars = array();
 		
-		$d13->templateRender("terms", $tvars);
+		$this->d13->outputPage("terms", $tvars);
 		
 	}
 

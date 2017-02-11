@@ -26,6 +26,8 @@ class d13_factory
 
 {
 	
+	protected $d13;
+	
 	private $nodeFactory, $moduleFactory, $objectFactory, $gameObjectFactory;
 	
 	// ----------------------------------------------------------------------------------------
@@ -34,15 +36,30 @@ class d13_factory
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct()
+	function __construct(d13_engine &$d13)
 	{
-	
-		$this->nodeFactory 			= new d13_factory_node();
-		$this->moduleFactory		= new d13_factory_module();
-		$this->GameObjectFactory 	= new d13_factory_gameobject();
-		$this->objectFactory		= new d13_factory_object();
+		$this->d13 					= $d13;
+		$this->nodeFactory 			= new d13_factory_node($d13);
+		$this->moduleFactory		= new d13_factory_module($d13);
+		$this->GameObjectFactory 	= new d13_factory_gameobject($d13);
+		$this->objectFactory		= new d13_factory_object($d13);
+		$this->controllerFactory	= new d13_factory_controller($d13);
 	
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// createController
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function createController($type, $args=NULL)
+	{
+		
+		return $this->controllerFactory->create($type, $args);
+		
+	}
+	
 	
 	// ----------------------------------------------------------------------------------------
 	// createObject

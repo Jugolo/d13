@@ -26,6 +26,16 @@ class d13_controller
 
 {
 	
+	protected $d13;
+	
+	public
+	
+	function __construct(d13_engine &$d13)
+	{
+		$this->d13 = $d13;
+		
+	}
+	
 	
 
 

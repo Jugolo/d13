@@ -16,7 +16,7 @@
 class d13_moduleListController extends d13_controller
 {
 	
-	private $node, $slotId;
+	private $slodId;
 	
 	// ----------------------------------------------------------------------------------------
 	// construct
@@ -25,10 +25,11 @@ class d13_moduleListController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct($node, $slotId)
+	function __construct($args, d13_engine &$d13)
 	{
-		$this->node 	= $node;
-		$this->slotId 	= $slotId;	
+		parent::__construct($d13);
+		
+		$this->slotId 	= $args['slotId'];	
 	}
 
 
@@ -56,36 +57,36 @@ class d13_moduleListController extends d13_controller
 	function getTemplateVariables()
 	{
 	
-		global $d13;
+		
 		
 		$tvars = array();
 		
 		$tvars['tvar_sub_list'] = "";
-		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
+		$tvars['tvar_nodeFaction'] = $this->d13->node->data['faction'];
 		
-		$this->node->queues->getQueue("build");
+		$this->d13->node->queues->getQueue("build");
 		
-		foreach($d13->getModule($this->node->data['faction']) as $module) {
+		foreach($this->d13->getModule($this->d13->node->data['faction']) as $module) {
 		
-			$count = $this->node->getModuleCount($module['id']);
+			$count = $this->d13->node->getModuleCount($module['id']);
 			
-			if (count($this->node->queues->queue["build"])) {
-				foreach($this->node->queues->queue["build"] as $item) {
+			if (count($this->d13->node->queues->queue["build"])) {
+				foreach($this->d13->node->queues->queue["build"] as $item) {
 					if ($item['obj_id'] == $module['id']) {
 						$count++;
 					}
 				}
 			}
 			
-			if ($count < $d13->getModule($this->node->data['faction'], $module['id'], 'maxInstances')) {
+			if ($count < $this->d13->getModule($this->d13->node->data['faction'], $module['id'], 'maxInstances')) {
 				$tmp_module = NULL;
-				$tmp_module = $d13->createModule($module['id'], $this->slotId, $this->node);
-				$tvars['tvar_sub_list'].= $d13->templateSubpage("sub.module.list", $tmp_module->getTemplateVariables());
+				$tmp_module = $this->d13->createModule($module['id'], $this->slotId, $this->d13->node);
+				$tvars['tvar_sub_list'].= $this->d13->templateSubpage("sub.module.list", $tmp_module->getTemplateVariables());
 			}
 		}
 		
 		// - - - - Add Slider Initalize at bottom of the page
-		$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
+		$this->d13->templateInject($this->d13->templateSubpage("sub.swiper.horizontal", $tvars));
 				
 		return $tvars;
 	}

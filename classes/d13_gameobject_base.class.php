@@ -37,7 +37,9 @@
 abstract class d13_gameobject_base
 
 {
-	
+
+	protected $d13;
+
 	public $data, $node, $checkRequirements;
 
 	// ----------------------------------------------------------------------------------------
@@ -46,11 +48,11 @@ abstract class d13_gameobject_base
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct($args = array(), &$node)
+	function __construct($args = array(), &$node, d13_engine &$d13)
 	{
 	
-		global $d13;
 		
+		$this->d13	= $d13;
 		$this->data = array();
 		$this->node = $node;
 		$this->checkStatsBase($args);

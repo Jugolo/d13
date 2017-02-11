@@ -16,7 +16,6 @@
 class d13_activateController extends d13_controller
 {
 	
-	
 	// ----------------------------------------------------------------------------------------
 	// construct
 	// @
@@ -24,9 +23,9 @@ class d13_activateController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct($args=NULL, d13_engine &$d13)
 	{
-		
+		parent::__construct($d13);
 		$this->doControl();
 		$this->getTemplate();
 		
@@ -43,31 +42,31 @@ class d13_activateController extends d13_controller
 	function doControl()
 	{
 	
-		global $d13;
-		$d13->dbQuery('start transaction');
+		
+		$this->d13->dbQuery('start transaction');
 
 		if (isset($_GET['user'], $_GET['code'])) {
 			foreach($_GET as $key => $value) $_GET[$key] = d13_misc::clean($value);
 			if ((($_GET['user'] != '')) && ($_GET['code'] != '')) {
 			
-				$user = $d13->createObject('user');
+				$user = $this->d13->createObject('user');
 				$status = $user->get('name', $_GET['user']);
 				
 				if ($status == 'done') {
 					$activation = new d13_activation();
 					$status = $activation->get($user->data['id']);
 					if ($status == 'done') $status = $activation->activate($_GET['code']);
-					$message = $d13->getLangUI($status);
+					$message = $this->d13->getLangUI($status);
 				}
-				else $message = $d13->getLangUI($status);
+				else $message = $this->d13->getLangUI($status);
 			}
-			else $message = $d13->getLangUI("insufficientData");
+			else $message = $this->d13->getLangUI("insufficientData");
 		}
 
 		if ((isset($status)) && ($status == 'error')) {
-			$d13->dbQuery('rollback');
+			$this->d13->dbQuery('rollback');
 		} else {
-			$d13->dbQuery('commit');
+			$this->d13->dbQuery('commit');
 		}
 	}
 
@@ -81,10 +80,10 @@ class d13_activateController extends d13_controller
 	function getTemplate()
 	{
 	
-		global $d13;
+		
 		
 		$tvars = array();
-		$d13->templateRender("activate", $tvars);
+		$this->d13->outputPage("activate", $tvars);
 		
 		
 	}

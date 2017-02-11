@@ -15,9 +15,7 @@
 
 class d13_resetController extends d13_controller
 {
-	
-	private $node, $nodeId;
-	
+
 	// ----------------------------------------------------------------------------------------
 	// construct
 	// @
@@ -25,9 +23,9 @@ class d13_resetController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct($args=NULL, d13_engine &$d13)
 	{
-		
+		parent::__construct($d13);
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -40,39 +38,39 @@ class d13_resetController extends d13_controller
 	doControl()
 	{
 	
-		$d13->dbQuery('start transaction');
+		$this->d13->dbQuery('start transaction');
 
 		if (isset($_POST['name'], $_POST['email'])) {
 			
 			if ((($_POST['name'] != '')) && ($_POST['email'] != '')) {
-				$user = $d13->createObject('user');
+				$user = $this->d13->createObject('user');
 				$status = $user->get('name', $_POST['name']);
 				if ($status == 'done') {
 					$newPass = rand(1000000000, 9999999999);
 					$status = $user->resetPassword($_POST['email'], $newPass);
 					include (CONST_INCLUDE_PATH . 'api/email.api.php');
 
-					$body = CONST_GAME_TITLE . ' ' . $d13->getLangUI("newPassword") . ': ' . $newPass;			//TODO move to template
+					$body = CONST_GAME_TITLE . ' ' . $this->d13->getLangUI("newPassword") . ': ' . $newPass;			//TODO move to template
 					
 					if ($status == 'done') {
-						$status = email(CONST_EMAIL, CONST_GAME_TITLE, $user->data['email'], CONST_GAME_TITLE . ' ' . $d13->getLangUI("resetPassword") , $body);
-						$message = $d13->getLangUI($status);
+						$status = email(CONST_EMAIL, CONST_GAME_TITLE, $user->data['email'], CONST_GAME_TITLE . ' ' . $this->d13->getLangUI("resetPassword") , $body);
+						$message = $this->d13->getLangUI($status);
 					}
 				}
 				else {
-					$message = $d13->getLangUI($status);
+					$message = $this->d13->getLangUI($status);
 				}
 			}
 			else {
-				$message = $d13->getLangUI("insufficientData");
+				$message = $this->d13->getLangUI("insufficientData");
 			}
 		}
 
 		if ((isset($status)) && ($status == 'error')) {
-			$d13->dbQuery('rollback');
+			$this->d13->dbQuery('rollback');
 		}
 		else {
-			$d13->dbQuery('commit');
+			$this->d13->dbQuery('commit');
 		}
 	
 	}
@@ -87,7 +85,7 @@ class d13_resetController extends d13_controller
 	function getTemplate()
 	{
 	
-		global $d13;
+		
 		
 		$tvars = array();
 		$tvars['tvar_user_email'] = '';
@@ -98,7 +96,7 @@ class d13_resetController extends d13_controller
 			$tvars['tvar_user_name']	= $_SESSION[CONST_PREFIX . 'User']['name'];
 		}
 		
-		$d13->templateRender("reset", $tvars);
+		$this->d13->outputPage("reset", $tvars);
 		
 	}
 

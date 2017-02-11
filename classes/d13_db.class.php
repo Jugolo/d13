@@ -25,7 +25,8 @@
 class d13_db
 
 {
-
+	protected $d13;
+	
 	private $db, $queries, $lastquery;
 
 	// ----------------------------------------------------------------------------------------
@@ -34,8 +35,9 @@ class d13_db
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct()
+	function __construct(d13_engine &$d13)
 	{
+		$this->d13 = $d13;
 		$this->queries = array();
 		$this->create(CONST_DB_HOST, CONST_DB_USER, CONST_DB_PASS, CONST_DB_NAME);
 	}

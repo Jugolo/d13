@@ -16,8 +16,6 @@
 class d13_combatController extends d13_controller
 {
 	
-	private $node;
-	
 	// ----------------------------------------------------------------------------------------
 	// construct
 	// @
@@ -25,16 +23,13 @@ class d13_combatController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct($args=NULL, d13_engine &$d13)
 	{
-		
+		parent::__construct($d13);
 		$tvars = array();
 		
-		$this->node = new d13_node();
-		$status	= $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
-		$this->node->checkAll(time());
-		$this->node->getResources();
-		$this->node->getComponents();
+		
+		
 		$tvars = $this->doControl();
 		$this->getTemplate($tvars);
 
@@ -50,7 +45,7 @@ class d13_combatController extends d13_controller
 	function doControl()
 	{
 	
-		global $d13;
+		
 		
 		$tvars = array();
 		
@@ -80,7 +75,7 @@ class d13_combatController extends d13_controller
 	function doCombatAdd()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 	
@@ -91,10 +86,10 @@ class d13_combatController extends d13_controller
 			$pass = false;
 			
 			// - - - - Check if Node allows this combat type
-			if ($this->node->checkOptions($_GET['type'])) {
+			if ($this->d13->node->checkOptions($_GET['type'])) {
 				$pass = true;
 			} else {
-				$message = $d13->getLangUI("featureDisabled");
+				$message = $this->d13->getLangUI("featureDisabled");
 			}
 			
 			if ($pass && isset($_POST['type'], $_POST['id'], $_POST['attackerGroupUnitIds'], $_POST['attackerGroups'])) {
@@ -103,7 +98,7 @@ class d13_combatController extends d13_controller
 				if ($target->get('id', $_POST['id']) == 'done') {
 					
 					// - - - - Check Alliance Status
-					$targetUser = $d13->createObject('user');
+					$targetUser = $this->d13->createObject('user');
 					if ($targetUser->get('id', $target->data['user']) == 'done') {
 						$pass = true;
 						$alliance = new d13_alliance();
@@ -115,7 +110,7 @@ class d13_combatController extends d13_controller
 							}
 							else {
 								$pass = false;
-								$message = $d13->getLangUI("noWar");
+								$message = $this->d13->getLangUI("noWar");
 							}
 						}
 
@@ -126,13 +121,13 @@ class d13_combatController extends d13_controller
 							$gotLeader = false;
 							$gotLimits = array();
 							
-							foreach ($d13->getGeneral('types') as $key => $type) {
+							foreach ($this->d13->getGeneral('types') as $key => $type) {
 								$gotLimits[$key] = 0;
 							}
 							
 							$data = array();
-							$data['input']['attacker']['focus'] = $this->node->data['focus'] ;
-							$data['input']['attacker']['faction'] = $this->node->data['faction'];
+							$data['input']['attacker']['focus'] = $this->d13->node->data['focus'] ;
+							$data['input']['attacker']['faction'] = $this->d13->node->data['faction'];
 							
 							// - - - - Check for static, multiple leaders and limited units
 							
@@ -147,16 +142,16 @@ class d13_combatController extends d13_controller
 								}
 								
 								
-								if (!$d13->getUnit($this->node->data['faction'], $unitId, 'speed')) {
+								if (!$this->d13->getUnit($this->d13->node->data['faction'], $unitId, 'speed')) {
 									$gotIllegal = true;
 								}
-								if (!in_array($d13->getUnit($this->node->data['faction'], $key, 'movementType'), $d13->getCombat($_GET['type'], 'movementTypes') )) {
+								if (!in_array($this->d13->getUnit($this->d13->node->data['faction'], $key, 'movementType'), $this->d13->getCombat($_GET['type'], 'movementTypes') )) {
 									$gotIllegal = true;
 								}
 								
-								$type = $d13->getUnit($this->node->data['faction'], $unitId, 'type');
+								$type = $this->d13->getUnit($this->d13->node->data['faction'], $unitId, 'type');
 								
-								if ($d13->getGeneral('types', $type, 'unique')) {
+								if ($this->d13->getGeneral('types', $type, 'unique')) {
 									$gotLimits[$type] += $_POST['attackerGroups'][$key];
 								}
 								
@@ -169,7 +164,7 @@ class d13_combatController extends d13_controller
 							}
 							
 							foreach ($gotLimits as $key => $limit) {
-								if ($limit > $d13->getGeneral('types', $key, 'limit')) {
+								if ($limit > $this->d13->getGeneral('types', $key, 'limit')) {
 									$pass = false;
 								}
 								if ($key == 'leader' && $limit == 1) {
@@ -177,24 +172,24 @@ class d13_combatController extends d13_controller
 								}
 							}
 							
-							if (!$gotLeader && $d13->getCombat($_GET['type'], 'requiresLeader')) {
+							if (!$gotLeader && $this->d13->getCombat($_GET['type'], 'requiresLeader')) {
 								$pass = false;
 							}
 							
 							if ($pass) {
-								$status = $this->node->addCombat($target->data['id'], $data, $_GET['type'], $_GET['slotId']);
+								$status = $this->d13->node->addCombat($target->data['id'], $data, $_GET['type'], $_GET['slotId']);
 								header("location: ?p=node&action=list&nodeId=0");
 							} else {
 								$status = 'error';
 							}
-							$message = $d13->getLangUI($status);
+							$message = $this->d13->getLangUI($status);
 							
 						}
 					} else {
-						$message = $d13->getLangUI("noUser");
+						$message = $this->d13->getLangUI("noUser");
 					}
 				} else {
-					$message = $d13->getLangUI("noNode");
+					$message = $this->d13->getLangUI("noNode");
 				}
 			}
 			
@@ -203,9 +198,9 @@ class d13_combatController extends d13_controller
 		//----
 		
 
-		$tvars['tvar_unitImagePath'] 	= $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'];
-		$tvars['tvar_nodeFaction'] 		= $this->node->data['faction'];
-		$tvars['tvar_nodeID'] 			= $this->node->data['id'];
+		$tvars['tvar_unitImagePath'] 	= $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->d13->node->data['faction'];
+		$tvars['tvar_nodeFaction'] 		= $this->d13->node->data['faction'];
+		$tvars['tvar_nodeID'] 			= $this->d13->node->data['id'];
 		$tvars['tvar_combatType'] 		= $_GET['type'];
 
 		if (isset($_GET['type'])) {
@@ -221,26 +216,26 @@ class d13_combatController extends d13_controller
 		$tvars['tvar_units'] = "";
 		$tvars['tvar_unitsHTML'] = "";
 
-		foreach($this->node->units as $key => $unit) {
-			if ($unit['value'] > 0 && $d13->getUnit($this->node->data['faction'], $key, 'speed') > 0) {
-				if ( in_array($d13->getUnit($this->node->data['faction'], $key, 'movementType'), $d13->getCombat($_GET['type'], 'movementTypes') )) {
+		foreach($this->d13->node->units as $key => $unit) {
+			if ($unit['value'] > 0 && $this->d13->getUnit($this->d13->node->data['faction'], $key, 'speed') > 0) {
+				if ( in_array($this->d13->getUnit($this->d13->node->data['faction'], $key, 'movementType'), $this->d13->getCombat($_GET['type'], 'movementTypes') )) {
 					
-					$id = $d13->getUnit($this->node->data['faction'], $key, 'id');
+					$id = $this->d13->getUnit($this->d13->node->data['faction'], $key, 'id');
 					
 					$args = array();
 					$args['supertype'] = 'unit';
 					$args['id'] = $id;
 					
-					$tmp_unit = $d13->createGameObject($args, $this->node);
+					$tmp_unit = $this->d13->createGameObject($args, $this->d13->node);
 					
-					$d13->templateInject($d13->templateSubpage("sub.popup.unit", $tmp_unit->getTemplateVariables()));
+					$this->d13->templateInject($this->d13->templateSubpage("sub.popup.unit", $tmp_unit->getTemplateVariables()));
 	
-					$tvars['tvar_unitName'] 	= $d13->getLangGL('units', $this->node->data['faction'], $id, 'name');
+					$tvars['tvar_unitName'] 	= $this->d13->getLangGL('units', $this->d13->node->data['faction'], $id, 'name');
 					$tvars['tvar_unitId'] 		= $id;
 					$tvars['tvar_unitImage']	= $tmp_unit->data['image'];
 					$tvars['tvar_unitType'] 	= $tmp_unit->data['type'];
-					$tvars['tvar_unitUnique'] 	= (int)$d13->getGeneral('types', $tmp_unit->data['type'], 'unique');
-					$tvars['tvar_unitAmount'] 	= min($unit['value'], $d13->getGeneral('types', $tmp_unit->data['type'], 'limit'));			
+					$tvars['tvar_unitUnique'] 	= (int)$this->d13->getGeneral('types', $tmp_unit->data['type'], 'unique');
+					$tvars['tvar_unitAmount'] 	= min($unit['value'], $this->d13->getGeneral('types', $tmp_unit->data['type'], 'limit'));			
 					$tvars['tvar_unitFuel'] 	= $tmp_unit->data['fuel'];
 		
 					$tvars['tvar_unitdamage'] 	= $tmp_unit->data['damage'] + $tmp_unit->data['upgrade_damage'];
@@ -252,11 +247,11 @@ class d13_combatController extends d13_controller
 					$tvars['tvar_unitcapacity'] = $tmp_unit->data['capacity'] + $tmp_unit->data['upgrade_capacity'];
 			
 					foreach ($tmp_unit->data['attackModifier'] as $modifier) {
-						$tvars['tvar_unit'.$modifier['stat']] += floor($d13->getUnit($this->node->data['faction'], $id, $modifier['stat']) * $modifier['value']);
+						$tvars['tvar_unit'.$modifier['stat']] += floor($this->d13->getUnit($this->d13->node->data['faction'], $id, $modifier['stat']) * $modifier['value']);
 					}
 		
 					$modifiers = array();
-					foreach ($d13->getGeneral('stats') as $stat) {
+					foreach ($this->d13->getGeneral('stats') as $stat) {
 						$modifiers[$stat] = 0;
 					}
 		
@@ -264,30 +259,30 @@ class d13_combatController extends d13_controller
 						$modifiers[$modifier['stat']] += $modifier['value'];
 					}
 		
-					foreach ($d13->getGeneral('stats') as $stat) {
+					foreach ($this->d13->getGeneral('stats') as $stat) {
 						$tvars['tvar_armyMod'.$stat] = $modifiers[$stat];
 					}
 		
-					$tvars['tvar_unitsHTML']	.= $d13->templateSubpage("sub.combat.unit", $tvars);
+					$tvars['tvar_unitsHTML']	.= $this->d13->templateSubpage("sub.combat.unit", $tvars);
 	
 				}
 			}
 		}
 
-		$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
+		$this->d13->templateInject($this->d13->templateSubpage("sub.swiper.horizontal", $tvars));
 
 		//====================================================== BUILD AVAILABLE ENEMIES LIST
 		
 		$showAll = true;
 		$tvars['tvar_nodeList'] = '<option disabled>...</option>';
 		$target_nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id'], TRUE);
-		$this->node->getLocation();
+		$this->d13->node->getLocation();
 
 		foreach($target_nodes as $target_node) {
 			$disabled = '';
 			$text = '';
 			$target_node->getLocation();
-			$distance = ceil(sqrt(pow(abs($this->node->location['x'] - $target_node->location['x']) , 2) + pow(abs($this->node->location['y'] - $target_node->location['y']) , 2)));
+			$distance = ceil(sqrt(pow(abs($this->d13->node->location['x'] - $target_node->location['x']) , 2) + pow(abs($this->d13->node->location['y'] - $target_node->location['y']) , 2)));
 	
 			if ($target_node->getShield($_GET['type'])) {
 				$disabled = 'disabled';
@@ -295,25 +290,25 @@ class d13_combatController extends d13_controller
 			}
 	
 			if ($showAll || empty($disabled))  {
-				$tvars['tvar_nodeList'].= '<option value="'.$target_node->data['id'].'" '.$disabled.'>' . $target_node->data['name'] . ' [' . $distance . $d13->getLangUI('miles') . '] ' .$text . '</option>';
+				$tvars['tvar_nodeList'].= '<option value="'.$target_node->data['id'].'" '.$disabled.'>' . $target_node->data['name'] . ' [' . $distance . $this->d13->getLangUI('miles') . '] ' .$text . '</option>';
 			}
 		}
 
 		// - - - - Is a leader required?
 		$tvars['tvar_leaderRequired'] = '';
 		$tvars['tvar_leader'] = 0;
-		if ($d13->getCombat($_GET['type'], 'requiresLeader')) {
-			$tvars['tvar_leaderRequired'] = $d13->templateGet("sub.combat.leader");
+		if ($this->d13->getCombat($_GET['type'], 'requiresLeader')) {
+			$tvars['tvar_leaderRequired'] = $this->d13->templateGet("sub.combat.leader");
 			$tvars['tvar_leader'] = 1;
 		}
 					
 		$tvars['tvar_wipeoutRequired'] = '';						
-		if ($d13->getCombat($_GET['type'], 'requiresWipeout')) {
-			$tvars['tvar_wipeoutRequired'] = $d13->templateGet("sub.combat.wipeout");
+		if ($this->d13->getCombat($_GET['type'], 'requiresWipeout')) {
+			$tvars['tvar_wipeoutRequired'] = $this->d13->templateGet("sub.combat.wipeout");
 		}
 					
 		// - - - - Combat Cost & Fuel
-		$cost = $d13->getFaction($this->node->data['faction'], 'costs', $_GET['type']);
+		$cost = $this->d13->getFaction($this->d13->node->data['faction'], 'costs', $_GET['type']);
 		$tvars['tvar_costData'] = '';
 		$tvars['tvar_resources'] = '';
 
@@ -332,11 +327,11 @@ class d13_combatController extends d13_controller
 					$idr = "totalFuel";
 					$cost = 0;
 					$tvars['tvar_fuelFactor'] = floor($res['value']);
-					$tvars['tvar_fuelResource'] = floor($this->node->resources[$res['resource']]['value']);
+					$tvars['tvar_fuelResource'] = floor($this->d13->node->resources[$res['resource']]['value']);
 				}
 		
-				$tvars['tvar_resources'] .= '<input type="hidden" name="availableRes[]" id="'.$idv.'" value="'.floor($this->node->resources[$resource]['value']).'">';
-				$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $d13->getResource($resource, 'icon') . '" title="' . $d13->getLangGL('resources', $resource, 'name') . '"><span name="totalRes[]" id="'.$idr.'">'.$cost . '</span></span>';
+				$tvars['tvar_resources'] .= '<input type="hidden" name="availableRes[]" id="'.$idv.'" value="'.floor($this->d13->node->resources[$resource]['value']).'">';
+				$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $this->d13->getResource($resource, 'icon') . '" title="' . $this->d13->getLangGL('resources', $resource, 'name') . '"><span name="totalRes[]" id="'.$idr.'">'.$cost . '</span></span>';
 
 			} else if (isset($res['component'])) {
 		
@@ -347,7 +342,7 @@ class d13_combatController extends d13_controller
 				$args['supertype'] 	= 'component';
 				$args['id'] 		= $res['component'];
 				
-				$tmp_component = new d13_gameobject_component($args, $this->node);
+				$tmp_component = new d13_gameobject_component($args, $this->d13->node);
 		
 				$resource = $res['component'];
 				$cost =  $res['value'];
@@ -357,11 +352,11 @@ class d13_combatController extends d13_controller
 					$idr = "totalFuel";
 					$cost = 0;
 					$tvars['tvar_fuelFactor'] = floor($res['value']);
-					$tvars['tvar_fuelResource'] = floor($this->node->components[$res['resource']]['value']);
+					$tvars['tvar_fuelResource'] = floor($this->d13->node->components[$res['resource']]['value']);
 				}
 		
-				$tvars['tvar_resources'] .= '<input type="hidden" name="availableRes[]" id="'.$idv.'" value="'.floor($this->node->components[$resource]['value']).'">';
-				$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . "/" . $tmp_component->data['image'] . '" title="' . $tmp_component->data['name'] . '"><span name="totalRes[]" id="'.$idr.'">'.$cost . '</span></span>';
+				$tvars['tvar_resources'] .= '<input type="hidden" name="availableRes[]" id="'.$idv.'" value="'.floor($this->d13->node->components[$resource]['value']).'">';
+				$tvars['tvar_costData'] .=  '<span class="badge"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->d13->node->data['faction'] . "/" . $tmp_component->data['image'] . '" title="' . $tmp_component->data['name'] . '"><span name="totalRes[]" id="'.$idr.'">'.$cost . '</span></span>';
 
 			}
 	
@@ -386,24 +381,24 @@ class d13_combatController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['combatId'])) {
-			$combat = $this->node->getCombat($_GET['combatId']);
+			$combat = $this->d13->node->getCombat($_GET['combatId']);
 			if (isset($combat['id'])) {
-				if ($combat['sender'] == $this->node->data['id']) {
-					$status = $this->node->cancelCombat($combat['id']);
+				if ($combat['sender'] == $this->d13->node->data['id']) {
+					$status = $this->d13->node->cancelCombat($combat['id']);
 					if ($status == 'done') {
-						header('Location: ?p=node&action=get&nodeId=' . $this->node->data['id']);
+						header('Location: ?p=node&action=get&nodeId=' . $this->d13->node->data['id']);
 						exit();
 					} else {
-						$message = $d13->getLangUI($status);
+						$message = $this->d13->getLangUI($status);
 					}
 				} else {
-					$message = $d13->getLangUI("accessDenied");
+					$message = $this->d13->getLangUI("accessDenied");
 				}
 			} else {
-				$message = $d13->getLangUI("noCombat");
+				$message = $this->d13->getLangUI("noCombat");
 			}
 		} else {
-			$message = $d13->getLangUI("noCombat");
+			$message = $this->d13->getLangUI("noCombat");
 		}
 		
 		return $tvars;
@@ -420,9 +415,9 @@ class d13_combatController extends d13_controller
 	function getTemplate($tvars)
 	{
 	
-		global $d13;
 		
-		$d13->templateRender($tvars['tvar_page'], $tvars);
+		
+		$this->d13->outputPage($tvars['tvar_page'], $tvars);
 		
 	}
 

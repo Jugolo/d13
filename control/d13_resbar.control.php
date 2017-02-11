@@ -16,7 +16,7 @@
 class d13_resBarController extends d13_controller
 {
 	
-	private $node, $user;
+	private $user;
 	
 	// ----------------------------------------------------------------------------------------
 	// construct
@@ -25,15 +25,13 @@ class d13_resBarController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct(&$node)
+	function __construct($args=NULL, d13_engine &$d13)
 	{
+		parent::__construct($d13);
 		
-		global $d13;
 		
-		$this->node 	= $node;
-		$this->node->getResources();
-	
-		$this->user = $d13->createObject('user', $_SESSION[CONST_PREFIX . 'User']['id']);
+		
+		$this->user = $this->d13->createObject('user', $_SESSION[CONST_PREFIX . 'User']['id']);
 		
 	}
 
@@ -47,7 +45,7 @@ class d13_resBarController extends d13_controller
 	function getTemplate()
 	{
 	
-		global $d13;
+		
 		
 		$html = '';
 		$tvars = array();
@@ -59,7 +57,7 @@ class d13_resBarController extends d13_controller
 		
 		//- - - - - Player Stats
 		if ($this->user->user_status == 'done') {
-			foreach($d13->getGeneral("userstats") as $stat) {
+			foreach($this->d13->getGeneral("userstats") as $stat) {
 				if ($stat['active'] && $stat['visible']) {
 					$tvars['tvar_resImage'] 		= $stat['icon'];
 					$tvars['tvar_resValue'] 		= $this->user->data[$stat['value']];
@@ -69,50 +67,50 @@ class d13_resBarController extends d13_controller
 					} else {
 					$tvars['tvar_resPercentage'] 	= 0;
 					}
-					$tvars['tvar_resTooltip'] 		= $d13->getLangUI($stat['name']);
+					$tvars['tvar_resTooltip'] 		= $this->d13->getLangUI($stat['name']);
 					if ($stat['isExp']) {
 					$tvars['tvar_resTooltip'] 		.= ' '. floor($this->user->data[$stat['value']]) . '/' . d13_misc::nextlevelexp($this->user->data['level']);
 					} else {
 					$tvars['tvar_resTooltip'] 		.= ' '. floor($this->user->data[$stat['value']]) ;
 					}
-					$tvars['tvar_resEntry']			.= $d13->templateSubpage("sub.resource.entry", $tvars);
+					$tvars['tvar_resEntry']			.= $this->d13->templateSubpage("sub.resource.entry", $tvars);
 				}
 			}
 		}
 	
 		//- - - - - Resources
-		if (isset($this->node) && isset($this->node->resources)) {
-			foreach($this->node->resources as $resource) {
-				if ($d13->getResource($resource['id'], 'active') && $d13->getResource($resource['id'], 'visible')) {
+		if (isset($this->d13->node) && isset($this->d13->node->resources)) {
+			foreach($this->d13->node->resources as $resource) {
+				if ($this->d13->getResource($resource['id'], 'active') && $this->d13->getResource($resource['id'], 'visible')) {
 				
-					$tvars['tvar_resImage'] = $d13->getResource($resource['id'], 'icon');
-					$tvars['tvar_resColor'] = $d13->getResource($resource['id'], 'color');
+					$tvars['tvar_resImage'] = $this->d13->getResource($resource['id'], 'icon');
+					$tvars['tvar_resColor'] = $this->d13->getResource($resource['id'], 'color');
 					$tvars['tvar_resValue'] 	= 0;
 					$tvars['tvar_resPercentage'] = 0;
 					$tvars['tvar_resTooltip'] 	= '';
 				
-					$tvars['tvar_resTooltip'] .= $d13->getLangGL('resources', $resource['id'], 'name') . ' ';
-					if ($d13->getResource($resource['id'], 'limited')) {
-						$tvars['tvar_resValue'] = floor($resource['value']) . '/' . floor($this->node->storage[$resource['id']]);
-						$tvars['tvar_resPercentage'] = d13_misc::percentage(floor($resource['value']), floor($this->node->storage[$resource['id']]));
-						$tvars['tvar_resTooltip'] .= floor($resource['value']) . '/' . floor($this->node->storage[$resource['id']]);
+					$tvars['tvar_resTooltip'] .= $this->d13->getLangGL('resources', $resource['id'], 'name') . ' ';
+					if ($this->d13->getResource($resource['id'], 'limited')) {
+						$tvars['tvar_resValue'] = floor($resource['value']) . '/' . floor($this->d13->node->storage[$resource['id']]);
+						$tvars['tvar_resPercentage'] = d13_misc::percentage(floor($resource['value']), floor($this->d13->node->storage[$resource['id']]));
+						$tvars['tvar_resTooltip'] .= floor($resource['value']) . '/' . floor($this->d13->node->storage[$resource['id']]);
 					} else {
 						$tvars['tvar_resValue'] = floor($resource['value']);
 						$tvars['tvar_resTooltip'] .= floor($resource['value']);
 					
 					}
-					if ($this->node->production[$resource['id']]) {
-						if (floor($resource['value']) < $this->node->storage[$resource['id']]) {
-							$tvars['tvar_resTooltip'] .= ' [+' . round($this->node->production[$resource['id']]) . $d13->getLangUI('perHour') . ']';
+					if ($this->d13->node->production[$resource['id']]) {
+						if (floor($resource['value']) < $this->d13->node->storage[$resource['id']]) {
+							$tvars['tvar_resTooltip'] .= ' [+' . round($this->d13->node->production[$resource['id']]) . $this->d13->getLangUI('perHour') . ']';
 						}
 						else {
-							if ($d13->getResource($resource['id'], 'limited')) {
-								$tvars['tvar_resTooltip'] .= ' [' . $d13->getLangUI("full") . ']';
+							if ($this->d13->getResource($resource['id'], 'limited')) {
+								$tvars['tvar_resTooltip'] .= ' [' . $this->d13->getLangUI("full") . ']';
 							}
 						}
 					}
 
-					$tvars['tvar_resEntry'].= $d13->templateSubpage("sub.resource.entry", $tvars);
+					$tvars['tvar_resEntry'].= $this->d13->templateSubpage("sub.resource.entry", $tvars);
 				}
 			}
 		}
@@ -121,21 +119,21 @@ class d13_resBarController extends d13_controller
 
 		//- - - - - Open Right Panel
 		$tvars['tvar_rightOptions'] = '';
-		$html = $this->node->queues->getQueueExpireNext();
+		$html = $this->d13->node->queues->getQueueExpireNext();
 	
-		if ($this->node->queues->getQueueCount() > 1) {
+		if ($this->d13->node->queues->getQueueCount() > 1) {
 		$tvars['tvar_linkClass'] 	= 'open-panel"';
 		$tvars['tvar_linkData'] 	= 'data-panel="right"';
 		$tvars['tvar_linkImage'] 	= 'previous.png';
-		$tvars['tvar_linkTooltip'] 	= $d13->getLangUI('active') . " " . $d13->getLangUI('task');
+		$tvars['tvar_linkTooltip'] 	= $this->d13->getLangUI('active') . " " . $this->d13->getLangUI('task');
 		$tvars['tvar_linkLabel'] 	= '';
-		$tvars['tvar_rightOptions']	= $d13->templateSubpage("sub.resource.link", $tvars);
+		$tvars['tvar_rightOptions']	= $this->d13->templateSubpage("sub.resource.link", $tvars);
 		}
 		if (!empty($html)) {
 		$tvars['tvar_rightOptions'] .= $html;
 		}
 		
-		return $d13->templateSubpage("sub.resources", $tvars);
+		return $this->d13->templateSubpage("sub.resources", $tvars);
 		
 	}
 

@@ -23,8 +23,9 @@ class d13_messageController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct($args=NULL, d13_engine &$d13)
 	{
+		parent::__construct($d13);
 		$tvars = array();
 		$tvars = $this->doControl();
 		$this->getTemplate($tvars);
@@ -40,7 +41,7 @@ class d13_messageController extends d13_controller
 	function doControl()
 	
 	{
-		global $d13;
+		
 				
 		switch ($_GET['action'])
 		{
@@ -84,7 +85,7 @@ class d13_messageController extends d13_controller
 	function messageGet()
 	{
 	
-		global $d13;
+		
 		
 		$tvars = array();
 		
@@ -97,21 +98,21 @@ class d13_messageController extends d13_controller
 						$msg->data['viewed'] = 1;
 						$msg->set();
 					}
-					$user = $d13->createObject('user');
+					$user = $this->d13->createObject('user');
 					$status = $user->get('id', $msg->data['sender']);
 					if ($status == 'done') {
 						$msg->data['senderName'] = $user->data['name'];
 					} else {
-						$msg->data['senderName'] = $d13->getLangUI("game");
+						$msg->data['senderName'] = $this->d13->getLangUI("game");
 					}
 				} else {
-					$message = $d13->getLangUI("accessDenied");
+					$message = $this->d13->getLangUI("accessDenied");
 				}
 			} else {
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
 		} else {
-			$message = $d13->getLangUI("insufficientData");
+			$message = $this->d13->getLangUI("insufficientData");
 		}
 		
 		if (isset($msg->data['recipient'])) {
@@ -134,11 +135,11 @@ class d13_messageController extends d13_controller
 	function messageAdd()
 	{
 	
-		global $d13;
+		
 		
 		$tvars = array();
 		
-		$d13->dbQuery('start transaction');
+		$this->d13->dbQuery('start transaction');
 		
 		if (isset($_GET['messageId'])) {
 			$msg = new d13_message();
@@ -151,7 +152,7 @@ class d13_messageController extends d13_controller
 		}
 
 		if (isset($_POST['recipient'], $_POST['subject'], $_POST['msgbody'])) {
-			if ($_POST['recipient'] != '' && $_POST['subject'] != '' && $_POST['msgbody'] != '' && !$d13->getLangBW($_POST['msgbody']) && !$d13->getLangBW($_POST['subject'])) {
+			if ($_POST['recipient'] != '' && $_POST['subject'] != '' && $_POST['msgbody'] != '' && !$this->d13->getLangBW($_POST['msgbody']) && !$this->d13->getLangBW($_POST['subject'])) {
 				$msg = new d13_message();
 				$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 				$msg->data['recipient'] = $_POST['recipient'];
@@ -159,17 +160,17 @@ class d13_messageController extends d13_controller
 				$msg->data['body'] = $_POST['msgbody'];
 				$msg->data['viewed'] = 0;
 				$msg->data['type'] = 'message';
-				$message = $d13->getLangUI($msg->add());
+				$message = $this->d13->getLangUI($msg->add());
 			} else {
-				$message = $d13->getLangUI("insufficientData");
+				$message = $this->d13->getLangUI("insufficientData");
 			}
 		} else {
-			$message = $d13->getLangUI("insufficientData");
+			$message = $this->d13->getLangUI("insufficientData");
 		}
 						
 		$recipient = $subject = $body = '';
 		if (isset($msg->data['id'])) {
-			$user = $d13->createObject('user');
+			$user = $this->d13->createObject('user');
 			$status = $user->get('id', $msg->data['sender']);
 			if ($status == 'done') {
 				$recipient = $user->data['name'];
@@ -183,9 +184,9 @@ class d13_messageController extends d13_controller
 		$tvars['tvar_body'] 		= $body;
 		
 		if ((isset($status)) && ($status == 'error')) {
-			$d13->dbQuery('rollback');
+			$this->d13->dbQuery('rollback');
 		} else {
-			$d13->dbQuery('commit');
+			$this->d13->dbQuery('commit');
 		}
 		
 		return $tvars;
@@ -201,11 +202,11 @@ class d13_messageController extends d13_controller
 	function messageRemove()
 	{
 	
-		global $d13;
+		
 		
 		$tvars = array();
 		
-		$d13->dbQuery('start transaction');
+		$this->d13->dbQuery('start transaction');
 		
 		if (isset($_GET['messageId'])) {
 			$msg = new d13_message();
@@ -216,13 +217,13 @@ class d13_messageController extends d13_controller
 					if ($status == 'done') {
 						header('location: ?p=message&action=list');
 					} else {
-						$message = $d13->getLangUI($status);
+						$message = $this->d13->getLangUI($status);
 					}
 				} else {
-					$message = $d13->getLangUI("accessDenied");
+					$message = $this->d13->getLangUI("accessDenied");
 				}
 			} else {
-				$message = $d13->getLangUI("noMessage");
+				$message = $this->d13->getLangUI("noMessage");
 			}
 			
 		} else {
@@ -230,14 +231,14 @@ class d13_messageController extends d13_controller
 				foreach($_POST['messageId'] as $id) d13_message::remove($id);
 				header('location: ?p=message&action=list');
 			} else {
-				$message = $d13->getLangUI("insufficientData");
+				$message = $this->d13->getLangUI("insufficientData");
 			}
 		}
 		
 		if ((isset($status)) && ($status == 'error')) {
-			$d13->dbQuery('rollback');
+			$this->d13->dbQuery('rollback');
 		} else {
-			$d13->dbQuery('commit');
+			$this->d13->dbQuery('commit');
 		}
 		
 		return $tvars;
@@ -253,7 +254,7 @@ class d13_messageController extends d13_controller
 	function messageRemoveAll()
 	{
 	
-		global $d13;
+		
 		
 		$tvars = array();
 		
@@ -261,7 +262,7 @@ class d13_messageController extends d13_controller
 		if ($status == 'done') {
 			header('location: ?p=message&action=list');
 		} else {
-			$message = $d13->getLangUI($status);
+			$message = $this->d13->getLangUI($status);
 		}
 		
 		return $tvars;
@@ -276,7 +277,7 @@ class d13_messageController extends d13_controller
 	
 	function messageList()
 	{
-		global $d13;
+		
 		
 		$limit = 8;
 		$filter = 'all';
@@ -302,18 +303,18 @@ class d13_messageController extends d13_controller
 		// - - - Build Filter Select
 		$tvars['tvar_filterSelect'] .= '<select class="pure-input" name="filter" id="filter" onChange="this.form.submit();">';
 		
-		foreach ($d13->getGeneral('message') as $msg) {
+		foreach ($this->d13->getGeneral('message') as $msg) {
 			$sel = "";
 			if (isset($_POST['filter']) && $_POST['filter'] == $msg) {
 				$sel = 'selected';
 			}
-			$tvars['tvar_filterSelect'] .= '<option value="'.$msg.'" '.$sel.'>'.$d13->getLangUI($msg).'</option>';		
+			$tvars['tvar_filterSelect'] .= '<option value="'.$msg.'" '.$sel.'>'.$this->d13->getLangUI($msg).'</option>';		
 		}
 		$tvars['tvar_filterSelect'] .= '</select>';
 		
 		// - - - Build Remove All
 		if (count($messages['messages'])) {
-			$removeAll = '<a class="button external" href="?p=message&action=removeAll">' . $d13->getLangUI("removeAll") . '</a>';
+			$removeAll = '<a class="button external" href="?p=message&action=removeAll">' . $this->d13->getLangUI("removeAll") . '</a>';
 		} else {
 			$removeAll = '';
 		}
@@ -321,7 +322,7 @@ class d13_messageController extends d13_controller
 
 		// - - - Build Remove Selected
 		if (count($messages['messages'])) {
-			$tvars['tvar_remove'] = '<a class="button external" href="javascript: document.getElementById(\'messageList\').submit()">' . $d13->getLangUI("remove") . ' ' . $d13->getLangUI("selected") . '</a>';
+			$tvars['tvar_remove'] = '<a class="button external" href="javascript: document.getElementById(\'messageList\').submit()">' . $this->d13->getLangUI("remove") . ' ' . $this->d13->getLangUI("selected") . '</a>';
 		}
 		
 		// - - - Build Message List
@@ -337,7 +338,7 @@ class d13_messageController extends d13_controller
 			$vars['tvar_listImage'] = '<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/'.$new.'">';
 			$vars['tvar_listLabel'] = '<input type="checkbox" name="messageId[]" value="' . $message->data['id'] . '"> <a class="external" href="index.php?p=message&action=get&messageId=' . $message->data['id'] . '"' . $new . '>' . $message->data['subject'] . '</a>';
 			$vars['tvar_listAmount'] = $hours . ' {{tvar_ui_hours}} {{tvar_ui_ago}} <a class="external" href="?p=message&action=remove&messageId=' . $message->data['id'] . '"><img class="d13-micron" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
-			$tvars['tvar_messages'] .= $d13->templateSubpage("sub.module.listcontent", $vars);
+			$tvars['tvar_messages'] .= $this->d13->templateSubpage("sub.module.listcontent", $vars);
 		}
 		
 		// - - - Build Pagination
@@ -346,19 +347,19 @@ class d13_messageController extends d13_controller
 			$next = '';
 			if (isset($_GET['page'])) {
 				if ($_GET['page']) {
-					$previous = '<a class="external" href="?p=message&action=list&page=' . ($_GET['page'] - 1) . '">' . $d13->getLangUI("previous") . '</a>';
+					$previous = '<a class="external" href="?p=message&action=list&page=' . ($_GET['page'] - 1) . '">' . $this->d13->getLangUI("previous") . '</a>';
 				}
 			} else if (!isset($_GET['page'])) {
 				if ($pageCount) {
-					$next = '<a class="external" href="?p=message&action=list&page=1">' . $d13->getLangUI("next") . '</a>';
+					$next = '<a class="external" href="?p=message&action=list&page=1">' . $this->d13->getLangUI("next") . '</a>';
 				}
 			}
 
 			if (isset($_GET['page']) && $pageCount - $_GET['page'] - 1) {
-				$next = '<a class="external" href="?p=message&action=list&page=' . ($_GET['page'] + 1) . '">' . $d13->getLangUI("next") . '</a>';
+				$next = '<a class="external" href="?p=message&action=list&page=' . ($_GET['page'] + 1) . '">' . $this->d13->getLangUI("next") . '</a>';
 			}
 
-			$tvars['tvar_controls'].= $d13->getLangUI("page") . $previous . ' <select class="dropdown" id="page" onChange="window.location.href=\'index.php?p=message&action=list&page=\'+this.value">';
+			$tvars['tvar_controls'].= $this->d13->getLangUI("page") . $previous . ' <select class="dropdown" id="page" onChange="window.location.href=\'index.php?p=message&action=list&page=\'+this.value">';
 			for ($i = 0; $i < $pageCount; $i++) {
 				$tvars['tvar_controls'].= '<option value="' . $i . '">' . $i . '</option>';
 			}
@@ -383,20 +384,20 @@ class d13_messageController extends d13_controller
 	function getTemplate($tvars)
 	{
 	
-		global $d13;
+		
 		
 		switch ($_GET['action']) {
 		
 			case 'get':
-				$d13->templateRender('message.get', $tvars);
+				$this->d13->outputPage('message.get', $tvars);
 				break;
 
 			case 'add':
-				$d13->templateRender('message.add', $tvars);			
+				$this->d13->outputPage('message.add', $tvars);			
 				break;
 
 			default:
-				$d13->templateRender('message.list', $tvars);
+				$this->d13->outputPage('message.list', $tvars);
 				break;
 		
 		}

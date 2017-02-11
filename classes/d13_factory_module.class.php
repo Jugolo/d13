@@ -35,8 +35,9 @@ class d13_factory_module extends d13_factory_base
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct()
+	function __construct(d13_engine &$d13)
 	{
+		parent::__construct($d13);
 	
 	
 	}
@@ -60,51 +61,51 @@ class d13_factory_module extends d13_factory_base
 
         switch ($args['type']) {
             case 'storage':
-                return new d13_module_storage($args, $node);
+                return new d13_module_storage($args, $node, $this->d13);
                 break;
 
             case 'harvest':
-                return new d13_module_harvest($args, $node);
+                return new d13_module_harvest($args, $node, $this->d13);
                 break;
 
             case 'craft':
-                return new d13_module_craft($args, $node);
+                return new d13_module_craft($args, $node, $this->d13);
                 break;
 
             case 'train':
-                return new d13_module_train($args, $node);
+                return new d13_module_train($args, $node, $this->d13);
                 break;
 
             case 'research':
-                return new d13_module_research($args, $node);
+                return new d13_module_research($args, $node, $this->d13);
                 break;
 
             case 'alliance':
-                return new d13_module_alliance($args, $node);
+                return new d13_module_alliance($args, $node, $this->d13);
                 break;
 
             case 'command':
-                return new d13_module_command($args, $node);
+                return new d13_module_command($args, $node, $this->d13);
                 break;
 
             case 'warfare':
-                return new d13_module_warfare($args, $node);
+                return new d13_module_warfare($args, $node, $this->d13);
                 break;
 
             case 'trade':
-                return new d13_module_trade($args, $node);
+                return new d13_module_trade($args, $node, $this->d13);
                 break;
 
             case 'storvest':
-                return new d13_module_storvest($args, $node);
+                return new d13_module_storvest($args, $node, $this->d13);
                 break;
 
             case 'market':
-                return new d13_module_market($args, $node);
+                return new d13_module_market($args, $node, $this->d13);
                 break;
 			
 			case 'defense':
-                return new d13_module_defense($args, $node);
+                return new d13_module_defense($args, $node, $this->d13);
                 break;
 			
             default:

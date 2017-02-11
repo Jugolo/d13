@@ -39,9 +39,9 @@ class d13_module_research extends d13_gameobject_module
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct($args, &$node)
+	function __construct($args, &$node, d13_engine &$d13)
 	{
-		parent::__construct($args, $node);
+		parent::__construct($args, $node, $d13);
 	}
 	// ----------------------------------------------------------------------------------------
 	// getInventory
@@ -204,6 +204,7 @@ class d13_module_research extends d13_gameobject_module
 		// - - - Check Queue
 		
 		$this->data['busy'] = false;
+		$this->node->queues->getQueue('research');
 		
 		if (count($this->node->queues->queue['research'])) {
 			foreach($this->node->queues->queue['research'] as $item) {

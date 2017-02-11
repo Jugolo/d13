@@ -26,6 +26,9 @@
 class d13_logger
 
 {
+	
+	protected $d13;
+	
 	private $starttime, $endtime, $duration;
 
 	// ----------------------------------------------------------------------------------------
@@ -34,8 +37,9 @@ class d13_logger
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct()
+	function __construct(d13_engine &$d13)
 	{
+		$this->d13 = $d13;
 		$this->starttime = 0;
 		$this->endtime = 0;
 		$this->duration = 0;

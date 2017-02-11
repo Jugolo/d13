@@ -25,30 +25,29 @@ class d13_statusController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct($userId=0)
+	function __construct($args=NULL, d13_engine &$d13)
 	{
 		
-		global $d13;
-		
+		parent::__construct($d13);
 		$tvars = array();
 		
 		if (isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 
 			if (isset($_GET['userId'])) {
-				$userId = $_GET['userId'];
+				$args['userId'] = $_GET['userId'];
 				$this->own = false;
-			} else if ($userId > 0) {
+			} else if ($args['userId'] > 0) {
 				$this->own = false;
 			} else {
-				$userId = $_SESSION[CONST_PREFIX . 'User']['id'];
+				$args['userId'] = $_SESSION[CONST_PREFIX . 'User']['id'];
 				$this->own = true;
 			}
 
-			$this->user = $d13->createObject('user', $userId);
+			$this->user = $this->d13->createObject('user', $args['userId']);
 			
 		} else {
 			$this->own = false;
-			$message = $d13->getLangUI("accessDenied");
+			$message = $this->d13->getLangUI("accessDenied");
 		}
 		
 		$tvars = $this->doControl();
@@ -122,7 +121,7 @@ class d13_statusController extends d13_controller
 	function getAvatarPopup()
 	{
 	
-		global $d13;
+		
 		
 		$html = '';
 		
@@ -134,7 +133,7 @@ class d13_statusController extends d13_controller
 			$tvars['tvar_sub_popuplist'] = '';
 			$tvars['tvar_listID'] = 1;
 		
-			foreach ($d13->getAvatar() as $avatar) {
+			foreach ($this->d13->getAvatar() as $avatar) {
 				if ($avatar['active']) {
 
 					if ($avatar['level'] <= $this->user->data['level']) {
@@ -147,7 +146,7 @@ class d13_statusController extends d13_controller
 						$tvars['tvar_sub_popuplist'] .= '<div class="row">';
 						}
 						
-						$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.imagecontent", $vars);
+						$tvars['tvar_sub_popuplist'] .= $this->d13->templateSubpage("sub.module.imagecontent", $vars);
 						if ($i %2 != 0) {
 						$tvars['tvar_sub_popuplist'] .= '</div>';
 						}
@@ -162,17 +161,17 @@ class d13_statusController extends d13_controller
 			}
 			
 			if ($i > 0) {
-				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+				$this->d13->templateInject($this->d13->templateSubpage("sub.popup.list", $tvars));
 				
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("set") . " " . $d13->getLangUI("avatar");
+				$vars['tvar_button_name'] 	 = $this->d13->getLangUI("set") . " " . $this->d13->getLangUI("avatar");
 				$vars['tvar_list_id'] 		 = "list-1"; 
 				$vars['tvar_button_tooltip'] = ""; 
-				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				$html = $this->d13->templateSubpage("button.popup.enabled", $vars);
 				
 			} else {
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("set") . " " . $d13->getLangUI("avatar");
+				$vars['tvar_button_name'] 	 = $this->d13->getLangUI("set") . " " . $this->d13->getLangUI("avatar");
 				$vars['tvar_button_tooltip'] = ""; 
-				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+				$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		
 		}
@@ -191,11 +190,11 @@ class d13_statusController extends d13_controller
 	function getTemplate($tvars)
 	{
 	
-		global $d13;
 		
 		
 		
-		$d13->templateRender($tvars['tvar_page'], $tvars);
+		
+		$this->d13->outputPage($tvars['tvar_page'], $tvars);
 
 	}
 

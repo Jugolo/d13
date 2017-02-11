@@ -16,9 +16,6 @@
 class d13_navBarController extends d13_controller
 {
 	
-	private $node;
-    private $nodeId;
-
     // ----------------------------------------------------------------------------------------
 	// construct
 	// @
@@ -26,10 +23,9 @@ class d13_navBarController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct(&$node)
+	function __construct($args=NULL, d13_engine &$d13)
 	{
-		
-		$this->node = $node;
+		parent::__construct($d13);
 		
 	}
 
@@ -43,7 +39,7 @@ class d13_navBarController extends d13_controller
 	function getTemplate()
 	{
 	
-		global $d13;
+		
 		
 		$tvars = array();
 		$html = '';
@@ -51,7 +47,7 @@ class d13_navBarController extends d13_controller
 		$html_right = '';
 	
 		// - - - Place all Navigation Options
-		foreach($d13->getNavigation() as $nav) {
+		foreach($this->d13->getNavigation() as $nav) {
 			if ($nav['active']) {
 				if (($nav['login'] && isset($_SESSION[CONST_PREFIX . 'User']['id'])) || (!$nav['login'] && !isset($_SESSION[CONST_PREFIX . 'User']['id']))) {
 					if(!$nav['admin'] || $nav['admin'] && (isset($_SESSION[CONST_PREFIX . 'User']['access'])) && ($_SESSION[CONST_PREFIX . 'User']['access'] >= 3)) {
@@ -75,7 +71,7 @@ class d13_navBarController extends d13_controller
 					
 						}
 				
-						$html = '<a class="tooltip-top link external" data-tooltip="' . $d13->getLangUI($nav['name']) . '" href="index.php?p=' . $nav['link'] . '"><span><img class="'.$class.' d13-icon" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/' . $icon . '"></span></a>';
+						$html = '<a class="tooltip-top link external" data-tooltip="' . $this->d13->getLangUI($nav['name']) . '" href="index.php?p=' . $nav['link'] . '"><span><img class="'.$class.' d13-icon" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/' . $icon . '"></span></a>';
 
 						if ($nav['class'] == 'left') {
 							$html_left.= $html;
@@ -91,7 +87,7 @@ class d13_navBarController extends d13_controller
 		$tvars['tvar_nodeNavbarLeft'] = $html_left;
 		$tvars['tvar_nodeNavbarRight'] = $html_right;
 
-		$subpage = $d13->templateSubpage("sub.navbar", $tvars);
+		$subpage = $this->d13->templateSubpage("sub.navbar", $tvars);
 		
 		return $subpage;
 		

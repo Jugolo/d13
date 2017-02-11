@@ -35,7 +35,7 @@ class d13_engine
 
 {
 
-	public $flags;
+	public $flags, $node;
 
 	private $data, $db, $tpl, $router, $logger, $session, $profiler, $factory;
 
@@ -47,20 +47,61 @@ class d13_engine
 
 	function __construct()
 	{
-		$this->db 		= new d13_db();						# database access handling
-		$this->tpl 		= new d13_tpl();
-		$this->router 	= new d13_router();
-		$this->session 	= new d13_session();
+		$this->db 		= new d13_db($this);
+		$this->tpl 		= new d13_tpl($this);
+		$this->router 	= new d13_router($this);
+		$this->session 	= new d13_session($this);
+		$this->data 	= new d13_data($this);
+		$this->factory  = new d13_factory($this);
+		$this->flags 	= new d13_flags($this);
+		$this->logger 	= new d13_logger($this);
+	}
+	
+	
+	// ----------------------------------------------------------------------------------------
+	// initPage
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function initPage()
+	{
+	
+		if (empty($this->node)) {
+			if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
+				$this->node	= new d13_node();
+				$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
+				
+			}
+		}
 		
-		$this->data 	= new d13_data();					# runtime data handling
-		$this->factory  = new d13_factory();
-		$this->flags 	= new d13_flags();
-		$this->logger 	= new d13_logger();					# debug logs and profile handling
+		$this->routerRoute();
+	
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// outputPage
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function outputPage($page, $tvars, &$node=NULL)
+	{
+	
+		$this->templateRender($page, $tvars);
+	
 	}
 
 	// ========================================================================================
 	//								FACTORY WRAPPER METHODS
 	// ========================================================================================
+
+	public
+	
+	function createController($type, $args=NULL)
+	{
+		return $this->factory->createController($type, $args);
+	}
 
 	public
 	

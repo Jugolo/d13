@@ -24,9 +24,9 @@ class d13_rankingController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct($args=NULL, d13_engine &$d13)
 	{
-		
+		parent::__construct($d13);
 		$tvars = array();
 		$tvars = $this->doControl();
 		$this->getTemplate($tvars);
@@ -43,7 +43,7 @@ class d13_rankingController extends d13_controller
 	function doControl()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 
@@ -63,15 +63,15 @@ class d13_rankingController extends d13_controller
 	
 			$users = array();
 	
-			$result = $d13->dbQuery('select count(*) as count from users');
-			$row = $d13->dbFetch($result);
+			$result = $this->d13->dbQuery('select count(*) as count from users');
+			$row = $this->d13->dbFetch($result);
 			$count = $row['count'];
 	
 	
-			$result = $d13->dbQuery('select * from users order by trophies desc, level desc limit ' . $limit . ' offset ' . $offset);
-			for ($i = 0; $row = $d13->dbFetch($result); $i++) {
+			$result = $this->d13->dbQuery('select * from users order by trophies desc, level desc limit ' . $limit . ' offset ' . $offset);
+			for ($i = 0; $row = $this->d13->dbFetch($result); $i++) {
 					$row['league'] = d13_misc::getLeague($row['level'], $row['trophies']);
-					$users[] = $d13->createObject('user', $row['id']);
+					$users[] = $this->d13->createObject('user', $row['id']);
 			}
 	
 			$pageCount = ceil($count / $limit);
@@ -93,7 +93,7 @@ class d13_rankingController extends d13_controller
 				
 				
 				
-				$tvars['tvar_userRankings'] .= $d13->templateSubpage("sub.module.leaguecontent", $vars);
+				$tvars['tvar_userRankings'] .= $this->d13->templateSubpage("sub.module.leaguecontent", $vars);
 			}
 	
 			// - - - Build Pagination
@@ -104,19 +104,19 @@ class d13_rankingController extends d13_controller
 				$next = '';
 				if (isset($_GET['page'])) {
 					if ($_GET['page']) {
-						$previous = '<a class="external" href="?p=ranking&action=list&page=' . ($_GET['page'] - 1) . '">' . $d13->getLangUI("previous") . '</a>';
+						$previous = '<a class="external" href="?p=ranking&action=list&page=' . ($_GET['page'] - 1) . '">' . $this->d13->getLangUI("previous") . '</a>';
 					}
 				} else if (!isset($_GET['page'])) {
 					if ($pageCount) {
-						$next = '<a class="external" href="?p=ranking&action=list&page=1">' . $d13->getLangUI("next") . '</a>';
+						$next = '<a class="external" href="?p=ranking&action=list&page=1">' . $this->d13->getLangUI("next") . '</a>';
 					}
 				}
 
 				if (isset($_GET['page']) && $pageCount - $_GET['page'] - 1) {
-					$next = '<a class="external" href="?p=ranking&action=list&page=' . ($_GET['page'] + 1) . '">' . $d13->getLangUI("next") . '</a>';
+					$next = '<a class="external" href="?p=ranking&action=list&page=' . ($_GET['page'] + 1) . '">' . $this->d13->getLangUI("next") . '</a>';
 				}
 
-				$tvars['tvar_controls'].= $d13->getLangUI("page") . $previous . ' <select class="dropdown" id="page" onChange="window.location.href=\'index.php?p=ranking&action=list&page=\'+this.value">';
+				$tvars['tvar_controls'].= $this->d13->getLangUI("page") . $previous . ' <select class="dropdown" id="page" onChange="window.location.href=\'index.php?p=ranking&action=list&page=\'+this.value">';
 				for ($i = 0; $i < $pageCount; $i++) {
 					$tvars['tvar_controls'].= '<option value="' . $i . '">' . $i . '</option>';
 				}
@@ -129,7 +129,7 @@ class d13_rankingController extends d13_controller
 
 
 		} else {
-			$message = $d13->getLangUI("accessDenied");
+			$message = $this->d13->getLangUI("accessDenied");
 		}
 
 	
@@ -146,10 +146,10 @@ class d13_rankingController extends d13_controller
 	function getTemplate($tvars)
 	{
 	
-		global $d13;
+		
 		
 
-		$d13->templateRender("ranking", $tvars);
+		$this->d13->outputPage("ranking", $tvars);
 		
 	}
 

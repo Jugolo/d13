@@ -23,9 +23,9 @@ class d13_logoutController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct($args=NULL, d13_engine &$d13)
 	{
-	
+		parent::__construct($d13);
 
 		unset($_POST);
 		unset($_GET);

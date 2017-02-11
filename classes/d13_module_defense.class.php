@@ -42,9 +42,9 @@ class d13_module_defense extends d13_gameobject_module
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct($args, &$node)
+	function __construct($args, &$node, d13_engine &$d13)
 	{
-		parent::__construct($args, $node);
+		parent::__construct($args, $node, $d13);
 	}
 	// ----------------------------------------------------------------------------------------
 	// getStats
@@ -65,9 +65,8 @@ class d13_module_defense extends d13_gameobject_module
 		$args['id'] 		= $this->data['unitId'];
 		$args['level'] 		= $this->data['level'];
 		$args['input'] 		= $this->data['input'];
-		$args['node'] 		= $this->node;
 				
-		$this->turret = new d13_gameobject_turret($args, $this->node);
+		$this->turret = $d13->createGameObject($args, $this->node, $this->d13);
 	
 	}
 	

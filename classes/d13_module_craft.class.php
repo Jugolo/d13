@@ -40,9 +40,9 @@ class d13_module_craft extends d13_gameobject_module
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct($args, &$node)
+	function __construct($args, &$node, d13_engine &$d13)
 	{
-		parent::__construct($args, $node);
+		parent::__construct($args, $node, $d13);
 	}
 	
 	// ----------------------------------------------------------------------------------------
@@ -127,7 +127,9 @@ class d13_module_craft extends d13_gameobject_module
 				$args['supertype'] 	= 'component';
 				$args['id'] 		= $cid;
 				
-				$tmp_component = new d13_gameobject_component($args, $this->node);
+				$tmp_component = $d13->createGameObject($args, $this->node);
+				
+				#$tmp_component = new d13_gameobject_component($args, $this->node);
 				
 				// - - - - Cost and Requirements
 				$costData = $tmp_component->getCostList();

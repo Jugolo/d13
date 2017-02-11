@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// FACTORY.CLASS
+// CONTROLLER.FACTORY.CLASS
 //
 // !!! THIS FREE PROJECT IS DEVELOPED AND MAINTAINED BY A SINGLE HOBBYIST !!!
 // # Author......................: Tobias Strunz (Fhizban)
@@ -18,27 +18,37 @@
 // 
 // NOTES:
 //
-// 
+// A simple factory class that is responsible for creating new instances of controllers.
+//
 //
 // ========================================================================================
 
-abstract class d13_factory_base
+class d13_factory_controller extends d13_factory_base
 
 {
-	
-	protected $d13;
-	
+
 	// ----------------------------------------------------------------------------------------
 	// constructor
+	//
 	// ----------------------------------------------------------------------------------------
 	public
-	
+
 	function __construct(d13_engine &$d13)
 	{
-		$this->d13 = $d13;
+		parent::__construct($d13);
 	}
 
+	// ----------------------------------------------------------------------------------------
+	// create
+	//
+	// ----------------------------------------------------------------------------------------
+    public
+
+    function create($type, $args=NULL)
+    {
+        return new $type($args, $this->d13);
+    }
+    
 }
 
 // =====================================================================================EOF
-

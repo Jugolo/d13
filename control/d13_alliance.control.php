@@ -16,7 +16,7 @@
 class d13_allianceController extends d13_controller
 {
 	
-	private $node, $alliance, $node_status, $ally_status, $own;
+	private $alliance, $ally_status, $own;
 	
 	// ----------------------------------------------------------------------------------------
 	// construct
@@ -25,14 +25,12 @@ class d13_allianceController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function __construct()
+	function __construct($args=NULL, d13_engine &$d13)
 	{
+		parent::__construct($d13);
 		
-		global $d13;
 		
 		$tvars 				= array();
-		$this->node 		= new d13_node();
-		$this->node_status 	= $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
 		$this->alliance 	= new d13_alliance();
 		$this->ally_status 	= $this->alliance->get('id', $_SESSION[CONST_PREFIX . 'User']['alliance']);
 		$this->own = true;
@@ -116,17 +114,17 @@ class d13_allianceController extends d13_controller
 	function allianceGet()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 		$html = "";
 		
-		if ($this->node->checkOptions('allianceGet')) {
+		if ($this->d13->node->checkOptions('allianceGet')) {
 			if ($_SESSION[CONST_PREFIX . 'User']['alliance']) {
 				if ($this->ally_status == 'done') {
 					$this->alliance->getAll();
 				} else {
-					$message = $d13->getLangUI($this->ally_status);
+					$message = $this->d13->getLangUI($this->ally_status);
 				}
 			} else {
 				$invitations = d13_alliance::getInvitations('user', $_SESSION[CONST_PREFIX . 'User']['id']);
@@ -145,14 +143,14 @@ class d13_allianceController extends d13_controller
 				if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) $html.= '<div class="section" style="margin-top: 5px;"> -> {{tvar_ui_invitations}} | <a class="external" href="index.php?p=alliance&action=addInvitation">{{tvar_ui_invite}}</a></div>';
 				foreach($this->alliance->invitations as $invitation) {
 					
-					$user = $d13->createObject('user');
+					$user = $this->d13->createObject('user');
 					
 					if ($user->get('id', $invitation['user']) == 'done') {
 						$accept = '';
 						$removeLabel = 'x';
 						if ($user->data['id'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
 							$accept = '<a class="external" href="?p=alliance&action=acceptInvitation&alliance=' . $invitation['alliance'] . '&user=' . $invitation['user'] . '">{{tvar_ui_accept}}</a> | ';
-							$removeLabel = $d13->getLangUI('decline');
+							$removeLabel = $this->d13->getLangUI('decline');
 						}
 
 						$html.= '<div class="right"> ' . $user->data['name'] . ' | ' . $accept . '<a class="external" href="index.php?p=alliance&action=removeInvitation&alliance=' . $invitation['alliance'] . '&user=' . $invitation['user'] . '">' . $removeLabel . '</a></div>';
@@ -177,14 +175,14 @@ class d13_allianceController extends d13_controller
 				if ($invitations) {
 					$html.= '<div class="section"> -> {{tvar_ui_invitations}}</div>';
 					foreach($invitations as $invitation) {
-						$user = $d13->createObject('user');
+						$user = $this->d13->createObject('user');
 						
 						if ($user->get('id', $invitation['user']) == 'done') {
 							$accept = '';
 							$removeLabel = 'x';
 							if ($user->data['id'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
 								$accept = '<a class="external" href="?p=alliance&action=acceptInvitation&alliance=' . $invitation['alliance'] . '&user=' . $invitation['user'] . '">{{tvar_ui_accept}}</a> | ';
-								$removeLabel = $d13->getLangUI('decline');
+								$removeLabel = $this->d13->getLangUI('decline');
 							}
 
 							$html.= '<div class="right"> ' . $user->data['name'] . ' | ' . $accept . '<a class="external" href="index.php?p=alliance&action=removeInvitation&alliance=' . $invitation['alliance'] . '&user=' . $invitation['user'] . '">' . $removeLabel . '</a></div>';
@@ -213,11 +211,11 @@ class d13_allianceController extends d13_controller
 	function allianceSet()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 		
-		if ($this->node->checkOptions('allianceSet')) {
+		if ($this->d13->node->checkOptions('allianceSet')) {
 
 			$nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
 			$nodeList = '';
@@ -228,7 +226,7 @@ class d13_allianceController extends d13_controller
 			if (isset($_POST['nodeId'], $_POST['name']))
 			if ($_POST['name'] != '')
 			if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$node = $d13->createNode();
+				$node = $this->d13->createNode();
 				$status = $node->get('id', $_POST['nodeId']);
 				if ($status == 'done')
 				if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -236,29 +234,29 @@ class d13_allianceController extends d13_controller
 					$this->alliance->data['tag'] 	= $_POST['tag'];
 					$this->alliance->data['avatar'] = $_POST['avatar'];
 					$status = $this->alliance->set($node->data['id']);
-					$message = $d13->getLangUI($status);
+					$message = $this->d13->getLangUI($status);
 				}
-				else $message = $d13->getLangUI("accessDenied");
-				else $message = $d13->getLangUI($status);
+				else $message = $this->d13->getLangUI("accessDenied");
+				else $message = $this->d13->getLangUI($status);
 			}
-			else $message = $d13->getLangUI("accessDenied");
-			else $message = $d13->getLangUI("insufficientData");
+			else $message = $this->d13->getLangUI("accessDenied");
+			else $message = $this->d13->getLangUI("insufficientData");
 		}
 		else {
-			$message = $d13->getLangUI("accessDenied");
+			$message = $this->d13->getLangUI("accessDenied");
 		}
 
 		
 		$costData = '';
-		foreach($d13->getFaction($this->node->data['faction'], 'costs', 'alliance') as $key => $cost) {
-			$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></div>';
+		foreach($this->d13->getFaction($this->d13->node->data['faction'], 'costs', 'alliance') as $key => $cost) {
+			$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $this->d13->getLangGL("resources", $cost['resource'], "name") . '"></div>';
 		}
 		
 		if (isset($_GET['avatarId'])) {
-			$tvars['tvar_allianceAvatar'] = $d13->getAlliance($_GET['avatarId'], 'image');
+			$tvars['tvar_allianceAvatar'] = $this->d13->getAlliance($_GET['avatarId'], 'image');
 			$tvars['tvar_avatarId'] = $_GET['avatarId'];
 		} else {
-			$tvars['tvar_allianceAvatar'] = $d13->getAlliance($this->alliance->data['avatar'], 'image');
+			$tvars['tvar_allianceAvatar'] = $this->d13->getAlliance($this->alliance->data['avatar'], 'image');
 			$tvars['tvar_avatarId'] = $this->alliance->data['avatar'];
 		}
 
@@ -267,8 +265,8 @@ class d13_allianceController extends d13_controller
 		$tvars['tvar_allianceName'] = $this->alliance->data['name'];
 		$tvars['tvar_allianceTag'] = $this->alliance->data['tag'];
 		
-		$tvars['tvar_nodeID'] = $this->node->data['id'];
-		$tvars['tvar_nodeName'] = $this->node->data['name'];
+		$tvars['tvar_nodeID'] = $this->d13->node->data['id'];
+		$tvars['tvar_nodeName'] = $this->d13->node->data['name'];
 		
 		
 		return $tvars;
@@ -285,11 +283,11 @@ class d13_allianceController extends d13_controller
 	function allianceAdd()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 		
-		if ($this->node->checkOptions('allianceAdd')) {
+		if ($this->d13->node->checkOptions('allianceAdd')) {
 			if ($this->ally_status == 'noAlliance') {
 			
 				$nodeList = '';
@@ -303,7 +301,7 @@ class d13_allianceController extends d13_controller
 					if (isset($_POST['nodeId'], $_POST['name']))
 					if ($_POST['name'] != '') {
 						$alliance = new d13_alliance();
-						$node = $d13->createNode();
+						$node = $this->d13->createNode();
 						$status = $node->get('id', $_POST['nodeId']);
 						if ($status == 'done') {
 							if ($node->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -316,35 +314,35 @@ class d13_allianceController extends d13_controller
 										$_SESSION[CONST_PREFIX . 'User']['alliance'] = $alliance->data['id'];
 									}
 								}
-								$message = $d13->getLangUI($status);
+								$message = $this->d13->getLangUI($status);
 							} else {
-								$message = $d13->getLangUI("accessDenied");
+								$message = $this->d13->getLangUI("accessDenied");
 							}
 						} else {
-							$message = $d13->getLangUI($status);
+							$message = $this->d13->getLangUI($status);
 						}
 					} else {
-						$message = $d13->getLangUI("insufficientData");
+						$message = $this->d13->getLangUI("insufficientData");
 					}
 				} else {
-					$message = $d13->getLangUI("noNode");
+					$message = $this->d13->getLangUI("noNode");
 				}
 			} else {
-				$message = $d13->getLangUI("allianceSet");
+				$message = $this->d13->getLangUI("allianceSet");
 			}
 		} else {
-			$message = $d13->getLangUI("accessDenied");
+			$message = $this->d13->getLangUI("accessDenied");
 		}
 	
 		$costData = '';
-		foreach($d13->getFaction($this->node->data['faction'], 'costs', 'alliance') as $key => $cost) {
-			$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $d13->getLangGL("resources", $cost['resource'], "name") . '"></div>';
+		foreach($this->d13->getFaction($this->d13->node->data['faction'], 'costs', 'alliance') as $key => $cost) {
+			$costData.= '<div class="cell">' . $cost['value'] . '</div><div class="cell"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['resource'] . '.png" title="' . $this->d13->getLangGL("resources", $cost['resource'], "name") . '"></div>';
 		}
 
 		$tvars['tvar_nodeList'] = $nodeList;
 		$tvars['tvar_costData'] = $costData;
-		$tvars['tvar_nodeID'] = $this->node->data['id'];
-		$tvars['tvar_nodeName'] = $this->node->data['name'];
+		$tvars['tvar_nodeID'] = $this->d13->node->data['id'];
+		$tvars['tvar_nodeName'] = $this->d13->node->data['name'];
 			
 		return $tvars;
 		
@@ -360,11 +358,11 @@ class d13_allianceController extends d13_controller
 	function allianceRemove()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 		
-		if ($this->node->checkOptions('allianceRemove')) {
+		if ($this->d13->node->checkOptions('allianceRemove')) {
 			if ((isset($_GET['go'])) && ($_GET['go']))
 			if ($_SESSION[CONST_PREFIX . 'User']['alliance']) {
 				if ($this->ally_status == 'done')
@@ -374,15 +372,15 @@ class d13_allianceController extends d13_controller
 						$_SESSION[CONST_PREFIX . 'User']['alliance'] = 0;
 						header('Location ?p=alliance&action=get');
 					}
-					else $message = $d13->getLangUI($status);
+					else $message = $this->d13->getLangUI($status);
 				}
-				else $message = $d13->getLangUI("accessDenied");
-				else $message = $d13->getLangUI($status);
+				else $message = $this->d13->getLangUI("accessDenied");
+				else $message = $this->d13->getLangUI($status);
 			}
-			else $message = $d13->getLangUI("insufficientData");
+			else $message = $this->d13->getLangUI("insufficientData");
 		}
 		else {
-			$message = $d13->getLangUI("accessDenied");
+			$message = $this->d13->getLangUI("accessDenied");
 		}
 
 		return $tvars;
@@ -399,16 +397,16 @@ class d13_allianceController extends d13_controller
 	function allianceAddInvitation()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 		
-		if ($this->node->checkOptions('allianceInvite')) {
+		if ($this->d13->node->checkOptions('allianceInvite')) {
 			if (isset($_POST['name']))
 			if ($_POST['name'] != '')
 			if ($this->ally_status == 'done')
 			if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-				$user = $d13->createObject('user');
+				$user = $this->d13->createObject('user');
 				if ($user->get('name', $_POST['name']) == 'done') {
 					$status = $this->alliance->addInvitation($user->data['id']);
 					if ($status == 'done') {
@@ -417,24 +415,24 @@ class d13_allianceController extends d13_controller
 							$msg = new d13_message();
 							$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 							$msg->data['recipient'] = $user->data['name'];
-							$msg->data['subject'] = $d13->getLangUI("allianceInvitation");
-							$msg->data['body'] = '<a class=\"link\" href=\"index.php?p=alliance&action=acceptInvitation&alliance=' . $this->alliance->data['id'] . '&user=' . $user->data['id'] . '\">' . $d13->getLangUI("accept") . '</a> ' . $this->alliance->data['name'] . ' ' . $d13->getLangUI("alliance");
+							$msg->data['subject'] = $this->d13->getLangUI("allianceInvitation");
+							$msg->data['body'] = '<a class=\"link\" href=\"index.php?p=alliance&action=acceptInvitation&alliance=' . $this->alliance->data['id'] . '&user=' . $user->data['id'] . '\">' . $this->d13->getLangUI("accept") . '</a> ' . $this->alliance->data['name'] . ' ' . $this->d13->getLangUI("alliance");
 							$msg->data['type'] = 'alliance';
 							$msg->data['viewed'] = 0;
 							$status = $msg->add();
 						}
 					}
 
-					$message = $d13->getLangUI($status);
+					$message = $this->d13->getLangUI($status);
 				}
-				else $message = $d13->getLangUI("noUser");
+				else $message = $this->d13->getLangUI("noUser");
 			}
-			else $message = $d13->getLangUI("accessDenied");
-			else $message = $d13->getLangUI("noAlliance");
-			else $message = $d13->getLangUI("insufficientData");
+			else $message = $this->d13->getLangUI("accessDenied");
+			else $message = $this->d13->getLangUI("noAlliance");
+			else $message = $this->d13->getLangUI("insufficientData");
 		}
 		else {
-			$message = $d13->getLangUI("accessDenied");
+			$message = $this->d13->getLangUI("accessDenied");
 		}
 
 		return $tvars;
@@ -451,7 +449,7 @@ class d13_allianceController extends d13_controller
 	function allianceRemoveInvitation()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 		
@@ -464,12 +462,12 @@ class d13_allianceController extends d13_controller
 			))) {
 				$status = d13_alliance::removeInvitation($_GET['alliance'], $_GET['user']);
 				if ($status == 'done') header('Location: ?p=alliance&action=get');
-				else $message = $d13->getLangUI($status);
+				else $message = $this->d13->getLangUI($status);
 			}
-			else $message = $d13->getLangUI("accessDenied");
-			else $message = $d13->getLangUI("noAlliance");
+			else $message = $this->d13->getLangUI("accessDenied");
+			else $message = $this->d13->getLangUI("noAlliance");
 		}
-		else $message = $d13->getLangUI("insufficientData");
+		else $message = $this->d13->getLangUI("insufficientData");
 	
 		return $tvars;
 		
@@ -485,7 +483,7 @@ class d13_allianceController extends d13_controller
 	function allianceAcceptInvitation()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 		
@@ -493,10 +491,10 @@ class d13_allianceController extends d13_controller
 		if ($_SESSION[CONST_PREFIX . 'User']['id'] == $_GET['user']) {
 			$status = d13_alliance::acceptInvitation($_GET['alliance'], $_GET['user']);
 			if ($status == 'done') $_SESSION[CONST_PREFIX . 'User']['alliance'] = $_GET['alliance'];
-			$message = $d13->getLangUI($status);
+			$message = $this->d13->getLangUI($status);
 		}
-		else $message = $d13->getLangUI("accessDenied");
-		else $message = $d13->getLangUI("insufficientData");
+		else $message = $this->d13->getLangUI("accessDenied");
+		else $message = $this->d13->getLangUI("insufficientData");
 	
 		return $tvars;
 	
@@ -512,11 +510,11 @@ class d13_allianceController extends d13_controller
 	function allianceRemoveMember()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 		
-		if ($this->node->checkOptions('allianceRemoveMember')) {
+		if ($this->d13->node->checkOptions('allianceRemoveMember')) {
 			if ($this->ally_status == 'done')
 			if (isset($_GET['user']))
 			if ((($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) && ($_GET['user'] != $_SESSION[CONST_PREFIX . 'User']['id'])) || (($this->alliance->data['user'] != $_SESSION[CONST_PREFIX . 'User']['id']) && ($_GET['user'] == $_SESSION[CONST_PREFIX . 'User']['id']))) {
@@ -526,14 +524,14 @@ class d13_allianceController extends d13_controller
 					header('Location: ?p=alliance&action=get');
 				}
 
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
-			else $message = $d13->getLangUI("accessDenied");
-			else $message = $d13->getLangUI("insufficientData");
-			else $message = $d13->getLangUI("noAlliance");
+			else $message = $this->d13->getLangUI("accessDenied");
+			else $message = $this->d13->getLangUI("insufficientData");
+			else $message = $this->d13->getLangUI("noAlliance");
 		}
 		else {
-			$message = $d13->getLangUI("accessDenied");
+			$message = $this->d13->getLangUI("accessDenied");
 		}
 	
 		return $tvars;
@@ -550,11 +548,11 @@ class d13_allianceController extends d13_controller
 	function allianceAddWar()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 		
-		if ($this->node->checkOptions('allianceWar')) {
+		if ($this->d13->node->checkOptions('allianceWar')) {
 			if (isset($_POST['name']))
 			if ($_POST['name'] != '')
 			if ($this->ally_status == 'done')
@@ -564,35 +562,35 @@ class d13_allianceController extends d13_controller
 				if ($this->alliance->data['id'] != $recipientAlliance->data['id']) {
 					$status = $this->alliance->addWar($recipientAlliance->data['id']);
 					if ($status == 'done') {
-						$user = $d13->createObject('user');
+						$user = $this->d13->createObject('user');
 						if ($user->get('id', $recipientAlliance->data['user']) == 'done') {
 							$user->getPreferences('name');
 							if ($user->preferences['allianceReports']) {
 								$msg = new d13_message();
 								$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 								$msg->data['recipient'] = $user->data['name'];
-								$msg->data['subject'] = $d13->getLangUI("warDeclaration");
-								$msg->data['body'] = $d13->getLangUI("sender") . ': ' . $this->alliance->data['name'] . ' ' . $d13->getLangUI("alliance");
+								$msg->data['subject'] = $this->d13->getLangUI("warDeclaration");
+								$msg->data['body'] = $this->d13->getLangUI("sender") . ': ' . $this->alliance->data['name'] . ' ' . $this->d13->getLangUI("alliance");
 								$msg->data['type'] = 'alliance';
 								$msg->data['viewed'] = 0;
 								$status = $msg->add();
 								if ($status == 'done') header('Location ?p=alliance&action=get');
 							}
 						}
-						else $message = $d13->getLangUI("noUser");
+						else $message = $this->d13->getLangUI("noUser");
 					}
 
-					$message = $d13->getLangUI($status);
+					$message = $this->d13->getLangUI($status);
 				}
-				else $message = $d13->getLangUI("accessDenied");
-				else $message = $d13->getLangUI("noAlliance");
+				else $message = $this->d13->getLangUI("accessDenied");
+				else $message = $this->d13->getLangUI("noAlliance");
 			}
-			else $message = $d13->getLangUI("accessDenied");
-			else $message = $d13->getLangUI("noAlliance");
-			else $message = $d13->getLangUI("insufficientData");
+			else $message = $this->d13->getLangUI("accessDenied");
+			else $message = $this->d13->getLangUI("noAlliance");
+			else $message = $this->d13->getLangUI("insufficientData");
 		}
 		else {
-			$message = $d13->getLangUI("accessDenied");
+			$message = $this->d13->getLangUI("accessDenied");
 		}
 		
 		return $tvars;
@@ -608,11 +606,11 @@ class d13_allianceController extends d13_controller
 	function allianceProposePeace()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 		
-		if ($this->node->checkOptions('alliancePeace')) {
+		if ($this->d13->node->checkOptions('alliancePeace')) {
 			if (isset($_GET['recipient']))
 			if ($this->ally_status == 'done')
 			if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -620,16 +618,16 @@ class d13_allianceController extends d13_controller
 				if ($recipientAlliance->get('id', $_GET['recipient']) == 'done') {
 					$status = $this->alliance->proposePeace($recipientAlliance->data['id']);
 					if ($status == 'done') header('Location ?p=alliance&action=get');
-					$message = $d13->getLangUI($status);
+					$message = $this->d13->getLangUI($status);
 				}
-				else $message = $d13->getLangUI("noAlliance");
+				else $message = $this->d13->getLangUI("noAlliance");
 			}
-			else $message = $d13->getLangUI("accessDenied");
-			else $message = $d13->getLangUI("noAlliance");
-			else $message = $d13->getLangUI("insufficientData");
+			else $message = $this->d13->getLangUI("accessDenied");
+			else $message = $this->d13->getLangUI("noAlliance");
+			else $message = $this->d13->getLangUI("insufficientData");
 		}
 		else {
-			$message = $d13->getLangUI("accessDenied");
+			$message = $this->d13->getLangUI("accessDenied");
 		}
 	
 		return $tvars;
@@ -646,7 +644,7 @@ class d13_allianceController extends d13_controller
 	function allianceRemovePeace()
 	{
 		
-		global $d13;
+		
 		
 		$tvars = array();
 		
@@ -657,13 +655,13 @@ class d13_allianceController extends d13_controller
 			if ($recipientAlliance->get('id', $_GET['recipient']) == 'done') {
 				$status = $this->alliance->removePeace($recipientAlliance->data['id']);
 				if ($status == 'done') header('Location ?p=alliance&action=get');
-				else $message = $d13->getLangUI($status);
+				else $message = $this->d13->getLangUI($status);
 			}
-			else $message = $d13->getLangUI("noAlliance");
+			else $message = $this->d13->getLangUI("noAlliance");
 		}
-		else $message = $d13->getLangUI("accessDenied");
-		else $message = $d13->getLangUI("noAlliance");
-		else $message = $d13->getLangUI("insufficientData");
+		else $message = $this->d13->getLangUI("accessDenied");
+		else $message = $this->d13->getLangUI("noAlliance");
+		else $message = $this->d13->getLangUI("insufficientData");
 	
 		return $tvars;
 		
@@ -679,7 +677,7 @@ class d13_allianceController extends d13_controller
 	function allianceAcceptPeace()
 	{
 	
-		global $d13;
+		
 	
 		$tvars = array();
 		
@@ -690,31 +688,31 @@ class d13_allianceController extends d13_controller
 			if ($senderAlliance->get('id', $_GET['sender']) == 'done') {
 				$status = $this->alliance->acceptPeace($senderAlliance->data['id']);
 				if ($status == 'done') {
-					$user = $d13->createObject('user');
+					$user = $this->d13->createObject('user');
 					if ($user->get('id', $senderAlliance->data['user']) == 'done') {
 						$user->getPreferences('name');
 						if ($user->preferences['allianceReports']) {
 							$msg = new d13_message();
 							$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 							$msg->data['recipient'] = $user->data['name'];
-							$msg->data['subject'] = $d13->getLangUI("peaceAccepted");
-							$msg->data['body'] = $d13->getLangUI("sender") . ': ' . $this->alliance->data['name'] . ' ' . $d13->getLangUI("alliance");
+							$msg->data['subject'] = $this->d13->getLangUI("peaceAccepted");
+							$msg->data['body'] = $this->d13->getLangUI("sender") . ': ' . $this->alliance->data['name'] . ' ' . $this->d13->getLangUI("alliance");
 							$msg->data['type'] = 'alliance';
 							$msg->data['viewed'] = 0;
 							$status = $msg->add();
 							if ($status == 'done') header('Location ?p=alliance&action=get');
 						}
 					}
-					else $message = $d13->getLangUI("noUser");
+					else $message = $this->d13->getLangUI("noUser");
 				}
 
-				$message = $d13->getLangUI($status);
+				$message = $this->d13->getLangUI($status);
 			}
-			else $message = $d13->getLangUI("noAlliance");
+			else $message = $this->d13->getLangUI("noAlliance");
 		}
-		else $message = $d13->getLangUI("accessDenied");
-		else $message = $d13->getLangUI("noAlliance");
-		else $message = $d13->getLangUI("insufficientData");
+		else $message = $this->d13->getLangUI("accessDenied");
+		else $message = $this->d13->getLangUI("noAlliance");
+		else $message = $this->d13->getLangUI("insufficientData");
 	
 		return $tvars;
 	
@@ -731,7 +729,7 @@ class d13_allianceController extends d13_controller
 	function getAvatarPopup()
 	{
 	
-		global $d13;
+		
 		
 		$html = '';
 		
@@ -743,7 +741,7 @@ class d13_allianceController extends d13_controller
 			$tvars['tvar_sub_popuplist'] = '';
 			$tvars['tvar_listID'] = 1;
 		
-			foreach ($d13->getAlliance() as $avatar) {
+			foreach ($this->d13->getAlliance() as $avatar) {
 				if ($avatar['active']) {
 
 					if ($avatar['level'] <= $this->alliance->data['level']) {
@@ -756,7 +754,7 @@ class d13_allianceController extends d13_controller
 							$tvars['tvar_sub_popuplist'] .= '<div class="row">';
 						}
 						
-						$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.imagecontent", $vars);
+						$tvars['tvar_sub_popuplist'] .= $this->d13->templateSubpage("sub.module.imagecontent", $vars);
 						
 						if ($i %2 != 0) {
 							$tvars['tvar_sub_popuplist'] .= '</div>';
@@ -773,17 +771,17 @@ class d13_allianceController extends d13_controller
 			}
 			
 			if ($i > 0) {
-				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+				$this->d13->templateInject($this->d13->templateSubpage("sub.popup.list", $tvars));
 					
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("set") . " " . $d13->getLangUI("avatar");
+				$vars['tvar_button_name'] 	 = $this->d13->getLangUI("set") . " " . $this->d13->getLangUI("avatar");
 				$vars['tvar_list_id'] 	 	 = "list-1";
 				$vars['tvar_button_tooltip'] = "";
-				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				$html = $this->d13->templateSubpage("button.popup.enabled", $vars);
 				
 			} else {
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("set") . " " . $d13->getLangUI("avatar");
+				$vars['tvar_button_name'] 	 = $this->d13->getLangUI("set") . " " . $this->d13->getLangUI("avatar");
 				$vars['tvar_button_tooltip'] = "";
-				$html . $d13->templateSubpage("button.popup.disabled", $vars);
+				$html . $this->d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		
 		}
@@ -804,7 +802,7 @@ class d13_allianceController extends d13_controller
 	function getTemplate($tvars)
 	{
 	
-		global $d13;
+		
 		
 		$tvars['tvar_avatarLink'] = $this->getAvatarPopup();
 		
@@ -813,41 +811,41 @@ class d13_allianceController extends d13_controller
 		$tvars['tvar_allianceRemove'] = "";
 
 		if ($this->alliance->data['user'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-			$tvars['tvar_allianceSet'] = '<a class="external" href="?p=alliance&action=set">' . $d13->getLangUI("set") . '</a>';
-			$tvars['tvar_allianceRemove'] = '<a class="external" href="?p=alliance&action=remove">' . $d13->getLangUI("remove") . '</a>';
+			$tvars['tvar_allianceSet'] = '<a class="external" href="?p=alliance&action=set">' . $this->d13->getLangUI("set") . '</a>';
+			$tvars['tvar_allianceRemove'] = '<a class="external" href="?p=alliance&action=remove">' . $this->d13->getLangUI("remove") . '</a>';
 		}
 
-		$tvars['tvar_tpl_allianceMenu'] = $d13->templateSubpage("alliance.menu", $tvars);
+		$tvars['tvar_tpl_allianceMenu'] = $this->d13->templateSubpage("alliance.menu", $tvars);
 
 		
 		switch ($_GET['action']) {
 		
 			case 'get':
-				$d13->templateRender('alliance.get', $tvars);
+				$this->d13->outputPage('alliance.get', $tvars);
 				break;
 				
 			case 'set':
-				$d13->templateRender('alliance.set', $tvars);
+				$this->d13->outputPage('alliance.set', $tvars);
 				break;
 			
 			case 'add':
-				$d13->templateRender('alliance.add', $tvars);
+				$this->d13->outputPage('alliance.add', $tvars);
 				break;
 			
 			case 'remove':
-				$d13->templateRender('alliance.remove', $tvars);
+				$this->d13->outputPage('alliance.remove', $tvars);
 				break;
 			
 			case 'addInvitation':
-				$d13->templateRender('alliance.addInvitation', $tvars);
+				$this->d13->outputPage('alliance.addInvitation', $tvars);
 				break;
 			
 			case 'addWar':
-				$d13->templateRender('alliance.addWar', $tvars);
+				$this->d13->outputPage('alliance.addWar', $tvars);
 				break;
 			
 			default:
-				$d13->templateRender('alliance', $tvars);
+				$this->d13->outputPage('alliance', $tvars);
 				break;
 
 		}

@@ -28,9 +28,11 @@ class d13_node
 
 {
 
-	public $data, $resources, $production, $storage, $queues, $moduleCounts;
+	public $data, $status, $resources, $production, $storage, $queues, $moduleCounts;
 	
 	public $technologies, $modules, $components, $units, $buffs;
+	
+	private $updated = array();
 	
 	// ----------------------------------------------------------------------------------------
 	// constructor
@@ -47,6 +49,13 @@ class d13_node
 		$this->modules = array();
 		$this->units = array();
 		$this->components = array();
+		
+		$this->updated['technologies'] = false;
+		$this->updated['modules'] = false;
+		$this->updated['components'] = false;
+		$this->updated['units'] = false;
+		$this->updated['buffs'] = false;
+		
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -68,12 +77,12 @@ class d13_node
 		
 		if (isset($this->data['id'])) {
 			$this->getAll();
-			$status = 'done';
+			$this->status = 'done';
 		} else {
-			$status = 'noNode';
+			$this->status = 'noNode';
 		}
 
-		return $status;
+		return $this->status;
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -1668,9 +1677,10 @@ class d13_node
 	
 		global $d13;
 		
-		if (empty($this->buffs)) {
+		if (!$this->updated['buffs']) {
 			$result = $d13->dbQuery('select * from buff where node="' . $this->data['id'] . '" order by id asc');
 			for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->buffs[$i] = $row;
+			$this->updated['buffs'] = true;
 		}
 	
 	}
@@ -1685,9 +1695,10 @@ class d13_node
 	
 		global $d13;
 		
-		if (empty($this->technologies)) {
+		if (!$this->updated['technologies']) {
 			$result = $d13->dbQuery('select * from technologies where node="' . $this->data['id'] . '" order by id asc');
 			for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->technologies[$i] = $row;
+			$this->updated['technologies'] = true;
 		}
 
 	}
@@ -1702,9 +1713,10 @@ class d13_node
 	
 		global $d13;
 		
-		if (empty($this->modules)) {
+		if (!$this->updated['modules']) {
 			$result = $d13->dbQuery('select * from modules where node="' . $this->data['id'] . '" order by slot asc');
 			while ($row = $d13->dbFetch($result)) $this->modules[$row['slot']] = $row;
+			$this->updated['modules'] = true;
 		}
 		
 	}
@@ -1719,9 +1731,10 @@ class d13_node
 	
 		global $d13;
 		
-		if (empty($this->components)) {
+		if (!$this->updated['components']) {
 			$result = $d13->dbQuery('select * from components where node="' . $this->data['id'] . '" order by id asc');
 			for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->components[$i] = $row;
+			$this->updated['components'] = true;
 		}
 
 	}
@@ -1736,9 +1749,10 @@ class d13_node
 	
 		global $d13;
 		
-		if (empty($this->units)) {
+		if (!$this->updated['units']) {
 			$result = $d13->dbQuery('select * from units where node="' . $this->data['id'] . '" order by id asc');
 			while ($row = $d13->dbFetch($result)) $this->units[$row['id']] = $row;
+			$this->updated['units'] = true;
 		}
 		
 	}

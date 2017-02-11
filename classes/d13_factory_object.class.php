@@ -33,8 +33,9 @@ class d13_factory_object extends d13_factory_base
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct()
+	function __construct(d13_engine &$d13)
 	{
+		parent::__construct($d13);
 	
 	
 	}
