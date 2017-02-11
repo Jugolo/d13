@@ -30,7 +30,21 @@ class d13_grid
 
 {
 	public $data = array();
+	
+	protected $d13;
+	
+	// ----------------------------------------------------------------------------------------
+	// constructor
+	// ----------------------------------------------------------------------------------------
+	public
 
+	function __construct(d13_engine &$d13)
+	{
+		parent::__construct($d13);
+	
+	
+	}
+	
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
@@ -38,9 +52,9 @@ class d13_grid
 
 	function get($x, $y)
 	{
-		global $d13;
-		$result = $d13->dbQuery('select * from grid where (y between ' . ($y - 3) . ' and ' . ($y + 3) . ')  and (x between ' . ($x - 3) . ' and ' . ($x + 3) . ') order by y desc, x asc');
-		for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->data[$i] = $row;
+		
+		$result = $this->d13->dbQuery('select * from grid where (y between ' . ($y - 3) . ' and ' . ($y + 3) . ')  and (x between ' . ($x - 3) . ' and ' . ($x + 3) . ') order by y desc, x asc');
+		for ($i = 0; $row = $this->d13->dbFetch($result); $i++) $this->data[$i] = $row;
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -50,9 +64,9 @@ class d13_grid
 
 	function getAll()
 	{
-		global $d13;
-		$result = $d13->dbQuery('select * from grid order by y desc, x asc');
-		for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->data[$i] = $row;
+		
+		$result = $this->d13->dbQuery('select * from grid order by y desc, x asc');
+		for ($i = 0; $row = $this->d13->dbFetch($result); $i++) $this->data[$i] = $row;
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -62,7 +76,7 @@ class d13_grid
 
 	function getFree()
 	{
-		global $d13;
+		
 		$key = 0;
 		$free_coords = array();
 		$this->getAll();
@@ -83,9 +97,9 @@ class d13_grid
 
 	function getSector($x, $y)
 	{
-		global $d13;
-		$result = $d13->dbQuery('select * from grid where x="' . $x . '" and y="' . $y . '"');
-		$sector = $d13->dbFetch($result);
+		
+		$result = $this->d13->dbQuery('select * from grid where x="' . $x . '" and y="' . $y . '"');
+		$sector = $this->d13->dbFetch($result);
 		return $sector;
 	}
 
@@ -119,9 +133,9 @@ class d13_grid
 		if ((isset($this->data[$i])) && ($this->data[$i]['x'] == $x) && ($this->data[$i]['y'] == $y)) {
 			if ($this->data[$i]['type'] != 2) $output = 'href="javascript: fetch(\'getGrid.php\', \'x=' . $x . '&y=' . $y . '\')" onMouseOver="setSectorData(labels[' . $this->data[$i]['type'] . '], \'-\', \'-\')" onMouseOut="setSectorData(\'-\', \'-\', \'-\')"';
 			else {
-				$node = $d13->createNode();
+				$node = $this->d13->createNode();
 				$node->get('id', $this->data[$i]['id']);
-				$user = new d13_user();
+				$user = $this->d13->createObject('user');
 				$user->get('id', $node->data['user']);
 				$output = 'href="javascript: fetch(\'getGrid.php\', \'x=' . $x . '&y=' . $y . '\')" onMouseOver="setSectorData(\'' . $node->data['name'] . '\', \'' . $user->data['name'] . '\', \'-\')" onMouseOut="setSectorData(\'-\', \'-\', \'-\')"';
 			}
@@ -134,4 +148,3 @@ class d13_grid
 }
 
 // =====================================================================================EOF
-

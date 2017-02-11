@@ -55,7 +55,7 @@ class d13_module_craft extends d13_gameobject_module
 
 	function getInventory()
 	{
-		global $d13;
+		
 		$html = '';
 		$inventoryData = '';
 		$tvars['tvar_sub_popuplist'] = '';
@@ -65,17 +65,17 @@ class d13_module_craft extends d13_gameobject_module
 		if ($this->data['options']['inventoryList']) {
 
 			foreach($this->node->components as $uid => $unit) {
-				if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
+				if (in_array($uid, $this->d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
 					if ($unit['value'] > 0) {
 						
-						$image = $d13->getComponent($this->node->data['faction'], $uid, 'images');
+						$image = $this->d13->getComponent($this->node->data['faction'], $uid, 'images');
 						$image = $image[0]['image'];
 
 						
-						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'] . '">';
-						$tvars['tvar_listLabel'] = $d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'];
+						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $image . '" title="' . $this->d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'] . '">';
+						$tvars['tvar_listLabel'] = $this->d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'];
 						$tvars['tvar_listAmount'] = $unit['value'];
-						$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
+						$tvars['tvar_sub_popuplist'].= $this->d13->templateSubpage("sub.module.listcontent", $tvars);
 						$i++;
 					}
 				}
@@ -83,17 +83,17 @@ class d13_module_craft extends d13_gameobject_module
 			
 			if ($i>0) {
 				
-				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+				$this->d13->templateInject($this->d13->templateSubpage("sub.popup.list", $tvars));
 				
-				$vars['tvar_button_name'] 	 =  $this->data['name'] . " " . $d13->getLangUI("inventory");
+				$vars['tvar_button_name'] 	 =  $this->data['name'] . " " . $this->d13->getLangUI("inventory");
 				$vars['tvar_list_id'] 	 	 = "list-0";
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryCraft"));
-				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryCraft"));
+				$html = $this->d13->templateSubpage("button.popup.enabled", $vars);
 				
 			} else {
-				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory");
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
-				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $this->d13->getLangUI("inventory");
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryEmpty"));
+				$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		}
 		
@@ -113,21 +113,21 @@ class d13_module_craft extends d13_gameobject_module
 	function getPopup()
 	{
 	
-		global $d13;
+		
 		
 		$tvars['tvar_sub_popupswiper'] = '';
 		$html = '';
 
 		// - - - Craft Popup
 
-		foreach($d13->getComponent($this->node->data['faction']) as $cid => $component) {
-			if ($component['active'] && in_array($cid, $d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
+		foreach($this->d13->getComponent($this->node->data['faction']) as $cid => $component) {
+			if ($component['active'] && in_array($cid, $this->d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
 				
 				$args = array();
 				$args['supertype'] 	= 'component';
 				$args['id'] 		= $cid;
 				
-				$tmp_component = $d13->createGameObject($args, $this->node);
+				$tmp_component = $this->d13->createGameObject($args, $this->node);
 				
 				#$tmp_component = new d13_gameobject_component($args, $this->node);
 				
@@ -139,8 +139,8 @@ class d13_module_craft extends d13_gameobject_module
 
 				$costLimit = $this->node->checkCostMax($component['cost'], 'craft');
 				$reqLimit = $this->node->checkRequirementsMax($component['requirements']);
-				$upkeepLimit = floor($this->node->resources[$d13->getComponent($this->node->data['faction'], $cid, 'storageResource') ]['value'] / $d13->getComponent($this->node->data['faction'], $cid, 'storage'));
-				$unitLimit = abs($this->node->components[$cid]['value'] - $d13->getGeneral('types', $component['type'], 'limit'));
+				$upkeepLimit = floor($this->node->resources[$this->d13->getComponent($this->node->data['faction'], $cid, 'storageResource') ]['value'] / $this->d13->getComponent($this->node->data['faction'], $cid, 'storage'));
+				$unitLimit = abs($this->node->components[$cid]['value'] - $this->d13->getGeneral('types', $component['type'], 'limit'));
 				$limitData = min($costLimit, $reqLimit, $upkeepLimit, $unitLimit);
 				$limitData = floor($limitData);
 
@@ -157,17 +157,17 @@ class d13_module_craft extends d13_gameobject_module
 				}
 
 				if ($check_requirements['ok']) {
-					$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.ok");
+					$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.ok");
 				}
 				else {
-					$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.notok");
+					$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.notok");
 				}
 
 				if ($check_cost['ok']) {
-					$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
+					$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.ok");
 				}
 				else {
-					$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
+					$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.notok");
 				}
 
 				$tvars['tvar_nodeID'] = $this->node->data['id'];
@@ -179,7 +179,7 @@ class d13_module_craft extends d13_gameobject_module
 				$tvars['tvar_cid'] = $cid;
 				$tvars['tvar_componentName'] = $tmp_component->data['name'];
 				$tvars['tvar_componentDescription'] = $tmp_component->data['description'];
-				$tvars['tvar_duration'] = d13_misc::sToHMS( (($component['duration'] - $component['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'duration', 'craft')) * 60, true);
+				$tvars['tvar_duration'] = $this->d13->misc->sToHMS( (($component['duration'] - $component['duration'] * $this->data['totalIR']) * $this->d13->getGeneral('users', 'duration', 'craft')) * 60, true);
 				$tvars['tvar_compLimit'] = $limitData;
 				$vars['tvar_disableData']		= '';
 				if ($limitData <= 0) {
@@ -188,7 +188,7 @@ class d13_module_craft extends d13_gameobject_module
 				$tvars['tvar_compValue'] = $tmp_component->data['amount'];
 				$tvars['tvar_compStorage'] = $component['storage'];
 				$tvars['tvar_compResource'] = $component['storageResource'];
-				$tvars['tvar_compResourceName'] = $d13->getLangGL("resources", $component['storageResource'], "name");
+				$tvars['tvar_compResourceName'] = $this->d13->getLangGL("resources", $component['storageResource'], "name");
 				$tvars['tvar_compMaxValue'] = $tmp_component->data['amount'] + $limitData;
 				
 				$tvars['tvar_sliderID'] 	= $cid;
@@ -196,12 +196,12 @@ class d13_module_craft extends d13_gameobject_module
 				$tvars['tvar_sliderMax'] 	= $limitData;
 				$tvars['tvar_sliderValue'] 	= "00";
 
-				$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.craft", $tvars);
+				$tvars['tvar_sub_popupswiper'].= $this->d13->templateSubpage("sub.module.craft", $tvars);
 			}
 		}
 
-		$d13->templateInject($d13->templateSubpage("sub.popup.swiper", $tvars));
-		$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
+		$this->d13->templateInject($this->d13->templateSubpage("sub.popup.swiper", $tvars));
+		$this->d13->templateInject($this->d13->templateSubpage("sub.swiper.horizontal", $tvars));
 		return $tvars['tvar_sub_popupswiper'];
 	}
 
@@ -215,7 +215,7 @@ class d13_module_craft extends d13_gameobject_module
 
 	function getQueue()
 	{
-		global $d13;
+		
 		$html = '';
 
 		// - - - Check Queue
@@ -230,22 +230,22 @@ class d13_module_craft extends d13_gameobject_module
 					$this->data['busy'] = true;
 					
 					if (!$item['stage']) {
-						$stage = $d13->getLangUI('craft');
+						$stage = $this->d13->getLangUI('craft');
 					} else {
-						$stage = $d13->getLangUI('remove');
+						$stage = $this->d13->getLangUI('remove');
 					}
 					
-					$remaining = d13_misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
+					$remaining = $this->d13->misc->sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
-					$image = $d13->getComponent($this->node->data['faction'], $item['obj_id'], 'images');
+					$image = $this->d13->getComponent($this->node->data['faction'], $item['obj_id'], 'images');
 					$image = $image[0]['image'];
 									
 					$tvars = array();
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $image .'">';
-					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $d13->getLangGL("components", $this->node->data['faction'], $item['obj_id'], "name");
+					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $this->d13->getLangGL("components", $this->node->data['faction'], $item['obj_id'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="craft_' . $item['id'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("craft_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelComponent&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&craftId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 				
-					$html = $d13->templateSubpage("sub.module.listcontent", $tvars);
+					$html = $this->d13->templateSubpage("sub.module.listcontent", $tvars);
 				
 				}
 			}
@@ -256,15 +256,15 @@ class d13_module_craft extends d13_gameobject_module
 		if ((bool)$this->data['busy'] === false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
 			
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("craft");
+				$vars['tvar_button_name'] 	 = $this->d13->getLangUI("launch") . ' ' . $this->d13->getLangUI("craft");
 				$vars['tvar_list_id'] 	 	 = "swiper";
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleInactive"));
-				$html = $d13->templateSubpage("button.popup.swiper", $vars);
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipModuleInactive"));
+				$html = $this->d13->templateSubpage("button.popup.swiper", $vars);
 				
 			} else {
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("craft");
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleDisabled"));
-				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+				$vars['tvar_button_name'] 	 = $this->d13->getLangUI("launch") . ' ' . $this->d13->getLangUI("craft");
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipModuleDisabled"));
+				$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		}
 
@@ -281,18 +281,18 @@ class d13_module_craft extends d13_gameobject_module
 
 	function getOutputList()
 	{
-		global $d13;
+		
 		$html = '';
 		if (isset($this->data['components'])) {
 			foreach($this->data['components'] as $component) {
-				if ($d13->getComponent($this->node->data['faction'], $component, 'active')) {
-					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("components", $this->node->data['faction'], $component, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $component . '.png" title="' . $d13->getLangGL("components", $this->node->data['faction'], $component, "name") . '"></a>';
+				if ($this->d13->getComponent($this->node->data['faction'], $component, 'active')) {
+					$html.= '<a class="tooltip-left" data-tooltip="' . $this->d13->getLangGL("components", $this->node->data['faction'], $component, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $component . '.png" title="' . $this->d13->getLangGL("components", $this->node->data['faction'], $component, "name") . '"></a>';
 				}
 			}
 		}
 
 		if (empty($html)) {
-			$html = $d13->getLangUI("none");
+			$html = $this->d13->getLangUI("none");
 		}
 
 		return $html;

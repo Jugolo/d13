@@ -53,7 +53,7 @@ class d13_module_market extends d13_gameobject_module
 
 	function getInventory()
 	{
-		global $d13;
+		
 		
 		$html = '';
 		$inventoryData = '';
@@ -71,13 +71,13 @@ class d13_module_market extends d13_gameobject_module
 					$args['supertype'] = $object['object'];
 					$args['id'] = $object['id'];
 				
-					$tmp_object = $d13->createGameObject($args, $this->node);
+					$tmp_object = $this->d13->createGameObject($args, $this->node);
 				
 					if ($tmp_object->data['active']) {
 						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $tmp_object->data['imgdir'] . '/' . $tmp_object->data['image'] . '" title="' . $tmp_object->data['name'] . '">';
 						$tvars['tvar_listLabel'] = $tmp_object->data['name'];
 						$tvars['tvar_listAmount'] = "";
-						$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
+						$tvars['tvar_sub_popuplist'].= $this->d13->templateSubpage("sub.module.listcontent", $tvars);
 						$i++;
 					}
 			
@@ -86,17 +86,17 @@ class d13_module_market extends d13_gameobject_module
 			
 			if ($i>0) {
 				
-				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+				$this->d13->templateInject($this->d13->templateSubpage("sub.popup.list", $tvars));
 				
-				$vars['tvar_button_name'] 	 =  $this->data['name'] . " " . $d13->getLangUI("inventory");
+				$vars['tvar_button_name'] 	 =  $this->data['name'] . " " . $this->d13->getLangUI("inventory");
 				$vars['tvar_list_id'] 	 	 = "list-0";
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryCraft"));
-				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryCraft"));
+				$html = $this->d13->templateSubpage("button.popup.enabled", $vars);
 				
 			} else {
-				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory");
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
-				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $this->d13->getLangUI("inventory");
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryEmpty"));
+				$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		}
 		
@@ -115,7 +115,7 @@ class d13_module_market extends d13_gameobject_module
 	function getPopup()
 	{
 		
-		global $d13;
+		
 		
 		$tvars['tvar_sub_popupswiper'] = '';
 		$html = '';
@@ -144,7 +144,7 @@ class d13_module_market extends d13_gameobject_module
 					$args['supertype'] = $item['object'];
 					$args['id'] = $item['id'];
 				
-					$tmp_object = $d13->createGameObject($args, $this->node);
+					$tmp_object = $this->d13->createGameObject($args, $this->node);
 					
 					if ($tmp_object->data['active']) {
 
@@ -164,26 +164,26 @@ class d13_module_market extends d13_gameobject_module
 
 						if ($tmp_object->getCheckConvertedCost($resid, $modifier) && ($tmp_object->data['amount']+$item['amount'] <= $tmp_object->getMaxProduction()) ) {
 							
-							$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
+							$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.ok");
 							
-							$vars['tvar_button_name'] 	 = $d13->getLangUI("buy");
+							$vars['tvar_button_name'] 	 = $this->d13->getLangUI("buy");
 							$vars['tvar_button_link'] 	 = '?p=module&action=buyMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&objType=' . $objType . '&objId=' . $objId;
-							$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryResearch"));
-							$linkData .= $d13->templateSubpage("button.external.enabled", $vars);
+							$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryResearch"));
+							$linkData .= $this->d13->templateSubpage("button.external.enabled", $vars);
 						} else {
 							
-							$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
+							$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.notok");
 							
-							$vars['tvar_button_name'] 	 = $d13->getLangUI("buy");
-							$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
-							$linkData.= $d13->templateSubpage("button.popup.disabled", $vars);
+							$vars['tvar_button_name'] 	 = $this->d13->getLangUI("buy");
+							$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryEmpty"));
+							$linkData.= $this->d13->templateSubpage("button.popup.disabled", $vars);
 						}
 						
 						$tvars['tvar_linkData'] 			= $linkData;
 
 						$tvars['tvar_costData'] 			= $tmp_object->getConvertedCostList($resid, false, $modifier);
 					
-						$tvars['tvar_sub_popupswiper'].= $d13->templateSubpage("sub.module.market", $tvars);
+						$tvars['tvar_sub_popupswiper'].= $this->d13->templateSubpage("sub.module.market", $tvars);
 						
 						$i++;
 						
@@ -199,8 +199,8 @@ class d13_module_market extends d13_gameobject_module
 			}
 		}
 
-		$d13->templateInject($d13->templateSubpage("sub.popup.swiper", $tvars));
-		$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
+		$this->d13->templateInject($this->d13->templateSubpage("sub.popup.swiper", $tvars));
+		$this->d13->templateInject($this->d13->templateSubpage("sub.swiper.horizontal", $tvars));
 		
 		return $tvars['tvar_sub_popupswiper'];
 		
@@ -216,7 +216,7 @@ class d13_module_market extends d13_gameobject_module
 	function getQueue()
 	{
 	
-		global $d13;
+		
 		
 		$html = '';
 
@@ -231,16 +231,16 @@ class d13_module_market extends d13_gameobject_module
 					
 					$this->data['busy'] = true;
 								
-					$remaining = d13_misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
+					$remaining = $this->d13->misc->sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
 					$image = "refresh.png";
 					
 					$tvars = array();
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/refresh.png">';
-					$tvars['tvar_listLabel'] 	= $d13->getLangUI("refresh") . " " . $this->data['name'];
+					$tvars['tvar_listLabel'] 	= $this->d13->getLangUI("refresh") . " " . $this->data['name'];
 					$tvars['tvar_listAmount'] 	= '<span id="market_' . $this->data['slotId'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("market_' . $this->data['slotId'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 				
-					$html = $d13->templateSubpage("sub.module.listcontent", $tvars);
+					$html = $this->d13->templateSubpage("sub.module.listcontent", $tvars);
 				
 				}
 			}
@@ -250,24 +250,24 @@ class d13_module_market extends d13_gameobject_module
 
 		if ((bool)$this->data['busy'] === false) {
 			
-			$vars['tvar_button_name'] 	 = $d13->getLangUI("refresh") . ' ' . $d13->getLangUI("market");
+			$vars['tvar_button_name'] 	 = $this->d13->getLangUI("refresh") . ' ' . $this->d13->getLangUI("market");
 			$vars['tvar_button_link'] 	 = '?p=module&action=addMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'];
-			$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipRefreshMarket"));
-			$html .= $d13->templateSubpage("button.external.enabled", $vars);
+			$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipRefreshMarket"));
+			$html .= $this->d13->templateSubpage("button.external.enabled", $vars);
 		
 		// - - - Popover Button if queue full
 			
 		} else {
 		
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0) {
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("open") . ' ' . $d13->getLangUI("market");
+				$vars['tvar_button_name'] 	 = $this->d13->getLangUI("open") . ' ' . $this->d13->getLangUI("market");
 				$vars['tvar_list_id'] 	 	 = "swiper";
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleInactive"));
-				$html = $d13->templateSubpage("button.popup.swiper", $vars);
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipModuleInactive"));
+				$html = $this->d13->templateSubpage("button.popup.swiper", $vars);
 			} else {
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("open") . ' ' . $d13->getLangUI("market");
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipModuleDisabled"));
-				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+				$vars['tvar_button_name'] 	 = $this->d13->getLangUI("open") . ' ' . $this->d13->getLangUI("market");
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipModuleDisabled"));
+				$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 			}
 			
 		}
@@ -287,7 +287,7 @@ class d13_module_market extends d13_gameobject_module
 	function getOutputList()
 	{
 	
-		global $d13;
+		
 		
 		$html = '';
 		$data = array();
@@ -299,7 +299,7 @@ class d13_module_market extends d13_gameobject_module
 				$args['supertype'] = $object['object'];
 				$args['id'] = $object['id'];
 				
-				$tmp_object = $d13->createGameObject($args, $this->node);
+				$tmp_object = $this->d13->createGameObject($args, $this->node);
 				
 				if ($tmp_object->data['active']) {
 					$html.= '<a class="tooltip-left" data-tooltip="' . $tmp_object->data['name'] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $tmp_object->data['imgdir'] . '/' . $tmp_object->data['image'] . '" title="' . $tmp_object->data['name'] . '"></a>';
@@ -308,7 +308,7 @@ class d13_module_market extends d13_gameobject_module
 		}
 
 		if (empty($html)) {
-			$html = $d13->getLangUI("none");
+			$html = $this->d13->getLangUI("none");
 		}
 
 		return $html;
@@ -325,7 +325,7 @@ class d13_module_market extends d13_gameobject_module
 	public function getTemplateVariables()
 	{
 	
-		global $d13;
+		
 		$tvars = array();
 		
 		$tvars = parent::getTemplateVariables();

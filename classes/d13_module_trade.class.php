@@ -93,8 +93,8 @@ class d13_module_trade extends d13_gameobject_module
 
 	function getOutputList()
 	{
-		global $d13;
-		return $d13->getLangUI("none");
+		
+		return $this->d13->getLangUI("none");
 	}
 }
 

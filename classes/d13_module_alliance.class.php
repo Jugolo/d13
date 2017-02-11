@@ -67,7 +67,7 @@ class d13_module_alliance extends d13_gameobject_module
 
 	function getPopup()
 	{
-		global $d13;
+		
 		$html = '';
 		$i = 0;
 		$tvars = array();
@@ -77,71 +77,71 @@ class d13_module_alliance extends d13_gameobject_module
 		// - - - - Option: Alliance List
 
 		if ($this->data['options']['allianceGet']) {
-			$tvars['tvar_Label'] = $d13->getLangUI("new") . ' ' . $d13->getLangUI("alliance");
+			$tvars['tvar_Label'] = $this->d13->getLangUI("new") . ' ' . $this->d13->getLangUI("alliance");
 			$tvars['tvar_Link'] = '?p=alliance&action=get&nodeId=' . $this->node->data['id'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("new") . ' ' . $d13->getLangUI("alliance");
+			$tvars['tvar_LinkLabel'] = $this->d13->getLangUI("new") . ' ' . $this->d13->getLangUI("alliance");
 			$tvars['tvar_description'] = '';
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
+			$tvars['tvar_sub_popuplist'] .= $this->d13->templateSubpage("sub.module.itemcontent", $tvars);
 			$i++;
 		}
 
 		// - - - - Option: Alliance Edit
 
 		if ($this->data['options']['allianceEdit']) {
-			$tvars['tvar_Label'] = $d13->getLangUI("edit") . ' ' . $d13->getLangUI("alliance");
+			$tvars['tvar_Label'] = $this->d13->getLangUI("edit") . ' ' . $this->d13->getLangUI("alliance");
 			$tvars['tvar_Link'] = '?p=alliance&action=set&nodeId=' . $this->node->data['id'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("edit") . ' ' . $d13->getLangUI("alliance");
+			$tvars['tvar_LinkLabel'] = $this->d13->getLangUI("edit") . ' ' . $this->d13->getLangUI("alliance");
 			$tvars['tvar_description'] = '';
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
+			$tvars['tvar_sub_popuplist'] .= $this->d13->templateSubpage("sub.module.itemcontent", $tvars);
 			$i++;
 		}
 
 		// - - - - Option: Alliance Remove
 
 		if ($this->data['options']['allianceRemove']) {
-			$tvars['tvar_Label'] = $d13->getLangUI("remove") . ' ' . $d13->getLangUI("alliance");
+			$tvars['tvar_Label'] = $this->d13->getLangUI("remove") . ' ' . $this->d13->getLangUI("alliance");
 			$tvars['tvar_Link'] = '?p=alliance&action=remove&nodeId=' . $this->node->data['id'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("remove") . ' ' . $d13->getLangUI("alliance");
+			$tvars['tvar_LinkLabel'] = $this->d13->getLangUI("remove") . ' ' . $this->d13->getLangUI("alliance");
 			$tvars['tvar_description'] = '';
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
+			$tvars['tvar_sub_popuplist'] .= $this->d13->templateSubpage("sub.module.itemcontent", $tvars);
 			$i++;
 		}
 
 		// - - - - Option: Alliance Invite
 
 		if ($this->data['options']['allianceInvite']) {
-			$tvars['tvar_Label'] = $d13->getLangUI("invite") . ' ' . $d13->getLangUI("members");
+			$tvars['tvar_Label'] = $this->d13->getLangUI("invite") . ' ' . $this->d13->getLangUI("members");
 			$tvars['tvar_Link'] = '?p=alliance&action=addInvitation&nodeId=' . $this->node->data['id'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("invite") . ' ' . $d13->getLangUI("members");
+			$tvars['tvar_LinkLabel'] = $this->d13->getLangUI("invite") . ' ' . $this->d13->getLangUI("members");
 			$tvars['tvar_description'] = '';
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
+			$tvars['tvar_sub_popuplist'] .= $this->d13->templateSubpage("sub.module.itemcontent", $tvars);
 			$i++;
 		}
 
 		// - - - - Option: Alliance Go to War
 
 		if ($this->data['options']['allianceWar']) {
-			$tvars['tvar_Label'] = $d13->getLangUI("warDeclaration");
+			$tvars['tvar_Label'] = $this->d13->getLangUI("warDeclaration");
 			$tvars['tvar_Link'] = '?p=alliance&action=addWar&nodeId=' . $this->node->data['id'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("warDeclaration");
+			$tvars['tvar_LinkLabel'] = $this->d13->getLangUI("warDeclaration");
 			$tvars['tvar_description'] = '';
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
+			$tvars['tvar_sub_popuplist'] .= $this->d13->templateSubpage("sub.module.itemcontent", $tvars);
 			$i++;
 		}
 		
 		if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $i > 0) {
-			$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+			$this->d13->templateInject($this->d13->templateSubpage("sub.popup.list", $tvars));
 			
-			$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("alliance");
+			$vars['tvar_button_name'] 	 = $this->d13->getLangUI("launch") . ' ' . $this->d13->getLangUI("alliance");
 			$vars['tvar_list_id'] 	 	 = "list-1";
-			$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
-			$html = $d13->templateSubpage("button.popup.enabled", $vars);
+			$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI('tipModuleInactive'));
+			$html = $this->d13->templateSubpage("button.popup.enabled", $vars);
 			
 		} else {
 			
-			$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("alliance");
-			$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI('tipModuleDisabled'));
-			$html = $d13->templateSubpage("button.popup.disabled", $vars);
+			$vars['tvar_button_name'] 	 = $this->d13->getLangUI("launch") . ' ' . $this->d13->getLangUI("alliance");
+			$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI('tipModuleDisabled'));
+			$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 			
 		}
 		
@@ -173,8 +173,8 @@ class d13_module_alliance extends d13_gameobject_module
 
 	function getOutputList()
 	{
-		global $d13;
-		return $d13->getLangUI("none");
+		
+		return $this->d13->getLangUI("none");
 	}
 }
 

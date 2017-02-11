@@ -80,8 +80,8 @@ class d13_loginController extends d13_controller
 		}
 		else
 		if (isset($_COOKIE[CONST_PREFIX . 'Name'], $_COOKIE[CONST_PREFIX . 'Password'])) {
-			$name = d13_misc::clean($_COOKIE[CONST_PREFIX . 'Name']);
-			$pass = d13_misc::clean($_COOKIE[CONST_PREFIX . 'Password']);
+			$name = $this->d13->misc->clean($_COOKIE[CONST_PREFIX . 'Name']);
+			$pass = $this->d13->misc->clean($_COOKIE[CONST_PREFIX . 'Password']);
 			$remember = 1;
 		}
 
@@ -131,7 +131,7 @@ class d13_loginController extends d13_controller
 			$user = $this->d13->createObject('user');
 			$status = $user->get('name', $_POST['user']);
 			if ($status == 'done') {
-				$sitter = new d13_user();
+				$sitter = $this->d13->createObject('user');
 				$status = $sitter->get('name', $_POST['sitter']);
 				if ($status == 'done')
 				if (sha1($_POST['password']) == $sitter->data['password'])

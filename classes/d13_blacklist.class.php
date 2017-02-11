@@ -27,52 +27,84 @@
 class d13_blacklist
 
 {
+
+	protected $d13;
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function __construct(d13_engine &$d13)
+	{
+		$this->d13 = $d13;
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
 	public static
 
 	function check($type, $value)
 	{
-		global $d13;
-		$result = $d13->dbQuery('select count(*) as count from blacklist where type="' . $type . '" and value="' . $value . '"');
-		$row = $d13->dbFetch($result);
+		
+		$result = $this->d13->dbQuery('select count(*) as count from blacklist where type="' . $type . '" and value="' . $value . '"');
+		$row = $this->d13->dbFetch($result);
 		return $row['count'];
 	}
-
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
 	public static
 
 	function get($type)
 	{
-		global $d13;
-		$result = $d13->dbQuery('select * from blacklist where type="' . $type . '"');
+		
+		$result = $this->d13->dbQuery('select * from blacklist where type="' . $type . '"');
 		$blacklist = array();
-		for ($i = 0; $row = $d13->dbFetch($result); $i++) $blacklist[$i] = $row;
+		for ($i = 0; $row = $this->d13->dbFetch($result); $i++) $blacklist[$i] = $row;
 		return $blacklist;
 	}
-
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
 	public static
 
 	function add($type, $value)
 	{
-		global $d13;
+		
 		if (!self::check($type, $value)) {
-			$d13->dbQuery('insert into blacklist (type, value) values ("' . $type . '", "' . $value . '")');
-			if ($d13->dbAffectedRows() > - 1) $status = 'done';
+			$this->d13->dbQuery('insert into blacklist (type, value) values ("' . $type . '", "' . $value . '")');
+			if ($this->d13->dbAffectedRows() > - 1) $status = 'done';
 			else $status = 'error';
 		}
 		else $status = 'duplicateEntry';
 		return $status;
 	}
-
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
 	public static
 
 	function remove($type, $value)
 	{
-		global $d13;
+		
 		if (self::check($type, $value)) {
-			$d13->dbQuery('delete from blacklist where type="' . $type . '" and value="' . $value . '"');
-			if ($d13->dbAffectedRows() > - 1) $status = 'done';
+			$this->d13->dbQuery('delete from blacklist where type="' . $type . '" and value="' . $value . '"');
+			if ($this->d13->dbAffectedRows() > - 1) $status = 'done';
 			else $status = 'error';
 		}
 		else $status = 'noEntry';
 		return $status;
 	}
 }
+
+// =====================================================================================EOF

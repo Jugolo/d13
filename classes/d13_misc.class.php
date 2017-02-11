@@ -26,6 +26,19 @@ class d13_misc
 
 {
 
+	protected $d13;
+	
+	// ----------------------------------------------------------------------------------------
+	// constructor
+	// ----------------------------------------------------------------------------------------
+	public
+
+	function __construct(d13_engine &$d13)
+	{
+		$this->d13 = $d13;
+	
+	}
+	
 	//----------------------------------------------------------------------------------------
 	// getMobileClient
 	// 
@@ -46,19 +59,17 @@ class d13_misc
 	// toolTip
 	// 
 	//----------------------------------------------------------------------------------------
-	public static
+	public
 	
 	function toolTip($data, $cache=0) {
-		
-		global $d13;
-		
+
 		$id=md5($data);
 				
 		$tvars = array();
 		$tvars['tvar_tipContent'] = $data;
 		$tvars['tvar_tipID'] = $id;
 
-		$d13->templateInject($d13->templateSubpage("sub.tooltip", $tvars), $cache);
+		$this->d13->templateInject($this->d13->templateSubpage("sub.tooltip", $tvars), $cache);
 		
 		return 'showTip tip_'.$id;
 
@@ -68,16 +79,16 @@ class d13_misc
 	// getLeague
 	// level ca. 1-999 / trophies ca. 1-9999
 	//----------------------------------------------------------------------------------------
-	public static
+	public
 	
 	function getLeague($level, $trophies) {
 		
-		global $d13;
+		
 		
 		$my_league = 0;
 		$my_value = ceil(($level*100)+$trophies)/2;
 		
-		foreach ($d13->getLeague() as $league) {
+		foreach ($this->d13->getLeague() as $league) {
 		
 			if ($league['min'] <= $my_value) {
 				$my_league = $league['id'];
@@ -94,7 +105,7 @@ class d13_misc
 	//----------------------------------------------------------------------------------------
 	// gq_percent_difference
 	//----------------------------------------------------------------------------------------
-	public static
+	public
 	
 	function percent_difference($value1, $value2) {
 		
@@ -115,12 +126,11 @@ class d13_misc
 	//   level as well as the current grade. This formula can scale into infinite.
 	// 3.0
 	//----------------------------------------------------------------------------------------
-	public static
+	public
 	
 	function nextlevelexp($level, $grade=1) {
 	
-		global $d13;
-		$factor = $d13->getGeneral('factors', 'experience');
+		$factor = $this->d13->getGeneral('factors', 'experience');
 		$modifier = ceil($grade/4);													// !important - modifier is quarter of the grade
 		$level++;																	// because we want next level
 		$required_exp = ($level * ($grade * $factor)) * ($level * $modifier) * $factor;
@@ -132,8 +142,7 @@ class d13_misc
 	// record_sort
 	//
 	// ----------------------------------------------------------------------------------------
-
-	public static
+	public
 	
 	function record_sort($records, $field, $reverse = false)
 	{
@@ -154,7 +163,7 @@ class d13_misc
 	// ----------------------------------------------------------------------------------------
 	// percentage
 	// ----------------------------------------------------------------------------------------
-	public static
+	public
 
 	function percentage($fraction, $total)
 	{
@@ -169,7 +178,7 @@ class d13_misc
 	// ----------------------------------------------------------------------------------------
 	// upgraded_value
 	// ----------------------------------------------------------------------------------------
-	public static
+	public
 	
 	function upgraded_value($fraction, $total)
 	{
@@ -177,7 +186,7 @@ class d13_misc
 		$value = 1;
 		
 		if ($fraction > 0 && $total > 0) {
-			$value = floor(d13_misc::percentage($fraction, $total));
+			$value = floor($this->d13->misc->percentage($fraction, $total));
 			if ($value > $total) {
 				$value = $total;
 			} else if ($value < 1) {
@@ -192,24 +201,24 @@ class d13_misc
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-	public static
+	public
 
 	function clean($data, $type = 0)
 	{
-		global $d13;
+		
 		if (is_array($data))
 		foreach($data as $key => $value) {
 			if (($type) && ($type == 'numeric'))
 			if (!is_numeric($value)) $value = 0;
 			else $value = floor(abs($value));
-			$value = $d13->dbRealEscapeString($value);
+			$value = $this->d13->dbRealEscapeString($value);
 			$data[$key] = htmlspecialchars($value);
 		}
 		else {
 			if (($type) && ($type == 'numeric'))
 			if (!is_numeric($data)) $data = 0;
 			else $data = floor(abs($data));
-			$data = $d13->dbRealEscapeString($data);
+			$data = $this->d13->dbRealEscapeString($data);
 			$data = htmlspecialchars($data);
 		}
 
@@ -219,20 +228,20 @@ class d13_misc
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-	public static
+	public
 
 	function newId($type)
 	{
-		global $d13;
-		$result = $d13->dbQuery('select min(id) as id from free_ids where type="' . $type . '"');
-		$id = $d13->dbFetch($result);
+		
+		$result = $this->d13->dbQuery('select min(id) as id from free_ids where type="' . $type . '"');
+		$id = $this->d13->dbFetch($result);
 		if (isset($id['id'])) {
-			$d13->dbQuery('delete from free_ids where id="' . $id['id'] . '" and type="' . $type . '"');
+			$this->d13->dbQuery('delete from free_ids where id="' . $id['id'] . '" and type="' . $type . '"');
 			return $id['id'];
 		}
 		else {
-			$result = $d13->dbQuery('select max(id) as id from ' . $type);
-			$id = $d13->dbFetch($result);
+			$result = $this->d13->dbQuery('select max(id) as id from ' . $type);
+			$id = $this->d13->dbFetch($result);
 			if (isset($id['id'])) return $id['id'] + 1;
 			else return 1;
 		}
@@ -241,7 +250,7 @@ class d13_misc
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-	public static
+	public
 
 	function sToHMS($seconds, $asString=false)
 	{
@@ -261,7 +270,7 @@ class d13_misc
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-	public static
+	public
 
 	function microTime()
 	{

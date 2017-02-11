@@ -53,7 +53,7 @@ class d13_router
 	function route()
 	{
 		
-		global $d13;
+		
 		
 		$this->sanitize_vars();
 		
@@ -65,7 +65,7 @@ class d13_router
 			$page_access = "index";
 		}
 		
-		foreach ($d13->getRoute() as $route) {
+		foreach ($this->d13->getRoute() as $route) {
 			if ($route['page'] == $page_access && $route['active'] == TRUE) {
 				if (($route['login'] && isset($_SESSION[CONST_PREFIX . 'User']['id'])) || (!$route['login'] && !isset($_SESSION[CONST_PREFIX . 'User']['id']))) {
 					if(!$route['admin'] || $nav['admin'] && (isset($_SESSION[CONST_PREFIX . 'User']['access'])) && ($_SESSION[CONST_PREFIX . 'User']['access'] >= 3)) {
@@ -135,11 +135,11 @@ class d13_router
 	//
 	// ----------------------------------------------------------------------------------------
 
-	public static
+	public
 
 	function clean($data, $type = 0)
 	{
-		global $d13;
+		
 		if (is_array($data)) {
 			foreach($data as $key => $value) {
 				if ($type && $type == 'numeric') {
@@ -154,7 +154,7 @@ class d13_router
 					$data = basename($data);
 				}
 
-				$value = $d13->dbRealEscapeString($value);
+				$value = $this->d13->dbRealEscapeString($value);
 				$data[$key] = htmlspecialchars($value);
 			}
 		}
@@ -171,7 +171,7 @@ class d13_router
 				$data = basename($data);
 			}
 			
-			$data = $d13->dbRealEscapeString($data);
+			$data = $this->d13->dbRealEscapeString($data);
 			$data = htmlspecialchars($data);
 		}
 

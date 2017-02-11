@@ -55,11 +55,8 @@ class d13_factory
 	
 	function createController($type, $args=NULL)
 	{
-		
 		return $this->controllerFactory->create($type, $args);
-		
 	}
-	
 	
 	// ----------------------------------------------------------------------------------------
 	// createObject
@@ -69,9 +66,7 @@ class d13_factory
 	
 	function createObject($type, $id=NULL)
 	{
-		
 		return $this->objectFactory->create($type, $id);
-		
 	}
 	
 	// ----------------------------------------------------------------------------------------
@@ -109,6 +104,18 @@ class d13_factory
 	function createNode()
 	{
 		return $this->nodeFactory->create();
+	
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// getNodeList
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getNodeList($id, $otherNode=FALSE)
+	{
+		return $this->nodeFactory->getNodeList($id, $otherNode);
 	
 	}
 

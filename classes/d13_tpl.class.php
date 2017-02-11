@@ -301,12 +301,10 @@ class d13_tpl
 		$tvars = array_merge($tvars, $this->merge_ui_vars());
 		
 		$navBar = $this->d13->createController('d13_navBarController');
-		#$navBar = new d13_navBarController($this->d13->node);
 		$tvars["tpl_page_navbar"] = $navBar->getTemplate();
 		
 		if (isset($this->d13->node) && !empty($this->d13->node)) {
 			$resBar = $this->d13->createController('d13_resBarController');
-			#$resBar = new d13_resBarController($this->d13->node);
 			$tvars["tpl_page_subbar"] = $resBar->getTemplate();
 			$tvars["tpl_page_rightPanel"] = $this->d13->node->queues->getQueuesList();
 		}

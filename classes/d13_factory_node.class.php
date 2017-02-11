@@ -25,16 +25,16 @@
 class d13_factory_node extends d13_factory_base
 
 {
+
 	// ----------------------------------------------------------------------------------------
 	// constructor
 	//
 	// ----------------------------------------------------------------------------------------
 	public
 
-	function __construct()
+	function __construct(d13_engine &$d13)
 	{
-	
-	
+		parent::__construct($d13);
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -45,15 +45,33 @@ class d13_factory_node extends d13_factory_base
 
 	function create()
 	{
-	
-	
-		return new d13_node();
-		
-	
+		return new d13_node($this->d13);
 	}
 
-	
+	// ----------------------------------------------------------------------------------------
+	// getNodeList
+	// ----------------------------------------------------------------------------------------
+	public
 
+	function getNodeList($userId, $otherNode = FALSE)
+	{
+		
+		
+		$nodes = array();
+		
+		if ($otherNode) {
+			$result = $this->d13->dbQuery('select * from nodes where user != "' . $userId . '"');
+		} else {
+			$result = $this->d13->dbQuery('select * from nodes where user = "' . $userId . '"');
+		}
+
+		for ($i = 0; $row = $this->d13->dbFetch($result); $i++) {
+			$nodes[$i] = $this->create();
+			$nodes[$i]->data = $row;
+		}
+
+		return $nodes;
+	}
 
 
 }

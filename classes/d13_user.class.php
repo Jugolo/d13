@@ -27,18 +27,19 @@
 class d13_user
 
 {
-	
+
+	protected $d13;
+
 	public $data, $alliance, $ally_status, $user_status, $preferences, $blocklist;
 	
-
 	// ----------------------------------------------------------------------------------------
 	// constructor
 	// ----------------------------------------------------------------------------------------	
 	public
 	
-	function __construct($id=NULL)
+	function __construct($id=NULL, d13_engine &$d13)
 	{
-		
+		$this->d13 = $d13;
 		$this->user_status = $this->get('id', $id);
 		
 	}
@@ -46,27 +47,26 @@ class d13_user
 	// ----------------------------------------------------------------------------------------
 	// 
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function get($idType, $id=NULL)
 	{
-		global $d13;
+		
 		
 		if (!empty($id)) {
 		
 			$lower = '';
 			if (is_string($id)) {
 				$id = strtolower($id);
-				$result = $d13->dbQuery('select * from users where LOWER(' . $idType . ')= LOWER("' . strtolower($id) . '")');
+				$result = $this->d13->dbQuery('select * from users where LOWER(' . $idType . ')= LOWER("' . strtolower($id) . '")');
 			} else {
-				$result = $d13->dbQuery('select * from users where ' . $idType . '="' . $id . '"');
+				$result = $this->d13->dbQuery('select * from users where ' . $idType . '="' . $id . '"');
 			}
 		
-			$this->data = $d13->dbFetch($result);
+			$this->data = $this->d13->dbFetch($result);
 		
 			if (isset($this->data['id'])) {
-				$this->alliance	= new d13_alliance();
+				$this->alliance	= $this->d13->createObject('alliance');
 				$this->ally_status 	= $this->alliance->get('id', $this->data['alliance']);
 				$status = 'done';
 			} else {
@@ -83,16 +83,15 @@ class d13_user
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function set()
 	{
-		global $d13;
-		$user = new d13_user();
+		
+		$user = $this->d13->createObject('user', $this->d13);
 		if ($user->get('id', $this->data['id']) == 'done') {
-			$d13->dbQuery('update users set name="' . $this->data['name'] . '", password="' . $this->data['password'] . '", email="' . $this->data['email'] . '", access="' . $this->data['access'] . '", joined="' . $this->data['joined'] . '", lastVisit="' . $this->data['lastVisit'] . '", ip="' . $this->data['ip'] . '", alliance="' . $this->data['alliance'] . '", template="' . $this->data['template'] . '", color="' . $this->data['color'] . '", locale="' . $this->data['locale'] . '", sitter="' . $this->data['sitter'] . '" where id="' . $this->data['id'] . '"');
-			if ($d13->dbAffectedRows() > - 1) $status = 'done';
+			$this->d13->dbQuery('update users set name="' . $this->data['name'] . '", password="' . $this->data['password'] . '", email="' . $this->data['email'] . '", access="' . $this->data['access'] . '", joined="' . $this->data['joined'] . '", lastVisit="' . $this->data['lastVisit'] . '", ip="' . $this->data['ip'] . '", alliance="' . $this->data['alliance'] . '", template="' . $this->data['template'] . '", color="' . $this->data['color'] . '", locale="' . $this->data['locale'] . '", sitter="' . $this->data['sitter'] . '" where id="' . $this->data['id'] . '"');
+			if ($this->d13->dbAffectedRows() > - 1) $status = 'done';
 			else $status = 'error';
 		}
 		else $status = 'noUser';
@@ -102,26 +101,25 @@ class d13_user
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function add()
 	{
-		global $d13;
-		$user = new d13_user();
+		
+		$user = $this->d13->createObject('user', $this->d13);
 		if ($user->get('name', $this->data['name']) == 'noUser') {
 			if ($user->get('email', $this->data['email']) == 'noUser') {
 				if (!d13_blacklist::check('ip', $this->data['ip'])) {
 					if (!d13_blacklist::check('email', $this->data['email'])) {
 						$ok = 1;
-						$this->data['id'] = d13_misc::newId('users');
-						$d13->dbQuery('insert into users (id, name, password, email, access, joined, lastVisit, ip, template, color, locale, trophies) values ("' . $this->data['id'] . '", "' . $this->data['name'] . '", "' . $this->data['password'] . '", "' . $this->data['email'] . '", "' . $this->data['access'] . '", "' . $this->data['joined'] . '", "' . $this->data['lastVisit'] . '", "' . $this->data['ip'] . '", "' . $this->data['template'] . '", "' . $this->data['color'] . '", "' . $this->data['locale'] . '", "500")');
-						if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						$this->data['id'] = $this->d13->misc->newId('users');
+						$this->d13->dbQuery('insert into users (id, name, password, email, access, joined, lastVisit, ip, template, color, locale, trophies) values ("' . $this->data['id'] . '", "' . $this->data['name'] . '", "' . $this->data['password'] . '", "' . $this->data['email'] . '", "' . $this->data['access'] . '", "' . $this->data['joined'] . '", "' . $this->data['lastVisit'] . '", "' . $this->data['ip'] . '", "' . $this->data['template'] . '", "' . $this->data['color'] . '", "' . $this->data['locale'] . '", "500")');
+						if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 						$preferences = array();
-						foreach($d13->getGeneral('users', 'preferences') as $key => $preference) $preferences[] = '("' . $this->data['id'] . '", "' . $key . '", "' . $preference . '")';
+						foreach($this->d13->getGeneral('users', 'preferences') as $key => $preference) $preferences[] = '("' . $this->data['id'] . '", "' . $key . '", "' . $preference . '")';
 						$preferences = implode(', ', $preferences);
-						$d13->dbQuery('insert into preferences (user, name, value) values ' . $preferences);
-						if ($d13->dbAffectedRows() == - 1) $ok = 0;
+						$this->d13->dbQuery('insert into preferences (user, name, value) values ' . $preferences);
+						if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 						if ($ok) $status = 'done';
 						else $status = 'error';
 					}
@@ -147,34 +145,33 @@ class d13_user
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public static
 
 	function remove($id)
 	{
-		global $d13;
-		$user = new d13_user();
+		
+		$user = $this->d13->createObject('user', $this->d13);
 		if ($user->get('id', $id) == 'done') {
-			$result = $d13->dbQuery('select id from alliances where user="' . $id . '"');
-			while ($row = $d13->dbFetch($result)) d13_alliance::remove($row['id']);
-			$result = $d13->dbQuery('select id from nodes where user="' . $id . '"');
-			while ($row = $d13->dbFetch($result)) d13_node::remove($row['id']);
+			$result = $this->d13->dbQuery('select id from alliances where user="' . $id . '"');
+			while ($row = $this->d13->dbFetch($result)) d13_alliance::remove($row['id']);
+			$result = $this->d13->dbQuery('select id from nodes where user="' . $id . '"');
+			while ($row = $this->d13->dbFetch($result)) d13_node::remove($row['id']);
 			$ok = 1;
-			$d13->dbQuery('delete from activations where user="' . $id . '"');
-			$d13->dbQuery('delete from preferences where user="' . $id . '"');
-			$d13->dbQuery('delete from blocklist where to="' . $id . '" or from="' . $id . '"');
-			$messagesResult = $d13->dbQuery('select id from messages where recipient="' . $id . '" or sender="' . $id . '"');
-			while ($row = $d13->dbFetch($messagesResult)) {
-				$d13->dbQuery('insert into free_ids (id, type) values ("' . $row['id'] . '", "messages")');
-				if ($d13->dbAffectedRows() == - 1) $ok = 0;
-				$d13->dbQuery('delete from messages where id="' . $row['id'] . '"');
-				if ($d13->dbAffectedRows() == - 1) $ok = 0;
+			$this->d13->dbQuery('delete from activations where user="' . $id . '"');
+			$this->d13->dbQuery('delete from preferences where user="' . $id . '"');
+			$this->d13->dbQuery('delete from blocklist where to="' . $id . '" or from="' . $id . '"');
+			$messagesResult = $this->d13->dbQuery('select id from messages where recipient="' . $id . '" or sender="' . $id . '"');
+			while ($row = $this->d13->dbFetch($messagesResult)) {
+				$this->d13->dbQuery('insert into free_ids (id, type) values ("' . $row['id'] . '", "messages")');
+				if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+				$this->d13->dbQuery('delete from messages where id="' . $row['id'] . '"');
+				if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 			}
 
-			$d13->dbQuery('insert into free_ids (id, type) values ("' . $id . '", "users")');
-			if ($d13->dbAffectedRows() == - 1) $ok = 0;
-			$d13->dbQuery('delete from users where id="' . $id . '"');
-			if ($d13->dbAffectedRows() == - 1) $ok = 0;
+			$this->d13->dbQuery('insert into free_ids (id, type) values ("' . $id . '", "users")');
+			if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+			$this->d13->dbQuery('delete from users where id="' . $id . '"');
+			if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 			if ($ok) $status = 'done';
 			else $status = 'error';
 		}
@@ -190,29 +187,29 @@ class d13_user
 
 	function removeInactive($maxIdleTime)
 	{
-		global $d13;
+		
 		$fromWhen = time() - $maxIdleTime * 86400;
 		$fromWhen = strftime('%Y-%m-%d %H:%M:%S', $fromWhen);
-		$usersResult = $d13->dbQuery('select id from users where (lastVisit<"' . $fromWhen . '" or access=0) and access<2');
+		$usersResult = $this->d13->dbQuery('select id from users where (lastVisit<"' . $fromWhen . '" or access=0) and access<2');
 		$pendingCount = $removedCount = 0;
-		while ($userRow = $d13->dbFetch($usersResult)) {
+		while ($userRow = $this->d13->dbFetch($usersResult)) {
 			$pendingCount++;
-			$result = $d13->dbQuery('select id from nodes where user="' . $userRow['id'] . '"');
-			while ($row = $d13->dbFetch($result)) d13_node::remove($row['id']);
+			$result = $this->d13->dbQuery('select id from nodes where user="' . $userRow['id'] . '"');
+			while ($row = $this->d13->dbFetch($result)) d13_node::remove($row['id']);
 			$ok = 1;
-			$d13->dbQuery('delete from activations where user="' . $userRow['id'] . '"');
-			$messagesResult = $d13->dbQuery('select id from messages where recipient="' . $userRow['id'] . '" or sender="' . $userRow['id'] . '"');
-			while ($row = $d13->dbFetch($messagesResult)) {
-				$d13->dbQuery('insert into free_ids (id, type) values ("' . $row['id'] . '", "messages")');
-				if ($d13->dbAffectedRows() == - 1) $ok = 0;
-				$d13->dbQuery('delete from messages where id="' . $row['id'] . '"');
-				if ($d13->dbAffectedRows() == - 1) $ok = 0;
+			$this->d13->dbQuery('delete from activations where user="' . $userRow['id'] . '"');
+			$messagesResult = $this->d13->dbQuery('select id from messages where recipient="' . $userRow['id'] . '" or sender="' . $userRow['id'] . '"');
+			while ($row = $this->d13->dbFetch($messagesResult)) {
+				$this->d13->dbQuery('insert into free_ids (id, type) values ("' . $row['id'] . '", "messages")');
+				if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+				$this->d13->dbQuery('delete from messages where id="' . $row['id'] . '"');
+				if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 			}
 
-			$d13->dbQuery('insert into free_ids (id, type) values ("' . $userRow['id'] . '", "users")');
-			if ($d13->dbAffectedRows() == - 1) $ok = 0;
-			$d13->dbQuery('delete from users where id="' . $userRow['id'] . '"');
-			if ($d13->dbAffectedRows() == - 1) $ok = 0;
+			$this->d13->dbQuery('insert into free_ids (id, type) values ("' . $userRow['id'] . '", "users")');
+			if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+			$this->d13->dbQuery('delete from users where id="' . $userRow['id'] . '"');
+			if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 			if ($ok) $status = 'done';
 			else $status = 'error';
 			if ($ok) $removedCount++;
@@ -231,12 +228,12 @@ class d13_user
 
 	function resetPassword($email, $newPass)
 	{
-		global $d13;
+		
 		if ($this->data['email'] == $email)
-		if (time() - strtotime($this->data['lastVisit']) >= $d13->getGeneral('passwordResetIdle') * 60) {
+		if (time() - strtotime($this->data['lastVisit']) >= $this->d13->getGeneral('passwordResetIdle') * 60) {
 			$this->data['lastVisit'] = strftime('%Y-%m-%d %H:%M:%S', time());
-			$d13->dbQuery('update users set password=sha1("' . $newPass . '"), lastVisit="' . $this->data['lastVisit'] . '" where id="' . $this->data['id'] . '"');
-			if ($d13->dbAffectedRows() > - 1) $status = 'done';
+			$this->d13->dbQuery('update users set password=sha1("' . $newPass . '"), lastVisit="' . $this->data['lastVisit'] . '" where id="' . $this->data['id'] . '"');
+			if ($this->d13->dbAffectedRows() > - 1) $status = 'done';
 			else $status = 'error';
 		}
 		else $status = 'tryAgain';
@@ -251,13 +248,13 @@ class d13_user
 
 	function getPreferences($index)
 	{
-		global $d13;
-		$result = $d13->dbQuery('select * from preferences where user="' . $this->data['id'] . '"');
+		
+		$result = $this->d13->dbQuery('select * from preferences where user="' . $this->data['id'] . '"');
 		$this->preferences = array();
 		if ($index == 'name')
-		while ($row = $d13->dbFetch($result)) $this->preferences[$row['name']] = $row['value'];
+		while ($row = $this->d13->dbFetch($result)) $this->preferences[$row['name']] = $row['value'];
 		else
-		for ($i = 0; $row = $d13->dbFetch($result); $i++) $this->preferences[$i] = $row;
+		for ($i = 0; $row = $this->d13->dbFetch($result); $i++) $this->preferences[$i] = $row;
 	}
 	// ----------------------------------------------------------------------------------------
 	//
@@ -267,9 +264,9 @@ class d13_user
 
 	function setPreference($name, $value)
 	{
-		global $d13;
-		$d13->dbQuery('update preferences set value="' . $value . '" where user="' . $this->data['id'] . '" and name="' . $name . '"');
-		if ($d13->dbAffectedRows() > - 1) $status = 'done';
+		
+		$this->d13->dbQuery('update preferences set value="' . $value . '" where user="' . $this->data['id'] . '" and name="' . $name . '"');
+		if ($this->d13->dbAffectedRows() > - 1) $status = 'done';
 		else $status = 'error';
 		return $status;
 	}
@@ -281,11 +278,11 @@ class d13_user
 
 	function getBlocklist()
 	{
-		global $d13;
-		$result = $d13->dbQuery('select * from blocklist where recipient="' . $this->data['id'] . '"');
+		
+		$result = $this->d13->dbQuery('select * from blocklist where recipient="' . $this->data['id'] . '"');
 		$this->blocklist = array();
-		$user = new d13_user();
-		for ($i = 0; $row = $d13->dbFetch($result); $i++) {
+		$user = $this->d13->createObject('user', $this->d13);
+		for ($i = 0; $row = $this->d13->dbFetch($result); $i++) {
 			$this->blocklist[$i] = $row;
 			if ($user->get('id', $this->blocklist[$i]['sender']) == 'done') $this->blocklist[$i]['senderName'] = $user->data['name'];
 			else $this->blocklist[$i]['senderName'] = '[x]';
@@ -299,9 +296,9 @@ class d13_user
 
 	function isBlocked($recipient)
 	{
-		global $d13;
-		$result = $d13->dbQuery('select count(*) as count from blocklist where recipient="' . $recipient . '" and sender="' . $this->data['id'] . '"');
-		$row = $d13->dbFetch($result);
+		
+		$result = $this->d13->dbQuery('select count(*) as count from blocklist where recipient="' . $recipient . '" and sender="' . $this->data['id'] . '"');
+		$row = $this->d13->dbFetch($result);
 		return $row['count'];
 	}
 	
@@ -313,14 +310,14 @@ class d13_user
 
 	function setBlocklist($name)
 	{
-		global $d13;
-		$user = new d13_user();
+		
+		$user = $this->d13->createObject('user', $this->d13);
 		if ($user->get('name', $name) == 'done') {
-			$result = $d13->dbQuery('select count(*) as count from blocklist where recipient="' . $this->data['id'] . '" and sender="' . $user->data['id'] . '"');
-			$row = $d13->dbFetch($result);
-			if ($row['count']) $d13->dbQuery('delete from blocklist where recipient="' . $this->data['id'] . '" and sender="' . $user->data['id'] . '"');
-			else $d13->dbQuery('insert into blocklist (recipient, sender) values ("' . $this->data['id'] . '", "' . $user->data['id'] . '")');
-			if ($d13->dbAffectedRows() > - 1) $status = 'done';
+			$result = $this->d13->dbQuery('select count(*) as count from blocklist where recipient="' . $this->data['id'] . '" and sender="' . $user->data['id'] . '"');
+			$row = $this->d13->dbFetch($result);
+			if ($row['count']) $this->d13->dbQuery('delete from blocklist where recipient="' . $this->data['id'] . '" and sender="' . $user->data['id'] . '"');
+			else $this->d13->dbQuery('insert into blocklist (recipient, sender) values ("' . $this->data['id'] . '", "' . $user->data['id'] . '")');
+			if ($this->d13->dbAffectedRows() > - 1) $status = 'done';
 			else $status = 'error';
 		}
 		else $status = 'noUser';
@@ -335,14 +332,14 @@ class d13_user
 	function setStat($stat, $value)	
 	{
 	
-		global $d13;
+		
 
 		$status = 0;
 		
 
-			$d13->dbQuery('update users set '.$stat.'="'.$value.'" where id="' . $this->data['id'] . '"');
+			$this->d13->dbQuery('update users set '.$stat.'="'.$value.'" where id="' . $this->data['id'] . '"');
 			
-			if ($d13->dbAffectedRows() > - 1) {
+			if ($this->d13->dbAffectedRows() > - 1) {
 				$status = 1;
 			}
 			
@@ -360,17 +357,17 @@ class d13_user
 	function addStat($stat, $value)	
 	{
 	
-		global $d13;
+		
 
 		$status = 0;
-		$tmp_stat = $d13->getGeneral('userstats', $stat);
+		$tmp_stat = $this->d13->getGeneral('userstats', $stat);
 		
 		if (!empty($tmp_stat)) {
 		
 			$this->data[$tmp_stat['name']] += $value;
 			
 			if ($tmp_stat['isExp']) {
-				if ($this->data[$tmp_stat['name']] >= d13_misc::nextlevelexp($this->data['level'])) {
+				if ($this->data[$tmp_stat['name']] >= $this->d13->misc->nextlevelexp($this->data['level'])) {
 					$this->addStat('level', 1);
 				}
 			}
@@ -379,9 +376,9 @@ class d13_user
 				$this->data[$tmp_stat['name']] = 0;
 			}
 			
-			$d13->dbQuery('update users set '.$tmp_stat['name'].'="'.$this->data[$tmp_stat['name']].'" where id="' . $this->data['id'] . '"');
+			$this->d13->dbQuery('update users set '.$tmp_stat['name'].'="'.$this->data[$tmp_stat['name']].'" where id="' . $this->data['id'] . '"');
 			
-			if ($d13->dbAffectedRows() > - 1) {
+			if ($this->d13->dbAffectedRows() > - 1) {
 				$status = 1;
 			}
 			
@@ -399,7 +396,7 @@ class d13_user
 	function gainExperience($cost, $level)
 	{
 	
-		global $d13;
+		
 		
 		$status = 0;
 		$value = 0;
@@ -410,7 +407,7 @@ class d13_user
 			$i++;
 		}
 		
-		$value = abs(floor((($value/$i)*$level)/$d13->getGeneral('factors', 'experience')));
+		$value = abs(floor((($value/$i)*$level)/$this->d13->getGeneral('factors', 'experience')));
 	
 		$status = $this->addStat('experience', $value);
 		
@@ -426,13 +423,13 @@ class d13_user
 	function getTemplateVariables()
 	{
 	
-		global $d13;
+		
 				
 		$tvars = array();
 	
 		//- - - - - Player Name & Avatar
 		$tvars['tvar_userName'] 		= $this->data['name'];
-		$tvars['tvar_userImage'] 		= $d13->getAvatar($this->data['avatar'], 'image');
+		$tvars['tvar_userImage'] 		= $this->d13->getAvatar($this->data['avatar'], 'image');
 		$tvars['tvar_userTrophies']		= $this->data['trophies'];
 		$tvars['tvar_userID']			= $this->data['id'];
 		
@@ -441,12 +438,12 @@ class d13_user
 		
 			$tvars['tvar_userAllianceName'] 	= $this->alliance->data['name'];
 			$tvars['tvar_userAllianceTag'] 		= " [" . $this->alliance->data['tag'] . "]";
-			$tvars['tvar_userAllianceImage'] 	= $d13->getAlliance($this->alliance->data['avatar'], 'image');
+			$tvars['tvar_userAllianceImage'] 	= $this->d13->getAlliance($this->alliance->data['avatar'], 'image');
 			$tvars['tvar_userName'] 			.= " [" . $this->alliance->data['tag'] . "]";
 		
 		} else {
 		
-			$tvars['tvar_userAllianceName']	= $d13->getLangUI("none");
+			$tvars['tvar_userAllianceName']	= $this->d13->getLangUI("none");
 			$tvars['tvar_userAllianceImage'] = "alliance0.png";
 			$tvars['tvar_userAllianceTag'] = "";
 			
@@ -454,20 +451,20 @@ class d13_user
 
 		//- - - - - Player League
 		$league = array();
-		$league = $d13->getLeague(d13_misc::getLeague($this->data['level'], $this->data['trophies']));
+		$league = $this->d13->getLeague($this->d13->misc->getLeague($this->data['level'], $this->data['trophies']));
 		
-		$tvars['tvar_userLeague']		= $d13->getLangGL('leagues', $league['id'], 'name');
+		$tvars['tvar_userLeague']		= $this->d13->getLangGL('leagues', $league['id'], 'name');
 		$tvars['tvar_userImageLeague'] 	= $league['image'];
 		
 		//- - - - - Player Stats
 	
-		foreach($d13->getGeneral("userstats") as $stat) {
+		foreach($this->d13->getGeneral("userstats") as $stat) {
 			if ($stat['active']) {
 				$tvars['tvar_userImage'.$stat['name']] 		= $stat['icon'];
 				$tvars['tvar_userPercentage'.$stat['name']] = '';
 				if ($stat['isExp']) {
-				$tvars['tvar_user'.$stat['name']] 			= $this->data[$stat['value']] . '/' . d13_misc::nextlevelexp($this->data['level']);
-				$tvars['tvar_userPercentage'.$stat['name']] = d13_misc::percentage(floor($this->data[$stat['value']]), d13_misc::nextlevelexp($this->data['level']));
+				$tvars['tvar_user'.$stat['name']] 			= $this->data[$stat['value']] . '/' . $this->d13->misc->nextlevelexp($this->data['level']);
+				$tvars['tvar_userPercentage'.$stat['name']] = $this->d13->misc->percentage(floor($this->data[$stat['value']]), $this->d13->misc->nextlevelexp($this->data['level']));
 				$tvars['tvar_userColor'] 					= $stat['color'];
 				} else {
 				$tvars['tvar_user'.$stat['name']] 			= $this->data[$stat['value']];
@@ -483,4 +480,3 @@ class d13_user
 }
 
 // =====================================================================================EOF
-

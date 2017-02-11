@@ -217,7 +217,7 @@ class d13_allianceController extends d13_controller
 		
 		if ($this->d13->node->checkOptions('allianceSet')) {
 
-			$nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
+			$nodes = $this->d13->getNodeList($_SESSION[CONST_PREFIX . 'User']['id']);
 			$nodeList = '';
 			foreach($nodes as $node) {
 				$nodeList.= '<option value="' . $node->data['id'] . '">' . $node->data['name'] . '</option>';
@@ -291,7 +291,7 @@ class d13_allianceController extends d13_controller
 			if ($this->ally_status == 'noAlliance') {
 			
 				$nodeList = '';
-				$nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
+				$nodes = $this->d13->getNodeList($_SESSION[CONST_PREFIX . 'User']['id']);
 				if ($nodes) {
 					
 					foreach($nodes as $node) {
@@ -412,7 +412,7 @@ class d13_allianceController extends d13_controller
 					if ($status == 'done') {
 						$user->getPreferences('name');
 						if ($user->preferences['allianceReports']) {
-							$msg = new d13_message();
+							$msg = $this->d13->createObject('message');
 							$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 							$msg->data['recipient'] = $user->data['name'];
 							$msg->data['subject'] = $this->d13->getLangUI("allianceInvitation");
@@ -566,7 +566,7 @@ class d13_allianceController extends d13_controller
 						if ($user->get('id', $recipientAlliance->data['user']) == 'done') {
 							$user->getPreferences('name');
 							if ($user->preferences['allianceReports']) {
-								$msg = new d13_message();
+								$msg = $this->d13->createObject('message');
 								$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 								$msg->data['recipient'] = $user->data['name'];
 								$msg->data['subject'] = $this->d13->getLangUI("warDeclaration");
@@ -692,7 +692,7 @@ class d13_allianceController extends d13_controller
 					if ($user->get('id', $senderAlliance->data['user']) == 'done') {
 						$user->getPreferences('name');
 						if ($user->preferences['allianceReports']) {
-							$msg = new d13_message();
+							$msg = $this->d13->createObject('message');
 							$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 							$msg->data['recipient'] = $user->data['name'];
 							$msg->data['subject'] = $this->d13->getLangUI("peaceAccepted");

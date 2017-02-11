@@ -53,11 +53,18 @@ class d13_factory_object extends d13_factory_base
         switch ($type) {
         
             case 'user':
-                return new d13_user($id);
+                return new d13_user($id, $this->d13);
                 break;
-
-            
-            
+			
+			case 'alliance':
+				return new d13_alliance($this->d13);
+				break;
+				
+			case 'message':
+				return new d13_message($this->d13);
+				break;	
+				
+           
             default:
                 return NULL;
                 break;

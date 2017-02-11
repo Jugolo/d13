@@ -275,7 +275,7 @@ class d13_combatController extends d13_controller
 		
 		$showAll = true;
 		$tvars['tvar_nodeList'] = '<option disabled>...</option>';
-		$target_nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id'], TRUE);
+		$target_nodes = $this->d13->getNodeList($_SESSION[CONST_PREFIX . 'User']['id'], TRUE);
 		$this->d13->node->getLocation();
 
 		foreach($target_nodes as $target_node) {

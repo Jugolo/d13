@@ -120,11 +120,11 @@ class d13_logger
 	function debugLog($page)
 	{
 	
-		global $d13;
+		
 	
 		$queries = array();
-		$count 		= $d13->getQueryCount();
-		$queries 	= $d13->getQueries();
+		$count 		= $this->d13->getQueryCount();
+		$queries 	= $this->d13->getQueries();
 	
 		$this->log("======================= PROFILE (".$page.") =======================");
 		$this->log( "Execution Time: " . $this->profile_get() . 'ms');

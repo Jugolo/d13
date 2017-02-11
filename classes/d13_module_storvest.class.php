@@ -54,7 +54,7 @@ class d13_module_storvest extends d13_gameobject_module
 
 	function getInventory()
 	{
-		global $d13;
+		
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 0;
@@ -64,26 +64,26 @@ class d13_module_storvest extends d13_gameobject_module
 		if (isset($this->data['options']['inventoryList']) && $this->data['options']['inventoryList']) {
 			
 			foreach($this->node->resources as $uid => $unit) {
-				if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
-					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $uid . '.png" title="' . $d13->getLangGL('resources', $uid, 'name') . '">';
-					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $uid, 'name');
+				if ($this->d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
+					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $uid . '.png" title="' . $this->d13->getLangGL('resources', $uid, 'name') . '">';
+					$tvars['tvar_listLabel'] = $this->d13->getLangGL('resources', $uid, 'name');
 					$tvars['tvar_listAmount'] = floor($unit['value']);
-					$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
+					$tvars['tvar_sub_popuplist'].= $this->d13->templateSubpage("sub.module.listcontent", $tvars);
 					$i++;
 				}
 			}
 			if ($i > 0) {
-				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+				$this->d13->templateInject($this->d13->templateSubpage("sub.popup.list", $tvars));
 								
-				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory");
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $this->d13->getLangUI("inventory");
 				$vars['tvar_list_id'] 	 	 = "list-0";
 				$vars['tvar_button_tooltip'] = "";
-				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				$html = $this->d13->templateSubpage("button.popup.enabled", $vars);
 				
 			} else {
-				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty");
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $this->d13->getLangUI("inventory") . " " . $this->d13->getLangUI("empty");
 				$vars['tvar_button_tooltip'] = "";
-				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+				$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		
 		}
@@ -127,19 +127,19 @@ class d13_module_storvest extends d13_gameobject_module
 
 	function getOutputList()
 	{
-		global $d13;
+		
 		$html = '';
 		if (isset($this->data['storedResource'])) {
 			foreach($this->data['storedResource'] as $res) {
-				if ($d13->getResource($res, 'active')) {
-					$html.= $d13->getLangUI('production') . '<a class="tooltip-left" data-tooltip="' . $d13->getLangUI('production') . ' ' . $d13->getLangGL("resources", $res, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $d13->getLangGL("resources", $res, "name") . '"></a>';
-					$html.= ' ' . $d13->getLangUI('storage') . '<a class="tooltip-left" data-tooltip="' . $d13->getLangUI('storage') . ' ' . $d13->getLangGL("resources", $res, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $d13->getLangGL("resources", $res, "name") . '"></a>';
+				if ($this->d13->getResource($res, 'active')) {
+					$html.= $this->d13->getLangUI('production') . '<a class="tooltip-left" data-tooltip="' . $this->d13->getLangUI('production') . ' ' . $this->d13->getLangGL("resources", $res, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $this->d13->getLangGL("resources", $res, "name") . '"></a>';
+					$html.= ' ' . $this->d13->getLangUI('storage') . '<a class="tooltip-left" data-tooltip="' . $this->d13->getLangUI('storage') . ' ' . $this->d13->getLangGL("resources", $res, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $this->d13->getLangGL("resources", $res, "name") . '"></a>';
 				}
 			}
 		}
 
 		if (empty($html)) {
-			$html = $d13->getLangUI("none");
+			$html = $this->d13->getLangUI("none");
 		}
 
 		return $html;

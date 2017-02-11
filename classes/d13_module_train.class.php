@@ -54,7 +54,7 @@ class d13_module_train extends d13_gameobject_module
 
 	function getInventory()
 	{
-		global $d13;
+		
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 0;
@@ -63,17 +63,17 @@ class d13_module_train extends d13_gameobject_module
 		
 		if ($this->data['options']['inventoryList']) {
 			foreach($this->node->units as $uid => $unit) {
-				if (in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['id'], 'units'))) {
-					if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
+				if (in_array($uid, $this->d13->getModule($this->node->data['faction'], $this->data['id'], 'units'))) {
+					if ($this->d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
 						
-						$image = $d13->getUnit($this->node->data['faction'], $uid, 'images');
+						$image = $this->d13->getUnit($this->node->data['faction'], $uid, 'images');
 						$image = $image[0]['image'];
 
 						
-						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
-						$tvars['tvar_listLabel'] = $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'];
+						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $image . '" title="' . $this->d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
+						$tvars['tvar_listLabel'] = $this->d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'];
 						$tvars['tvar_listAmount'] = $unit['value'];
-						$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
+						$tvars['tvar_sub_popuplist'].= $this->d13->templateSubpage("sub.module.listcontent", $tvars);
 						$i++;
 					}
 				}
@@ -81,17 +81,17 @@ class d13_module_train extends d13_gameobject_module
 			
 			if ($i>0) {
 				
-				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+				$this->d13->templateInject($this->d13->templateSubpage("sub.popup.list", $tvars));
 				
-				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory");
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $this->d13->getLangUI("inventory");
 				$vars['tvar_list_id'] 	 	 = "list-0";
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryTrain"));
-				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryTrain"));
+				$html = $this->d13->templateSubpage("button.popup.enabled", $vars);
 				
 			} else {
-				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory");
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
-				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $this->d13->getLangUI("inventory");
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryEmpty"));
+				$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		}
 		
@@ -110,24 +110,24 @@ class d13_module_train extends d13_gameobject_module
 
 	function getPopup()
 	{
-		global $d13;
+		
 		$html = '';
 		$tvars = array();
 		$tvars['tvar_sub_popupswiper'] = '';
 		
-		foreach($d13->getUnit($this->node->data['faction']) as $uid => $unit) {
-			if ($unit['active'] && in_array($uid, $d13->getModule($this->node->data['faction'], $this->data['id'], 'units'))) {
+		foreach($this->d13->getUnit($this->node->data['faction']) as $uid => $unit) {
+			if ($unit['active'] && in_array($uid, $this->d13->getModule($this->node->data['faction'], $this->data['id'], 'units'))) {
 				
 				$args = array();
 				$args['supertype'] = 'unit';
 				$args['id'] = $uid;
 				
-				$tmp_unit = $d13->createGameObject($args, $this->node);
+				$tmp_unit = $this->d13->createGameObject($args, $this->node);
 				
 				$vars = array();
 				$vars = $tmp_unit->getTemplateVariables();
 				
-				$vars['tvar_duration'] = d13_misc::sToHMS((($tmp_unit->data['duration'] - $tmp_unit->data['duration'] * $this->data['totalIR']) * $d13->getGeneral('users', 'duration', 'train')) * 60, true);
+				$vars['tvar_duration'] = $this->d13->misc->sToHMS((($tmp_unit->data['duration'] - $tmp_unit->data['duration'] * $this->data['totalIR']) * $this->d13->getGeneral('users', 'duration', 'train')) * 60, true);
 				$vars['tvar_uid'] = $uid;
 				$vars['tvar_nodeId'] = $this->node->data['id'];
 				$vars['tvar_slotId'] = $this->data['slotId'];
@@ -142,12 +142,12 @@ class d13_module_train extends d13_gameobject_module
 				$vars['tvar_unitDescription'] = $tmp_unit->data['description'];
 				$vars['tvar_unitMaxValue'] = $tmp_unit->data['amount'] + $tmp_unit->getMaxProduction();
 				
-				$tvars['tvar_sub_popupswiper'] .= $d13->templateSubpage("sub.module.train", $vars);
+				$tvars['tvar_sub_popupswiper'] .= $this->d13->templateSubpage("sub.module.train", $vars);
 			}
 		}
 
-		$d13->templateInject($d13->templateSubpage("sub.popup.swiper", $tvars));
-		$d13->templateInject($d13->templateSubpage("sub.swiper.horizontal", $tvars));
+		$this->d13->templateInject($this->d13->templateSubpage("sub.popup.swiper", $tvars));
+		$this->d13->templateInject($this->d13->templateSubpage("sub.swiper.horizontal", $tvars));
 		return $tvars['tvar_sub_popupswiper'];
 	}
 
@@ -161,7 +161,7 @@ class d13_module_train extends d13_gameobject_module
 
 	function getQueue()
 	{
-		global $d13;
+		
 		$html = '';
 
 		// - - - Check Queue
@@ -176,21 +176,21 @@ class d13_module_train extends d13_gameobject_module
 					$this->data['busy'] = true;
 					
 					if (!$item['stage']) {
-						$stage = $d13->getLangUI('train');
+						$stage = $this->d13->getLangUI('train');
 					} else {
-						$stage = $d13->getLangUI('remove');
+						$stage = $this->d13->getLangUI('remove');
 					}
-					$remaining = d13_misc::sToHMS(($item['start'] + $item['duration']) - time(), true);
+					$remaining = $this->d13->misc->sToHMS(($item['start'] + $item['duration']) - time(), true);
 					
-					$image = $d13->getUnit($this->node->data['faction'], $item['obj_id'], 'images');
+					$image = $this->d13->getUnit($this->node->data['faction'], $item['obj_id'], 'images');
 					$image = $image[0]['image'];
 
 					$tvars = array();
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $image . '">';
-					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $d13->getLangGL("units", $this->node->data['faction'], $item['obj_id'], "name");
+					$tvars['tvar_listLabel'] 	= $stage . ' ' . $item['quantity'] . 'x ' . $this->d13->getLangGL("units", $this->node->data['faction'], $item['obj_id'], "name");
 					$tvars['tvar_listAmount'] 	= '<span id="train_' . $item['id'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("train_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelUnit&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '&trainId=' . $item['id'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 				
-					$html = $d13->templateSubpage("sub.module.listcontent", $tvars);
+					$html = $this->d13->templateSubpage("sub.module.listcontent", $tvars);
 				
 				}
 			}
@@ -203,15 +203,15 @@ class d13_module_train extends d13_gameobject_module
 				$tvars = array();
 				
 				
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("train");
+				$vars['tvar_button_name'] 	 = $this->d13->getLangUI("launch") . ' ' . $this->d13->getLangUI("train");
 				$vars['tvar_list_id'] 	 	 = "swiper";
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
-				$html = $d13->templateSubpage("button.popup.swiper", $vars);
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI('tipModuleInactive'));
+				$html = $this->d13->templateSubpage("button.popup.swiper", $vars);
 				
 			} else {
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("train");
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI('tipModuleDisabled'));
-				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+				$vars['tvar_button_name'] 	 = $this->d13->getLangUI("launch") . ' ' . $this->d13->getLangUI("train");
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI('tipModuleDisabled'));
+				$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		}
 
@@ -228,22 +228,22 @@ class d13_module_train extends d13_gameobject_module
 
 	function getOutputList()
 	{
-		global $d13;
+		
 		$html = '';
 				
 		if (isset($this->data['units'])) {
 			foreach($this->data['units'] as $unit) {
-				if ($d13->getUnit($this->node->data['faction'], $unit, 'active')) {
-					$id = $d13->getUnit($this->node->data['faction'], $unit, 'id');
-					$image = $d13->getUnit($this->node->data['faction'], $id, 'images');
+				if ($this->d13->getUnit($this->node->data['faction'], $unit, 'active')) {
+					$id = $this->d13->getUnit($this->node->data['faction'], $unit, 'id');
+					$image = $this->d13->getUnit($this->node->data['faction'], $id, 'images');
 					$image = $image[0]['image'];
-					$html.= '<a class="tooltip-left" data-tooltip="' . $d13->getLangGL("units", $this->node->data['faction'], $unit, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangGL("units", $this->node->data['faction'], $unit, "name") . '"></a>';
+					$html.= '<a class="tooltip-left" data-tooltip="' . $this->d13->getLangGL("units", $this->node->data['faction'], $unit, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $image . '" title="' . $this->d13->getLangGL("units", $this->node->data['faction'], $unit, "name") . '"></a>';
 				}
 			}
 		}
 
 		if (empty($html)) {
-			$html = $d13->getLangUI("none");
+			$html = $this->d13->getLangUI("none");
 		}
 
 		return $html;

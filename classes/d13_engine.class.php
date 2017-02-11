@@ -18,16 +18,9 @@
 // 
 // NOTES:
 //
-// Ah - the big, ugly engine class that is currently accessed in literally every other
-// class, function and piece of code using the 'global' keyword. This should be changed
-// later to some form of dependency injection.
-// 
-// This class holds all utility classes that are required all the time (like the database,
-// the template and the game data itself).
-//
-// features a series of wrapper functions to access the classes within.
-//
-// An OOP breaking global combined with the god-class anti-pattern.
+// This class holds several utility classes that are required all the time (like the database,
+// the template and the game data itself). features a series of wrapper functions to access
+// the classes within.
 //
 // ========================================================================================
 
@@ -55,6 +48,8 @@ class d13_engine
 		$this->factory  = new d13_factory($this);
 		$this->flags 	= new d13_flags($this);
 		$this->logger 	= new d13_logger($this);
+		$this->misc		= new d13_misc($this);
+		$this->message	= new d13_message($this);
 	}
 	
 	
@@ -69,7 +64,7 @@ class d13_engine
 	
 		if (empty($this->node)) {
 			if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
-				$this->node	= new d13_node();
+				$this->node	= $this->createNode(); #new d13_node();
 				$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
 				
 			}
@@ -129,6 +124,17 @@ class d13_engine
 	function createNode()
 	{
 		return $this->factory->createNode(func_get_args());
+	}
+	
+	
+	// ========================================================================================
+	//								NODE WRAPPER METHODS
+	// ========================================================================================
+	public
+	
+	function getNodeList($id, $otherNode=FALSE)
+	{
+		return $this->factory->getNodeList($id, $otherNode);
 	}
 	
 	// ========================================================================================

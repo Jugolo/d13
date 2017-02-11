@@ -107,7 +107,7 @@ class d13_nodeController extends d13_controller
 			$nodeId = $_SESSION[CONST_PREFIX . 'User']['node'];
 		}
 		
-		$this->d13->node = new d13_node();
+		$this->d13->node = $this->d13->createNode();
 		$status = $this->d13->node->get('id', $nodeId);
 		
 		if ($status == 'done') {
@@ -141,7 +141,7 @@ class d13_nodeController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['nodeId'])) {
-			$this->d13->node = new d13_node();
+			$this->d13->node = $this->d13->createNode();
 			$status = $this->d13->node->get('id', $_GET['nodeId']);
 			if ($status == 'done') {
 				if ((isset($_POST['name'], $_POST['focus'])) && ($_POST['name']))
@@ -208,7 +208,7 @@ class d13_nodeController extends d13_controller
 		
 		if (isset($_POST['faction'], $_POST['name'], $_POST['x'], $_POST['y'])) {
 			if ($_POST['faction'] != '' && !empty($_POST['name']) && !empty($_POST['x']) && !empty($_POST['y'])) {
-				$this->d13->node = new d13_node();
+				$this->d13->node = $this->d13->createNode();
 				$this->d13->node->data['faction'] = $_POST['faction'];
 				$this->d13->node->data['user'] = $_SESSION[CONST_PREFIX . 'User']['id'];
 				$this->d13->node->data['name'] = $_POST['name'];
@@ -259,7 +259,7 @@ class d13_nodeController extends d13_controller
 				$coord = array();
 				$grid = new d13_grid();
 				$coord = $grid->getFree();
-				$this->d13->node = new d13_node();
+				$this->d13->node = $this->d13->createNode();
 				$this->d13->node->data['faction'] = $_POST['faction'];
 				$this->d13->node->data['user'] = $_SESSION[CONST_PREFIX . 'User']['id'];
 				$this->d13->node->data['name'] = $_SESSION[CONST_PREFIX . 'User']['name'];
@@ -282,7 +282,7 @@ class d13_nodeController extends d13_controller
 		// - - - - Check for Faction Fixation
 
 		if ($this->d13->getGeneral('options', 'factionFixation')) {
-			$nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
+			$nodes = $this->d13->getNodeList($_SESSION[CONST_PREFIX . 'User']['id']); #$this->d13->getNodeList($_SESSION[CONST_PREFIX . 'User']['id']);
 			$t = count($nodes);
 			if ($t > 0) {
 				$factionId = $nodes[0]->data['faction'];
@@ -321,7 +321,7 @@ class d13_nodeController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['nodeId'])) {
-			$this->d13->node = new d13_node();
+			$this->d13->node = $this->d13->createNode();
 			$status = $this->d13->node->get('id', $_GET['nodeId']);
 			if ($status == 'done') {
 				if ((isset($_GET['go'])) && ($_GET['go'])) {
@@ -367,7 +367,7 @@ class d13_nodeController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['nodeId'])) {
-			$this->d13->node = new d13_node();
+			$this->d13->node = $this->d13->createNode();
 			$status = $this->d13->node->get('id', $_GET['nodeId']);
 			if ($status == 'done') {
 				if (isset($_POST['x'], $_POST['y']))
@@ -408,7 +408,7 @@ class d13_nodeController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['shieldId'])) {
-			$this->d13->node = new d13_node();
+			$this->d13->node = $this->d13->createNode();
 			$status = $this->d13->node->get('id', $_GET['nodeId']);
 			$status = $this->d13->node->cancelShield($_GET['shieldId']);
 			if ($status == 'done') {
@@ -437,7 +437,7 @@ class d13_nodeController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['buffId']) && isset($_GET['nodeId'])) {
-			$this->d13->node = new d13_node();
+			$this->d13->node = $this->d13->createNode();
 			$status = $this->d13->node->get('id', $_GET['nodeId']);
 			$status = $this->d13->node->cancelBuff($_GET['buffId']);
 			if ($status == 'done') {
@@ -466,7 +466,7 @@ class d13_nodeController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['slotId']) && isset($_GET['nodeId'])) {
-			$this->d13->node = new d13_node();
+			$this->d13->node = $this->d13->createNode();
 			$status = $this->d13->node->get('id', $_GET['nodeId']);
 			$status = $this->d13->node->cancelMarket($_GET['slotId']);
 			if ($status == 'done') {
@@ -495,7 +495,7 @@ class d13_nodeController extends d13_controller
 		$tvars = array();
 		$tvars['tvar_nodeList'] = "";
 		
-		$nodes = d13_node::getList($_SESSION[CONST_PREFIX . 'User']['id']);
+		$nodes = $this->d13->getNodeList($_SESSION[CONST_PREFIX . 'User']['id']); #$this->d13->getNodeList($_SESSION[CONST_PREFIX . 'User']['id']);
 		$t = count($nodes);
 
 		// - - - - - - - - - - - - - - - - - - - - 0 towns - create new town
@@ -557,7 +557,6 @@ class d13_nodeController extends d13_controller
 			
 			$offset_start = ($sector - 1) * $this->d13->getGeneral('users', 'maxModules');
 			$offset_end = $offset_start + $this->d13->getGeneral('users', 'maxModules');
-			#$this->d13->node->getModules();
 			
 			$add = true;
 			$limit = 4;

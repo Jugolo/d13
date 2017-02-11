@@ -90,7 +90,7 @@ class d13_messageController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['messageId'])) {
-			$msg = new d13_message();
+			$msg = $this->d13->createObject('message');
 			$status = $msg->get($_GET['messageId']);
 			if ($status == 'done') {
 				if ($msg->data['recipient'] == $_SESSION[CONST_PREFIX . 'User']['id'] || $msg->data['sender'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
@@ -142,7 +142,7 @@ class d13_messageController extends d13_controller
 		$this->d13->dbQuery('start transaction');
 		
 		if (isset($_GET['messageId'])) {
-			$msg = new d13_message();
+			$msg = $this->d13->createObject('message');
 			$status = $msg->get($_GET['messageId']);
 			if ($status != 'done') {
 				$msg = 0;
@@ -153,7 +153,7 @@ class d13_messageController extends d13_controller
 
 		if (isset($_POST['recipient'], $_POST['subject'], $_POST['msgbody'])) {
 			if ($_POST['recipient'] != '' && $_POST['subject'] != '' && $_POST['msgbody'] != '' && !$this->d13->getLangBW($_POST['msgbody']) && !$this->d13->getLangBW($_POST['subject'])) {
-				$msg = new d13_message();
+				$msg = $this->d13->createObject('message');
 				$msg->data['sender'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 				$msg->data['recipient'] = $_POST['recipient'];
 				$msg->data['subject'] = $_POST['subject'];
@@ -209,11 +209,11 @@ class d13_messageController extends d13_controller
 		$this->d13->dbQuery('start transaction');
 		
 		if (isset($_GET['messageId'])) {
-			$msg = new d13_message();
+			$msg = $this->d13->createObject('message');
 			$status = $msg->get($_GET['messageId']);
 			if ($status == 'done') {
 				if ($msg->data['recipient'] == $_SESSION[CONST_PREFIX . 'User']['id']) {
-					$status = d13_message::remove($_GET['messageId']);
+					$status = $this->d13->message->remove($_GET['messageId']);
 					if ($status == 'done') {
 						header('location: ?p=message&action=list');
 					} else {
@@ -228,7 +228,7 @@ class d13_messageController extends d13_controller
 			
 		} else {
 			if (isset($_POST['messageId'])) {
-				foreach($_POST['messageId'] as $id) d13_message::remove($id);
+				foreach($_POST['messageId'] as $id) $this->d13->message->remove($id);
 				header('location: ?p=message&action=list');
 			} else {
 				$message = $this->d13->getLangUI("insufficientData");
@@ -258,7 +258,7 @@ class d13_messageController extends d13_controller
 		
 		$tvars = array();
 		
-		$status = d13_message::removeAll($_SESSION[CONST_PREFIX . 'User']['id']);
+		$status = $this->d13->message->removeAll($_SESSION[CONST_PREFIX . 'User']['id']);
 		if ($status == 'done') {
 			header('location: ?p=message&action=list');
 		} else {
@@ -278,7 +278,6 @@ class d13_messageController extends d13_controller
 	function messageList()
 	{
 		
-		
 		$limit = 8;
 		$filter = 'all';
 		if (isset($_GET['page'])) {
@@ -289,10 +288,9 @@ class d13_messageController extends d13_controller
 		if (isset($_POST['filter'])) {
 			$filter = $_POST['filter'];
 		}
-		$messages = d13_message::getList($_SESSION[CONST_PREFIX . 'User']['id'], $limit, $offset, $filter);
+		
+		$messages = $this->d13->message->getList($_SESSION[CONST_PREFIX . 'User']['id'], $limit, $offset, $filter);
 		$pageCount = ceil($messages['count'] / $limit);
-		
-		
 		
 		$tvars['tvar_removeAll'] 		= "";
 		$tvars['tvar_messages'] 		= "";

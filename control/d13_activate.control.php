@@ -46,7 +46,7 @@ class d13_activateController extends d13_controller
 		$this->d13->dbQuery('start transaction');
 
 		if (isset($_GET['user'], $_GET['code'])) {
-			foreach($_GET as $key => $value) $_GET[$key] = d13_misc::clean($value);
+			foreach($_GET as $key => $value) $_GET[$key] = $this->d13->misc->clean($value);
 			if ((($_GET['user'] != '')) && ($_GET['code'] != '')) {
 			
 				$user = $this->d13->createObject('user');

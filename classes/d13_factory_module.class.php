@@ -51,10 +51,10 @@ class d13_factory_module extends d13_factory_base
     function create($moduleId, $slotId, &$node)
     {
 
-        global $d13;
+        
  
         $args = array();
-        $args['type']		= $d13->getModule($node->data['faction'], $moduleId, 'type');
+        $args['type']		= $this->d13->getModule($node->data['faction'], $moduleId, 'type');
         $args['supertype'] 	= 'module';
         $args['id'] 		= $moduleId;
         $args['slotId'] 	= $slotId;

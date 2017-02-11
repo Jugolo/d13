@@ -69,10 +69,10 @@ abstract class d13_gameobject_base
 
 	function checkStatsBase($args)
 	{
-		global $d13;
+		
 		
 		//add upgrade stat array entries
-		foreach($d13->getGeneral('stats') as $stat) {
+		foreach($this->d13->getGeneral('stats') as $stat) {
 			$this->data[$stat] = 0;
 			$this->data['upgrade_' . $stat] = 0;
 		}
@@ -81,11 +81,11 @@ abstract class d13_gameobject_base
 		{
 		
 			case 'module':
-				$data 	= $d13->getModule($this->node->data['faction'], $args['id']);
-				$name 	= $d13->getLangGL("modules", $this->node->data['faction'], $args['id'], "name");
-				$desc 	= $d13->getLangGL("modules", $this->node->data['faction'], $args['id'], "description");
+				$data 	= $this->d13->getModule($this->node->data['faction'], $args['id']);
+				$name 	= $this->d13->getLangGL("modules", $this->node->data['faction'], $args['id'], "name");
+				$desc 	= $this->d13->getLangGL("modules", $this->node->data['faction'], $args['id'], "description");
 				$level 	= $this->node->modules[$args['slotId']]['level'];
-				$type	= $d13->getModule($this->node->data['faction'], $args['id'], 'type');
+				$type	= $this->d13->getModule($this->node->data['faction'], $args['id'], 'type');
 				$input	= $this->node->modules[$args['slotId']]['input'];
 				$ctype 	= 'build';
 				$slot	= $args['slotId'];	
@@ -96,9 +96,9 @@ abstract class d13_gameobject_base
 				break;
 						
 			case 'component':
-				$data 	= $d13->getComponent($this->node->data['faction'], $args['id']);
-				$name 	= $d13->getLangGL("components", $this->node->data['faction'], $args['id'], "name");
-				$desc 	= $d13->getLangGL("components", $this->node->data['faction'], $args['id'], "description");
+				$data 	= $this->d13->getComponent($this->node->data['faction'], $args['id']);
+				$name 	= $this->d13->getLangGL("components", $this->node->data['faction'], $args['id'], "name");
+				$desc 	= $this->d13->getLangGL("components", $this->node->data['faction'], $args['id'], "description");
 				$level 	= 0;
 				$type	= $args['supertype'];
 				$input	= 0;
@@ -107,13 +107,13 @@ abstract class d13_gameobject_base
 				$amount = $this->node->components[$args['id']]['value'];
 				$imgdir = 'components' . '/' . $this->node->data['faction'];
 				$resimg = $data['icon'];
-				$resname= $d13->getLangGL("resources", $data['storageResource'], "name");
+				$resname= $this->d13->getLangGL("resources", $data['storageResource'], "name");
 				break;
 				
 			case 'technology':
-				$data 	= $d13->getTechnology($this->node->data['faction'], $args['id']);
-				$name 	= $d13->getLangGL("technologies", $this->node->data['faction'], $args['id'], "name");
-				$desc 	= $d13->getLangGL("technologies", $this->node->data['faction'], $args['id'], "description");
+				$data 	= $this->d13->getTechnology($this->node->data['faction'], $args['id']);
+				$name 	= $this->d13->getLangGL("technologies", $this->node->data['faction'], $args['id'], "name");
+				$desc 	= $this->d13->getLangGL("technologies", $this->node->data['faction'], $args['id'], "description");
 				$level 	= $this->node->technologies[$args['id']]['level'];
 				$type	= $args['supertype'];
 				$input	= 0;
@@ -126,11 +126,11 @@ abstract class d13_gameobject_base
 				break;	
 					
 			case 'unit':
-				$data 	= $d13->getUnit($this->node->data['faction'], $args['id']);
-				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $args['id'], "name");
-				$desc 	= $d13->getLangGL("units", $this->node->data['faction'], $args['id'], "description");
+				$data 	= $this->d13->getUnit($this->node->data['faction'], $args['id']);
+				$name 	= $this->d13->getLangGL("units", $this->node->data['faction'], $args['id'], "name");
+				$desc 	= $this->d13->getLangGL("units", $this->node->data['faction'], $args['id'], "description");
 				$level 	= 0;
-				$type	= $d13->getUnit($this->node->data['faction'], $args['id'], "type");
+				$type	= $this->d13->getUnit($this->node->data['faction'], $args['id'], "type");
 				$input	= 0;
 				$ctype 	= 'train';
 				$slot	= 0;
@@ -141,11 +141,11 @@ abstract class d13_gameobject_base
 				break;
 				
 			case 'turret':
-				$data 	= $d13->getUnit($this->node->data['faction'], $args['id']);
-				$name 	= $d13->getLangGL("units", $this->node->data['faction'], $args['id'], "name");
-				$desc 	= $d13->getLangGL("units", $this->node->data['faction'], $args['id'], "description");
+				$data 	= $this->d13->getUnit($this->node->data['faction'], $args['id']);
+				$name 	= $this->d13->getLangGL("units", $this->node->data['faction'], $args['id'], "name");
+				$desc 	= $this->d13->getLangGL("units", $this->node->data['faction'], $args['id'], "description");
 				$level 	= $args['level'];
-				$type	= $d13->getUnit($this->node->data['faction'], $args['id'], "type");
+				$type	= $this->d13->getUnit($this->node->data['faction'], $args['id'], "type");
 				$input	= $args['input'];
 				$ctype 	= 'train';
 				$slot	= 0;
@@ -156,9 +156,9 @@ abstract class d13_gameobject_base
 				break;
 				
 			case 'shield':
-				$data 	= $d13->getShield($args['id']);
-				$name 	= $d13->getLangGL("shields", $args['id'], "name");
-				$desc 	= $d13->getLangGL("shields", $args['id'], "description");
+				$data 	= $this->d13->getShield($args['id']);
+				$name 	= $this->d13->getLangGL("shields", $args['id'], "name");
+				$desc 	= $this->d13->getLangGL("shields", $args['id'], "description");
 				$level 	= 0;
 				$type	= $args['supertype'];
 				$input	= 0;
@@ -171,9 +171,9 @@ abstract class d13_gameobject_base
 				break;		
 				
 			case 'buff':	
-				$data 	= $d13->getBuff($args['id']);
-				$name 	= $d13->getLangGL("buffs", $args['id'], "name");
-				$desc 	= $d13->getLangGL("buffs", $args['id'], "description");
+				$data 	= $this->d13->getBuff($args['id']);
+				$name 	= $this->d13->getLangGL("buffs", $args['id'], "name");
+				$desc 	= $this->d13->getLangGL("buffs", $args['id'], "description");
 				$level 	= 0;
 				$type	= $args['supertype'];
 				$input	= 0;
@@ -186,9 +186,9 @@ abstract class d13_gameobject_base
 				break;		
 			
 			case 'resource':	
-				$data 	= $d13->getResource($args['id']);
-				$name 	= $d13->getLangGL("resources", $args['id'], "name");
-				$desc 	= $d13->getLangGL("resources", $args['id'], "description");
+				$data 	= $this->d13->getResource($args['id']);
+				$name 	= $this->d13->getLangGL("resources", $args['id'], "name");
+				$desc 	= $this->d13->getLangGL("resources", $args['id'], "description");
 				$level 	= 0;
 				$type	= $args['supertype'];
 				$input	= 0;
@@ -202,8 +202,8 @@ abstract class d13_gameobject_base
 			
 			default:
 				$data 	= NULL;
-				$name 	= $d13->getLangUI("none");
-				$desc 	= $d13->getLangUI("none");
+				$name 	= $this->d13->getLangUI("none");
+				$desc 	= $this->d13->getLangUI("none");
 				$level 	= 0;
 				$type	= '';
 				$input	= 0;
@@ -249,7 +249,7 @@ abstract class d13_gameobject_base
 	function checkStatsUpgrade()
 	{
 	
-		global $d13;
+		
 		
 		$upgrade_list = array();
 		$object_upgrades = array();
@@ -258,19 +258,19 @@ abstract class d13_gameobject_base
 		switch ($this->data['supertype'])
 		{
 			case 'module':
-				$upgrade_list = $d13->getUpgradeTechnology($this->node->data['faction']);
+				$upgrade_list = $this->d13->getUpgradeTechnology($this->node->data['faction']);
 				break;
 			case 'component':
-				$upgrade_list = $d13->getUpgradeComponent($this->node->data['faction']);
+				$upgrade_list = $this->d13->getUpgradeComponent($this->node->data['faction']);
 				break;
 			case 'technology':
-				$upgrade_list = $d13->getUpgradeTechnology($this->node->data['faction']);
+				$upgrade_list = $this->d13->getUpgradeTechnology($this->node->data['faction']);
 				break;
 			case 'unit':
-				$upgrade_list = $d13->getUpgradeUnit($this->node->data['faction']);
+				$upgrade_list = $this->d13->getUpgradeUnit($this->node->data['faction']);
 				break;
 			case 'turret':
-				$upgrade_list = $d13->getUpgradeTurret($this->node->data['faction']);
+				$upgrade_list = $this->d13->getUpgradeTurret($this->node->data['faction']);
 				break;
 				
 			#TODO: add upgradeBuff and upgradeShield as well
@@ -299,9 +299,9 @@ abstract class d13_gameobject_base
 				foreach ($this->data['upgrades'] as $upgrade_id) {
 										
 					if ($this->data['supertype'] == 'module') {
-						$tmp_upgrade = $d13->getUpgradeModule($this->node->data['faction'], $upgrade_id);
+						$tmp_upgrade = $this->d13->getUpgradeModule($this->node->data['faction'], $upgrade_id);
 					} else if ( $this->data['supertype'] == 'turret') {
-						$tmp_upgrade = $d13->getUpgradeTurret($this->node->data['faction'], $upgrade_id);
+						$tmp_upgrade = $this->d13->getUpgradeTurret($this->node->data['faction'], $upgrade_id);
 					}
 										
 					if ($tmp_upgrade['active'] && $tmp_upgrade['type'] == $this->data['type'] && $tmp_upgrade['id'] == $this->data['id']) {
@@ -315,7 +315,7 @@ abstract class d13_gameobject_base
 		// - - - - - - - - - - - - - - - Gather Technology Upgrades
 		foreach($this->node->technologies as $technologies) {
 			if ($technologies['level'] > 0) {
-				$technology = $d13->getTechnology($this->node->data['faction'], $technologies['id']);
+				$technology = $this->d13->getTechnology($this->node->data['faction'], $technologies['id']);
 				if ($technology['type'] == $this->data['type'] && in_array($this->data['id'], $technology['targets'])) {
 					foreach ($technology['upgrades'] as $upgrade_id) {
 						$tmp_upgrade = array();
@@ -336,18 +336,18 @@ abstract class d13_gameobject_base
 				if (isset($my_upgrade['battlestats']) && is_array($my_upgrade['battlestats'])) {
 					foreach($my_upgrade['battlestats'] as $stats) {
 						if ($stats['stat'] == 'all') {
-							foreach($d13->getGeneral('stats') as $stat) {
-								$this->data['upgrade_' . $stat] += d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stat]);
+							foreach($this->d13->getGeneral('stats') as $stat) {
+								$this->data['upgrade_' . $stat] += $this->d13->misc->upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stat]);
 							}
 						} else {
-							$this->data['upgrade_' . $stats['stat']] += d13_misc::upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stats['stat']]);
+							$this->data['upgrade_' . $stats['stat']] += $this->d13->misc->upgraded_value($stats['value'] * $my_upgrade['level'], $this->data[$stats['stat']]);
 						}
 					}
 				// - - - - - - - - - - Attributes scale on a fixed base
 				} else if (isset($my_upgrade['attributes']) && is_array($my_upgrade['attributes'])) {
 					foreach($my_upgrade['attributes'] as $stats) {
 						if ($stats['stat'] == 'all') {
-							foreach($d13->getGeneral('stats') as $stat) {
+							foreach($this->d13->getGeneral('stats') as $stat) {
 								$this->data['upgrade_' . $stat] += $stats['value'] * $my_upgrade['level'];
 							}
 						} else {
@@ -360,7 +360,7 @@ abstract class d13_gameobject_base
 		}
 		
 		// - - - - - - - - - - - - - - - Gather Buff Upgrades
-		#foreach($d13->getGeneral('stats') as $stat) {		
+		#foreach($this->d13->getGeneral('stats') as $stat) {		
 		$stat = "efficiency";
 		
 			if ($this->node->getBuff($stat, $this->data['type'])) {
@@ -411,7 +411,7 @@ abstract class d13_gameobject_base
 	function getCheckConvertedCost($resid, $modifier=1)
 	{
 		
-		global $d13;
+		
 
 		return $this->node->checkConvertedCost($this->getConvertedCost($resid, false, $modifier), $this->data['costType'], $modifier);
 
@@ -427,7 +427,7 @@ abstract class d13_gameobject_base
 	function getConvertedCost($resid, $upgrade=false, $modifier=1)
 	{
 	
-		global $d13;
+		
 		
 		$convertedCost = 0;
 		$cost_array = array();
@@ -442,8 +442,8 @@ abstract class d13_gameobject_base
 		$converted_cost_array = array();
 		$converted_cost_array['resource'] 	= $resid;
 		$converted_cost_array['value'] 		= $convertedCost;
-		$converted_cost_array['name'] 		= $d13->getLangGL('resources', $resid, 'name');
-		$converted_cost_array['icon'] 		= $d13->getResource($resid, 'icon');
+		$converted_cost_array['name'] 		= $this->d13->getLangGL('resources', $resid, 'name');
+		$converted_cost_array['icon'] 		= $this->d13->getResource($resid, 'icon');
 		$converted_cost_array['factor'] 	= $modifier;
 		
 		return $converted_cost_array;
@@ -460,23 +460,23 @@ abstract class d13_gameobject_base
 	function getCost($upgrade = false)
 	{
 	
-		global $d13;
+		
 		
 		$cost_array = array();
 		foreach($this->data['cost'] as $key => $cost) {
 			$tmp_array = array();
 			$tmp_array['resource'] = $cost['resource'];
-			$tmp_array['value'] = $cost['value'] * $d13->getGeneral('users', 'efficiency', $this->data['costType']);
-			$tmp_array['name'] = $d13->getLangGL('resources', $cost['resource'], 'name');
-			$tmp_array['icon'] = $d13->getResource($cost['resource'], 'icon');
+			$tmp_array['value'] = $cost['value'] * $this->d13->getGeneral('users', 'efficiency', $this->data['costType']);
+			$tmp_array['name'] = $this->d13->getLangGL('resources', $cost['resource'], 'name');
+			$tmp_array['icon'] = $this->d13->getResource($cost['resource'], 'icon');
 			$tmp_array['factor'] = 1;
 			if ($upgrade) {
 				foreach($this->data['cost_upgrade'] as $key => $upcost) {
 					$tmp2_array = array();
 					$tmp2_array['resource'] = $upcost['resource'];
-					$tmp2_array['value'] = $upcost['value'] * $d13->getGeneral('users', 'efficiency', $this->data['costType']);
-					$tmp2_array['name'] = $d13->getLangGL('resources', $upcost['resource'], 'name');
-					$tmp2_array['icon'] = $d13->getResource($upcost['resource'], 'icon');
+					$tmp2_array['value'] = $upcost['value'] * $this->d13->getGeneral('users', 'efficiency', $this->data['costType']);
+					$tmp2_array['name'] = $this->d13->getLangGL('resources', $upcost['resource'], 'name');
+					$tmp2_array['icon'] = $this->d13->getResource($upcost['resource'], 'icon');
 					$tmp2_array['factor'] = $upcost['factor'];
 					if ($tmp_array['resource'] == $tmp2_array['resource']) {
 						$tmp_array['value'] = $tmp_array['value'] + floor($tmp2_array['value'] * $tmp2_array['factor'] * $this->data['level']);
@@ -498,7 +498,7 @@ abstract class d13_gameobject_base
 
 	function getObjectImage()
 	{
-		global $d13;
+		
 		$this->data['image'] = '';
 		
 		foreach($this->data['images'] as $image) {
@@ -519,7 +519,7 @@ abstract class d13_gameobject_base
 
 	function getPendingImage()
 	{
-		global $d13;
+		
 		
 		foreach($this->data['images'] as $image) {
 			if ($image['level'] == 0) {
@@ -537,7 +537,7 @@ abstract class d13_gameobject_base
 
 	function getRequirements()
 	{
-		global $d13;
+		
 		$req_array = array();
 		foreach($this->data['requirements'] as $key => $requirement) {
 			$tmp_array = array();
@@ -548,10 +548,10 @@ abstract class d13_gameobject_base
 				$tmp_array['value'] = $requirement['value'];
 			}
 
-			$tmp_array['name'] = $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name');
+			$tmp_array['name'] = $this->d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name');
 			$tmp_array['type'] = $requirement['type'];
 			$tmp_array['icon'] = $requirement['id'] . '.png'; //TODO!
-			$tmp_array['type_name'] = $d13->getLangUI($requirement['type']);
+			$tmp_array['type_name'] = $this->d13->getLangUI($requirement['type']);
 			$req_array[] = $tmp_array;
 		}
 
@@ -567,10 +567,10 @@ abstract class d13_gameobject_base
 	function getStats()
 	{
 	
-		global $d13;
+		
 		
 		$stats = array();
-		foreach($d13->getGeneral('stats') as $stat) {
+		foreach($this->d13->getGeneral('stats') as $stat) {
 			$stats[$stat] = $this->data[$stat];
 		}
 
@@ -585,10 +585,10 @@ abstract class d13_gameobject_base
 
 	function getUpgrades()
 	{
-		global $d13;
+		
 		
 		$stats = array();
-		foreach($d13->getGeneral('stats') as $stat) {
+		foreach($this->d13->getGeneral('stats') as $stat) {
 			$stats[$stat] = $this->data['upgrade_' . $stat];
 		}
 
@@ -604,7 +604,7 @@ abstract class d13_gameobject_base
 
 	function getCostList($upgrade = false)
 	{
-		global $d13;
+		
 		
 		$get_costs = $this->getCost($upgrade);
 		
@@ -630,11 +630,11 @@ abstract class d13_gameobject_base
 	function getConvertedCostList($resid, $upgrade = false, $modifier = 1)
 	{
 		
-		global $d13;
+		
 		
 		$cost = $this->getConvertedCost($resid, $upgrade, $modifier);
 		
-		$costData = $d13->getLangUI("none");
+		$costData = $this->d13->getLangUI("none");
 		
 		if ($cost['value'] > 0) {
 			$costData = '<div class="cell">' . $cost['value'] . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $cost['name'] . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $cost['icon'] . '" title="' . $cost['name'] . '"></a></div>';
@@ -654,36 +654,36 @@ abstract class d13_gameobject_base
 	function getRequirementsList()
 	{
 	
-		global $d13;
+		
 		$html = '';
 		
 		if (!count($this->data['requirements'])) {
-			$html = $d13->getLangUI('none');
+			$html = $this->d13->getLangUI('none');
 		} else {
 			foreach($this->data['requirements'] as $key => $requirement) {
 				
 				if (isset($requirement['level'])) {
 					$value = $requirement['level'];
-					$tooltip = $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . " [L".$value."]";
+					$tooltip = $this->d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . " [L".$value."]";
 				}
 				else {
 					$value = $requirement['value'];
-					$tooltip = $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . " [x".$value."]";
+					$tooltip = $this->d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . " [x".$value."]";
 				}
 
 				if ($requirement['type'] == 'modules') {
 					$images = array();
-					$images = $d13->getModule($this->node->data['faction'], $requirement['id'], 'images');
+					$images = $this->d13->getModule($this->node->data['faction'], $requirement['id'], 'images');
 					$image = $images[1]['image'];
 				} else if ($requirement['type'] == 'technology') {
-					$image = $d13->getTechnology($this->node->data['faction'], $requirement['id'], 'image');
+					$image = $this->d13->getTechnology($this->node->data['faction'], $requirement['id'], 'image');
 				} else if ($requirement['type'] == 'component') {
-					$image = $d13->getComponent($this->node->data['faction'], $requirement['id'], 'image');
+					$image = $this->d13->getComponent($this->node->data['faction'], $requirement['id'], 'image');
 				} else {
 					$image = $requirement['id'];
 				}
 
-				$html.= '<div class="cell">' . $value . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $tooltip . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangUI($requirement['type']) . ' - ' . $d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div>';
+				$html.= '<div class="cell">' . $value . '</div><div class="cell"><a class="tooltip-left" data-tooltip="' . $tooltip . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/' . $requirement['type'] . '/' . $this->node->data['faction'] . '/' . $image . '" title="' . $this->d13->getLangUI($requirement['type']) . ' - ' . $this->d13->getLangGL($requirement['type'], $this->node->data['faction'], $requirement['id'], 'name') . '"></a></div>';
 			}
 		}
 
@@ -699,25 +699,25 @@ abstract class d13_gameobject_base
 
 	function getMaxProduction()
 	{
-		global $d13;
+		
 		
 			switch ($this->data['supertype'])
 			{
 				case 'unit':
 					$nowUpkeep 	= $this->data['upkeep'];
 					$upRes		= $this->data['upkeepResource'];
-					$limit 		= $d13->getGeneral('types', $this->data['type'], 'limit');
+					$limit 		= $this->d13->getGeneral('types', $this->data['type'], 'limit');
 					break;
 				
 				case 'component':
 					$nowUpkeep 	= $this->data['storage'];
 					$upRes		= $this->data['storageResource'];
-					$limit 		= $d13->getGeneral('types', $this->data['type'], 'limit');
+					$limit 		= $this->d13->getGeneral('types', $this->data['type'], 'limit');
 					break;
 				
 				case 'module':
 					$nowUpkeep 	= 1;
-					$limit 		= $d13->getModule($this->node->data['faction'], $this->data['id'], 'maxInstances');
+					$limit 		= $this->d13->getModule($this->node->data['faction'], $this->data['id'], 'maxInstances');
 					break;
 				
 				case 'resource':
@@ -780,7 +780,7 @@ abstract class d13_gameobject_base
 
 	function getTemplateVariables()
 	{
-		global $d13;
+		
 		$tvars = array();
 			
 		$tvars = array_merge($this->getStats(), $this->getUpgrades());

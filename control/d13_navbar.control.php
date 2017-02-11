@@ -60,7 +60,7 @@ class d13_navBarController extends d13_controller
 						//- - - Message Trigger
 						} else if ($nav['trigger'] == 'messages' && isset($_SESSION[CONST_PREFIX . 'User']['id'])) {
 				
-							$umc = d13_message::getUnreadCount($_SESSION[CONST_PREFIX . 'User']['id']);
+							$umc = $this->d13->message->getUnreadCount($_SESSION[CONST_PREFIX . 'User']['id']);
 							if ($umc <= 0) {
 								$icon = $nav['images'][0]['image'];
 								$class = $nav['images'][0]['class'];

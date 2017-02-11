@@ -53,7 +53,7 @@ class d13_module_warfare extends d13_gameobject_module
 
 	function getInventory()
 	{
-		global $d13;
+		
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 0;
@@ -62,33 +62,33 @@ class d13_module_warfare extends d13_gameobject_module
 		
 		if ($this->data['options']['inventoryList']) {
 			foreach($this->node->units as $uid => $unit) {
-				if ($d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
+				if ($this->d13->getUnit($this->node->data['faction'], $uid, 'active') && $unit['value'] > 0) {
 					
 					
-					$image = $d13->getUnit($this->node->data['faction'], $uid, 'images');
+					$image = $this->d13->getUnit($this->node->data['faction'], $uid, 'images');
 					$image = $image[0]['image'];
 
-					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $image . '" title="' . $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
-					$tvars['tvar_listLabel'] = $d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'];
+					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/units/' . $this->node->data['faction'] . '/' . $image . '" title="' . $this->d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'] . '">';
+					$tvars['tvar_listLabel'] = $this->d13->getLangGL('units', $this->node->data['faction'], $uid) ['name'];
 					$tvars['tvar_listAmount'] = $unit['value'];
-					$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
+					$tvars['tvar_sub_popuplist'].= $this->d13->templateSubpage("sub.module.listcontent", $tvars);
 					$i++;
 				}
 			}
 			
 			if ($i>0) {
 				
-				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+				$this->d13->templateInject($this->d13->templateSubpage("sub.popup.list", $tvars));
 				
-				$vars['tvar_button_name'] 	 =  $this->data['name'] . " " . $d13->getLangUI("inventory");
+				$vars['tvar_button_name'] 	 =  $this->data['name'] . " " . $this->d13->getLangUI("inventory");
 				$vars['tvar_list_id'] 	 	 = "list-0";
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryTrain"));
-				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryTrain"));
+				$html = $this->d13->templateSubpage("button.popup.enabled", $vars);
 				
 			} else {
-				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory");
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
-				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $this->d13->getLangUI("inventory");
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryEmpty"));
+				$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		}
 		
@@ -108,22 +108,22 @@ class d13_module_warfare extends d13_gameobject_module
 	function getPopup()
 	{
 	
-		global $d13;
+		
 		$html = '';
 		$i = 0;
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 1;
 		
-		foreach ($d13->getCombat() as $key => $combatType) {
+		foreach ($this->d13->getCombat() as $key => $combatType) {
 			if ($combatType['active']) {
 				if (isset($this->data['options'][$key]) && $this->data['options'][$key]) {
 					if ($this->data['moduleSlotInput'] > 0 && $this->data['level'] >= $combatType['level']) {
-						$tvars['tvar_Label'] = $d13->getLangGL("combatTypes", $combatType['id'], "name");
-						$tvars['tvar_Description'] = $d13->getLangGL("combatTypes", $combatType['id'], "description");
+						$tvars['tvar_Label'] = $this->d13->getLangGL("combatTypes", $combatType['id'], "name");
+						$tvars['tvar_Description'] = $this->d13->getLangGL("combatTypes", $combatType['id'], "description");
 						$tvars['tvar_Link'] = '?p=combat&action=add&nodeId=' . $this->node->data['id'] . '&type='.$combatType['string'].'&slotId='.$this->data['slotId'];
-						$tvars['tvar_LinkLabel'] = $d13->getLangUI("set");
-						$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
+						$tvars['tvar_LinkLabel'] = $this->d13->getLangUI("set");
+						$tvars['tvar_sub_popuplist'] .= $this->d13->templateSubpage("sub.module.itemcontent", $tvars);
 						$i++;
 					}
 				}
@@ -131,16 +131,16 @@ class d13_module_warfare extends d13_gameobject_module
 		}
 		
 		if ($i > 0) {
-			$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+			$this->d13->templateInject($this->d13->templateSubpage("sub.popup.list", $tvars));
 			
-			$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . " " . $d13->getLangUI("combat");
+			$vars['tvar_button_name'] 	 = $this->d13->getLangUI("launch") . " " . $this->d13->getLangUI("combat");
 			$vars['tvar_list_id'] 	 	 = "list-1";
 			$vars['tvar_button_tooltip'] = "";
-			$html = $d13->templateSubpage("button.popup.enabled", $vars);
+			$html = $this->d13->templateSubpage("button.popup.enabled", $vars);
 		} else {
-			$vars['tvar_button_name'] 	 = $d13->getLangUI("unit") . " " . $d13->getLangUI("launch") . " " . $d13->getLangUI("combat");
+			$vars['tvar_button_name'] 	 = $this->d13->getLangUI("unit") . " " . $this->d13->getLangUI("launch") . " " . $this->d13->getLangUI("combat");
 			$vars['tvar_button_tooltip'] = "";
-			$html = $d13->templateSubpage("button.popup.disabled", $vars);
+			$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 		}
 		
 		return $html;
@@ -157,7 +157,7 @@ class d13_module_warfare extends d13_gameobject_module
 
 	function getQueue()
 	{
-		global $d13;
+		
 		$html = '';
 
 		// - - - Check Queue
@@ -174,13 +174,13 @@ class d13_module_warfare extends d13_gameobject_module
 					
 					if (!$item['stage']) {
 						if ($item['sender'] == $this->node->data['id']) {
-							$stage = $d13->getLangUI('outgoing');
+							$stage = $this->d13->getLangUI('outgoing');
 							$cancel = '<div class="cell"><a class="external" href="?p=combat&action=cancel&nodeId=' . $this->node->data['id'] . '&combatId=' . $item['id'] . '"><img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a></div>';
 						} else {
-							$stage = $d13->getLangUI('incoming');
+							$stage = $this->d13->getLangUI('incoming');
 						}
 					} else if ($item['sender'] == $this->node->data['id']) {
-						$stage = $d13->getLangUI('returning');
+						$stage = $this->d13->getLangUI('returning');
 					}
 					
 					$remaining = ($item['start'] + $item['duration']) - time();
@@ -196,12 +196,12 @@ class d13_module_warfare extends d13_gameobject_module
 					if ($status == 'done') {
 						$tvars = array();
 						$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/flag.png">';
-						$tvars['tvar_listLabel'] 	= $stage . ' ' . $d13->getLangUI("combat") . ' ' . $otherNode->data['name'];
-						$tvars['tvar_listAmount'] 	= '<span id="combat_' . $item['id'] . '">' . implode(':', d13_misc::sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("combat_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> '.$cancel;
+						$tvars['tvar_listLabel'] 	= $stage . ' ' . $this->d13->getLangUI("combat") . ' ' . $otherNode->data['name'];
+						$tvars['tvar_listAmount'] 	= '<span id="combat_' . $item['id'] . '">' . implode(':', $this->d13->misc->sToHMS($remaining)) . '</span><script type="text/javascript">timedJump("combat_' . $item['id'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> '.$cancel;
 				
 					
 				
-						$html = $d13->templateSubpage("sub.module.listcontent", $tvars);
+						$html = $this->d13->templateSubpage("sub.module.listcontent", $tvars);
 					}
 					
 				}
@@ -213,15 +213,15 @@ class d13_module_warfare extends d13_gameobject_module
 		if ($this->data['busy'] == false) {
 			if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $this->data['count'] > 0) {
 				
-				$vars['tvar_button_name'] 	 =  $d13->getLangUI("launch") . ' ' . $d13->getLangUI("combat");
+				$vars['tvar_button_name'] 	 =  $this->d13->getLangUI("launch") . ' ' . $this->d13->getLangUI("combat");
 				$vars['tvar_list_id'] 	 	 = "list-1";
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI('tipModuleInactive'));
-				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI('tipModuleInactive'));
+				$html = $this->d13->templateSubpage("button.popup.enabled", $vars);
 				
 			} else {
-				$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . ' ' . $d13->getLangUI("combat");
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI('tipModuleDisabled'));
-				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+				$vars['tvar_button_name'] 	 = $this->d13->getLangUI("launch") . ' ' . $this->d13->getLangUI("combat");
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI('tipModuleDisabled'));
+				$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 
 			}
 		}
@@ -239,8 +239,8 @@ class d13_module_warfare extends d13_gameobject_module
 
 	function getOutputList()
 	{
-		global $d13;
-		return $d13->getLangUI("none");
+		
+		return $this->d13->getLangUI("none");
 	}
 }
 

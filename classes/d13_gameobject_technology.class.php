@@ -54,7 +54,7 @@ class d13_gameobject_technology extends d13_gameobject_base
 
 	function checkStatsExtended()
 	{
-		global $d13;
+		
 
 		
 		

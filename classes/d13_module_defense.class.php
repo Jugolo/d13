@@ -56,7 +56,7 @@ class d13_module_defense extends d13_gameobject_module
 
 	function checkStatsExtended()
 	{
-		global $d13;
+		
 		
 		parent::checkStatsExtended();
 		
@@ -66,7 +66,7 @@ class d13_module_defense extends d13_gameobject_module
 		$args['level'] 		= $this->data['level'];
 		$args['input'] 		= $this->data['input'];
 				
-		$this->turret = $d13->createGameObject($args, $this->node, $this->d13);
+		$this->turret = $this->d13->createGameObject($args, $this->node, $this->d13);
 	
 	}
 	
@@ -80,16 +80,16 @@ class d13_module_defense extends d13_gameobject_module
 
 	function getTemplateVariables()
 	{
-		global $d13;
+		
 		$tvars = array();
 		
 		$tvars = parent::getTemplateVariables();
 		
 		$tvars['tvar_unitType'] 			= $this->data['type'];
-		$tvars['tvar_Class'] 			= $d13->getLangGL('classes', $this->turret->data['class']);
+		$tvars['tvar_Class'] 			= $this->d13->getLangGL('classes', $this->turret->data['class']);
 		$tvars['tvar_nodeFaction'] 		= $this->node->data['faction'];
 
-		foreach($d13->getGeneral('stats') as $stat) {
+		foreach($this->d13->getGeneral('stats') as $stat) {
 			$tvars['tvar_'.$stat] 			= $this->turret->data[$stat];
 			$tvars['tvar_'.$stat.'Plus'] 	= "[+".$this->turret->data['upgrade_'.$stat]."]";
 		}
@@ -146,8 +146,8 @@ class d13_module_defense extends d13_gameobject_module
 
 	function getOutputList()
 	{
-		global $d13;
-		return $d13->getLangUI("none");
+		
+		return $this->d13->getLangUI("none");
 	}
 	
 }

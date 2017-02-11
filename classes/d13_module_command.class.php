@@ -55,7 +55,7 @@ class d13_module_command extends d13_gameobject_module
 
 	function getInventory()
 	{
-		global $d13;
+		
 		$tvars = array();
 		$tvars['tvar_sub_popuplist'] = '';
 		$tvars['tvar_listID'] = 0;
@@ -65,27 +65,27 @@ class d13_module_command extends d13_gameobject_module
 		if ($this->data['options']['inventoryList']) {
 			
 			foreach($this->node->resources as $rid => $res) {
-				if ($d13->getResource($res['id'], 'active') && $res['value'] > 0) {
-					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $d13->getLangGL('resources', $rid, 'name') . '">';
-					$tvars['tvar_listLabel'] = $d13->getLangGL('resources', $rid, 'name');
+				if ($this->d13->getResource($res['id'], 'active') && $res['value'] > 0) {
+					$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $rid . '.png" title="' . $this->d13->getLangGL('resources', $rid, 'name') . '">';
+					$tvars['tvar_listLabel'] = $this->d13->getLangGL('resources', $rid, 'name');
 					$tvars['tvar_listAmount'] = floor($res['value']);
-					$tvars['tvar_sub_popuplist'].= $d13->templateSubpage("sub.module.listcontent", $tvars);
+					$tvars['tvar_sub_popuplist'].= $this->d13->templateSubpage("sub.module.listcontent", $tvars);
 					$i++;
 				}
 			}
 			if ($i>0) {
 								
-				$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+				$this->d13->templateInject($this->d13->templateSubpage("sub.popup.list", $tvars));
 
-				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory");
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $this->d13->getLangUI("inventory");
 				$vars['tvar_list_id'] 	 	 = "list-0";
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryResource"));
-				$html = $d13->templateSubpage("button.popup.enabled", $vars);
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryResource"));
+				$html = $this->d13->templateSubpage("button.popup.enabled", $vars);
 							
 			} else {
-				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $d13->getLangUI("inventory") . " " . $d13->getLangUI("empty");
-				$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
-				$html = $d13->templateSubpage("button.popup.disabled", $vars);
+				$vars['tvar_button_name'] 	 = $this->data['name'] . " " . $this->d13->getLangUI("inventory") . " " . $this->d13->getLangUI("empty");
+				$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryEmpty"));
+				$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 			}
 		}
 
@@ -104,7 +104,7 @@ class d13_module_command extends d13_gameobject_module
 	{
 		
 	
-		global $d13;
+		
 		$html = '';
 		$i = 0;
 		$tvars = array();
@@ -112,54 +112,54 @@ class d13_module_command extends d13_gameobject_module
 		$tvars['tvar_listID'] = 1;
 		
 		// - - - - Option: Remove Node
-		$nodes = $this->node->getList($_SESSION[CONST_PREFIX . 'User']['id']);
+		$nodes = $this->d13->getNodeList($_SESSION[CONST_PREFIX . 'User']['id']);
 		$t = count($nodes);
 		if ($this->data['options']['nodeRemove'] && $t > 1) {
-			$tvars['tvar_Label'] = $d13->getLangUI("remove") . ' ' . $d13->getLangUI("node");
+			$tvars['tvar_Label'] = $this->d13->getLangUI("remove") . ' ' . $this->d13->getLangUI("node");
 			$tvars['tvar_Link'] = '?p=node&action=remove&nodeId=' . $this->node->data['id'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("remove");
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
+			$tvars['tvar_LinkLabel'] = $this->d13->getLangUI("remove");
+			$tvars['tvar_sub_popuplist'] .= $this->d13->templateSubpage("sub.module.itemcontent", $tvars);
 			$i++;
 		}
 
 		// - - - - Option: Move Node
 		if ($this->data['options']['nodeMove']) {
-			$tvars['tvar_Label'] = $d13->getLangUI("move") . ' ' . $d13->getLangUI("node");
+			$tvars['tvar_Label'] = $this->d13->getLangUI("move") . ' ' . $this->d13->getLangUI("node");
 			$tvars['tvar_Link'] = '?p=node&action=move&nodeId=' . $this->node->data['id'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("move");
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
+			$tvars['tvar_LinkLabel'] = $this->d13->getLangUI("move");
+			$tvars['tvar_sub_popuplist'] .= $this->d13->templateSubpage("sub.module.itemcontent", $tvars);
 			$i++;
 		}
 
 		// - - - - Option: Edit Node
 		if ($this->data['options']['nodeEdit']) {
-			$tvars['tvar_Label'] = $d13->getLangUI("edit") . ' ' . $d13->getLangUI("node");
+			$tvars['tvar_Label'] = $this->d13->getLangUI("edit") . ' ' . $this->d13->getLangUI("node");
 			$tvars['tvar_Link'] = '?p=node&action=set&nodeId=' . $this->node->data['id'];
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("edit");
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
+			$tvars['tvar_LinkLabel'] = $this->d13->getLangUI("edit");
+			$tvars['tvar_sub_popuplist'] .= $this->d13->templateSubpage("sub.module.itemcontent", $tvars);
 			$i++;
 		}
 
 		// - - - - Option: Add new Node
-		if ($t < $d13->getGeneral('maxNodes')) {
-			$tvars['tvar_Label'] = $d13->getLangUI("add") . ' ' . $d13->getLangUI("node");
+		if ($t < $this->d13->getGeneral('maxNodes')) {
+			$tvars['tvar_Label'] = $this->d13->getLangUI("add") . ' ' . $this->d13->getLangUI("node");
 			$tvars['tvar_Link'] = '?p=node&action=random';
-			$tvars['tvar_LinkLabel'] = $d13->getLangUI("add");
-			$tvars['tvar_sub_popuplist'] .= $d13->templateSubpage("sub.module.itemcontent", $tvars);
+			$tvars['tvar_LinkLabel'] = $this->d13->getLangUI("add");
+			$tvars['tvar_sub_popuplist'] .= $this->d13->templateSubpage("sub.module.itemcontent", $tvars);
 			$i++;
 		}
 		
 		if ($this->node->modules[$this->data['slotId']]['input'] > 0 && $i > 0) {
-			$d13->templateInject($d13->templateSubpage("sub.popup.list", $tvars));
+			$this->d13->templateInject($this->d13->templateSubpage("sub.popup.list", $tvars));
 			
-			$vars['tvar_button_name'] 	 =$d13->getLangUI("launch") . " " . $d13->getLangUI("command");
+			$vars['tvar_button_name'] 	 =$this->d13->getLangUI("launch") . " " . $this->d13->getLangUI("command");
 			$vars['tvar_list_id'] 	 	 = "list-1";
 			$vars['tvar_button_tooltip'] = "";
-			$html = $d13->templateSubpage("button.popup.enabled", $vars);
+			$html = $this->d13->templateSubpage("button.popup.enabled", $vars);
 		} else {
-			$vars['tvar_button_name'] 	 = $d13->getLangUI("launch") . " " . $d13->getLangUI("command");
-			$vars['tvar_button_tooltip'] = d13_misc::toolTip($d13->getLangUI("tipInventoryEmpty"));
-			$html = $d13->templateSubpage("button.popup.disabled", $vars);
+			$vars['tvar_button_name'] 	 = $this->d13->getLangUI("launch") . " " . $this->d13->getLangUI("command");
+			$vars['tvar_button_tooltip'] = $this->d13->misc->toolTip($this->d13->getLangUI("tipInventoryEmpty"));
+			$html = $this->d13->templateSubpage("button.popup.disabled", $vars);
 		}
 		
 		return $html;
@@ -192,8 +192,8 @@ class d13_module_command extends d13_gameobject_module
 
 	function getOutputList()
 	{
-		global $d13;
-		return $d13->getLangUI("none");
+		
+		return $this->d13->getLangUI("none");
 	}
 }
 

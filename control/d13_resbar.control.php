@@ -27,10 +27,9 @@ class d13_resBarController extends d13_controller
 	
 	function __construct($args=NULL, d13_engine &$d13)
 	{
+	
 		parent::__construct($d13);
-		
-		
-		
+
 		$this->user = $this->d13->createObject('user', $_SESSION[CONST_PREFIX . 'User']['id']);
 		
 	}
@@ -45,8 +44,6 @@ class d13_resBarController extends d13_controller
 	function getTemplate()
 	{
 	
-		
-		
 		$html = '';
 		$tvars = array();
 		
@@ -63,13 +60,13 @@ class d13_resBarController extends d13_controller
 					$tvars['tvar_resValue'] 		= $this->user->data[$stat['value']];
 					$tvars['tvar_resColor'] 		= $stat['color'];
 					if ($stat['isExp']) {
-					$tvars['tvar_resPercentage'] 	= d13_misc::percentage(floor($this->user->data[$stat['value']]), d13_misc::nextlevelexp($this->user->data['level']));
+					$tvars['tvar_resPercentage'] 	= $this->d13->misc->percentage(floor($this->user->data[$stat['value']]), $this->d13->misc->nextlevelexp($this->user->data['level']));
 					} else {
 					$tvars['tvar_resPercentage'] 	= 0;
 					}
 					$tvars['tvar_resTooltip'] 		= $this->d13->getLangUI($stat['name']);
 					if ($stat['isExp']) {
-					$tvars['tvar_resTooltip'] 		.= ' '. floor($this->user->data[$stat['value']]) . '/' . d13_misc::nextlevelexp($this->user->data['level']);
+					$tvars['tvar_resTooltip'] 		.= ' '. floor($this->user->data[$stat['value']]) . '/' . $this->d13->misc->nextlevelexp($this->user->data['level']);
 					} else {
 					$tvars['tvar_resTooltip'] 		.= ' '. floor($this->user->data[$stat['value']]) ;
 					}
@@ -92,7 +89,7 @@ class d13_resBarController extends d13_controller
 					$tvars['tvar_resTooltip'] .= $this->d13->getLangGL('resources', $resource['id'], 'name') . ' ';
 					if ($this->d13->getResource($resource['id'], 'limited')) {
 						$tvars['tvar_resValue'] = floor($resource['value']) . '/' . floor($this->d13->node->storage[$resource['id']]);
-						$tvars['tvar_resPercentage'] = d13_misc::percentage(floor($resource['value']), floor($this->d13->node->storage[$resource['id']]));
+						$tvars['tvar_resPercentage'] = $this->d13->misc->percentage(floor($resource['value']), floor($this->d13->node->storage[$resource['id']]));
 						$tvars['tvar_resTooltip'] .= floor($resource['value']) . '/' . floor($this->d13->node->storage[$resource['id']]);
 					} else {
 						$tvars['tvar_resValue'] = floor($resource['value']);

@@ -54,7 +54,7 @@ class d13_gameobject_unit extends d13_gameobject_base
 
 	function checkStatsExtended()
 	{
-		global $d13;
+		
 
 		
 		
@@ -71,7 +71,7 @@ class d13_gameobject_unit extends d13_gameobject_base
 	function getTemplateVariables()
 	{
 	
-		global $d13;
+		
 		$tvars = array();
 		
 		$tvars = parent::getTemplateVariables();
@@ -81,7 +81,7 @@ class d13_gameobject_unit extends d13_gameobject_base
 			
 		$tvars['tvar_id'] 				= $this->data['id'];
 		$tvars['tvar_type'] 			= $this->data['type'];
-		$tvars['tvar_class'] 			= $d13->getLangGL('classes', $this->data['class']);
+		$tvars['tvar_class'] 			= $this->d13->getLangGL('classes', $this->data['class']);
 		$tvars['tvar_nodeFaction'] 		= $this->node->data['faction'];
 		
 		$tvars['tvar_attackModifier']		= '';
@@ -91,37 +91,37 @@ class d13_gameobject_unit extends d13_gameobject_base
 		
 		if (!empty($this->data['attackModifier'])) {
 			foreach ($this->data['attackModifier'] as $modifier) {
-				$tvars['tvar_attackModifier'] 	.= $d13->getLangUI($modifier['stat']) . " +".($modifier['value']*100)."% ";
+				$tvars['tvar_attackModifier'] 	.= $this->d13->getLangUI($modifier['stat']) . " +".($modifier['value']*100)."% ";
 			}
 		} else {
-			$tvars['tvar_attackModifier'] 	= $d13->getLangUI('none');
+			$tvars['tvar_attackModifier'] 	= $this->d13->getLangUI('none');
 		}
 		
 		if (!empty($this->data['defenseModifier'])) {
 			foreach ($this->data['defenseModifier'] as $modifier) {
-				$tvars['tvar_defenseModifier'] 	.= $d13->getLangUI($modifier['stat']) . " +".($modifier['value']*100)."% ";
+				$tvars['tvar_defenseModifier'] 	.= $this->d13->getLangUI($modifier['stat']) . " +".($modifier['value']*100)."% ";
 			}
 		} else {
-			$tvars['tvar_defenseModifier'] 	= $d13->getLangUI('none');
+			$tvars['tvar_defenseModifier'] 	= $this->d13->getLangUI('none');
 		}
 		
 		if (!empty($this->data['armyAttackModifier'])) {
 			foreach ($this->data['armyAttackModifier'] as $modifier) {
-				$tvars['tvar_armyAttackModifier'] 	.= $d13->getLangUI($modifier['stat']) . " +".($modifier['value']*100)."% ";
+				$tvars['tvar_armyAttackModifier'] 	.= $this->d13->getLangUI($modifier['stat']) . " +".($modifier['value']*100)."% ";
 			}
 		} else {
-			$tvars['tvar_armyAttackModifier'] 	= $d13->getLangUI('none');
+			$tvars['tvar_armyAttackModifier'] 	= $this->d13->getLangUI('none');
 		}
 		
 		if (!empty($this->data['armyDefenseModifier'])) {
 			foreach ($this->data['armyDefenseModifier'] as $modifier) {
-				$tvars['tvar_armyDefenseModifier'] 	.= $d13->getLangUI($modifier['stat']) . " +".($modifier['value']*100)."% ";
+				$tvars['tvar_armyDefenseModifier'] 	.= $this->d13->getLangUI($modifier['stat']) . " +".($modifier['value']*100)."% ";
 			}
 		} else {
-			$tvars['tvar_armyDefenseModifier'] 	= $d13->getLangUI('none');
+			$tvars['tvar_armyDefenseModifier'] 	= $this->d13->getLangUI('none');
 		}
 		
-		foreach($d13->getGeneral('stats') as $stat) {
+		foreach($this->d13->getGeneral('stats') as $stat) {
 			$tvars['tvar_unit'.$stat] 			= $this->data[$stat];
 			$tvars['tvar_unit'.$stat.'Plus'] 	= $this->data['upgrade_'.$stat];
 		}
@@ -133,15 +133,15 @@ class d13_gameobject_unit extends d13_gameobject_base
 		$check_cost = $this->getCheckCost();
 		
 		if ($check_requirements) {
-			$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.ok");
+			$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.ok");
 		} else {
-			$tvars['tvar_requirementsIcon'] = $d13->templateGet("sub.requirement.notok");
+			$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.notok");
 		}
 
 		if ($check_cost) {
-			$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.ok");
+			$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.ok");
 		} else {
-			$tvars['tvar_costIcon'] = $d13->templateGet("sub.requirement.notok");
+			$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.notok");
 		}
 		
 
@@ -149,7 +149,7 @@ class d13_gameobject_unit extends d13_gameobject_base
 		
 		$tvars['tvar_unitLimit'] = $this->getMaxProduction();
 
-		$tvars['tvar_unitUpkeepResourceName'] = $d13->getLangGL('resources', $this->data['upkeepResource'], 'name');
+		$tvars['tvar_unitUpkeepResourceName'] = $this->d13->getLangGL('resources', $this->data['upkeepResource'], 'name');
 		
 		return $tvars;
 	}	

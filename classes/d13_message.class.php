@@ -36,6 +36,19 @@ class d13_message
 {
 	public $data;
 	
+	protected $d13;
+	
+	// ----------------------------------------------------------------------------------------
+	// constructor
+	// ----------------------------------------------------------------------------------------
+	public
+
+	function __construct(d13_engine &$d13)
+	{
+		$this->d13 = $d13;
+	
+	}
+	
 	// ----------------------------------------------------------------------------------------
 	//
 	//
@@ -45,9 +58,9 @@ class d13_message
 
 	function get($id)
 	{
-		global $d13;
-		$result = $d13->dbQuery('select * from messages where id="' . $id . '"');
-		$this->data = $d13->dbFetch($result);
+		
+		$result = $this->d13->dbQuery('select * from messages where id="' . $id . '"');
+		$this->data = $this->d13->dbFetch($result);
 		$this->data['body'] = $this->textDecode($this->data['body']);
 		if (isset($this->data['id'])) $status = 'done';
 		else $status = 'noMessage';
@@ -63,11 +76,11 @@ class d13_message
 
 	function set()
 	{
-		global $d13;
-		$message = new d13_message();
+		
+		$message = $this->d13->createObject('message');
 		if ($message->get($this->data['id']) == 'done') {
-			$d13->dbQuery('update messages set viewed="' . $this->data['viewed'] . '" where id="' . $this->data['id'] . '"');
-			if ($d13->dbAffectedRows() > - 1) $status = 'done';
+			$this->d13->dbQuery('update messages set viewed="' . $this->data['viewed'] . '" where id="' . $this->data['id'] . '"');
+			if ($this->d13->dbAffectedRows() > - 1) $status = 'done';
 			else $status = 'error';
 		}
 		else $status = 'noMessage';
@@ -83,17 +96,17 @@ class d13_message
 
 	function add()
 	{
-		global $d13;
-		$recipient = new d13_user();
+		
+		$recipient = $this->d13->createObject('user');
 		if ($recipient->get('name', $this->data['recipient']) == 'done') {
-			$sender = new d13_user();
+			$sender = $this->d13->createObject('user');
 			if ($sender->get('name', $this->data['sender']) == 'done') {
 				if (!$sender->isBlocked($recipient->data['id'])) {
 					$this->data['body'] = $this->textEncode($this->data['body']);
-					$this->data['id'] = d13_misc::newId('messages');
+					$this->data['id'] = $this->d13->misc->newId('messages');
 					$sent = strftime('%Y-%m-%d %H:%M:%S', time());
-					$d13->dbQuery('insert into messages (id, sender, recipient, subject, body, sent, viewed, type) values ("' . $this->data['id'] . '", "' . $sender->data['id'] . '", "' . $recipient->data['id'] . '", "' . $this->data['subject'] . '", "' . $this->data['body'] . '", "' . $sent . '", "' . $this->data['viewed'] . '", "' . $this->data['type'] . '")');
-					if ($d13->dbAffectedRows() > - 1) {
+					$this->d13->dbQuery('insert into messages (id, sender, recipient, subject, body, sent, viewed, type) values ("' . $this->data['id'] . '", "' . $sender->data['id'] . '", "' . $recipient->data['id'] . '", "' . $this->data['subject'] . '", "' . $this->data['body'] . '", "' . $sent . '", "' . $this->data['viewed'] . '", "' . $this->data['type'] . '")');
+					if ($this->d13->dbAffectedRows() > - 1) {
 						$status = 'done';
 					}
 					else {
@@ -120,18 +133,18 @@ class d13_message
 	//
 	// ----------------------------------------------------------------------------------------
 
-	public static
+	public
 
 	function remove($id)
 	{
-		global $d13;
-		$message = new d13_message();
+		
+		$message = $this->d13->createObject('message');
 		if ($message->get($id) == 'done') {
 			$ok = 1;
-			$d13->dbQuery('insert into free_ids (id, type) values ("' . $id . '", "messages")');
-			if ($d13->dbAffectedRows() == - 1) $ok = 0;
-			$d13->dbQuery('delete from messages where id="' . $id . '"');
-			if ($d13->dbAffectedRows() == - 1) $ok = 0;
+			$this->d13->dbQuery('insert into free_ids (id, type) values ("' . $id . '", "messages")');
+			if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+			$this->d13->dbQuery('delete from messages where id="' . $id . '"');
+			if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 			if ($ok) $status = 'done';
 			else $status = 'error';
 		}
@@ -143,19 +156,18 @@ class d13_message
 	//
 	//
 	// ----------------------------------------------------------------------------------------
-
-	public static
+	public
 
 	function removeAll($userId)
 	{
-		global $d13;
-		$result = $d13->dbQuery('select id from messages where recipient="' . $userId . '"');
+		
+		$result = $this->d13->dbQuery('select id from messages where recipient="' . $userId . '"');
 		$ok = 1;
-		while ($row = $d13->dbFetch($result)) {
-			$d13->dbQuery('insert into free_ids (id, type) values ("' . $row['id'] . '", "messages")');
-			if ($d13->dbAffectedRows() == - 1) $ok = 0;
-			$d13->dbQuery('delete from messages where id="' . $row['id'] . '"');
-			if ($d13->dbAffectedRows() == - 1) $ok = 0;
+		while ($row = $this->d13->dbFetch($result)) {
+			$this->d13->dbQuery('insert into free_ids (id, type) values ("' . $row['id'] . '", "messages")');
+			if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+			$this->d13->dbQuery('delete from messages where id="' . $row['id'] . '"');
+			if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 		}
 
 		if ($ok) $status = 'done';
@@ -167,32 +179,31 @@ class d13_message
 	//
 	//
 	// ----------------------------------------------------------------------------------------
-
-	public static
+	public
 
 	function getList($recipient, $limit, $offset, $type="all")
 	{
-		global $d13;
+		
 		$messages = array();
 		$messages['messages'] = array();
-		$result = $d13->dbQuery('select count(*) as count from messages where recipient="' . $recipient . '"');
-		$row = $d13->dbFetch($result);
+		$result = $this->d13->dbQuery('select count(*) as count from messages where recipient="' . $recipient . '"');
+		$row = $this->d13->dbFetch($result);
 		$messages['count'] = $row['count'];
 		
 		if ($type == "outbox") {
 			$type = "message";
-			$result = $d13->dbQuery('select * from messages where sender="' . $recipient . '" and type="' . $type . '" order by sent desc limit ' . $limit . ' offset ' . $offset);
+			$result = $this->d13->dbQuery('select * from messages where sender="' . $recipient . '" and type="' . $type . '" order by sent desc limit ' . $limit . ' offset ' . $offset);
 		
 		} else if ($type == "all" || $type == "") {
-			$result = $d13->dbQuery('select * from messages where recipient="' . $recipient . '" order by sent desc limit ' . $limit . ' offset ' . $offset);
+			$result = $this->d13->dbQuery('select * from messages where recipient="' . $recipient . '" order by sent desc limit ' . $limit . ' offset ' . $offset);
 		} else {
-			$result = $d13->dbQuery('select * from messages where recipient="' . $recipient . '" and type="' . $type . '" order by sent desc limit ' . $limit . ' offset ' . $offset);
+			$result = $this->d13->dbQuery('select * from messages where recipient="' . $recipient . '" and type="' . $type . '" order by sent desc limit ' . $limit . ' offset ' . $offset);
 		}
 		
 		
 		
-		for ($i = 0; $row = $d13->dbFetch($result); $i++) {
-			$messages['messages'][$i] = new d13_message();
+		for ($i = 0; $row = $this->d13->dbFetch($result); $i++) {
+			$messages['messages'][$i] = $this->d13->createObject('message');
 			$messages['messages'][$i]->data = $row;
 		}
 
@@ -200,52 +211,44 @@ class d13_message
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
-	//
+	// getUnreadCount
 	// ----------------------------------------------------------------------------------------
-
-	public static
+	public
 
 	function getUnreadCount($recipient)
 	{
-		global $d13;
-		$result = $d13->dbQuery('select count(*) as count from messages where recipient="' . $recipient . '" and viewed=0');
-		$row = $d13->dbFetch($result);
+		
+		$result = $this->d13->dbQuery('select count(*) as count from messages where recipient="' . $recipient . '" and viewed=0');
+		$row = $this->d13->dbFetch($result);
 		return $row['count'];
 	}
 	
 	
 	// ----------------------------------------------------------------------------------------
-	//
+	// textEncode
 	//
 	// ----------------------------------------------------------------------------------------
-
 	private
 	
 	function textEncode($text)
 	{	
-		global $d13;
 		
 		$text = htmlentities($text);
-		$text = $d13->dbRealEscapeString($text);
-		
+		$text = $this->d13->dbRealEscapeString($text);
 		
 		return $text;
 		
 	}
 	
 	// ----------------------------------------------------------------------------------------
-	//
+	// textDecode
 	//
 	// ----------------------------------------------------------------------------------------
-
 	private
 	
 	function textDecode($text)
 	{
 	
-		global $d13;
-		
 		$text = html_entity_decode($text);
 		
 		return $text;
