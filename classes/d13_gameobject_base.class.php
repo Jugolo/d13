@@ -460,8 +460,6 @@ abstract class d13_gameobject_base
 	function getCost($upgrade = false)
 	{
 	
-		
-		
 		$cost_array = array();
 		foreach($this->data['cost'] as $key => $cost) {
 			$tmp_array = array();

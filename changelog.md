@@ -17,10 +17,11 @@ V0XX	--- PLANNED UPCOMING UPDATE(S) ---
 
 		* Comfort Features
 
-V0XX	--- NEXT SCHEDULED UPDATE ---
+V019	--- NEXT SCHEDULED UPDATE ---
 		
 		* Get rid of the dreaded global keyword and switch to dependency injection
-
+		* Updated Framework 7
+		
 V018	* Shop Building (Blackmarket): Buy resources, components, buff's, shield's
 		* Buff System: Add temporary speed/efficiency buff's to the current node (town)
 		

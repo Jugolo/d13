@@ -171,14 +171,14 @@ class d13_gameobject_module extends d13_gameobject_base
 		
 		if ($this->data['level'] <= 0) {
 		
-			if ($this->data['reqData']) {
+			if ($this->data['reqData']['ok']) {
 				$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.ok");
 			}
 			else {
 				$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.notok");
 			}
 
-			if ($this->data['costData']) {
+			if ($this->data['costData']['ok']) {
 				$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.ok");
 			}
 			else {
@@ -301,14 +301,14 @@ class d13_gameobject_module extends d13_gameobject_base
 			}	
 			
 			
-			if ($this->data['reqData']) {
+			if ($this->data['reqData']['ok']) {
 				$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.ok");
 			}
 			else {
 				$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.notok");
 			}
 
-			if ($this->data['costData']) {
+			if ($this->data['costData']['ok']) {
 				$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.ok");
 			}
 			else {
@@ -317,7 +317,7 @@ class d13_gameobject_module extends d13_gameobject_base
 			
 			if ($this->data['level'] <= 0) {
 		
-				if (($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput']) > 0 && $this->data['costData'] && $this->data['reqData'] && ($this->node->getModuleCount($this->data['slotId'], $this->data['moduleId']) < $this->d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'maxInstances'))) {
+				if (($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput']) > 0 && $this->data['costData']['ok'] && $this->data['reqData'] && ($this->node->getModuleCount($this->data['slotId'], $this->data['moduleId']) < $this->d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'maxInstances'))) {
 					
 					$tvars['tvar_title'] 			= $this->d13->getLangUI("addModule");
 					$tvars['tvar_moduleInputName'] 	= $this->data['moduleInputName'];
@@ -356,7 +356,7 @@ class d13_gameobject_module extends d13_gameobject_base
 				
 				if ($this->d13->getGeneral('options', 'moduleUpgrade')) {
 					if ($this->data['level'] < $this->data['maxLevel']) {
-						if (($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput']) > 0 && $this->data['costData'] && $this->data['reqData'] && $this->node->modules[$this->data['slotId']]['level'] < $this->data['maxLevel'] && $this->data['maxLevel'] > 1) {
+						if (($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput']) > 0 && $this->data['costData']['ok'] && $this->data['reqData'] && $this->node->modules[$this->data['slotId']]['level'] < $this->data['maxLevel'] && $this->data['maxLevel'] > 1) {
 						
 							$tvars['tvar_title'] 			= $this->d13->getLangUI("upgrade");
 							$tvars['tvar_moduleInputName'] 	= $this->data['moduleInputName'];
