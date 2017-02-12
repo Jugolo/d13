@@ -14,13 +14,20 @@ V0XX	--- PLANNED UPCOMING UPDATE(S) ---
 			- Sabotage Checks
 			
 		* Trade Building (Tradepost): Trade resources/components with other users
-
+		
 		* Comfort Features
 
 V019	--- NEXT SCHEDULED UPDATE ---
 		
 		* Get rid of the dreaded global keyword and switch to dependency injection
 		* Updated Framework 7
+		* Minor Bugfixes
+		* Gamestart: When there is only one faction available, it is chosen automatically
+		* Preperations for multi-data / multi-server integration
+		
+		* Transformation Building Type
+		
+		* Production Building Type
 		
 V018	* Shop Building (Blackmarket): Buy resources, components, buff's, shield's
 		* Buff System: Add temporary speed/efficiency buff's to the current node (town)

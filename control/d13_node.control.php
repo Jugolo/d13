@@ -255,32 +255,57 @@ class d13_nodeController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_POST['faction'])) {
-			if ($_POST['faction'] != '') {
+			$factionSet = $_POST['faction'];
+		} else {
+			$factionSet = -1;
+		}
+		
+		// - - - - Add Factions to Swiper Slide
+		$factionId = - 1;
+		$tvars['tvar_getHTMLFactions'] = "";
+		$tvars['tvar_factionName'] = "";
+		$tvars['tvar_factionText'] = "";
+		$tvars['tvar_factionID'] = - 1;
+		
+		
+		foreach($this->d13->getFaction() as $faction) {
+			if ($faction['active']) {
+				if (!$this->d13->getGeneral('options', 'factionFixation') || ($this->d13->getGeneral('options', 'factionFixation') && $faction['id'] == $factionId) || ($this->d13->getGeneral('options', 'factionFixation') && $factionId == - 1)) {
+					$tvars['tvar_factionName'] = $this->d13->getLangGL('factions', $faction['id'], 'name');
+					$tvars['tvar_factionText'] = $this->d13->getLangGL('factions', $faction['id'], 'description');
+					$tvars['tvar_factionID'] = $faction['id'];
+					$tvars['tvar_getHTMLFactions'].= $this->d13->templateSubpage("sub.node.faction", $tvars);
+					$factionId = $faction['id'];
+				}
+			}
+		}
+		
+		// - - - - Auto-set faction if only one is available and skip selection
+		if ($factionId > -1 && $factionSet == -1) {
+			$factionSet = $factionId;
+		}
+		
+		if (isset($factionSet)) {
+			if ($factionSet > -1) {
 				$coord = array();
-				$grid = new d13_grid();
+				$grid = new d13_grid($this->d13);
 				$coord = $grid->getFree();
 				$this->d13->node = $this->d13->createNode();
-				$this->d13->node->data['faction'] = $_POST['faction'];
+				$this->d13->node->data['faction'] = $factionSet;
 				$this->d13->node->data['user'] = $_SESSION[CONST_PREFIX . 'User']['id'];
 				$this->d13->node->data['name'] = $_SESSION[CONST_PREFIX . 'User']['name'];
 				$this->d13->node->location['x'] = $coord['x'];
 				$this->d13->node->location['y'] = $coord['y'];
 				$message = $this->d13->getLangUI($this->d13->node->add($_SESSION[CONST_PREFIX . 'User']['id']));
 				header('Location: ?p=node&action=list');
+				exit();
 			}
 			else {
 				$message = $this->d13->getLangUI("insufficientData");
 			}
 		}
 				
-		$tvars['tvar_getHTMLFactions'] = "";
-		$tvars['tvar_factionName'] = "";
-		$tvars['tvar_factionText'] = "";
-		$tvars['tvar_factionID'] = - 1;
-		$factionId = - 1;
-
 		// - - - - Check for Faction Fixation
-
 		if ($this->d13->getGeneral('options', 'factionFixation')) {
 			$nodes = $this->d13->getNodeList($_SESSION[CONST_PREFIX . 'User']['id']); #$this->d13->getNodeList($_SESSION[CONST_PREFIX . 'User']['id']);
 			$t = count($nodes);
@@ -289,18 +314,7 @@ class d13_nodeController extends d13_controller
 			}
 		}
 
-		// - - - - Add Factions to Swiper Slide
-
-		foreach($this->d13->getFaction() as $faction) {
-			if ($faction['active']) {
-				if (!$this->d13->getGeneral('options', 'factionFixation') || ($this->d13->getGeneral('options', 'factionFixation') && $faction['id'] == $factionId) || ($this->d13->getGeneral('options', 'factionFixation') && $factionId == - 1)) {
-					$tvars['tvar_factionName'] = $this->d13->getLangGL('factions', $faction['id'], 'name');
-					$tvars['tvar_factionText'] = $this->d13->getLangGL('factions', $faction['id'], 'description');
-					$tvars['tvar_factionID'] = $faction['id'];
-					$tvars['tvar_getHTMLFactions'].= $this->d13->templateSubpage("sub.node.faction", $tvars);
-				}
-			}
-		}
+		
 
 		$this->d13->templateInject($this->d13->templateSubpage("sub.swiper.horizontal", $tvars));
 		$tvars['tvar_page'] = "node.random";

@@ -48,6 +48,7 @@ class d13_accountController extends d13_controller
 		$tvars['tvar_locales']		 	= $this->accountLocales();
 		$tvars['tvar_templates'] 		= $this->accountTemplates();
 		$tvars['tvar_colors'] 			= $this->accountColors();
+		$tvars['tvar_datas'] 			= $this->accountDatas();
 		
 		$userData						= $this->accountUser();
 		
@@ -146,6 +147,35 @@ class d13_accountController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	private
 	
+	function accountDatas()
+	{
+	
+		
+		$datas = '';
+		
+		$datas = '<option value="' . $_SESSION[CONST_PREFIX . 'User']['data'] . '">' . $_SESSION[CONST_PREFIX . 'User']['data'] . '</option>';
+		if ($handle = opendir('data')) {
+			while (false != ($file = readdir($handle))) {
+				$fileName = explode('.', $file);
+				$fileName = $fileName[0];
+				if (($file != '.') && ($file != '..') && ($_SESSION[CONST_PREFIX . 'User']['data'] != $fileName)) {
+					$datas.= '<option value="' . $fileName . '">' . $fileName . '</option>';
+				}
+			}
+
+			closedir($handle);
+		}
+		
+		return $datas;
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+	private
+	
 	function accountUser()
 	{
 		
@@ -164,6 +194,7 @@ class d13_accountController extends d13_controller
 					$user->data['locale'] = $_SESSION[CONST_PREFIX . 'User']['locale'] = $_POST['locale'];
 					$user->data['color'] = $_SESSION[CONST_PREFIX . 'User']['color'] = $_POST['color'];
 					$user->data['template'] = $_SESSION[CONST_PREFIX . 'User']['template'] = $_POST['template'];
+					$user->data['data'] = $_SESSION[CONST_PREFIX . 'User']['data'] = $_POST['data'];
 					$message = $this->d13->getLangUI($user->set());
 				}
 				else {

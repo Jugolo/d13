@@ -449,6 +449,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `alliance` int(10) unsigned NOT NULL DEFAULT '0',
   `template` varchar(32) COLLATE utf8_bin NOT NULL,
   `color` varchar(32) COLLATE utf8_bin NOT NULL,
+  `data` varchar(32) COLLATE utf8_bin NOT NULL,
   `locale` varchar(32) COLLATE utf8_bin NOT NULL,
   `sitter` varchar(32) COLLATE utf8_bin NULL DEFAULT NULL,
   PRIMARY KEY (`id`),

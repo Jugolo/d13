@@ -64,7 +64,7 @@ class d13_data
 		$this->json = array();
 		
 		//- - - read language files
-		$dir = new DirectoryIterator(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/");
+		$dir = new DirectoryIterator(CONST_INCLUDE_PATH . "locales/" . $_SESSION[CONST_PREFIX . 'User']['data'] . DIRECTORY_SEPARATOR . $_SESSION[CONST_PREFIX . 'User']['locale'] . "/");
 		foreach ($dir as $fileinfo) {
     		if (!$fileinfo->isDot()) {
         		$name = $this->getRealName($fileinfo->getFilename());
@@ -75,7 +75,7 @@ class d13_data
 		}
 
 		//- - - read data files
-		$dir = new DirectoryIterator(CONST_INCLUDE_PATH . "data/");
+		$dir = new DirectoryIterator(CONST_INCLUDE_PATH . "data/" . $_SESSION[CONST_PREFIX . 'User']['data']);
 		foreach ($dir as $fileinfo) {
     		if (!$fileinfo->isDot()) {
        		 	$name = $this->getRealName($fileinfo->getFilename());
@@ -122,7 +122,7 @@ class d13_data
 	{
    		
    		$url = $path . "/" . $name;
-		$cacheFile = CONST_INCLUDE_PATH . 'cache/data' . DIRECTORY_SEPARATOR . basename($url). ".php";
+		$cacheFile = CONST_INCLUDE_PATH . 'cache/data' . DIRECTORY_SEPARATOR . $_SESSION[CONST_PREFIX . 'User']['data'] . DIRECTORY_SEPARATOR . basename($url). ".php";
 		
 		if (is_file($cacheFile) && filemtime($url) < filemtime($cacheFile)) {
 			$classConstruct = require_once $cacheFile;

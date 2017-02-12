@@ -45,7 +45,7 @@ class d13_blacklist
 	// 
 	//
 	// ----------------------------------------------------------------------------------------
-	public static
+	public
 
 	function check($type, $value)
 	{
@@ -59,7 +59,7 @@ class d13_blacklist
 	// 
 	//
 	// ----------------------------------------------------------------------------------------
-	public static
+	public
 
 	function get($type)
 	{
@@ -74,7 +74,7 @@ class d13_blacklist
 	// 
 	//
 	// ----------------------------------------------------------------------------------------
-	public static
+	public
 
 	function add($type, $value)
 	{
@@ -92,7 +92,7 @@ class d13_blacklist
 	// 
 	//
 	// ----------------------------------------------------------------------------------------
-	public static
+	public
 
 	function remove($type, $value)
 	{

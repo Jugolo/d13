@@ -71,6 +71,7 @@ class d13_registerController extends d13_controller
 							$user->data['template'] = CONST_DEFAULT_TEMPLATE;
 							$user->data['color'] = CONST_DEFAULT_COLOR;
 							$user->data['locale'] = CONST_DEFAULT_LOCALE;
+							$user->data['data'] = CONST_DEFAULT_DATA;
 							$status = $user->add();
 							$message = $this->d13->getLangUI($status);
 							if ($this->d13->GetGeneral('activationRequired')) {

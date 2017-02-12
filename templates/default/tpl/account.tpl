@@ -31,6 +31,7 @@
      <div><div class="cell">{{tvar_ui_sitter}}</div><div class="cell"><input class="textbox" type="text" name="sitter" maxlength="32" value="{{tvar_user_sitter}}"></div></div>
      <div><div class="cell">{{tvar_ui_locale}}</div><div class="cell"><select class="dropdown" type="text" name="locale">{{tvar_locales}}</select></div></div>
      <div><div class="cell">{{tvar_ui_template}}</div><div class="cell"><select class="dropdown" type="text" name="template">{{tvar_templates}}</select></div></div>
+     <div><div class="cell">{{tvar_ui_data}}</div><div class="cell"><select class="dropdown" type="text" name="data">{{tvar_datas}}</select></div></div>
      <div><div class="cell">{{tvar_ui_color}}</div><div class="cell"><select class="dropdown" type="text" name="color">{{tvar_colors}}</select></div></div>
      <div><div class="cell">{{tvar_ui_password}}</div><div class="cell"><input class="textbox" type="password" name="password"></div></div>
      <div><div class="cell"><input class="button" type="submit" value="{{tvar_ui_edit}}"></div></div>

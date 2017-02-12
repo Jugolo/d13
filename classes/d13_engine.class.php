@@ -30,7 +30,7 @@ class d13_engine
 
 	public $flags, $node;
 
-	public $data, $db, $tpl, $router, $logger, $session, $profiler, $factory, $misc, $message, $notes;
+	public $data, $db, $tpl, $router, $logger, $session, $profiler, $factory, $misc, $message, $notes, $blacklist;
 
 	// ----------------------------------------------------------------------------------------
 	// constructor
@@ -51,6 +51,7 @@ class d13_engine
 		$this->misc		= new d13_misc($this);
 		$this->message	= new d13_message($this);
 		$this->notes	= new d13_notes($this);
+		$this->blacklist= new d13_blacklist($this);
 	}
 	
 	

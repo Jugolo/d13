@@ -97,7 +97,8 @@ class d13_node
 	function add($userId)
 	{
 		
-		$sector = d13_grid::getSector($this->location['x'], $this->location['y']);
+		$grid = new d13_grid($this->d13);
+		$sector = $grid->getSector($this->location['x'], $this->location['y']);
 		$node = $this->d13->createNode();
 		$status = 0;
 		if ($sector['type'] == 1) {

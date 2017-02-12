@@ -90,7 +90,7 @@ class d13_user
 		
 		$user = $this->d13->createObject('user', $this->d13);
 		if ($user->get('id', $this->data['id']) == 'done') {
-			$this->d13->dbQuery('update users set name="' . $this->data['name'] . '", password="' . $this->data['password'] . '", email="' . $this->data['email'] . '", access="' . $this->data['access'] . '", joined="' . $this->data['joined'] . '", lastVisit="' . $this->data['lastVisit'] . '", ip="' . $this->data['ip'] . '", alliance="' . $this->data['alliance'] . '", template="' . $this->data['template'] . '", color="' . $this->data['color'] . '", locale="' . $this->data['locale'] . '", sitter="' . $this->data['sitter'] . '" where id="' . $this->data['id'] . '"');
+			$this->d13->dbQuery('update users set name="' . $this->data['name'] . '", password="' . $this->data['password'] . '", email="' . $this->data['email'] . '", access="' . $this->data['access'] . '", joined="' . $this->data['joined'] . '", lastVisit="' . $this->data['lastVisit'] . '", ip="' . $this->data['ip'] . '", alliance="' . $this->data['alliance'] . '", template="' . $this->data['template'] . '", color="' . $this->data['color'] . '", locale="' . $this->data['locale'] . '", data="' . $this->data['data'] . '", sitter="' . $this->data['sitter'] . '" where id="' . $this->data['id'] . '"');
 			if ($this->d13->dbAffectedRows() > - 1) $status = 'done';
 			else $status = 'error';
 		}
@@ -109,8 +109,8 @@ class d13_user
 		$user = $this->d13->createObject('user', $this->d13);
 		if ($user->get('name', $this->data['name']) == 'noUser') {
 			if ($user->get('email', $this->data['email']) == 'noUser') {
-				if (!d13_blacklist::check('ip', $this->data['ip'])) {
-					if (!d13_blacklist::check('email', $this->data['email'])) {
+				if (!$this->d13->blacklist->check('ip', $this->data['ip'])) {
+					if (!$this->d13->blacklist->check('email', $this->data['email'])) {
 						$ok = 1;
 						$this->data['id'] = $this->d13->misc->newId('users');
 						$this->d13->dbQuery('insert into users (id, name, password, email, access, joined, lastVisit, ip, template, color, locale, trophies) values ("' . $this->data['id'] . '", "' . $this->data['name'] . '", "' . $this->data['password'] . '", "' . $this->data['email'] . '", "' . $this->data['access'] . '", "' . $this->data['joined'] . '", "' . $this->data['lastVisit'] . '", "' . $this->data['ip'] . '", "' . $this->data['template'] . '", "' . $this->data['color'] . '", "' . $this->data['locale'] . '", "500")');
