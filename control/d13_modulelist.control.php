@@ -57,8 +57,6 @@ class d13_moduleListController extends d13_controller
 	function getTemplateVariables()
 	{
 	
-		
-		
 		$tvars = array();
 		
 		$tvars['tvar_sub_list'] = "";
@@ -66,7 +64,10 @@ class d13_moduleListController extends d13_controller
 		
 		$this->d13->node->queues->getQueue("build");
 		
-		foreach($this->d13->getModule($this->d13->node->data['faction']) as $module) {
+		$module_list = $this->d13->getModule($this->d13->node->data['faction']);
+		$module_list = $this->d13->misc->record_sort($module_list, 'priority', true);
+		
+		foreach($module_list as $module) {
 		
 			$count = $this->d13->node->getModuleCount($module['id']);
 			

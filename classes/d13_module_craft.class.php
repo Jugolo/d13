@@ -119,8 +119,11 @@ class d13_module_craft extends d13_gameobject_module
 		$html = '';
 
 		// - - - Craft Popup
+		
+		$comp_list = $this->d13->getComponent($this->node->data['faction']);
+		$comp_list = $this->d13->misc->record_sort($comp_list, 'priority', true);
 
-		foreach($this->d13->getComponent($this->node->data['faction']) as $cid => $component) {
+		foreach($comp_list as $cid => $component) {
 			if ($component['active'] && in_array($cid, $this->d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
 				
 				$args = array();

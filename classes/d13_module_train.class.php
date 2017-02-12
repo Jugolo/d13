@@ -115,7 +115,10 @@ class d13_module_train extends d13_gameobject_module
 		$tvars = array();
 		$tvars['tvar_sub_popupswiper'] = '';
 		
-		foreach($this->d13->getUnit($this->node->data['faction']) as $uid => $unit) {
+		$unit_list = $this->d13->getUnit($this->node->data['faction']);
+		$unit_list = $this->d13->misc->record_sort($unit_list, 'priority', true);
+
+		foreach($unit_list as $uid => $unit) {
 			if ($unit['active'] && in_array($uid, $this->d13->getModule($this->node->data['faction'], $this->data['id'], 'units'))) {
 				
 				$args = array();

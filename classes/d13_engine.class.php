@@ -30,7 +30,7 @@ class d13_engine
 
 	public $flags, $node;
 
-	private $data, $db, $tpl, $router, $logger, $session, $profiler, $factory;
+	public $data, $db, $tpl, $router, $logger, $session, $profiler, $factory, $misc, $message, $notes;
 
 	// ----------------------------------------------------------------------------------------
 	// constructor
@@ -50,6 +50,7 @@ class d13_engine
 		$this->logger 	= new d13_logger($this);
 		$this->misc		= new d13_misc($this);
 		$this->message	= new d13_message($this);
+		$this->notes	= new d13_notes($this);
 	}
 	
 	
@@ -64,7 +65,7 @@ class d13_engine
 	
 		if (empty($this->node)) {
 			if (isset($_SESSION[CONST_PREFIX . 'User']['node']) && $_SESSION[CONST_PREFIX . 'User']['node'] > 0) {
-				$this->node	= $this->createNode(); #new d13_node();
+				$this->node	= $this->createNode();
 				$status = $this->node->get('id', $_SESSION[CONST_PREFIX . 'User']['node']);
 				
 			}
@@ -80,11 +81,32 @@ class d13_engine
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function outputPage($page, $tvars, &$node=NULL)
+	function outputPage($page, $tvars=array(), &$node=NULL)
 	{
-	
+		
+		
+		$tvars["tvar_global_message"] = $this->notes->noteGet();
+		
 		$this->templateRender($page, $tvars);
 	
+	}
+	
+	// ========================================================================================
+	//								NOTE WRAPPER METHODS
+	// ========================================================================================
+	
+	public
+	
+	function noteAdd($note=NULL)
+	{
+		return $this->notes->noteAdd($note);
+	}
+	
+	public
+	
+	function noteGetAll()
+	{
+		return $this->notes->noteGetAll();
 	}
 
 	// ========================================================================================

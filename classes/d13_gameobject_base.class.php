@@ -40,7 +40,7 @@ abstract class d13_gameobject_base
 
 	protected $d13;
 
-	public $data, $node, $checkRequirements;
+	public $data, $node, $checkCost, $checkRequirements;
 
 	// ----------------------------------------------------------------------------------------
 	// construct
@@ -232,8 +232,11 @@ abstract class d13_gameobject_base
 		$this->data['storageResImg']	= $resimg;
 		$this->data['storageResName']	= $resname;
 		
-		$this->data['costData'] 		= $this->getCheckCost();
-		$this->data['reqData'] 			= $this->getCheckRequirements();
+		$this->getCheckCost();
+		$this->getCheckRequirements();
+		
+		$this->data['costData'] 		= $this->checkCost;
+		$this->data['reqData'] 			= $this->checkRequirements;
 		$this->getObjectImage();
 		
 	}
@@ -380,12 +383,14 @@ abstract class d13_gameobject_base
 	function getCheckRequirements()
 	{
 		$this->checkRequirements = $this->node->checkRequirements($this->data['requirements']);
+		
 		if ($this->checkRequirements['ok']) {
 			return true;
 		}
 		else {
 			return false;
 		}
+		
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -397,8 +402,14 @@ abstract class d13_gameobject_base
 	function getCheckCost()
 	{
 	
-		return $this->node->checkCost($this->data['cost'], $this->data['costType']);
+		$this->checkCost =  $this->node->checkCost($this->data['cost'], $this->data['costType']);
 		
+		if ($this->checkCost['ok']) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	// ----------------------------------------------------------------------------------------

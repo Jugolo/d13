@@ -115,7 +115,11 @@ class d13_module_research extends d13_gameobject_module
 		// - - - Research Popup
 
 		$tvars['tvar_sub_popupswiper'] = "";
-		foreach($this->d13->getTechnology($this->node->data['faction']) as $tid => $technology) {
+		
+		$tech_list = $this->d13->getTechnology($this->node->data['faction']);
+		$tech_list = $this->d13->misc->record_sort($tech_list, 'priority', true);
+		
+		foreach($tech_list as $tid => $technology) {
 			if ($technology['active'] && in_array($tid, $this->d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'technologies')) && ($this->node->technologies[$tid]['level'] < $technology['maxLevel'])) {
 				
 				$i++;
