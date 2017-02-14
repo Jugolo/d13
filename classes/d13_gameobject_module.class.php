@@ -29,6 +29,8 @@
 //
 // ========================================================================================
 
+abstract
+
 class d13_gameobject_module extends d13_gameobject_base
 
 {
@@ -77,7 +79,7 @@ class d13_gameobject_module extends d13_gameobject_base
 			$this->data['moduleInputName'] = $this->d13->getLangGL('resources', $this->data['inputResource'], 'name');
 			$this->data['moduleSlotInput'] = $this->node->modules[$this->data['slotId']]['input'];
 		}
-
+	/*
 		if (isset($this->data['outputResource'])) {
 			
 			$i = 0;
@@ -87,9 +89,13 @@ class d13_gameobject_module extends d13_gameobject_base
 				$i++;
 			}
 		}
+*/
 
 		if (isset($this->data['storedResource'])) {
 			$this->data['moduleStorage'] = $this->data['ratio'] * $this->node->modules[$this->data['slotId']]['input'];
+		}
+		
+		/*
 			$i = 0;
 			foreach($this->data['storedResource'] as $res) {
 				$this->data['moduleStorageRes' . $i] = $res;
@@ -97,7 +103,7 @@ class d13_gameobject_module extends d13_gameobject_base
 				$i++;
 			}
 		}
-		
+		*/
 		foreach($this->d13->getGeneral('stats') as $stat) {
 			$this->data[$stat] = $this->data[$stat] + $this->data['upgrade_'.$stat];
 		}
@@ -121,21 +127,25 @@ class d13_gameobject_module extends d13_gameobject_base
 		
 		$tvars = parent::getTemplateVariables();
 				
-		$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
-		$tvars['tvar_nodeID'] = $this->node->data['id'];
-		$tvars['tvar_slotID'] = $this->data['slotId'];
+		$tvars['tvar_nodeFaction'] 			= $this->node->data['faction'];
+		$tvars['tvar_nodeID'] 				= $this->node->data['id'];
+		$tvars['tvar_slotID'] 				= $this->data['slotId'];
+		$tvars['tvar_image'] 				= $this->data['image'];
+		$tvars['tvar_moduleDescription'] 	= $this->data['description'];
+		$tvars['tvar_moduleProduction'] 	= $this->data['moduleProduction'];
 		$tvars['tvar_demolishLink'] 		= $this->getDemolish();
 		$tvars['tvar_linkData'] 			= $this->getModuleUpgrade();
+		$tvars['tvar_inventoryLink'] 		= $this->getInventory();
+		$tvars['tvar_costData'] 			= $this->getCostList();
+		$tvars['tvar_requirementsData'] 	= $this->getRequirementsList();
 		
-		$tvars['tvar_image'] = $this->data['image'];
-		$tvars['tvar_moduleDescription'] = $this->data['description'];
-		$tvars['tvar_moduleProduction'] = $this->data['moduleProduction'];
-		$tvars['tvar_inventoryLink'] 	= $this->getInventory();
+		$tvars['tvar_storedData'] 			= $this->getStoredResourceList();
+		$tvars['tvar_outputData'] 			= $this->getOutputResourceList();
+		$tvars['tvar_processData'] 			= $this->getProcessedResourceList();
 		
 		if ($this->data['level'] > 0) {
 			$tvars['tvar_popup'] = $this->getPopup();
 			$tvars['tvar_queue'] = $this->getQueue();
-			
 			
 			if ($this->node->resources[$this->data['inputResource']]['value'] < $this->data['maxInput']) {
 				$max = $this->node->modules[$this->data['slotId']]['input'] + $this->node->resources[$this->data['inputResource']]['value'];
@@ -164,11 +174,7 @@ class d13_gameobject_module extends d13_gameobject_base
 		if ($this->data['maxLevel'] > 1) {
 			$tvars['tvar_levelLabel'] = '('.$this->data['level'].'/'.$this->data['maxLevel'].')';
 		}
-		
-		$tvars['tvar_costData'] = $this->getCostList();
-		$tvars['tvar_requirementsData'] = $this->getRequirementsList();
-		$tvars['tvar_outputData'] = $this->getOutputList();
-		
+
 		if ($this->data['level'] <= 0) {
 		
 			if ($this->data['reqData']['ok']) {
@@ -187,25 +193,41 @@ class d13_gameobject_module extends d13_gameobject_base
 		
 		}
 		
+		/*
+			Get all stored Resources
+		*/
+		$html = '';
 		if (isset($this->data['storedResource'])) {
-			$i = 0;
-			while (isset($this->data['moduleStorageRes' . $i])) {
-				$tvars['tvar_moduleStorageRes' . $i] = $this->data['moduleStorageRes' . $i];
-				$tvars['tvar_moduleStorageResName' . $i] = $this->data['moduleStorageResName' . $i];
-				$i++;
+			foreach ($this->data['storedResource'] as $res) {
+				$vars = array();
+				$vars['tvar_listImage']		= $this->d13->getResource($res, 'icon');
+				$vars['tvar_listDirectory']	= 'resources';
+				$vars['tvar_listLabel']		= $this->d13->getLangUI("storage") . ' ' . $this->d13->getLangGL("resources", $res, 'name');
+				$vars['tvar_listContent'] 	= $this->data['moduleStorage'] . ' ' . $this->d13->getLangUI("perInput");
+				$html 						.= $this->d13->templateSubpage("sub.module.listentry", $vars);
 			}
 		}
-
+		
+		$tvars['tvar_moduleStorage'] = "store".$html;
+		
+		/*
+			Get all output Resources
+		*/
+		$html = '';
 		if (isset($this->data['outputResource'])) {
-
-			$i = 0;
-			while (isset($this->data['moduleOutput' . $i])) {
-				$tvars['tvar_moduleOutput' . $i] = $this->data['moduleOutput' . $i];
-				$tvars['tvar_moduleOutputName' . $i] = $this->data['moduleOutputName' . $i];
-				$i++;
+			foreach ($this->data['outputResource'] as $res) {
+				$vars = array();
+				$vars['tvar_listImage']		= $this->d13->getResource($res, 'icon');
+				$vars['tvar_listDirectory']	= 'resources';
+				$vars['tvar_listLabel']		= $this->d13->getLangUI("production") . ' ' . $this->d13->getLangGL("resources", $res, 'name');
+				$vars['tvar_listContent'] 	= $this->data['ratio'] . ' ' . $this->d13->getLangUI("perHour");
+				$html 						.= $this->d13->templateSubpage("sub.module.listentry", $vars);				
 			}
 		}
-
+		
+		$tvars['tvar_moduleOutput'] = "output".$html;
+		
+		
 		return $tvars;
 	}
 
@@ -218,8 +240,6 @@ class d13_gameobject_module extends d13_gameobject_base
 	function getInputSlider($action, $id, $min, $max, $value, $disabled=false, $tooltip=true)
 	{
 	
-		
-
 		$vars = array();		
 		$vars['tvar_formAction'] 		= $action;
 		$vars['tvar_sliderID'] 			= $id;
@@ -283,7 +303,6 @@ class d13_gameobject_module extends d13_gameobject_base
 
 	function getModuleUpgrade()
 	{
-		
 		
 		$html = '';
 		
@@ -405,15 +424,95 @@ class d13_gameobject_module extends d13_gameobject_base
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// getOutputList
-	// @
+	// getStoredResourceList
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
-
-	function getOutputList()
+	
+	function getStoredResourceList()
 	{
+
+		$html = '';
+		
+		if (isset($this->data['storedResource'])) {
+			foreach($this->data['storedResource'] as $res) {
+				$tmp_res = $this->d13->getResource($res);
+				if ($tmp_res['active']) {
+					$html .= '<a class="tooltip-left" data-tooltip="' . $this->d13->getLangUI('storage') . ' ' . $this->d13->getLangGL("resources", $res, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $tmp_res['icon'] . '" title="' . $this->d13->getLangGL("resources", $res, "name") . '"></a>';
+				}
+			}
+		}
+		
+		if (empty($html)) {
+			$html = $this->d13->getLangUI("none");
+		}
+		
+		$tvars = array();
+		$tvars['tvar_listImage']	= 'storage.png';
+		$tvars['tvar_listDirectory']= 'icon';
+		$tvars['tvar_listLabel']	= $this->d13->getLangUI("storage");
+		$tvars['tvar_listContent'] 	= $html;
+		$html 						= $this->d13->templateSubpage("sub.module.listentry", $tvars);
+		
+		return $html;
+
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getOutputResourceList
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getOutputResourceList()
+	{
+
+		$html = '';
+				
+		if (isset($this->data['outputResource'])) {
+			foreach($this->data['outputResource'] as $res) {
+				$tmp_res = $this->d13->getResource($res);
+				if ($tmp_res['active']) {
+					$html .= '<a class="tooltip-left" data-tooltip="' . $this->d13->getLangUI('production') . ' ' . $this->d13->getLangGL("resources", $res, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $tmp_res['icon'] . '" title="' . $this->d13->getLangGL("resources", $res, "name") . '"></a>';
+				}
+			}
+		}
+
+		if (empty($html)) {
+			$html = $this->d13->getLangUI("none");
+		}
+		
+		$tvars = array();
+		$tvars['tvar_listImage']	= 'production.png';
+		$tvars['tvar_listDirectory']= 'icon';
+		$tvars['tvar_listLabel']	= $this->d13->getLangUI("production");
+		$tvars['tvar_listContent'] 	= $html;
+		$html 						= $this->d13->templateSubpage("sub.module.listentry", $tvars);
+				
+		return $html;
+
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getProcessedResourceList
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getProcessedResourceList()
+	{
+
+		$html = '';
+		
+		
+		
+		
+		
+		
+		
+		
+		return $html;
+	
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -467,7 +566,8 @@ class d13_gameobject_module extends d13_gameobject_base
 	{
 		return '';
 	}
-
+	
+	
 	
 }
 

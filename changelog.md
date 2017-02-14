@@ -29,6 +29,8 @@ V019	--- NEXT SCHEDULED UPDATE ---
 		
 		* Production Building Type
 		
+		* Auto Craft / Auto Train
+		
 V018	* Shop Building (Blackmarket): Buy resources, components, buff's, shield's
 		* Buff System: Add temporary speed/efficiency buff's to the current node (town)
 		

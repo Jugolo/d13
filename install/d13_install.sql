@@ -169,6 +169,7 @@ CREATE TABLE IF NOT EXISTS `craft` (
   `obj_id` int(10) unsigned NOT NULL,
   `quantity` int(10) unsigned NOT NULL,
   `stage` tinyint(3) unsigned NOT NULL,
+  `auto` tinyint(3) unsigned NOT NULL,
   `start` datetime NOT NULL,
   `duration` float unsigned NOT NULL,
   PRIMARY KEY (`id`)
@@ -408,6 +409,7 @@ CREATE TABLE IF NOT EXISTS `train` (
   `obj_id` int(10) unsigned NOT NULL,
   `quantity` int(10) unsigned NOT NULL,
   `stage` tinyint(3) unsigned NOT NULL,
+  `auto` tinyint(3) unsigned NOT NULL,
   `start` datetime NOT NULL,
   `duration` float unsigned NOT NULL,
   PRIMARY KEY (`id`)

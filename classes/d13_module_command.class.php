@@ -184,7 +184,6 @@ class d13_module_command extends d13_gameobject_module
 
 	// ----------------------------------------------------------------------------------------
 	// getOutputList
-	// @
 	//
 	// ----------------------------------------------------------------------------------------
 
@@ -193,8 +192,23 @@ class d13_module_command extends d13_gameobject_module
 	function getOutputList()
 	{
 		
-		return $this->d13->getLangUI("none");
+		return parent::getStoredResourceList() . parent::getOutputResourceList();
+		
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+	
+	function getTemplateVariables()
+	{
+		return parent::getTemplateVariables();
+	}
+	
+	
 }
 
-?>
+// =====================================================================================EOF

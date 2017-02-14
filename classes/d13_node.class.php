@@ -69,9 +69,7 @@ class d13_node
 
 	function get($idType, $id)
 	{
-	
-		
-		
+
 		$result = $this->d13->dbQuery('select * from nodes where ' . $idType . '="' . $id . '"');
 		
 		$this->data = $this->d13->dbFetch($result);
@@ -188,8 +186,7 @@ class d13_node
 
 	function remove($id)
 	{
-		
-		
+				
 		$node = $this->d13->createNode();
 		
 		if ($node->get('id', $id) == 'done') {
@@ -749,7 +746,7 @@ class d13_node
 
 	public
 
-	function addComponent($componentId, $quantity, $slotId)
+	function addComponent($componentId, $quantity, $slotId, $auto=0)
 	{
 		
 		$this->getModules();
@@ -804,7 +801,7 @@ class d13_node
 						$totalIR = $this->modules[$slotId]['input'] * $this->d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'ratio');
 						$duration = ($duration - $duration * $totalIR) * $this->d13->getGeneral('users', 'duration', 'craft') * $this->getBuff('duration', 'craft') * 60;
 						
-						$this->d13->dbQuery('insert into craft (node, obj_id, quantity, stage, start, duration, slot) values ("' . $this->data['id'] . '", "' . $componentId . '", "' . $quantity . '", 0, "' . $start . '", "' . $duration . '", "' . $slotId . '")');
+						$this->d13->dbQuery('insert into craft (node, obj_id, quantity, stage, start, duration, slot, auto) values ("' . $this->data['id'] . '", "' . $componentId . '", "' . $quantity . '", 0, "' . $start . '", "' . $duration . '", "' . $slotId . '", "' . $auto . '")');
 						
 						if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 						if ($ok) $status = 'done';
@@ -868,7 +865,7 @@ class d13_node
 
 	public
 
-	function addUnit($unitId, $quantity, $slotId)
+	function addUnit($unitId, $quantity, $slotId, $auto=0)
 	{
 		
 		$this->getModules();
@@ -922,7 +919,7 @@ class d13_node
 						$totalIR = $this->modules[$slotId]['input'] * $this->d13->getModule($this->data['faction'], $this->modules[$slotId]['module'], 'ratio');
 						$duration = ($duration - $duration * $totalIR) * $this->d13->getGeneral('users', 'duration', 'train') * $this->getBuff('duration', 'train') * 60;
 						
-						$this->d13->dbQuery('insert into train (node, obj_id, quantity, stage, start, duration, slot) values ("' . $this->data['id'] . '", "' . $unitId . '", "' . $quantity . '", 0, "' . $start . '", "' . $duration . '", "' . $slotId . '")');
+						$this->d13->dbQuery('insert into train (node, obj_id, quantity, stage, start, duration, slot, auto) values ("' . $this->data['id'] . '", "' . $unitId . '", "' . $quantity . '", 0, "' . $start . '", "' . $duration . '", "' . $slotId . '", "' . $auto . '")');
 						if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 						if ($ok) $status = 'done';
 						else $status = 'error';
@@ -1580,32 +1577,6 @@ class d13_node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// getList
-	// ----------------------------------------------------------------------------------------
-	/*
-	public static
-
-	function getList($userId, $otherNode = FALSE)
-	{
-		
-		
-		$nodes = array();
-		
-		if ($otherNode) {
-			$result = $this->d13->dbQuery('select * from nodes where user != "' . $userId . '"');
-		} else {
-			$result = $this->d13->dbQuery('select * from nodes where user = "' . $userId . '"');
-		}
-
-		for ($i = 0; $row = $this->d13->dbFetch($result); $i++) {
-			$nodes[$i] = new d13_node($this->d13);
-			$nodes[$i]->data = $row;
-		}
-
-		return $nodes;
-	}
-*/
-	// ----------------------------------------------------------------------------------------
 	// getLocation
 	// ----------------------------------------------------------------------------------------
 	public
@@ -1630,7 +1601,6 @@ class d13_node
 
 	function getResources()
 	{
-		
 		
 		$this->resources = array();
 		$this->production = array();
@@ -2715,7 +2685,14 @@ class d13_node
 					$tmp_user = $this->d13->createObject('user', $_SESSION[CONST_PREFIX . 'User']['id']);
 					$ok = $tmp_user->gainExperience($this->d13->getComponent($this->data['faction'],  $entry['obj_id'], 'cost'), $entry['quantity']);
 				}
-					
+				
+				/*
+					auto craft
+				*/
+				if ($entry['auto'] != 0) {
+					$this->addComponent($entry['obj_id'], $entry['quantity'], $entry['slot'], 1);
+				}
+				
 				$this->d13->dbQuery('delete from craft where id="' . $entry['id'] . '"');
 				if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 			}
@@ -2736,8 +2713,6 @@ class d13_node
 	function checkTrain($time)
 	{
 	
-		
-		
 		$this->d13->dbQuery('start transaction');
 		$this->getResources();
 		$this->getComponents();
@@ -2783,6 +2758,13 @@ class d13_node
 				if ($ok && $this->d13->getUnit($this->data['faction'], $entry['obj_id'], 'gainExperience')) { #experience gain
 					$tmp_user = $this->d13->createObject('user', $_SESSION[CONST_PREFIX . 'User']['id']);
 					$ok = $tmp_user->gainExperience($this->d13->getUnit($this->data['faction'],  $entry['obj_id'], 'cost'), $entry['quantity']);
+				}
+				
+				/*
+					auto train
+				*/
+				if ($entry['auto'] != 0) {
+					$this->addUnit($entry['obj_id'], $entry['quantity'], $entry['slot'], 1);
 				}
 				
 				$this->d13->dbQuery('delete from train where id="' . $entry['id'] . '"');

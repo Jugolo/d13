@@ -238,7 +238,9 @@ class d13_module_market extends d13_gameobject_module
 					$tvars = array();
 					$tvars['tvar_listImage'] 	= '<img class="d13-resource" src="' . CONST_DIRECTORY . 'templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/icon/refresh.png">';
 					$tvars['tvar_listLabel'] 	= $this->d13->getLangUI("refresh") . " " . $this->data['name'];
-					$tvars['tvar_listAmount'] 	= '<span id="market_' . $this->data['slotId'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("market_' . $this->data['slotId'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
+					$tvars['tvar_listAmount'] 	= '<span id="market_' . $this->data['slotId'] . '">' . $remaining . '</span> <a class="external" href="?p=module&action=cancelMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
+				
+					#$tvars['tvar_listAmount'] 	= '<span id="market_' . $this->data['slotId'] . '">' . $remaining . '</span><script type="text/javascript">timedJump("market_' . $this->data['slotId'] . '", "?p=module&action=get&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '");</script> <a class="external" href="?p=module&action=cancelMarket&nodeId=' . $this->node->data['id'] . '&slotId=' . $this->data['slotId'] . '"> <img class="d13-resource" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>';
 				
 					$html = $this->d13->templateSubpage("sub.module.listcontent", $tvars);
 				

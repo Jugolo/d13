@@ -33,7 +33,6 @@
 						</div>
 					</li>
 
-					
 					<li class="item-content">
 						<div class="item-media"><a href="#" class="tooltip" data-tooltip="{{tvar_moduleInputName}}"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></a></div>
 						<div class="item-inner">
@@ -49,8 +48,6 @@
 						<div class="item-after"><span class="badge">{{tvar_ratio}}</span></div>
 						</div>
 					</li>
-				
-				
 				
 					<li class="item-content">
 						<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock.png"></div>
@@ -76,13 +73,10 @@
 						</div>
 					</li>
 				
-					<li class="item-content">
-						<div class="item-inner">
-						<div class="item-title">{{tvar_ui_output}}:</div>
-						<div class="item-after">{{tvar_outputData}}</div>
-						</div>
-					</li>
-
+					{{tvar_storedData}}
+					{{tvar_processData}}
+					{{tvar_outputData}}
+					
 					</ul>
 					</div>
 				</div>

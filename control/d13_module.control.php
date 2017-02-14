@@ -2,7 +2,7 @@
 
 // ========================================================================================
 //
-// EMPTY.CONTROLLER
+// MODULE.CONTROLLER
 //
 // !!! THIS FREE PROJECT IS DEVELOPED AND MAINTAINED BY A SINGLE HOBBYIST !!!
 // # Author......................: Tobias Strunz (Fhizban)
@@ -39,14 +39,11 @@ class d13_moduleController extends d13_controller
 	// doControl
 	// @
 	// ----------------------------------------------------------------------------------------
-	
 	private
 	
 	function doControl()
 	{
-	
-		
-				
+
 		switch ($_GET['action'])
 		{
 		
@@ -135,7 +132,6 @@ class d13_moduleController extends d13_controller
 	function moduleGet()
 	{
 	
-		
 		$tvars = array();
 		
 		if (isset($_GET['moduleId'])) {
@@ -444,7 +440,14 @@ class d13_moduleController extends d13_controller
 		
 		if (isset($_GET['componentId'], $_POST['quantity'])) {
 			if ($_POST['quantity'] > 0) {
-				$status = $this->d13->node->addComponent($_GET['componentId'], $_POST['quantity'], $_GET['slotId']);
+			
+				if (isset($_POST['autoCraft']) && $_POST['autoCraft'] != 0) {
+					$auto = 1;
+				} else {
+					$auto = 0;
+				}
+				
+				$status = $this->d13->node->addComponent($_GET['componentId'], $_POST['quantity'], $_GET['slotId'], $auto);
 				if ($status == 'done') {
 					
 					header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);
@@ -526,7 +529,14 @@ class d13_moduleController extends d13_controller
 		$tvars = array();
 		
 		if (isset($_GET['unitId'], $_POST['quantity']) && $_POST['quantity'] > 0) {
-			$status = $this->d13->node->addUnit($_GET['unitId'], $_POST['quantity'], $_GET['slotId']);
+			
+			if (isset($_POST['autoTrain']) && $_POST['autoTrain'] != 0) {
+				$auto = 1;
+			} else {
+				$auto = 0;
+			}
+				
+			$status = $this->d13->node->addUnit($_GET['unitId'], $_POST['quantity'], $_GET['slotId'], $auto);
 			if ($status == 'done') {
 				
 				header('Location: index.php?p=module&action=get&nodeId=' . $this->d13->node->data['id'] . '&slotId=' . $_GET['slotId']);

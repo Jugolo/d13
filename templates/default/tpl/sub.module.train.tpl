@@ -250,7 +250,10 @@
 		<div class="card-footer no-border">
 			
 			<form action="?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}" class="pure-form" id="unitForm_{{tvar_uid}}" method="post" name="unitForm_{{tvar_uid}}">
-				<select class="pure-input" onchange="change_maximum('input{{tvar_sliderID}}', {{tvar_unitValue}}, 'unitForm_{{tvar_uid}}', this.value)">
+				
+				<label><input type="checkbox" class="pure-input" value="1" name="autoTrain" id="autoTrain_{{tvar_uid}}">{{tvar_ui_auto}}</label>
+				
+				<select class="pure-input" onchange="change_maximum('input{{tvar_sliderID}}', {{tvar_unitValue}}, 'unitForm_{{tvar_uid}}', this.value, 'autoTrain_{{tvar_uid}}')">
 					<option value="index.php?p=module&action=addUnit&nodeId={{tvar_nodeID}}&slotId={{tvar_slotID}}&unitId={{tvar_uid}}">
 						{{tvar_ui_train}}
 					</option>

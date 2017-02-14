@@ -18,9 +18,14 @@ function set_maximum(id, value) {
     document.getElementById(id).max = value;
 }
 
-function change_maximum(id, value, form, formvalue) {
+function change_maximum(id, value, form, formvalue, checkbox) {
     set_maximum(id, value);
     document.getElementById(form).action= formvalue;
+   if (document.getElementById(checkbox).disabled) {
+   	document.getElementById(checkbox).disabled = false;
+   } else {
+   	document.getElementById(checkbox).disabled = true;
+   }
 }
 
 /* -- D13 JS -------------------------------------------------------------------*/
@@ -199,17 +204,17 @@ function timedJump(objectId, url)
 			else
    			{
     			clearTimeout(timerIds[objectId]);
-   				window.location.href=url;
+   				window.location.assign(url);
    				done=1;
    			}
 		}
 	}
 	if (!done)
 	{
-  	if (String(time[1]).length==1) time[1]="0"+String(time[1]);
-  	if (String(time[2]).length==1) time[2]="0"+String(time[2]);
-		object.innerHTML=time[0]+":"+time[1]+":"+time[2];
-		timerIds[objectId]=setTimeout("timedJump('"+objectId+"', '"+url+"')", 1000);
+  		if (String(time[1]).length==1) time[1]="0"+String(time[1]);
+  		if (String(time[2]).length==1) time[2]="0"+String(time[2]);
+			object.innerHTML=time[0]+":"+time[1]+":"+time[2];
+			timerIds[objectId]=setTimeout("timedJump('"+objectId+"', '"+url+"')", 1000);
 	}
 }
 

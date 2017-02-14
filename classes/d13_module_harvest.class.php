@@ -128,20 +128,8 @@ class d13_module_harvest extends d13_gameobject_module
 	function getOutputList()
 	{
 		
-		$html = '';
-		if (isset($this->data['outputResource'])) {
-			foreach($this->data['outputResource'] as $res) {
-				if ($this->d13->getResource($res, 'active')) {
-					$html.= '' . $this->d13->getLangUI('production') . '<a class="tooltip-left" data-tooltip="' . $this->d13->getLangUI('production') . " " . $this->d13->getLangGL("resources", $res, "name") . '"><img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/resources/' . $res . '.png" title="' . $this->d13->getLangGL("resources", $res, "name") . '"></a>';
-				}
-			}
-		}
-
-		if (empty($html)) {
-			$html = $this->d13->getLangUI("none");
-		}
-
-		return $html;
+			return parent::getOutputResourceList();
+			
 	}
 }
 
