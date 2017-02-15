@@ -130,20 +130,20 @@ class d13_module_train extends d13_gameobject_module
 				$vars = array();
 				$vars = $tmp_unit->getTemplateVariables();
 				
-				$vars['tvar_duration'] = $this->d13->misc->sToHMS((($tmp_unit->data['duration'] - $tmp_unit->data['duration'] * $this->data['totalIR']) * $this->d13->getGeneral('users', 'duration', 'train')) * 60, true);
-				$vars['tvar_uid'] = $uid;
-				$vars['tvar_nodeId'] = $this->node->data['id'];
-				$vars['tvar_slotId'] = $this->data['slotId'];
-				$vars['tvar_sliderID'] 	= $uid;
-				$vars['tvar_sliderMin'] 	= "00";
-				$vars['tvar_sliderMax'] 	= $tmp_unit->getMaxProduction();
+				$vars['tvar_duration'] 			= $this->d13->misc->sToHMS((($tmp_unit->data['duration'] - $tmp_unit->data['duration'] * $this->data['totalIR']) * $this->d13->getGeneral('users', 'duration', 'train')) * 60, true);
+				$vars['tvar_uid'] 				= $uid;
+				$vars['tvar_nodeId'] 			= $this->node->data['id'];
+				$vars['tvar_slotId'] 			= $this->data['slotId'];
+				$vars['tvar_sliderID'] 			= $uid;
+				$vars['tvar_sliderMin'] 		= "0";
+				$vars['tvar_sliderMax'] 		= $tmp_unit->getMaxProduction();
 				$vars['tvar_disableData']		= '';
 				if ($tmp_unit->getMaxProduction() <= 0) {
 					$vars['tvar_disableData']		= 'disabled';
 				}
-				$vars['tvar_sliderValue'] 	= "00";
-				$vars['tvar_unitDescription'] = $tmp_unit->data['description'];
-				$vars['tvar_unitMaxValue'] = $tmp_unit->data['amount'] + $tmp_unit->getMaxProduction();
+				$vars['tvar_sliderValue'] 		= "0";
+				$vars['tvar_unitDescription'] 	= $tmp_unit->data['description'];
+				$vars['tvar_unitMaxValue'] 		= $tmp_unit->data['amount'] + $tmp_unit->getMaxProduction();
 				
 				$tvars['tvar_sub_popupswiper'] .= $this->d13->templateSubpage("sub.module.train", $vars);
 			}
@@ -252,6 +252,19 @@ class d13_module_train extends d13_gameobject_module
 
 		return $html;
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+	
+	function getTemplateVariables()
+	{
+		return parent::getTemplateVariables();
+	}
+	
 }
 
 ?>

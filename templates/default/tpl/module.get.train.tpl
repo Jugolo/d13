@@ -30,7 +30,7 @@
 				<ul>
 
 					<li class="item-content">
-						<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
+						<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/{{tvar_moduleInputDirectory}}/{{tvar_moduleInputImage}}" title="{{tvar_moduleInputName}}"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_maxInput}}</div>
 						<div class="item-after"><span class="badge">{{tvar_base_maxinput}} +{{tvar_upgrade_maxinput}}</span></div>
@@ -54,7 +54,7 @@
 					</li>
 			
 					<li class="item-content">
-						<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
+						<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/{{tvar_moduleInputDirectory}}/{{tvar_moduleInputImage}}" title="{{tvar_moduleInputName}}"></div>
 						<div class="item-inner">
 							<div class="item-title">{{tvar_moduleInputName}}</div>
 							<div class="item-after">{{tvar_inputSlider}}</div>

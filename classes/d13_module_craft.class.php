@@ -68,9 +68,8 @@ class d13_module_craft extends d13_gameobject_module
 				if (in_array($uid, $this->d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'components'))) {
 					if ($unit['value'] > 0) {
 						
-						$image = $this->d13->getComponent($this->node->data['faction'], $uid, 'images');
-						$image = $image[0]['image'];
-
+						$image = $this->d13->getComponent($this->node->data['faction'], $uid, 'icon');
+						
 						
 						$tvars['tvar_listImage'] = '<img class="d13-resource" src="templates/' . $_SESSION[CONST_PREFIX . 'User']['template'] . '/images/components/' . $this->node->data['faction'] . '/' . $image . '" title="' . $this->d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'] . '">';
 						$tvars['tvar_listLabel'] = $this->d13->getLangGL('components', $this->node->data['faction'], $uid) ['name'];
@@ -132,74 +131,32 @@ class d13_module_craft extends d13_gameobject_module
 				
 				$tmp_component = $this->d13->createGameObject($args, $this->node);
 				
-				#$tmp_component = new d13_gameobject_component($args, $this->node);
-				
-				// - - - - Cost and Requirements
-				$costData = $tmp_component->getCostList();
-				$requirementsData = $tmp_component->getRequirementsList();
+				$vars = array();
+				$vars = $tmp_component->getTemplateVariables();
 
-				// - - - Check Affordable Maximum
-
-				$costLimit = $this->node->checkCostMax($component['cost'], 'craft');
-				$reqLimit = $this->node->checkRequirementsMax($component['requirements']);
-				$upkeepLimit = floor($this->node->resources[$this->d13->getComponent($this->node->data['faction'], $cid, 'storageResource') ]['value'] / $this->d13->getComponent($this->node->data['faction'], $cid, 'storage'));
-				$unitLimit = abs($this->node->components[$cid]['value'] - $this->d13->getGeneral('types', $component['type'], 'limit'));
-				$limitData = min($costLimit, $reqLimit, $upkeepLimit, $unitLimit);
-				$limitData = floor($limitData);
-
-				// - - - - - Check Permissions
-
-				$disableData = '';
-				$check_requirements = $this->node->checkRequirements($component['requirements']);
-				$check_cost = $this->node->checkCost($component['cost'], 'research');
-				if ($check_requirements['ok'] && $check_cost['ok']) {
-					$disableData = '';
-				}
-				else {
-					$disableData = 'disabled';
-				}
-
-				if ($check_requirements['ok']) {
-					$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.ok");
-				}
-				else {
-					$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.notok");
-				}
-
-				if ($check_cost['ok']) {
-					$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.ok");
-				}
-				else {
-					$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.notok");
-				}
-
-				$tvars['tvar_nodeID'] = $this->node->data['id'];
-				$tvars['tvar_slotID'] = $this->data['slotId'];
-				$tvars['tvar_nodeFaction'] = $this->node->data['faction'];
-				$tvars['tvar_costData'] = $costData;
-				$tvars['tvar_requirementsData'] = $requirementsData;
-				$tvars['tvar_disableData'] = $disableData;
-				$tvars['tvar_cid'] = $cid;
-				$tvars['tvar_componentName'] = $tmp_component->data['name'];
-				$tvars['tvar_componentDescription'] = $tmp_component->data['description'];
-				$tvars['tvar_duration'] = $this->d13->misc->sToHMS( (($component['duration'] - $component['duration'] * $this->data['totalIR']) * $this->d13->getGeneral('users', 'duration', 'craft')) * 60, true);
-				$tvars['tvar_compLimit'] = $limitData;
-				$vars['tvar_disableData']		= '';
-				if ($limitData <= 0) {
+				$vars['tvar_nodeID'] 				= $this->node->data['id'];
+				$vars['tvar_slotID'] 				= $this->data['slotId'];
+				$vars['tvar_nodeFaction'] 			= $this->node->data['faction'];
+				$vars['tvar_cid'] 					= $cid;
+				$vars['tvar_componentName'] 		= $tmp_component->data['name'];
+				$vars['tvar_componentDescription'] 	= $tmp_component->data['description'];
+				$vars['tvar_duration'] 				= $this->d13->misc->sToHMS( (($component['duration'] - $component['duration'] * $this->data['totalIR']) * $this->d13->getGeneral('users', 'duration', 'craft')) * 60, true);
+				$vars['tvar_compLimit'] 			= $tmp_component->getMaxProduction();;
+				$vars['tvar_disableData']			= '';
+				if ($tmp_component->getMaxProduction() <= 0) {
 					$vars['tvar_disableData']		= 'disabled';
 				}
-				$tvars['tvar_compValue'] = $tmp_component->data['amount'];
-				$tvars['tvar_compStorage'] = $component['storage'];
-				$tvars['tvar_compResource'] = $component['storageResource'];
-				$tvars['tvar_compResourceName'] = $this->d13->getLangGL("resources", $component['storageResource'], "name");
-				$tvars['tvar_compMaxValue'] = $tmp_component->data['amount'] + $limitData;
-				
-				$tvars['tvar_sliderID'] 	= $cid;
-				$tvars['tvar_sliderMin'] 	= "00";
-				$tvars['tvar_sliderMax'] 	= $limitData;
-				$tvars['tvar_sliderValue'] 	= "00";
+				$vars['tvar_compValue'] 			= $tmp_component->data['amount'];
+				$vars['tvar_compStorage'] 			= $component['storage'];
+				$vars['tvar_compResource'] 			= $component['storageResource'];
+				$vars['tvar_compResourceName'] 		= $this->d13->getLangGL("resources", $component['storageResource'], "name");
+				$vars['tvar_compMaxValue'] 			= $tmp_component->data['amount'] + $tmp_component->getMaxProduction();
+				$vars['tvar_sliderID'] 				= $cid;
+				$vars['tvar_sliderMin'] 			= "0";
+				$vars['tvar_sliderMax'] 			= $tmp_component->getMaxProduction();
+				$vars['tvar_sliderValue'] 			= "0";
 
-				$tvars['tvar_sub_popupswiper'].= $this->d13->templateSubpage("sub.module.craft", $tvars);
+				$tvars['tvar_sub_popupswiper'].= $this->d13->templateSubpage("sub.module.craft", $vars);
 			}
 		}
 
@@ -301,6 +258,18 @@ class d13_module_craft extends d13_gameobject_module
 		}
 
 		return $html;
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+	
+	function getTemplateVariables()
+	{
+		return parent::getTemplateVariables();
 	}
 	
 }

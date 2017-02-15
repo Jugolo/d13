@@ -29,7 +29,7 @@ class d13_resBarController extends d13_controller
 	{
 	
 		parent::__construct($d13);
-
+		
 		$this->user = $this->d13->createObject('user', $_SESSION[CONST_PREFIX . 'User']['id']);
 		
 	}
@@ -48,11 +48,12 @@ class d13_resBarController extends d13_controller
 		$tvars = array();
 		
 		$tvars['tvar_resEntry'] 	= '';
-		
-		//- - - - - Left Panel (not used ATM)
 		$tvars['tvar_leftOptions'] 	= '';
+		$tvars['tvar_rightOptions'] = '';
+		$panelEntry 	= '';
+		$resEntry = '';
 		
-		//- - - - - Player Stats
+		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Player Stats
 		if ($this->user->user_status == 'done') {
 			foreach($this->d13->getGeneral("userstats") as $stat) {
 				if ($stat['active'] && $stat['visible']) {
@@ -75,18 +76,17 @@ class d13_resBarController extends d13_controller
 			}
 		}
 	
-		//- - - - - Resources
+		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Resources
 		if (isset($this->d13->node) && isset($this->d13->node->resources)) {
 			foreach($this->d13->node->resources as $resource) {
 				if ($this->d13->getResource($resource['id'], 'active') && $this->d13->getResource($resource['id'], 'visible')) {
-				
-					$tvars['tvar_resImage'] = $this->d13->getResource($resource['id'], 'icon');
-					$tvars['tvar_resColor'] = $this->d13->getResource($resource['id'], 'color');
-					$tvars['tvar_resValue'] 	= 0;
-					$tvars['tvar_resPercentage'] = 0;
-					$tvars['tvar_resTooltip'] 	= '';
-				
-					$tvars['tvar_resTooltip'] .= $this->d13->getLangGL('resources', $resource['id'], 'name') . ' ';
+					
+					$tvars['tvar_resImage'] 		= $this->d13->getResource($resource['id'], 'icon');
+					$tvars['tvar_resColor'] 		= $this->d13->getResource($resource['id'], 'color');
+					$tvars['tvar_resValue'] 		= 0;
+					$tvars['tvar_resPercentage'] 	= 0;
+					$tvars['tvar_resTooltip'] 		= '';
+					$tvars['tvar_resTooltip'] 		.= $this->d13->getLangGL('resources', $resource['id'], 'name') . ' ';
 					if ($this->d13->getResource($resource['id'], 'limited')) {
 						$tvars['tvar_resValue'] = floor($resource['value']) . '/' . floor($this->d13->node->storage[$resource['id']]);
 						$tvars['tvar_resPercentage'] = $this->d13->misc->percentage(floor($resource['value']), floor($this->d13->node->storage[$resource['id']]));
@@ -94,45 +94,137 @@ class d13_resBarController extends d13_controller
 					} else {
 						$tvars['tvar_resValue'] = floor($resource['value']);
 						$tvars['tvar_resTooltip'] .= floor($resource['value']);
-					
 					}
 					if ($this->d13->node->production[$resource['id']]) {
 						if (floor($resource['value']) < $this->d13->node->storage[$resource['id']]) {
 							$tvars['tvar_resTooltip'] .= ' [+' . round($this->d13->node->production[$resource['id']]) . $this->d13->getLangUI('perHour') . ']';
-						}
-						else {
+						} else {
 							if ($this->d13->getResource($resource['id'], 'limited')) {
 								$tvars['tvar_resTooltip'] .= ' [' . $this->d13->getLangUI("full") . ']';
 							}
 						}
 					}
-
-					$tvars['tvar_resEntry'].= $this->d13->templateSubpage("sub.resource.entry", $tvars);
+					$resEntry .= $this->d13->templateSubpage("sub.resource.entry", $tvars);
 				}
 			}
 		}
-	
-		$tvars['tvar_nodeResources'] = $tvars['tvar_resEntry'];
 
-		//- - - - - Open Right Panel
-		$tvars['tvar_rightOptions'] = '';
+		$tvars['tvar_nodeResources'] = $resEntry;
+
+		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Open Left Panel
+		
+		$vars = array();
+		$vars['tvar_linkClass'] 	= 'open-panel"';
+		$vars['tvar_linkData'] 		= 'data-panel="left"';
+		$vars['tvar_linkImage'] 	= 'next.png';
+		$vars['tvar_linkTooltip'] 	= $this->d13->getLangUI('inventory');
+		$vars['tvar_linkLabel'] 	= '';
+		$tvars['tvar_leftOptions']	= $this->d13->templateSubpage("sub.resource.link", $vars);
+		
+		
+		
+		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Open Right Panel
 		$html = $this->d13->node->queues->getQueueExpireNext();
 	
 		if ($this->d13->node->queues->getQueueCount() > 1) {
-		$tvars['tvar_linkClass'] 	= 'open-panel"';
-		$tvars['tvar_linkData'] 	= 'data-panel="right"';
-		$tvars['tvar_linkImage'] 	= 'previous.png';
-		$tvars['tvar_linkTooltip'] 	= $this->d13->getLangUI('active') . " " . $this->d13->getLangUI('task');
-		$tvars['tvar_linkLabel'] 	= '';
-		$tvars['tvar_rightOptions']	= $this->d13->templateSubpage("sub.resource.link", $tvars);
+		$vars = array();
+		$vars['tvar_linkClass'] 	= 'open-panel"';
+		$vars['tvar_linkData'] 		= 'data-panel="right"';
+		$vars['tvar_linkImage'] 	= 'previous.png';
+		$vars['tvar_linkTooltip'] 	= $this->d13->getLangUI('active') . " " . $this->d13->getLangUI('task');
+		$vars['tvar_linkLabel'] 	= '';
+		$tvars['tvar_rightOptions']	= $this->d13->templateSubpage("sub.resource.link", $vars);
 		}
 		if (!empty($html)) {
-		$tvars['tvar_rightOptions'] .= $html;
+			$tvars['tvar_rightOptions'] .= $html;
 		}
 		
+		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 		return $this->d13->templateSubpage("sub.resources", $tvars);
 		
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getResourceList
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function getResourceList()
+	{
+		
+		$html = '';
+		$tvars['tvar_queueItems_A'] = '';
+		$tvars['tvar_queueItems_B'] = '';
+		
+		$this->d13->node->getResources();
+		
+		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Resources
+		if (isset($this->d13->node) && isset($this->d13->node->resources)) {
+			foreach($this->d13->node->resources as $resource) {
+				#if ($this->d13->getResource($resource['id'], 'active') && $this->d13->getResource($resource['id'], 'visible') == false) {
+					
+					$vars = array();
+					$vars['tvar_resName']  = $this->d13->getLangGL('resources', $resource['id'], 'name') . ' ';
+					$vars['tvar_resImage'] = $this->d13->getResource($resource['id'], 'icon');
+					$vars['tvar_resColor'] = $this->d13->getResource($resource['id'], 'color');
+					$vars['tvar_resDirectory'] = 'resources';
+					$vars['tvar_resValue'] = 0;
+
+					if ($this->d13->getResource($resource['id'], 'limited')) {
+						$vars['tvar_resValue'] = floor($resource['value']) . '/' . floor($this->d13->node->storage[$resource['id']]);
+					} else {
+						$vars['tvar_resValue'] = floor($resource['value']);
+					}
+					if ($this->d13->node->production[$resource['id']]) {
+						if (floor($resource['value']) < $this->d13->node->storage[$resource['id']]) {
+							$vars['tvar_resValue'] .= ' [+' . round($this->d13->node->production[$resource['id']]) . $this->d13->getLangUI('perHour') . ']';
+						} else {
+							if ($this->d13->getResource($resource['id'], 'limited')) {
+								$vars['tvar_resValue'] .= ' [' . $this->d13->getLangUI("full") . ']';
+							}
+						}
+					}
+
+					$tvars['tvar_queueItems_A'] .= $this->d13->templateSubpage("sub.queue.resource", $vars);
+				#}
+			}
+		}
+
+		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Components
+		$this->d13->node->getComponents();
+		
+		if (isset($this->d13->node) && isset($this->d13->node->components)) {
+		
+			foreach($this->d13->node->components as $uid => $unit) {
+				if ($this->d13->getComponent($this->d13->node->data['faction'], $uid, 'active')) {
+				
+					if ($unit['value'] > 0) {
+					
+						$vars = array();
+						$vars['tvar_resName']  = $this->d13->getLangGL('components', $this->d13->node->data['faction'], $uid, 'name');
+						$vars['tvar_resImage'] = $this->d13->getComponent($this->d13->node->data['faction'], $uid, 'icon');
+						$vars['tvar_resColor'] = '';
+						$vars['tvar_resDirectory'] = 'components/'.$this->d13->node->data['faction'].'/';
+						$vars['tvar_resValue'] = "(".$unit['value'].")";
+						
+						$tvars['tvar_queueItems_B'] .= $this->d13->templateSubpage("sub.queue.resource", $vars);
+						
+					}
+				}
+			}
+		}
+
+		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+		if (!empty($tvars['tvar_queueItems_A']) || !empty($tvars['tvar_queueItems_B'])) {
+			$html = $this->d13->templateSubpage("sub.queue.left", $tvars);
+		}
+		
+		return $html;
+	
+	}
+	
 
 }
 

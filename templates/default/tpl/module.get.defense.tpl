@@ -30,7 +30,7 @@
 				<ul>
 							
 				<li class="item-content">
-					<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
+					<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/{{tvar_moduleInputDirectory}}/{{tvar_moduleInputImage}}" title="{{tvar_moduleInputName}}"></div>
 					<div class="item-inner">
 					<div class="item-title">{{tvar_ui_maxInput}}</div>
 					<div class="item-after"><span class="badge">{{tvar_base_maxinput}} +{{tvar_upgrade_maxinput}}</span></div>
@@ -47,70 +47,70 @@
 				</li>
 				
 				<li class="item-content">
-									<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_hp.png"></div>
-									<div class="item-inner">
-										<div class="item-title">
-											{{tvar_ui_hp}}:
-										</div>
-										<div class="item-after">
-											<span class="badge">{{tvar_HP}} {{tvar_HPPlus}}</span>
-										</div>
-									</div>
-									<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_damage.png"></div>
-									<div class="item-inner">
-										<div class="item-title">
-											{{tvar_ui_damage}}:
-										</div>
-										<div class="item-after">
-											<span class="badge">{{tvar_Damage}} {{tvar_DamagePlus}}</span>
-										</div>
-									</div>
-								</li>
-								
-								<li class="item-content">
-									<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_armor.png"></div>
-									<div class="item-inner">
-										<div class="item-title">
-											{{tvar_ui_armor}}:
-										</div>
-										<div class="item-after">
-											<span class="badge">{{tvar_Armor}} {{tvar_ArmorPlus}}</span>
-										</div>
-									</div>
-									<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_speed.png"></div>
-									<div class="item-inner">
-										<div class="item-title">
-											{{tvar_ui_speed}}:
-										</div>
-										<div class="item-after">
-											<span class="badge">{{tvar_Speed}} {{tvar_SpeedPlus}}</span>
-										</div>
-									</div>
-								</li>
-								
-								<li class="item-content">
-									<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_critical.png"></div>
-									<div class="item-inner">
-										<div class="item-title">
-											{{tvar_ui_critical}}:
-										</div>
-										<div class="item-after">
-											<span class="badge">{{tvar_Critical}} {{tvar_CriticalPlus}}</span>
-										</div>
-									</div>
-									<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_vision.png"></div>
-									<div class="item-inner">
-										<div class="item-title">
-											{{tvar_ui_vision}}:
-										</div>
-										<div class="item-after">
-											 <span class="badge">{{tvar_Vision}} {{tvar_VisionPlus}}</span>
-										</div>
-									</div>
-								</li>
+				<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_hp.png"></div>
+				<div class="item-inner">
+					<div class="item-title">
+						{{tvar_ui_hp}}:
+					</div>
+					<div class="item-after">
+						<span class="badge">{{tvar_HP}} {{tvar_HPPlus}}</span>
+					</div>
+				</div>
+				<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_damage.png"></div>
+				<div class="item-inner">
+					<div class="item-title">
+						{{tvar_ui_damage}}:
+					</div>
+					<div class="item-after">
+						<span class="badge">{{tvar_Damage}} {{tvar_DamagePlus}}</span>
+					</div>
+				</div>
+			</li>
+			
+			<li class="item-content">
+				<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_armor.png"></div>
+				<div class="item-inner">
+					<div class="item-title">
+						{{tvar_ui_armor}}:
+					</div>
+					<div class="item-after">
+						<span class="badge">{{tvar_Armor}} {{tvar_ArmorPlus}}</span>
+					</div>
+				</div>
+				<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_speed.png"></div>
+				<div class="item-inner">
+					<div class="item-title">
+						{{tvar_ui_speed}}:
+					</div>
+					<div class="item-after">
+						<span class="badge">{{tvar_Speed}} {{tvar_SpeedPlus}}</span>
+					</div>
+				</div>
+			</li>
+			
+			<li class="item-content">
+				<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_critical.png"></div>
+				<div class="item-inner">
+					<div class="item-title">
+						{{tvar_ui_critical}}:
+					</div>
+					<div class="item-after">
+						<span class="badge">{{tvar_Critical}} {{tvar_CriticalPlus}}</span>
+					</div>
+				</div>
+				<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/stat_vision.png"></div>
+				<div class="item-inner">
+					<div class="item-title">
+						{{tvar_ui_vision}}:
+					</div>
+					<div class="item-after">
+						 <span class="badge">{{tvar_Vision}} {{tvar_VisionPlus}}</span>
+					</div>
+				</div>
+			</li>
 								
 				<li class="item-content">
-					<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/resources/{{tvar_moduleInput}}.png" title="{{tvar_moduleInputName}}"></div>
+					<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/{{tvar_moduleInputDirectory}}/{{tvar_moduleInputImage}}" title="{{tvar_moduleInputName}}"></div>
 					<div class="item-inner">
 						<div class="item-title">{{tvar_moduleInputName}}</div>
 					

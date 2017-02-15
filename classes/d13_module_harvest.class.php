@@ -131,6 +131,19 @@ class d13_module_harvest extends d13_gameobject_module
 			return parent::getOutputResourceList();
 			
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+	
+	function getTemplateVariables()
+	{
+		return parent::getTemplateVariables();
+	}
+	
 }
 
 ?>

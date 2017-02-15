@@ -150,6 +150,9 @@ class d13_module_defense extends d13_gameobject_module
 		return $this->d13->getLangUI("none");
 	}
 	
+	
+	
+	
 }
 
 ?>

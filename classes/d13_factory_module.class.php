@@ -109,6 +109,7 @@ class d13_factory_module extends d13_factory_base
                 return new d13_module_defense($args, $node, $this->d13);
                 break;
             
+            /*
             case 'transform':
             	return new d13_module_transform($args, $node, $this->d13);
                 break;
@@ -116,6 +117,7 @@ class d13_factory_module extends d13_factory_base
             case 'produce':
 				return new d13_module_produce($args, $node, $this->d13);
                 break;
+             */
                 
             default:
                 return NULL;

@@ -37,6 +37,8 @@ class d13_tpl
 	
 	protected $d13;
 	
+	private $resBar;
+	
 	// ----------------------------------------------------------------------------------------
 	// 
 	//
@@ -304,9 +306,13 @@ class d13_tpl
 		$tvars["tpl_page_navbar"] = $navBar->getTemplate();
 		
 		if (isset($this->d13->node) && !empty($this->d13->node)) {
-			$resBar = $this->d13->createController('d13_resBarController');
-			$tvars["tpl_page_subbar"] = $resBar->getTemplate();
+		if (empty($this->resBar)) {
+			$this->resBar = $this->d13->createController('d13_resBarController');
+			
+			$tvars["tpl_page_subbar"] 	  = $this->resBar->getTemplate();
+			$tvars["tpl_page_leftPanel"]  = $this->resBar->getResourceList();
 			$tvars["tpl_page_rightPanel"] = $this->d13->node->queues->getQueuesList();
+			}
 		}
 
 		$tvars["tpl_page_meta_header"] 	= $this->parse($this->get("meta.header") , $tvars);

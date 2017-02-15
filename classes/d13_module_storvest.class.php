@@ -130,6 +130,18 @@ class d13_module_storvest extends d13_gameobject_module
 			return parent::getStoredResourceList() . parent::getOutputResourceList();
 	}
 	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+	
+	function getTemplateVariables()
+	{
+		return parent::getTemplateVariables();
+	}
+	
 }
 
 // =====================================================================================EOF

@@ -17,20 +17,21 @@ V0XX	--- PLANNED UPCOMING UPDATE(S) ---
 		
 		* Comfort Features
 
-V019	--- NEXT SCHEDULED UPDATE ---
+V020	--- NEXT SCHEDULED UPDATE ---
+
+		...
 		
-		* Get rid of the dreaded global keyword and switch to dependency injection
+V019	* Implemented Dependency Injection
+		* Get rid of the dreaded global keyword and switch to constructor injection
 		* Updated Framework 7
 		* Minor Bugfixes
 		* Gamestart: When there is only one faction available, it is chosen automatically
 		* Preperations for multi-data / multi-server integration
-		
-		* Transformation Building Type
-		
-		* Production Building Type
-		
+		* Added left panel as resource/component overview
 		* Auto Craft / Auto Train
-		
+		* Minor GUI Adjustment (multiply input/storage/output resources shown correctly)
+		* Modules can now be assigned components/units as well as input
+
 V018	* Shop Building (Blackmarket): Buy resources, components, buff's, shield's
 		* Buff System: Add temporary speed/efficiency buff's to the current node (town)
 		
@@ -48,7 +49,6 @@ V016	* Fixed a few more bugs
 		* most object classes are now derived from one base class
 		* Even more bugfixes, refactoring and streamlining of the code
 		* renamed hybrid building/unit class into "turret"
-		
 		* Added Scout Checks to Combat System
 		* Added Scout Report to Combat System
 		* Enabled SCOUT Attack type
@@ -64,11 +64,9 @@ V015	* Project now also on Github: https://github.com/CriticalHit-d13/d13
 		* Alliances can now select an avatar and TAG according to their level
 		* Added dynamic loading of data and language files
 		* CKEditor messages are now limited, limit is shown during message edit
-		
 		* Refactored all remaining procedural pages into their own classes
 		* Added Technology class
 		* Added Component class
-		
 		* Moved top-navbar to bottom - layout is now "full window"
 
 V014	* Added CKEditor for messages
@@ -84,12 +82,10 @@ V014	* Added CKEditor for messages
 		* Researches are removed from the build list if you have researched max level.
 		* Modules are removed from the build list if you have built max instances.
 		* Lots of combat system bug fixes
-		
 		* Preperations for next update
 		* Preperations for refactoring
 	
 V013 	* Basic Combat System implemented, this covers:
-
 		* Different types of attacking an enemy:
 			- Basic Attack (Resource Raiding in progress)
 			- Raze

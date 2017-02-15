@@ -242,6 +242,19 @@ class d13_module_warfare extends d13_gameobject_module
 		
 		return $this->d13->getLangUI("none");
 	}
+
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+	
+	function getTemplateVariables()
+	{
+		return parent::getTemplateVariables();
+	}
+
 }
 
 ?>

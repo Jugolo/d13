@@ -483,43 +483,76 @@ class d13_node
 		return $status;
 	}
 
-
-
 	// ----------------------------------------------------------------------------------------
 	// setModule
+	// @Set module input to new input (can be either a resource, component or a unit)
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function setModule($slotId, $input)
 	{
 		
-		$this->getResources();
 		$result = $this->d13->dbQuery('select * from modules where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
 		$module = $this->d13->dbFetch($result);
+		
 		if (isset($module['module'])) {
-		if ($module['module'] > - 1) {
-			$tmp_module = $this->d13->createModule($module['module'], $slotId, $this);
-			$result = $this->d13->dbQuery('select * from resources where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
-			$resource = $this->d13->dbFetch($result);
-			if ($resource['value'] + $module['input'] >= $this->modules[$slotId]['input'])
-			if ($this->modules[$slotId]['input'] <= $tmp_module->data['maxInput'])
-			{
-				$ok = 1;
-				$this->resources[$resource['id']]['value']+= $module['input'] - $input;
-				$this->d13->dbQuery('update resources set value="' . $this->resources[$resource['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $resource['id'] . '"');
-				if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
-				$this->d13->dbQuery('update modules set input="' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
-				if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
-				$this->checkModuleDependencies($module['module'], $slotId, 1);
-				if ($ok) $status = 'done';
-				else $status = 'error';
+			if ($module['module'] > - 1) {
+				
+				$tmp_module = $this->d13->createModule($module['module'], $slotId, $this);
+				$inputType = $tmp_module->data['inputType'][0]['object'];
+				$inputID = $tmp_module->data['inputType'][0]['id'];
+				
+				if ($inputType == "resource") {
+					$this->getResources();
+					$table = "resources";
+				} else if ($inputType == "component") {
+					$this->getComponents();
+					$table = "components";
+				} else if ($inputType == "unit") {
+					$this->getUnits();
+					$table = "units";
+				}
+				
+				$result = $this->d13->dbQuery('select * from '. $table . ' where node="' . $this->data['id'] . '" and id="' . $inputID . '"');
+				$resource = $this->d13->dbFetch($result);
+								
+				if ($resource['value'] + $module['input'] >= $this->modules[$slotId]['input']) {
+					if ($this->modules[$slotId]['input'] <= $tmp_module->data['maxInput']) {
+						
+						$ok = 1;
+						
+						if ($inputType == "resource") {
+							$this->resources[$resource['id']]['value'] += ($module['input'] - $input);
+							$value = $this->resources[$resource['id']]['value'];
+						} else if ($inputType == "component") {
+							$this->components[$resource['id']]['value'] += ($module['input'] - $input);
+							$value = $this->components[$resource['id']]['value'];
+						} else if ($inputType == "unit") {
+							$this->units[$resource['id']]['value'] += ($module['input'] - $input);
+							$value = $this->units[$resource['id']]['value'];
+						}
+
+						$this->d13->dbQuery('update '. $table .' set value="' . $value . '" where node="' . $this->data['id'] . '" and id="' . $resource['id'] . '"');
+						if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+						$this->d13->dbQuery('update modules set input="' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+						if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+						$this->checkModuleDependencies($module['module'], $slotId, 1);
+			
+						if ($ok) {
+							$status = 'done';
+						} else { 
+							$status = 'error';
+						}
+			
+					} else {
+						$status = 'maxInputExceeded';
+					}
+				} else {
+					$status = 'notEnoughResources';
+				}
+			} else {
+				$status = 'emptySlot';
 			}
-			else $status = 'maxInputExceeded';
-			else $status = 'notEnoughResources';
-		} else {
-		$status = 'emptySlot';
-		}
 		} else {
 			$status = 'noSlot';
 		}
@@ -530,7 +563,6 @@ class d13_node
 	// ----------------------------------------------------------------------------------------
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getModuleCount($moduleId)
@@ -550,9 +582,8 @@ class d13_node
 	}
 
 	// ----------------------------------------------------------------------------------------
-	//
+	// addModule
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function addModule($slotId, $moduleId, $input=1)
@@ -587,6 +618,7 @@ class d13_node
 					if ($module['requirementsData']['ok']) {
 						$module['costData'] = $this->checkCost($this->d13->getModule($this->data['faction'], $moduleId, 'cost'), 'build');
 						if ($module['costData']['ok']) {
+						
 							$ok = 1;
 							$tmp_module = $this->d13->createModule($moduleId, $slotId, $this);
 							
@@ -606,12 +638,61 @@ class d13_node
 								$this->d13->dbQuery('update components set value="' . $this->components[$requirement['id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $requirement['id'] . '"');
 								if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 							}
+														
+							$inputType = $tmp_module->data['inputType'][0]['object'];
+							$inputID = $tmp_module->data['inputType'][0]['id'];
+				
+							if ($inputType == "resource") {
+								$this->getResources();
+								$table = "resources";
+							} else if ($inputType == "component") {
+								$this->getComponents();
+								$table = "components";
+							} else if ($inputType == "unit") {
+								$this->getUnits();
+								$table = "units";
+							}
+				
+							$result = $this->d13->dbQuery('select * from '. $table . ' where node="' . $this->data['id'] . '" and id="' . $inputID . '"');
+							$resource = $this->d13->dbFetch($result);
+								
+							if ($resource['value'] + $module['input'] >= $this->modules[$slotId]['input']) {
+								if ($this->modules[$slotId]['input'] <= $tmp_module->data['maxInput']) {
+						
+									$ok = 1;
+						
+									if ($inputType == "resource") {
+										$this->resources[$resource['id']]['value'] += ($module['input'] - $input);
+										$value = $this->resources[$resource['id']]['value'];
+									} else if ($inputType == "component") {
+										$this->components[$resource['id']]['value'] += ($module['input'] - $input);
+										$value = $this->components[$resource['id']]['value'];
+									} else if ($inputType == "unit") {
+										$this->units[$resource['id']]['value'] += ($module['input'] - $input);
+										$value = $this->units[$resource['id']]['value'];
+									}
+
+									$this->d13->dbQuery('update '. $table .' set value="' . $value . '" where node="' . $this->data['id'] . '" and id="' . $resource['id'] . '"');
+									if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+									$this->d13->dbQuery('update modules set input="' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
+									if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+									$this->checkModuleDependencies($module['module'], $slotId, 1);
+			
+									if ($ok) {
+										$status = 'done';
+									} else { 
+										$status = 'error';
+									}
+			
+								} else {
+									$status = 'maxInputExceeded';
+								}
+							} else {
+								$status = 'notEnoughResources';
+							}
 							
-							$this->resources[$tmp_module->data['inputResource']]['value'] -= $input;
-							$this->d13->dbQuery('update resources set value="' . $this->resources[$tmp_module->data['inputResource']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $tmp_module->data['inputResource'] . '"');
-							if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
-							$this->d13->dbQuery('update modules set input=input+"' . $input . '" where node="' . $this->data['id'] . '" and slot="' . $slotId . '"');
-							if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+							
+							
 							
 							$start = strftime('%Y-%m-%d %H:%M:%S', time());
 							$duration = ceil( ($tmp_module->data['duration'] * $this->d13->getGeneral('users', 'duration', 'build') * $this->getBuff('duration', 'build') * 60 ) / $input);

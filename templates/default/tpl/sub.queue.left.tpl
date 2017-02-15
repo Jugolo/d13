@@ -1,9 +1,15 @@
-<script type="text/javascript">
-   var timerIds=new Array();
-</script>
-
 <div class="d13-queue-left">
 
-    {{tvar_queueItems}}
- 
+
+
+
+<div class="row">
+	<div class="col-auto">
+		 {{tvar_queueItems_A}}
+	</div>
+	<div class="col-auto">
+		{{tvar_queueItems_B}}
+	</div>
+</div>   
+
 </div>

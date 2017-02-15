@@ -283,6 +283,19 @@ class d13_module_research extends d13_gameobject_module
 
 		return $html;
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+	
+	function getTemplateVariables()
+	{
+		return parent::getTemplateVariables();
+	}
+	
 }
 
 ?>

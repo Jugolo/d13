@@ -64,7 +64,45 @@ class d13_gameobject_component extends d13_gameobject_base
 		
 	}
 
+	// ----------------------------------------------------------------------------------------
+	// getTemplateVariables
+	// @
+	//
+	// ----------------------------------------------------------------------------------------
 
+	public
+
+	function getTemplateVariables()
+	{
+	
+		
+		$tvars = array();
+		
+		$tvars = parent::getTemplateVariables();
+		
+		
+		$tvars['tvar_costData'] = $this->getCostList();
+		$tvars['tvar_requirementsData'] = $this->getRequirementsList();
+		
+		$check_requirements = $this->getCheckRequirements();
+		$check_cost = $this->getCheckCost();
+		
+		if ($check_requirements) {
+			$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.ok");
+		} else {
+			$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.notok");
+		}
+
+		if ($check_cost) {
+			$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.ok");
+		} else {
+			$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.notok");
+		}
+	
+		return $tvars;	
+	}
+	
+	
 }
 
 // =====================================================================================EOF

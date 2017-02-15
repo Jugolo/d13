@@ -422,8 +422,6 @@ abstract class d13_gameobject_base
 	function getCheckConvertedCost($resid, $modifier=1)
 	{
 		
-		
-
 		return $this->node->checkConvertedCost($this->getConvertedCost($resid, false, $modifier), $this->data['costType'], $modifier);
 
 	}
@@ -438,8 +436,6 @@ abstract class d13_gameobject_base
 	function getConvertedCost($resid, $upgrade=false, $modifier=1)
 	{
 	
-		
-		
 		$convertedCost = 0;
 		$cost_array = array();
 		$cost_array = $this->getCost($upgrade);

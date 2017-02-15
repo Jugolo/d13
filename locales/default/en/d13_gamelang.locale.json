@@ -566,6 +566,10 @@
       {
         "name": "Hall of Heroes",
         "description": "Hire powerful and unique heroes of the land here."
+      },
+       {
+        "name": "Gold Smeltery",
+        "description": "Converts raw gold into gold coins."
       }
     ],
     [

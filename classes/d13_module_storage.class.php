@@ -134,6 +134,18 @@ class d13_module_storage extends d13_gameobject_module
 			return parent::getStoredResourceList();
 	}
 	
+	// ----------------------------------------------------------------------------------------
+	// 
+	//
+	// ----------------------------------------------------------------------------------------
+
+	public
+	
+	function getTemplateVariables()
+	{
+		return parent::getTemplateVariables();
+	}
+	
 }
 
 // =====================================================================================EOF

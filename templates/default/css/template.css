@@ -1,3 +1,131 @@
+/* -- Framework7 Overwrite Styling -----------------------------------------------------*/
+
+.page ,.page-content ,.views ,.view-main ,.login-screen-content ,.statusbar ,.statusbar-overlay { 
+    overflow: hidden;
+    background: transparent;
+}
+
+.navbar, .subnavbar, .toolbar, .buttons-row, .item-content, .navbar-inner {
+	left: 0;
+	font-size: 9pt;
+	font-weight: normal;
+	background: none;
+}
+
+.navbar:before, .subnavar:before, .navbar:after, .subnavbar:after, .toolbar:before, .toolbar:after {
+	border-style:none;
+	text-decoration: none;
+	border-width: 0;
+	display:none;
+	padding: auto;
+	margin: auto;
+	background: none;
+}
+
+.page-content {
+	text-align: center;
+	padding: 0;
+	margin: 0;
+}
+
+.row {
+	padding: 0;
+	margin: 0;
+}
+
+.panel {
+	background: transparent;
+	overflow: hidden;
+	font-size: 9pt;
+	width: 50%;
+}
+
+.card {
+	text-align: center;
+	max-width: 1024px;
+	max-height: 1024px;
+    vertical-align: middle;
+    margin: auto;
+    overflow: hidden;
+}
+
+.card-content {
+	overflow: hidden;
+	min-height: 75%;
+	max-height: 90%;
+    
+}
+
+.content-block
+	height: 100%;
+	min-height: 100%;
+}
+
+.card-shadow {
+	-webkit-filter: drop-shadow(2px 2px 2px #222);
+    filter: drop-shadow(2px 2px 2px #222);
+}
+
+.popup, .popover {
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	background: transparent;
+	width: auto;
+	height: auto;
+	-webkit-filter: drop-shadow(2px 2px 2px #222);
+    filter: drop-shadow(2px 2px 2px #222);
+}
+
+.swiper-container, .swiper-container-horizontal,   {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+.swiper-slide {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+.swiper-slide-list
+ {
+ 	min-height: 100%;
+	height: 100%;
+	width: auto;
+}
+
+.swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: none;
+  border:1px solid #aaa;
+  border-radius: 0 0 0 0;
+  opacity:1;
+  cursor: pointer;
+}
+
+.swiper-pagination-bullet-active {
+  background: #007aff;
+  border-color: #007aff;
+}
+
+.badge{
+	background-color: #000000;
+	background-color: hsla(0, 0%, 0%, 0.5);
+}
+
+.chip{
+	z-index: 1;
+}
+
+.chip-label{
+	font-size:9pt;
+}
+
 /* -- D13 CSS -------------------------------------------------------------------*/
 
 body {
@@ -52,129 +180,6 @@ img {
 	border: 0;
 }
 
-/* -- Framework7 Overwrite Styling -----------------------------------------------------*/
-
-.page ,.page-content ,.views ,.view-main ,.login-screen-content ,.statusbar ,.statusbar-overlay { 
-    overflow: hidden;
-    background: transparent;
-}
-
-.navbar, .subnavbar, .toolbar, .buttons-row, .item-content, .navbar-inner {
-	left: 0;
-	font-size: 9pt;
-	font-weight: normal;
-	background: none;
-}
-
-.navbar:before, .subnavar:before, .navbar:after, .subnavbar:after, .toolbar:before, .toolbar:after {
-	border-style:none;
-	text-decoration: none;
-	border-width: 0;
-	display:none;
-	padding: auto;
-	margin: auto;
-	background: none;
-}
-
-.page-content {
-	text-align: center;
-	padding: 0;
-	margin: 0;
-}
-
-.row {
-	padding: 0;
-	margin: 0;
-}
-
-.panel {
-	background: transparent;
-	overflow: hidden;
-	font-size: 9pt;
-}
-
-.card {
-	text-align: center;
-	max-width: 1024px;
-	max-height: 1024px;
-    vertical-align: middle;
-    margin: auto;
-    overflow: hidden;
-}
-
-.card-content {
-	overflow: hidden;
-	min-height: 75%;
-	max-height: 90%;
-    
-}
-
-.card-shadow {
-	-webkit-filter: drop-shadow(2px 2px 2px #222);
-    filter: drop-shadow(2px 2px 2px #222);
-}
-
-.popup, .popover {
-	overflow: hidden;
-	padding: 0;
-	margin: 0;
-	background: transparent;
-	width: auto;
-	height: auto;
-	-webkit-filter: drop-shadow(2px 2px 2px #222);
-    filter: drop-shadow(2px 2px 2px #222);
-}
-
-.swiper-container, .swiper-container-horizontal,   {
-	width: 100%;
-	height: 100%;
-	padding: 0;
-	margin: 0;
-}
-
-.swiper-slide {
-	width: 100%;
-	height: 100%;
-	padding: 0;
-	margin: 0;
-}
-
-.swiper-slide-list
- {
- 	min-height: 100%;
-	height: 100%;
-	width: auto;
-}
-
-.swiper-pagination-bullet {
-  width: 10px;
-  height: 10px;
-  background: none;
-  border:1px solid #aaa;
-  border-radius: 0 0 0 0;
-  opacity:1;
-  cursor: pointer;
-}
-.swiper-pagination-bullet-active {
-  background: #007aff;
-  border-color: #007aff;
-}
-
-.badge{
-	background-color: #000000;
-	background-color: hsla(0, 0%, 0%, 0.5);
-}
-
-.chip{
-	z-index: 1;
-}
-
-.chip-label{
-	font-size:9pt;
-}
-
-/* -- D13 CSS --------------------------------------------------------------------------*/
-
 .d13-image {
 	max-width: 100%;
 	height: auto;
@@ -218,7 +223,7 @@ img {
 	width: auto;
 	height: auto;
     max-width: 50%;
-    max-height: 50%;
+    max-height: 100%;
     margin: 0;
     padding: 0;
 }
@@ -285,16 +290,17 @@ p.d13-bold {
 	font-size:9pt;
 	overflow: visible;
 	position: absolute;
-	bottom: 2%;
+	bottom: 4%;
 	right: 1%;
 }
 
 .d13-queue-left {
+	width: 100%;
 	text-align: left;
-	font-size:9pt;
+	font-size: 9pt;
 	overflow: visible;
 	position: absolute;
-	bottom: 2%;
+	bottom: 4%;
 	left: 1%;
 }
 

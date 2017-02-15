@@ -44,24 +44,19 @@ class d13_gameobject_module extends d13_gameobject_base
 
 	function __construct($args, &$node, d13_engine &$d13)
 	{
-		
 		parent::__construct($args, $node, $d13);
-		
 	}
 
-	
 	// ----------------------------------------------------------------------------------------
 	// checkStatsExtended
 	// @ check and setup stats that are unique to this object type
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function checkStatsExtended()
 	{
 		
-				
 		$this->data['busy'] 		= false;			// is this building currently busy?
 		$this->data['count'] 		= 0;				// count of other objects in this building?
 		$this->data['available'] 	= 0;				// is any action available in this building?
@@ -72,42 +67,24 @@ class d13_gameobject_module extends d13_gameobject_base
 		$this->data['totalIR'] 			 = $this->node->modules[$this->data['slotId']]['input'] * $this->data['ratio'];
 		$this->data['cost'] 			 = $this->getCost();
 		
-		$this->data['inputLimit'] = floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'], $this->node->modules[$this->data['slotId']]['input']));
+		#$this->data['inputLimit'] = floor(min($this->data['maxInput'], $this->node->resources[$this->data['inputResource']]['value'], $this->node->modules[$this->data['slotId']]['input']));
+		
+		
+		$this->data['inputLimit'] = min($this->getMaxInput(), $this->getMinInput());
 		
 		if (isset($this->data['inputResource'])) {
 			$this->data['moduleInput'] = $this->data['inputResource'];
 			$this->data['moduleInputName'] = $this->d13->getLangGL('resources', $this->data['inputResource'], 'name');
 			$this->data['moduleSlotInput'] = $this->node->modules[$this->data['slotId']]['input'];
 		}
-	/*
-		if (isset($this->data['outputResource'])) {
-			
-			$i = 0;
-			foreach($this->data['outputResource'] as $res) {
-				$this->data['moduleOutput' . $i] = $res;
-				$this->data['moduleOutputName' . $i] = $this->d13->getLangGL("resources", $res, "name");
-				$i++;
-			}
-		}
-*/
-
+	
 		if (isset($this->data['storedResource'])) {
 			$this->data['moduleStorage'] = $this->data['ratio'] * $this->node->modules[$this->data['slotId']]['input'];
 		}
 		
-		/*
-			$i = 0;
-			foreach($this->data['storedResource'] as $res) {
-				$this->data['moduleStorageRes' . $i] = $res;
-				$this->data['moduleStorageResName' . $i] = $this->d13->getLangGL("resources", $res, "name");
-				$i++;
-			}
-		}
-		*/
 		foreach($this->d13->getGeneral('stats') as $stat) {
 			$this->data[$stat] = $this->data[$stat] + $this->data['upgrade_'.$stat];
 		}
-		
 		
 		
 	}
@@ -117,7 +94,6 @@ class d13_gameobject_module extends d13_gameobject_base
 	// @ retrieve all template variables that the tpl class requires to display this object type
 	//
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getTemplateVariables()
@@ -126,7 +102,9 @@ class d13_gameobject_module extends d13_gameobject_base
 		$tvars = array();
 		
 		$tvars = parent::getTemplateVariables();
-				
+		
+		$tvars = array_merge($tvars, $this->getTemplateInput());
+		
 		$tvars['tvar_nodeFaction'] 			= $this->node->data['faction'];
 		$tvars['tvar_nodeID'] 				= $this->node->data['id'];
 		$tvars['tvar_slotID'] 				= $this->data['slotId'];
@@ -138,7 +116,6 @@ class d13_gameobject_module extends d13_gameobject_base
 		$tvars['tvar_inventoryLink'] 		= $this->getInventory();
 		$tvars['tvar_costData'] 			= $this->getCostList();
 		$tvars['tvar_requirementsData'] 	= $this->getRequirementsList();
-		
 		$tvars['tvar_storedData'] 			= $this->getStoredResourceList();
 		$tvars['tvar_outputData'] 			= $this->getOutputResourceList();
 		$tvars['tvar_processData'] 			= $this->getProcessedResourceList();
@@ -147,20 +124,9 @@ class d13_gameobject_module extends d13_gameobject_base
 			$tvars['tvar_popup'] = $this->getPopup();
 			$tvars['tvar_queue'] = $this->getQueue();
 			
-			if ($this->node->resources[$this->data['inputResource']]['value'] < $this->data['maxInput']) {
-				$max = $this->node->modules[$this->data['slotId']]['input'] + $this->node->resources[$this->data['inputResource']]['value'];
-				$max = min($max, $this->data['maxInput']);
-			} else {
-				$max = $this->data['maxInput'];
-			}
+			$max = $this->getMaxInput();
+			$min = $this->getMinInput();
 
-			if ($this->node->resources[$this->data['inputResource']]['value'] < $this->node->storage[$this->data['inputResource']]) {
-				$min = $this->node->modules[$this->data['slotId']]['input'] - ($this->node->storage[$this->data['inputResource']] - $this->node->resources[$this->data['inputResource']]['value']);
-				if ($min<0) { $min=0; }
-			} else {
-				$min = $this->node->modules[$this->data['slotId']]['input'];
-			}
-			
 			$tvars['tvar_inputSlider'] = $this->getInputSlider(
 				"?p=module&action=set&nodeId=".$this->node->data['id']."&slotId=".$this->data['slotId'], 
 				$this->data['slotId'].'_'.$this->data['moduleId'], 
@@ -174,22 +140,13 @@ class d13_gameobject_module extends d13_gameobject_base
 		if ($this->data['maxLevel'] > 1) {
 			$tvars['tvar_levelLabel'] = '('.$this->data['level'].'/'.$this->data['maxLevel'].')';
 		}
-
+		
+		/*
+			Get Cost and Requirements Visuals
+		*/
 		if ($this->data['level'] <= 0) {
 		
-			if ($this->data['reqData']['ok']) {
-				$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.ok");
-			}
-			else {
-				$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.notok");
-			}
-
-			if ($this->data['costData']['ok']) {
-				$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.ok");
-			}
-			else {
-				$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.notok");
-			}
+			$tvars = array_merge($tvars, $this->getTemplateCost());
 		
 		}
 		
@@ -208,7 +165,7 @@ class d13_gameobject_module extends d13_gameobject_base
 			}
 		}
 		
-		$tvars['tvar_moduleStorage'] = "store".$html;
+		$tvars['tvar_moduleStorage'] = $html;
 		
 		/*
 			Get all output Resources
@@ -225,10 +182,154 @@ class d13_gameobject_module extends d13_gameobject_base
 			}
 		}
 		
-		$tvars['tvar_moduleOutput'] = "output".$html;
+		$tvars['tvar_moduleOutput'] = $html;
 		
 		
 		return $tvars;
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// 	function getTemplateCost()
+
+	// 
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function getTemplateCost()
+	{
+		
+		$tvars = array();
+		
+		if ($this->data['reqData']['ok']) {
+				$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.ok");
+		}
+		else {
+			$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.notok");
+		}
+
+		if ($this->data['costData']['ok']) {
+			$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.ok");
+		}
+		else {
+			$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.notok");
+		}
+		
+		return $tvars;
+		
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// getTemplateInput
+	// 
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function getTemplateInput()
+	{
+		$tvars = array();
+		
+		$inputType 	= $this->data['inputType'][0]['object'];
+		$inputID 	= $this->data['inputType'][0]['id'];
+		
+		if ($inputType == "resource") {
+			$tvars['tvar_moduleInputName'] 			= $this->d13->getLangGL("resources", $inputID, 'name');
+			$tvars['tvar_moduleInputImage'] 		= $this->d13->getResource($inputID, 'icon');
+			$tvars['tvar_moduleInputDirectory'] 	= 'resources';
+		} else if ($inputType == "component") {
+			$tvars['tvar_moduleInputName'] 			= $this->d13->getLangGL("components", $inputID, 'name');
+			$tvars['tvar_moduleInputImage'] 		= $this->d13->getComponent($this->node->data['faction'], $inputID, 'icon');
+			$tvars['tvar_moduleInputDirectory'] 	= 'components/'.$this->node->data['faction'].'/';
+		} else if ($inputType == "unit") {
+			$tvars['tvar_moduleInputName'] 			= $this->d13->getLangGL("units", $inputID, 'name');
+			$tvars['tvar_moduleInputImage'] 		= $this->d13->getUnit($this->node->data['faction'], $inputID, 'icon');
+			$tvars['tvar_moduleInputDirectory'] 	= 'units/'.$this->node->data['faction'].'/';
+		}
+	
+		return $tvars;
+	
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// getMinInput
+	// 
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function getMinInput()
+	{
+		
+		$args = array();
+		$inputType 	= $this->data['inputType'][0]['object'];
+		$inputID 	= $this->data['inputType'][0]['id'];
+		
+		$current 	= 0;
+		$storage 	= 0;
+		$min 		= 0;
+		
+		if ($inputType == "resource") {
+			$current = $this->node->resources[$inputID]['value'];
+			$storage = $this->node->storage[$inputID];
+		} else if ($inputType == "component") {
+			$current = $this->node->components[$inputID]['value'];
+				
+			$args['supertype'] 	= 'component';
+			$args['id'] 		= $inputID;
+			$tmp_object = $this->d13->createGameObject($args, $this->node);
+			$storage = $tmp_object->getMaxProduction();
+		} else if ($inputType == "unit") {
+			$current = $this->node->units[$inputID]['value'];
+			
+			$args['supertype'] 	= 'unit';
+			$args['id'] 		= $inputID;
+			$tmp_object = $this->d13->createGameObject($args, $this->node);
+			$storage = $tmp_object->getMaxProduction();
+		}
+
+		if ($current < $storage) {
+			$min = $this->node->modules[$this->data['slotId']]['input'] - ($storage - $current);
+			$min = max($min, 0);
+		} else {
+			$min = $this->node->modules[$this->data['slotId']]['input'];
+		}
+		
+		return floor($min);
+	
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// getMaxInput
+	//
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function getMaxInput()
+	{
+		$args = array();
+		$inputType 	= $this->data['inputType'][0]['object'];
+		$inputID 	= $this->data['inputType'][0]['id'];
+		
+		$current 	= 0;
+		$storage 	= 0;
+		$max 		= 0;
+		
+		if ($inputType == "resource") {
+			$current = $this->node->resources[$inputID]['value'];
+			$storage = $this->node->storage[$inputID];
+		} else if ($inputType == "component") {
+					
+		} else if ($inputType == "unit") {
+					
+		}
+
+		if ($current < $storage) {
+			$max = $this->node->modules[$this->data['slotId']]['input'] + $current;
+			$max = min($max, $this->data['maxInput']);
+		} else {
+			$max = $this->data['maxInput'];
+		}
+		
+		return floor($max);
+
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -298,7 +399,6 @@ class d13_gameobject_module extends d13_gameobject_base
 	// getModuleUpgrade
 	// generates and returns either a build or an upgrade button template snippet
 	// ----------------------------------------------------------------------------------------
-
 	public
 
 	function getModuleUpgrade()
@@ -310,44 +410,24 @@ class d13_gameobject_module extends d13_gameobject_base
 			return $html;
 		} else {
 		
-			if ($this->node->resources[$this->data['inputResource']]['value'] < $this->data['maxInput']) {
-				$max = $this->node->modules[$this->data['slotId']]['input'] + $this->node->resources[$this->data['inputResource']]['value'];
-				if ($max > $this->data['maxInput']) {
-					$max = $this->data['maxInput'];
-				}
-			} else {
-				$max = $this->data['maxInput'];
-			}	
+			$tvars = array();
+			$tvars = array_merge($tvars, $this->getTemplateInput());
+			$tvars = array_merge($tvars, $this->getTemplateCost());
 			
-			
-			if ($this->data['reqData']['ok']) {
-				$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.ok");
-			}
-			else {
-				$tvars['tvar_requirementsIcon'] = $this->d13->templateGet("sub.requirement.notok");
-			}
-
-			if ($this->data['costData']['ok']) {
-				$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.ok");
-			}
-			else {
-				$tvars['tvar_costIcon'] = $this->d13->templateGet("sub.requirement.notok");
-			}
-			
+			$max = $this->getMaxInput();
+			$min = $this->getMinInput();
+		
 			if ($this->data['level'] <= 0) {
 		
-				if (($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput']) > 0 && $this->data['costData']['ok'] && $this->data['reqData'] && ($this->node->getModuleCount($this->data['slotId'], $this->data['moduleId']) < $this->d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'maxInstances'))) {
+				if ($max > 0 && $this->data['costData']['ok'] && $this->data['reqData'] && ($this->node->getModuleCount($this->data['slotId'], $this->data['moduleId']) < $this->d13->getModule($this->node->data['faction'], $this->data['moduleId'], 'maxInstances'))) {
 					
 					$tvars['tvar_title'] 			= $this->d13->getLangUI("addModule");
-					$tvars['tvar_moduleInputName'] 	= $this->data['moduleInputName'];
-					$tvars['tvar_moduleInputImage'] = $this->d13->getResource($this->data['moduleInput'], 'icon');
 					$tvars['tvar_moduleDuration'] 	= $this->data['duration'];
 					$tvars['tvar_costData'] = $this->getCostList();
 					$tvars['tvar_requirementsData'] = $this->getRequirementsList();
 					$tvars['tvar_moduleAction'] 	= '?p=module&action=add&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'];
 					$tvars['tvar_id'] 				= $this->data['moduleId'];
-					$tvars['tvar_moduleInput']		= $this->data['moduleSlotInput'];
-					$tvars['tvar_moduleLimit'] 		= floor(min($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput'],$this->data['maxInput']));
+					$tvars['tvar_moduleLimit'] 		= floor(min($max,$this->data['maxInput']));
 					$tvars['tvar_disableData'] 		= '';
 					$tvars['tvar_inputSlider'] 		= $this->getInputSlider(
 						'?p=module&action=add&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'], 
@@ -375,18 +455,15 @@ class d13_gameobject_module extends d13_gameobject_base
 				
 				if ($this->d13->getGeneral('options', 'moduleUpgrade')) {
 					if ($this->data['level'] < $this->data['maxLevel']) {
-						if (($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput']) > 0 && $this->data['costData']['ok'] && $this->data['reqData'] && $this->node->modules[$this->data['slotId']]['level'] < $this->data['maxLevel'] && $this->data['maxLevel'] > 1) {
+						if ($max > 0 && $this->data['costData']['ok'] && $this->data['reqData'] && $this->node->modules[$this->data['slotId']]['level'] < $this->data['maxLevel'] && $this->data['maxLevel'] > 1) {
 						
 							$tvars['tvar_title'] 			= $this->d13->getLangUI("upgrade");
-							$tvars['tvar_moduleInputName'] 	= $this->data['moduleInputName'];
-							$tvars['tvar_moduleInputImage'] = $this->d13->getResource($this->data['moduleInput'], 'icon');
 							$tvars['tvar_moduleDuration'] 	= $this->data['duration'];
 							$tvars['tvar_costData'] 		= $this->getCostList(true);
 							$tvars['tvar_requirementsData'] = $this->getRequirementsList();
 							$tvars['tvar_moduleAction'] 	= '?p=module&action=upgrade&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'];
 							$tvars['tvar_id'] 				= $this->data['moduleId'];
-							$tvars['tvar_moduleInput']		= $this->data['moduleSlotInput'];
-							$tvars['tvar_moduleLimit'] 		= floor(min($this->node->resources[$this->data['inputResource']]['value']+$this->data['moduleSlotInput'],$this->data['maxInput']));
+							$tvars['tvar_moduleLimit'] 		= floor(min($max,$this->data['maxInput']));
 							$tvars['tvar_disableData'] 		= '';
 							$tvars['tvar_inputSlider']		= $this->getInputSlider(
 								'?p=module&action=upgrade&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'], 
@@ -493,28 +570,6 @@ class d13_gameobject_module extends d13_gameobject_base
 
 	}
 	
-	// ----------------------------------------------------------------------------------------
-	// getProcessedResourceList
-	//
-	// ----------------------------------------------------------------------------------------
-	public
-	
-	function getProcessedResourceList()
-	{
-
-		$html = '';
-		
-		
-		
-		
-		
-		
-		
-		
-		return $html;
-	
-	}
-
 	// ----------------------------------------------------------------------------------------
 	// getTemplate
 	// @
