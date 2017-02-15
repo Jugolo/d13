@@ -27,8 +27,10 @@ chdir("../");
 if (isset($_POST['email'], $_POST['name'], $_POST['password'], $_POST['rePassword'])) {
 
 	if ((($_POST['email'] != '')) && ($_POST['name'] != '') && (($_POST['password'] != ''))) {
-		$user = new d13_user();
+		
+		$user = $d13->createObject('user');
 		$user->get('name', $_POST['name']);
+		
 		if ($_POST['password'] == $_POST['rePassword'])
 		if (!$user->data['id']) {
 			$user->data['name'] = $_POST['name'];
@@ -41,6 +43,7 @@ if (isset($_POST['email'], $_POST['name'], $_POST['password'], $_POST['rePasswor
 			$user->data['template'] = CONST_DEFAULT_TEMPLATE;
 			$user->data['color'] = CONST_DEFAULT_COLOR;
 			$user->data['locale'] = CONST_DEFAULT_LOCALE;
+			$user->data['data'] = CONST_DEFAULT_DATA;
 			$imageStats = getimagesize('install/grid.png');
 			$image = imagecreatefrompng('install/grid.png');
 			$query = array();

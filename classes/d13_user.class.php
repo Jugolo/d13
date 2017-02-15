@@ -39,9 +39,12 @@ class d13_user
 	
 	function __construct($id=NULL, d13_engine &$d13)
 	{
+	
 		$this->d13 = $d13;
-		$this->user_status = $this->get('id', $id);
 		
+		if ($id != NULL) {
+			#$this->user_status = $this->get('id', $id);
+		}
 	}
 	
 	// ----------------------------------------------------------------------------------------
@@ -53,7 +56,7 @@ class d13_user
 	{
 		
 		
-		if (!empty($id)) {
+		if (!empty($id) && $id != NULL) {
 		
 			$lower = '';
 			if (is_string($id)) {
