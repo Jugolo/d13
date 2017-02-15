@@ -3,7 +3,7 @@
 	<div class="card no-border large-card card-shadow">
 		<div class="card-header no-border">
 			<div class="d13-heading">{{tvar_itemName}}</div>
-			<a class="close-popup" href="#"><img class="d13-icon hvr-pulse" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
+			<a class="close-popup" href="#"><img class="d13-icon hvr-pulse" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/close.png"></a>
 		</div>
   
 	<div class="card-content">

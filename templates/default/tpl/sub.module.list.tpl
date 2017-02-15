@@ -5,7 +5,7 @@
 
 	  <div class="card-header no-border">
 		<div class="d13-heading">{{tvar_name}}</div>
-		<a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-icon hvr-pulse" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/cross.png"></a>
+		<a class="external" href="?p=node&action=get&nodeId={{tvar_nodeID}}"><img class="d13-icon hvr-pulse" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/close.png"></a>
 	  </div>
   
 	  <div class="card-content">
@@ -14,7 +14,7 @@
 			<div class="row">
 			
 				<div class="col-40">
-					<div class="d13-module  {{tvar_moduleDescription}}" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
+					<div class="d13-module-detail  {{tvar_moduleDescription}}" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
 					<img class="d13-module-image" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_trueimage}}">
 					</div>
 					{{tvar_linkData}}
@@ -56,12 +56,16 @@
 						<div class="item-after"><span class="badge">{{tvar_duration}} {{tvar_ui_minutes}}</span></div>
 						</div>
 					</li>
-							
+					
+					{{tvar_moduleStorage}}
+			
+					{{tvar_moduleOutput}}
+					
 					<li class="item-content">
 						<div class="item-media">{{tvar_costIcon}}</div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_cost}}</div>
-						<div class="item-after">{{tvar_costData}}</div>
+						<div class="item-after"><span class="badge">{{tvar_costData}}</span></div>
 						</div>
 					</li>
 				
@@ -69,14 +73,10 @@
 						<div class="item-media">{{tvar_requirementsIcon}}</div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_requirements}}:</div>
-						<div class="item-after">{{tvar_requirementsData}}</div>
+						<div class="item-after"><span class="badge">{{tvar_requirementsData}}</span></div>
 						</div>
 					</li>
-				
-					{{tvar_storedData}}
-					{{tvar_processData}}
-					{{tvar_outputData}}
-					
+
 					</ul>
 					</div>
 				</div>

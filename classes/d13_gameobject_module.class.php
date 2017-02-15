@@ -118,7 +118,6 @@ class d13_gameobject_module extends d13_gameobject_base
 		$tvars['tvar_requirementsData'] 	= $this->getRequirementsList();
 		$tvars['tvar_storedData'] 			= $this->getStoredResourceList();
 		$tvars['tvar_outputData'] 			= $this->getOutputResourceList();
-		$tvars['tvar_processData'] 			= $this->getProcessedResourceList();
 		
 		if ($this->data['level'] > 0) {
 			$tvars['tvar_popup'] = $this->getPopup();
