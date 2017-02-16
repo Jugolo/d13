@@ -170,7 +170,8 @@ class d13_accountController extends d13_controller
 	{
 		
 		$args = array();
-		$args['id'] = $_SESSION[CONST_PREFIX . 'User']['id'];
+		$args['key'] = 'id';
+		$args['value'] = $_SESSION[CONST_PREFIX . 'User']['id'];
 		$user = $this->d13->createObject('user', $args);
 		
 		if (isset($_GET['action'], $_POST['password'])) {

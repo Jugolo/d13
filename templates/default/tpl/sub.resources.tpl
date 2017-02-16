@@ -1,4 +1,4 @@
-<div class="subnavbar" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/nodeBackground.png);">
+<div class="subnavbar" >
 	
 	
 	<div class="left">

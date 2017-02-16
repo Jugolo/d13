@@ -2,7 +2,6 @@
    var timerIds=new Array();
 </script>
 
-<div class="d13-node" >
 	<div class="card no-border large-card card-shadow">
 		<form class="pure-form" method="post" action="?p=message&action=remove" id="messageList">
 		
@@ -48,6 +47,3 @@
 		</div>
 	
 	</div>
-	
-
-</div>

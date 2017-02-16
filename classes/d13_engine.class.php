@@ -190,6 +190,13 @@ class d13_engine
 	// ========================================================================================
 
 	public
+	
+	function templateSetBackground($data)
+	{
+		$this->tpl->setBackground($data);
+	}
+
+	public
 
 	function templateRender($template, $vars = "", $node = "")
 	{

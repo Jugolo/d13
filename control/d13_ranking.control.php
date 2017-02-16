@@ -71,7 +71,11 @@ class d13_rankingController extends d13_controller
 			$result = $this->d13->dbQuery('select * from users order by trophies desc, level desc limit ' . $limit . ' offset ' . $offset);
 			for ($i = 0; $row = $this->d13->dbFetch($result); $i++) {
 					$row['league'] = $this->d13->misc->getLeague($row['level'], $row['trophies']);
-					$users[] = $this->d13->createObject('user', $row['id']);
+					
+					$args = array();
+					$args['key'] = 'id';
+					$args['value'] = $row['id'];
+					$users[] = $this->d13->createObject('user', $args);
 			}
 	
 			$pageCount = ceil($count / $limit);

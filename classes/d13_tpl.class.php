@@ -37,7 +37,7 @@ class d13_tpl
 	
 	protected $d13;
 	
-	private $resBar;
+	private $resBar, $navBar, $background;
 	
 	// ----------------------------------------------------------------------------------------
 	// 
@@ -294,6 +294,7 @@ class d13_tpl
 				
 		$tvars["tpl_pvar_name"] 		= $template;
 		$tvars['tvar_nodeFaction'] 		= 0;
+		
 		$tvars["tpl_page_leftPanel"] 	= '';
 		$tvars["tpl_page_rightPanel"] 	= '';
 		$tvars["tpl_page_navbar"] 		= "";
@@ -302,19 +303,23 @@ class d13_tpl
 		$tvars = array_merge($tvars, $this->global_vars($tvars));
 		$tvars = array_merge($tvars, $this->merge_ui_vars());
 		
-		$navBar = $this->d13->createController('d13_navBarController');
-		$tvars["tpl_page_navbar"] = $navBar->getTemplate();
+		$tvars["tpl_page_background"]	= $this->parse($this->background , $tvars);
+		
+		if (empty($this->navBar)) {
+			$this->navBar = $this->d13->createController('d13_navBarController');
+		}
+		$tvars["tpl_page_navbar"] = $this->navBar->getTemplate();
 		
 		if (isset($this->d13->node) && !empty($this->d13->node)) {
-		if (empty($this->resBar)) {
-			$this->resBar = $this->d13->createController('d13_resBarController');
-			
-			$tvars["tpl_page_subbar"] 	  = $this->resBar->getTemplate();
-			$tvars["tpl_page_leftPanel"]  = $this->resBar->getResourceList();
-			$tvars["tpl_page_rightPanel"] = $this->d13->node->queues->getQueuesList();
+			if (empty($this->resBar)) {
+				$this->resBar = $this->d13->createController('d13_resBarController');
 			}
+			$tvars["tpl_page_subbar"] 	  = $this->resBar->getTemplate();
+		$tvars["tpl_page_leftPanel"]  = $this->resBar->getResourceList();
+		$tvars["tpl_page_rightPanel"] = $this->d13->node->queues->getQueuesList();
 		}
-
+		
+			
 		$tvars["tpl_page_meta_header"] 	= $this->parse($this->get("meta.header") , $tvars);
 		$tvars["tpl_page_meta_footer"] 	= $this->parse($this->get("meta.footer") , $tvars);
 		$tvars["tpl_page_content"] 		= $this->render($template, $tvars);
@@ -329,6 +334,22 @@ class d13_tpl
 		exit();
 		
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// setBackground
+	// @ 
+	// ----------------------------------------------------------------------------------------
+	public
+	
+	function setBackground($data=NULL)
+	{
+	
+		$this->background = $data;
+	
+	
+	}
+	
+	
 }
 
 // =====================================================================================EOF

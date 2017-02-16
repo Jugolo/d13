@@ -1,4 +1,3 @@
-<div class="d13-node" >
 
 	<div class="swiper-container">
 		<div class="swiper-wrapper">
@@ -9,5 +8,3 @@
 		<div class="swiper-pagination"></div>
 		<div class="swiper-scrollbar"></div>
 	</div>
-
-</div>

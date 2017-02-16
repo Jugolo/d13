@@ -2,8 +2,6 @@
 	var timerIds=new Array();
 </script>
 
-<div class="d13-node" >
-
 	<div class="card no-border large-card card-shadow">
 
 		<div class="card-header no-border">
@@ -80,5 +78,3 @@
 		</div>
 
 	</div>
-
-</div>

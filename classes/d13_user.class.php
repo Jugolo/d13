@@ -42,7 +42,7 @@ class d13_user
 	
 		$this->d13 = $d13;
 		
-		if (isset($args) && !empty($args)) {
+		if (isset($args['key']) && isset($args['value'])) {
 			$this->user_status = $this->get($args['key'], $args['value']);
 		}
 	}
@@ -287,7 +287,7 @@ class d13_user
 		
 		$result = $this->d13->dbQuery('select * from blocklist where recipient="' . $this->data['id'] . '"');
 		$this->blocklist = array();
-		$user = $this->d13->createObject('user', $this->d13);
+		$user = $this->d13->createObject('user');
 		for ($i = 0; $row = $this->d13->dbFetch($result); $i++) {
 			$this->blocklist[$i] = $row;
 			if ($user->get('id', $this->blocklist[$i]['sender']) == 'done') $this->blocklist[$i]['senderName'] = $user->data['name'];

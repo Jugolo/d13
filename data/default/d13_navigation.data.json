@@ -8,6 +8,7 @@
       "name": "home",
       "link": "index",
       "trigger": "",
+      
       "images": [
       	 {
           "level": 0,
@@ -30,6 +31,7 @@
       "name": "login",
       "link": "login&action=login",
       "trigger": "",
+      
       "images": [
       	 {
           "level": 0,
@@ -52,6 +54,7 @@
       "name": "register",
       "link": "register",
       "trigger": "",
+      
       "images": [
       	 {
           "level": 0,
@@ -74,6 +77,7 @@
       "name": "terms",
       "link": "terms",
       "trigger": "",
+      
       "images": [
       	 {
           "level": 0,
@@ -96,6 +100,7 @@
       "name": "credits",
       "link": "credits",
       "trigger": "",
+      
       "images": [
       	 {
           "level": 0,
@@ -118,6 +123,7 @@
       "name": "nodes",
       "link": "node&action=list",
       "trigger": "",
+      
       "images": [
       	 {
           "level": 0,
@@ -140,6 +146,7 @@
       "name": "messages",
       "link": "message&action=list",
       "trigger": "messages",
+      
       "images": [
       	 {
           "level": 0,
@@ -162,6 +169,7 @@
       "name": "status",
       "link": "status",
       "trigger": "",
+      
       "images": [
       	 {
           "level": 0,
@@ -179,6 +187,7 @@
       "name": "ranking",
       "link": "ranking",
       "trigger": "",
+      
       "images": [
       	 {
           "level": 0,
@@ -196,6 +205,7 @@
       "name": "map",
       "link": "grid",
       "trigger": "",
+      
       "images": [
       	 {
           "level": 0,
@@ -213,6 +223,7 @@
       "name": "account",
       "link": "account",
       "trigger": "",
+      
       "images": [
       	 {
           "level": 0,
@@ -235,6 +246,7 @@
       "name": "admin",
       "link": "admin",
       "trigger": "",
+      
       "images": [
       	 {
           "level": 0,
@@ -257,6 +269,7 @@
       "name": "logout",
       "link": "logout",
       "trigger": "",
+      
       "images": [
       	 {
           "level": 0,

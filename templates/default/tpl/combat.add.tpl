@@ -1,4 +1,3 @@
-<div class="d13-node" >
 	<div class="card no-border large-card card-shadow">
 	
 	<form class="pure-form" method="post" id="combatForm" action="?p=combat&action=add&nodeId={{tvar_nodeID}}&type={{tvar_combatType}}&slotId={{tvar_slotID}}" id="combatForm">
@@ -77,4 +76,3 @@
 	</form>
 
 	</div>
-</div>

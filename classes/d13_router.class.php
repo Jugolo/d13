@@ -53,11 +53,10 @@ class d13_router
 	function route()
 	{
 		
-		
-		
 		$this->sanitize_vars();
 		
 		$page_name = 'd13_indexController';
+		$page_bkg = 'gui/mainBackground.png';
 		
 		if (isset($_GET['p'])) {
 			$page_access = $_GET['p'];
@@ -70,11 +69,15 @@ class d13_router
 				if (($route['login'] && isset($_SESSION[CONST_PREFIX . 'User']['id'])) || (!$route['login'] && !isset($_SESSION[CONST_PREFIX . 'User']['id']))) {
 					if(!$route['admin'] || $nav['admin'] && (isset($_SESSION[CONST_PREFIX . 'User']['access'])) && ($_SESSION[CONST_PREFIX . 'User']['access'] >= 3)) {
 						$page_name = 'd13_' . $route['page'] . 'Controller';
+						$page_bkg = $route['background'];
 						break;
 					}
 				}
 			}
 		}
+		
+		
+		$this->d13->templateSetBackground($page_bkg);
 		
 		$page_object = $this->d13->createController($page_name);
 		

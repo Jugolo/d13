@@ -4,6 +4,7 @@
   		"active": true,
   		"page": "account",
   		"class": "account",
+  		"background": "gui/mainBackground.png",
   		"login": true,
   		"admin": false
   	},
@@ -12,6 +13,7 @@
   		"active": true,
   		"page": "activate",
   		"class": "activate",
+  		"background": "gui/mainBackground.png",
   		"login": true,
   		"admin": false
   	},
@@ -20,6 +22,7 @@
   		"active": false,
   		"page": "admin",
   		"class": "admin",
+  		"background": "gui/mainBackground.png",
   		"login": true,
   		"admin": true
   	},
@@ -28,6 +31,7 @@
   		"active": true,
   		"page": "alliance",
   		"class": "alliance",
+  		"background": "gui/mainBackground.png",
   		"login": true,
   		"admin": false
   	},
@@ -36,6 +40,7 @@
   		"active": true,
   		"page": "combat",
   		"class": "combat",
+  		"background": "gui/mainBackground.png",
   		"login": true,
   		"admin": false
   	},
@@ -44,6 +49,7 @@
   		"active": true,
   		"page": "contact",
   		"class": "contact",
+  		"background": "gui/mainBackground.png",
   		"login": true,
   		"admin": false
   	},
@@ -52,6 +58,7 @@
   		"active": true,
   		"page": "credits",
   		"class": "credits",
+  		"background": "gui/mainBackground.png",
   		"login": false,
   		"admin": false
   	},
@@ -60,6 +67,7 @@
   		"active": false,
   		"page": "grid",
   		"class": "grid",
+  		"background": "gui/mainBackground.png",
   		"login": true,
   		"admin": false
   	},
@@ -68,6 +76,7 @@
   		"active": true,
   		"page": "index",
   		"class": "index",
+  		"background": "gui/mainBackground.png",
   		"login": false,
   		"admin": false
   	},
@@ -76,6 +85,7 @@
   		"active": true,
   		"page": "login",
   		"class": "login",
+  		"background": "gui/mainBackground.png",
   		"login": false,
   		"admin": false
   	},
@@ -84,78 +94,79 @@
   		"active": true,
   		"page": "logout",
   		"class": "logout",
+  		"background": "gui/mainBackground.png",
   		"login": true,
   		"admin": false
   	},
 	{
   		"id": 11,
   		"active": true,
-  		"page": "logout",
-  		"class": "logout",
+  		"page": "message",
+  		"class": "message",
+  		"background": "gui/mainBackground.png",
   		"login": true,
   		"admin": false
   	},
 	{
   		"id": 12,
   		"active": true,
-  		"page": "message",
-  		"class": "message",
+  		"page": "module",
+  		"class": "module",
+  		"background": "gui/mainBackground.png",
   		"login": true,
   		"admin": false
   	},
 	{
   		"id": 13,
   		"active": true,
-  		"page": "module",
-  		"class": "module",
+  		"page": "node",
+  		"class": "node",
+  		"background": "modules/{{tvar_nodeFaction}}/nodeBackground.png",
   		"login": true,
   		"admin": false
   	},
 	{
   		"id": 14,
   		"active": true,
-  		"page": "node",
-  		"class": "node",
+  		"page": "ranking",
+  		"class": "ranking",
+  		"background": "gui/mainBackground.png",
   		"login": true,
   		"admin": false
   	},
 	{
   		"id": 15,
   		"active": true,
-  		"page": "ranking",
-  		"class": "ranking",
-  		"login": true,
+  		"page": "register",
+  		"class": "register",
+  		"background": "gui/mainBackground.png",
+  		"login": false,
   		"admin": false
   	},
 	{
   		"id": 16,
   		"active": true,
-  		"page": "register",
-  		"class": "register",
+  		"page": "reset",
+  		"class": "reset",
+  		"background": "gui/mainBackground.png",
   		"login": false,
   		"admin": false
   	},
 	{
   		"id": 17,
   		"active": true,
-  		"page": "reset",
-  		"class": "reset",
-  		"login": false,
+  		"page": "status",
+  		"class": "status",
+  		"background": "gui/mainBackground.png",
+  		"login": true,
   		"admin": false
   	},
 	{
   		"id": 18,
   		"active": true,
-  		"page": "status",
-  		"class": "status",
-  		"login": true,
-  		"admin": false
-  	},
-	{
-  		"id": 19,
-  		"active": true,
   		"page": "terms",
   		"class": "terms",
+  		"background": "gui/mainBackground.png",
   		"login": false,
   		"admin": false
   	}
