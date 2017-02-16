@@ -44,6 +44,7 @@ class d13_statusController extends d13_controller
 			}
 
 			$this->user = $this->d13->createObject('user', $args['userId']);
+			$this->user->get('id', $args['userId']);
 			
 		} else {
 			$this->own = false;

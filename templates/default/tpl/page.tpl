@@ -20,11 +20,11 @@
 		<div class="view view-main">
 		  <div class="pages toolbar-through">
 			
-			<div data-page="{{tpl_pvar_name}}" class="page {{tvar_global_notoolbar}} theme-{{tvar_global_color}} with-subnavbar" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/nodeBackground.png);">
+			<div data-page="{{tpl_pvar_name}}" class="page {{tvar_global_notoolbar}} theme-{{tvar_global_color}} with-subnavbar" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/gui/mainBackground.png);">
 
 			  {{tpl_page_subbar}}
 			  
-			  <div class="toolbar ">
+			  <div class="toolbar">
 				<div class="toolbar-inner">
 				  {{tpl_page_navbar}}
 				  

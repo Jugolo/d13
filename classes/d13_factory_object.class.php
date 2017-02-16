@@ -46,14 +46,14 @@ class d13_factory_object extends d13_factory_base
 	// ----------------------------------------------------------------------------------------
     public
 
-    function create($type, $id=NULL)
+    function create($type, $args=NULL)
     {
 
         
         switch ($type) {
         
             case 'user':
-                return new d13_user($id, $this->d13);
+                return new d13_user($args, $this->d13);
                 break;
 			
 			case 'alliance':

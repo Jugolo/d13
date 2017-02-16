@@ -123,9 +123,9 @@ class d13_engine
 
 	public
 	
-	function createObject($type, $id=NULL)
+	function createObject($type, $args=NULL)
 	{
-		return $this->factory->createObject($type, $id);
+		return $this->factory->createObject($type, $args);
 	}
 
 	public
@@ -346,72 +346,108 @@ class d13_engine
 	
 	public
 
+	function getRoute()
+	{
+		return $this->data->json['router']->get(func_get_args());
+	}
+	
+	public
+	
 	function getUpgradeUnit()
 	{
-		return $this->data->json['upgrade_unit']->get(func_get_args());
+		$faction = 0;
+		if (func_num_args() > 0) {
+			$faction = func_get_arg(0);
+		}
+		return $this->data->json[$faction]['upgrade_unit']->get(func_get_args());
 	}
 
 	public
 
 	function getUpgradeTurret()
 	{
-		return $this->data->json['upgrade_turret']->get(func_get_args());
+		$faction = 0;
+		if (func_num_args() > 0) {
+			$faction = func_get_arg(0);
+		}
+		return $this->data->json[$faction]['upgrade_turret']->get(func_get_args());
 	}
 
 	public
 
 	function getUpgradeModule()
 	{
-		return $this->data->json['upgrade_module']->get(func_get_args());
+		$faction = 0;
+		if (func_num_args() > 0) {
+			$faction = func_get_arg(0);
+		}
+		return $this->data->json[$faction]['upgrade_module']->get(func_get_args());
 	}
 
 	public
 
 	function getUpgradeTechnology()
 	{
-		return $this->data->json['upgrade_technology']->get(func_get_args());
+		$faction = 0;
+		if (func_num_args() > 0) {
+			$faction = func_get_arg(0);
+		}
+		return $this->data->json[$faction]['upgrade_technology']->get(func_get_args());
 	}
 
 	public
 
 	function getUpgradeComponent()
 	{
-		return $this->data->json['upgrade_component']->get(func_get_args());
+		$faction = 0;
+		if (func_num_args() > 0) {
+			$faction = func_get_arg(0);
+		}
+		return $this->data->json[$faction]['upgrade_component']->get(func_get_args());
 	}
 
 	public
 
 	function getModule()
 	{
-		return $this->data->json['module']->get(func_get_args());
+		$faction = 0;
+		if (func_num_args() > 0) {
+			$faction = func_get_arg(0);
+		}
+		return $this->data->json[$faction]['module']->get(func_get_args());
 	}
 
 	public
 
 	function getComponent()
 	{
-		return $this->data->json['component']->get(func_get_args());
+		$faction = 0;
+		if (func_num_args() > 0) {
+			$faction = func_get_arg(0);
+		}
+		return $this->data->json[$faction]['component']->get(func_get_args());
 	}
 
 	public
 
 	function getTechnology()
 	{
-		return $this->data->json['technology']->get(func_get_args());
+		$faction = 0;
+		if (func_num_args() > 0) {
+			$faction = func_get_arg(0);
+		}
+		return $this->data->json[$faction]['technology']->get(func_get_args());
 	}
 
 	public
 
 	function getUnit()
 	{
-		return $this->data->json['unit']->get(func_get_args());
-	}
-	
-	public
-
-	function getRoute()
-	{
-		return $this->data->json['router']->get(func_get_args());
+		$faction = 0;
+		if (func_num_args() > 0) {
+			$faction = func_get_arg(0);
+		}
+		return $this->data->json[$faction]['unit']->get(func_get_args());
 	}
 	
 	// ========================================================================================

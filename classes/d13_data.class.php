@@ -37,7 +37,7 @@ class d13_data
 	
 	protected $d13;
 	
-	public $json;
+	public $json = array();
 	
 	// ----------------------------------------------------------------------------------------
 	// construct
@@ -78,13 +78,30 @@ class d13_data
 		$dir = new DirectoryIterator(CONST_INCLUDE_PATH . "data/" . $_SESSION[CONST_PREFIX . 'User']['data']);
 		foreach ($dir as $fileinfo) {
     		if (!$fileinfo->isDot()) {
-       		 	$name = $this->getRealName($fileinfo->getFilename());
-       		 	if ($name) {
-       		 		$this->json[$name] = $this->loadFromJSON($fileinfo->getPath() , $fileinfo->getFilename());
-       		 	}
+    			//- - - add data file
+    			if (!$fileinfo->isDir()) {
+    		
+       		 		$name = $this->getRealName($fileinfo->getFilename());
+       		 		if ($name) {
+       		 			$this->json[$name] = $this->loadFromJSON($fileinfo->getPath() , $fileinfo->getFilename());
+       		 		}
+    			} else {
+    			//- - - iterate sub directory for data files
+    				$dir2 = new DirectoryIterator(CONST_INCLUDE_PATH . "data/" . $_SESSION[CONST_PREFIX . 'User']['data'] . DIRECTORY_SEPARATOR . $fileinfo->getFilename());
+    				foreach ($dir2 as $file) {
+						if (!$file->isDot() && !$file->isDir()) {
+							$name = $this->getRealName($file->getFilename());
+							if ($name) {
+								$dirname = $fileinfo->getBasename();
+								$this->json[$dirname][$name] = $this->loadFromJSON($file->getPath() , $file->getFilename());
+							}		
+						}
+    				}
+    			}
     		}
 		}
-
+		
+		
 	}
 	
 	// ----------------------------------------------------------------------------------------

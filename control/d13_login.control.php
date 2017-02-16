@@ -69,9 +69,7 @@ class d13_loginController extends d13_controller
 	
 	function doLogin()
 	{
-		
-		
-		
+				
 		if (isset($_POST['name'], $_POST['password'])) {
 			$name = strtolower($_POST['name']);
 			$pass = sha1($_POST['password']);
@@ -86,9 +84,12 @@ class d13_loginController extends d13_controller
 		}
 
 		if (isset($name, $pass)) {
-			$user = $this->d13->createObject('user');
-			$status = $user->get('name', $name);
-			if ($status == 'done')
+			$args = array();
+			$args['key'] = 'name';
+			$args['value'] = $name;
+			$user = $this->d13->createObject('user', $args);
+			
+			if ($user->user_status == 'done')
 			if ($this->d13->getGeneral('options', 'enabledLogin') || $user->data['access'] == 3)
 			if ($user->data['password'] == $pass)
 			if ($user->data['access']) {

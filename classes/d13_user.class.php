@@ -37,13 +37,13 @@ class d13_user
 	// ----------------------------------------------------------------------------------------	
 	public
 	
-	function __construct($id=NULL, d13_engine &$d13)
+	function __construct($args=NULL, d13_engine &$d13)
 	{
 	
 		$this->d13 = $d13;
 		
-		if ($id != NULL) {
-			#$this->user_status = $this->get('id', $id);
+		if (isset($args) && !empty($args)) {
+			$this->user_status = $this->get($args['key'], $args['value']);
 		}
 	}
 	
@@ -90,9 +90,12 @@ class d13_user
 
 	function set()
 	{
+		$args = array();
+		$args['key'] = 'id';
+		$args['value'] = $this->data['id'];
+		$user = $this->d13->createObject('user', $args);
 		
-		$user = $this->d13->createObject('user', $this->d13);
-		if ($user->get('id', $this->data['id']) == 'done') {
+		if ($user->user_status == 'done') {
 			$this->d13->dbQuery('update users set name="' . $this->data['name'] . '", password="' . $this->data['password'] . '", email="' . $this->data['email'] . '", access="' . $this->data['access'] . '", joined="' . $this->data['joined'] . '", lastVisit="' . $this->data['lastVisit'] . '", ip="' . $this->data['ip'] . '", alliance="' . $this->data['alliance'] . '", template="' . $this->data['template'] . '", color="' . $this->data['color'] . '", locale="' . $this->data['locale'] . '", data="' . $this->data['data'] . '", sitter="' . $this->data['sitter'] . '" where id="' . $this->data['id'] . '"');
 			if ($this->d13->dbAffectedRows() > - 1) $status = 'done';
 			else $status = 'error';

@@ -64,9 +64,9 @@ class d13_factory
 	// ----------------------------------------------------------------------------------------
 	public
 	
-	function createObject($type, $id=NULL)
+	function createObject($type, $args=NULL)
 	{
-		return $this->objectFactory->create($type, $id);
+		return $this->objectFactory->create($type, $args);
 	}
 	
 	// ----------------------------------------------------------------------------------------

@@ -70,20 +70,19 @@ class d13_accountController extends d13_controller
 	
 	function accountLocales()
 	{
-	
-		
+		$dir = 'locales/'. $_SESSION[CONST_PREFIX . 'User']['template'];
 		$locales = '';
-		
 		$locales = '<option value="' . $_SESSION[CONST_PREFIX . 'User']['locale'] . '">' . $_SESSION[CONST_PREFIX . 'User']['locale'] . '</option>';
-		if ($handle = opendir('locales')) {
+		if ($handle = opendir($dir)) {
 			while (false != ($file = readdir($handle))) {
-				$fileName = explode('.', $file);
-				$fileName = $fileName[0];
-				if (($file != '.') && ($file != '..') && ($_SESSION[CONST_PREFIX . 'User']['locale'] != $fileName)) {
-					$locales.= '<option value="' . $fileName . '">' . $fileName . '</option>';
+				if (is_dir($file)) {
+					$fileName = explode('.', $file);
+					$fileName = $fileName[0];
+					if (($file != '.') && ($file != '..') && ($_SESSION[CONST_PREFIX . 'User']['locale'] != $fileName)) {
+						$locales.= '<option value="' . $fileName . '">' . $fileName . '</option>';
+					}
 				}
 			}
-
 			closedir($handle);
 		}
 		
@@ -99,37 +98,57 @@ class d13_accountController extends d13_controller
 	
 	function accountTemplates()
 	{
-	
-		
+		$dir = 'templates';
 		$templates = '';
-		
 		$templates = '<option value="' . $_SESSION[CONST_PREFIX . 'User']['template'] . '">' . $_SESSION[CONST_PREFIX . 'User']['template'] . '</option>';
-		if ($handle = opendir('templates')) {
+		if ($handle = opendir($dir)) {
 			while (false != ($file = readdir($handle))) {
 				if ((strpos($file, '.') === false) && ($_SESSION[CONST_PREFIX . 'User']['template'] != $file)) {
 					$templates.= '<option value="' . $file . '">' . $file . '</option>';
 				}
 			}
-		closedir($handle);
+			closedir($handle);
 		}
 		
 		return $templates;
-	
 	}
 	
 	// ----------------------------------------------------------------------------------------
 	// 
-	// @
+	//
+	// ----------------------------------------------------------------------------------------
+	private
+	
+	function accountDatas()
+	{
+		$dir = 'data';
+		$datas = '';
+		$datas = '<option value="' . $_SESSION[CONST_PREFIX . 'User']['data'] . '">' . $_SESSION[CONST_PREFIX . 'User']['data'] . '</option>';
+		if ($handle = opendir($dir)) {
+			while (false != ($file = readdir($handle))) {
+				#if (is_dir($file)) {
+					$fileName = explode('.', $file);
+					$fileName = $fileName[0];
+					if (($file != '.') && ($file != '..') && ($_SESSION[CONST_PREFIX . 'User']['data'] != $fileName)) {
+						$datas.= '<option value="' . $fileName . '">' . $fileName . '</option>';
+					}
+				#}
+			}
+			closedir($handle);
+		}
+		
+		return $datas;
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// 
 	//
 	// ----------------------------------------------------------------------------------------
 	private
 	
 	function accountColors()
 	{
-	
-		
 		$colors = '';
-		
 		$colors = '<option value="' . $_SESSION[CONST_PREFIX . 'User']['color'] . '">' . $_SESSION[CONST_PREFIX . 'User']['color'] . '</option>';
 		foreach($this->d13->getGeneral('colors') as $color) {
 			if ($_SESSION[CONST_PREFIX . 'User']['color'] != $color) {
@@ -147,41 +166,12 @@ class d13_accountController extends d13_controller
 	// ----------------------------------------------------------------------------------------
 	private
 	
-	function accountDatas()
-	{
-	
-		
-		$datas = '';
-		
-		$datas = '<option value="' . $_SESSION[CONST_PREFIX . 'User']['data'] . '">' . $_SESSION[CONST_PREFIX . 'User']['data'] . '</option>';
-		if ($handle = opendir('data')) {
-			while (false != ($file = readdir($handle))) {
-				$fileName = explode('.', $file);
-				$fileName = $fileName[0];
-				if (($file != '.') && ($file != '..') && ($_SESSION[CONST_PREFIX . 'User']['data'] != $fileName)) {
-					$datas.= '<option value="' . $fileName . '">' . $fileName . '</option>';
-				}
-			}
-
-			closedir($handle);
-		}
-		
-		return $datas;
-	}
-	
-	// ----------------------------------------------------------------------------------------
-	// 
-	// @
-	//
-	// ----------------------------------------------------------------------------------------
-	private
-	
 	function accountUser()
 	{
 		
-		
-		
-		$user = $this->d13->createObject('user', $_SESSION[CONST_PREFIX . 'User']['id']);
+		$args = array();
+		$args['id'] = $_SESSION[CONST_PREFIX . 'User']['id'];
+		$user = $this->d13->createObject('user', $args);
 		
 		if (isset($_GET['action'], $_POST['password'])) {
 		
