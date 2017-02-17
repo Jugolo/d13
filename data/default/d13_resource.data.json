@@ -13,8 +13,7 @@
     "limited": true,
     "carryable": true,
     "tradeable": true,
-    "buyable": true,
-    "lootable": true,
+    
     "cost": [
 		{
 			"resource": 0,
@@ -44,8 +43,7 @@
     "limited": true,
     "carryable": true,
     "tradeable": true,
-    "buyable": true,
-    "lootable": true,
+    
     "cost": [
 		{
 			"resource": 0,
@@ -75,8 +73,7 @@
     "limited": true,
     "carryable": true,
     "tradeable": true,
-    "buyable": true,
-    "lootable": true,
+    
     "cost": [
 		{
 			"resource": 0,
@@ -106,8 +103,7 @@
     "limited": true,
     "carryable": false,
     "tradeable": true,
-    "buyable": true,
-    "lootable": true,
+    
     "cost": [
 		{
 			"resource": 0,
@@ -137,8 +133,7 @@
     "limited": true,
     "carryable": false,
     "tradeable": true,
-    "buyable": true,
-    "lootable": true,
+    
     "cost": [
 		{
 			"resource": 0,
@@ -167,8 +162,7 @@
     "limited": true,
     "carryable": false,
     "tradeable": true,
-    "buyable": true,
-    "lootable": true,
+    
     "cost": [
 		{
 			"resource": 0,

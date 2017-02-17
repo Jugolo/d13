@@ -2,6 +2,8 @@
 	var timerIds=new Array();
 </script>
 
+<div class="d13-node" >
+
 	<div class="card no-border large-card card-shadow">
 
 		<div class="card-header no-border">
@@ -18,7 +20,7 @@
 				<div class="d13-module-detail" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
 				<img class="d13-module-image" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_image}}">
 				</div>
-				<p class="d13-italic"> {{tvar_moduleDescription}}</p>
+				<p class="d13-description"> {{tvar_moduleDescription}}</p>
 				{{tvar_linkData}}
 			</div>
 		
@@ -36,7 +38,7 @@
 					</li>
 				
 					<li class="item-content">
-						<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/clock_fill.png"></div>
+						<div class="item-media"><img class="d13-icon" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/icon/ratio.png"></div>
 						<div class="item-inner">
 						<div class="item-title">{{tvar_ui_ratio}}</div>
 						<div class="item-after"><span class="badge">{{tvar_base_Ratio}} +{{tvar_upgrade_ratio}}</span></div>
@@ -78,3 +80,5 @@
 		</div>
 
 	</div>
+
+</div>

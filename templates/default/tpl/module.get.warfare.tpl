@@ -2,6 +2,8 @@
 	var timerIds=new Array();
 </script>
 
+<div class="d13-node" >
+
 	<div class="card no-border large-card card-shadow">
 
 		<div class="card-header no-border">
@@ -18,7 +20,7 @@
 				<div class="d13-module-detail" style="background-image: url('{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/moduleBackground.png'); background-repeat: repeat;">
 				<img class="d13-module-image" src="{{tvar_global_directory}}templates/{{tvar_global_template}}/images/modules/{{tvar_nodeFaction}}/{{tvar_image}}">
 				</div>
-				<p class="d13-italic"> {{tvar_moduleDescription}}</p>
+				<p class="d13-description"> {{tvar_moduleDescription}}</p>
 				{{tvar_linkData}}
 			</div>
 			
@@ -53,3 +55,5 @@
 		</div>
 
 	</div>
+
+</div>

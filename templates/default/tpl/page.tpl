@@ -22,7 +22,6 @@
 			
 			<div data-page="{{tpl_pvar_name}}" class="page {{tvar_global_notoolbar}} theme-{{tvar_global_color}} with-subnavbar" style="background-image: url({{tvar_global_directory}}templates/{{tvar_global_template}}/images/{{tpl_page_background}});">
 
-				
 			  {{tpl_page_subbar}}
 			  
 			  <div class="toolbar">
@@ -36,9 +35,7 @@
 			  	{{tpl_pvar_message}}
 				{{tpl_page_content}}
 			  </div>
-			  
-			 
-							       
+	       
 			</div>
 		  </div>
 		</div>

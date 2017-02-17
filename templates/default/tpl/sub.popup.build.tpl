@@ -31,7 +31,7 @@
 					<div class="item-media">{{tvar_costIcon}}</div>
 					<div class="item-inner">
 					<div class="item-title">{{tvar_ui_cost}}</div>
-					<div class="item-after">{{tvar_costData}}</div>
+					<div class="item-after"><span class="badge">{{tvar_costData}}</span></div>
 					</div>
 				</li>
 				
@@ -39,7 +39,7 @@
 					<div class="item-media">{{tvar_requirementsIcon}}</div>
 					<div class="item-inner">
 					<div class="item-title">{{tvar_ui_requirements}}:</div>
-					<div class="item-after">{{tvar_requirementsData}}</div>
+					<div class="item-after"><span class="badge">{{tvar_requirementsData}}</span></div>
 					</div>
 				</li>
 				

@@ -28,8 +28,12 @@ if (isset($_POST['email'], $_POST['name'], $_POST['password'], $_POST['rePasswor
 
 	if ((($_POST['email'] != '')) && ($_POST['name'] != '') && (($_POST['password'] != ''))) {
 		
-		$user = $d13->createObject('user');
-		$user->get('name', $_POST['name']);
+		$args = array();
+		$args['key'] = 'name';
+		$args['value'] = $_POST['name'];
+		
+		$user = $d13->createObject('user', $args);
+		#$user->get('name', $_POST['name']);
 		
 		if ($_POST['password'] == $_POST['rePassword'])
 		if (!$user->data['id']) {

@@ -627,6 +627,8 @@
       ],
       "paymentResource": 0,
       "priceModifier": 1,
+      "sellModifier": 0.5,
+      "sellComponents": true,
       "ratio": 1,
       "maxInput": 10,
       "duration": 10,

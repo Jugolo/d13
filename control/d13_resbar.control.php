@@ -163,7 +163,7 @@ class d13_resBarController extends d13_controller
 		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Resources
 		if (isset($this->d13->node) && isset($this->d13->node->resources)) {
 			foreach($this->d13->node->resources as $resource) {
-				#if ($this->d13->getResource($resource['id'], 'active') && $this->d13->getResource($resource['id'], 'visible') == false) {
+				if ($this->d13->getResource($resource['id'], 'active') && $this->d13->getResource($resource['id'], 'visible') == false) {
 					
 					$vars = array();
 					$vars['tvar_resName']  = $this->d13->getLangGL('resources', $resource['id'], 'name') . ' ';
@@ -188,7 +188,7 @@ class d13_resBarController extends d13_controller
 					}
 
 					$tvars['tvar_queueItems_A'] .= $this->d13->templateSubpage("sub.queue.resource", $vars);
-				#}
+				}
 			}
 		}
 

@@ -272,6 +272,15 @@ img.d13-item
 	text-align: center;
 }
 
+p.d13-description {
+	font-style: italic;
+	font-size: 10pt;
+	background-color: #000000;
+	background-color: hsla(0, 0%, 0%, 0.5);
+	border-radius: 5px;
+	padding: 1%;
+}
+
 p.d13-italic {
 	font-style: italic;
 }

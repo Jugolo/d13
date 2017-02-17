@@ -112,14 +112,14 @@ class d13_user
 	function add()
 	{
 		
-		$user = $this->d13->createObject('user', $this->d13);
+		$user = $this->d13->createObject('user');
 		if ($user->get('name', $this->data['name']) == 'noUser') {
 			if ($user->get('email', $this->data['email']) == 'noUser') {
 				if (!$this->d13->blacklist->check('ip', $this->data['ip'])) {
 					if (!$this->d13->blacklist->check('email', $this->data['email'])) {
 						$ok = 1;
 						$this->data['id'] = $this->d13->misc->newId('users');
-						$this->d13->dbQuery('insert into users (id, name, password, email, access, joined, lastVisit, ip, template, color, locale, trophies) values ("' . $this->data['id'] . '", "' . $this->data['name'] . '", "' . $this->data['password'] . '", "' . $this->data['email'] . '", "' . $this->data['access'] . '", "' . $this->data['joined'] . '", "' . $this->data['lastVisit'] . '", "' . $this->data['ip'] . '", "' . $this->data['template'] . '", "' . $this->data['color'] . '", "' . $this->data['locale'] . '", "500")');
+						$this->d13->dbQuery('insert into users (id, name, password, email, access, joined, lastVisit, ip, template, color, locale, data, trophies) values ("' . $this->data['id'] . '", "' . $this->data['name'] . '", "' . $this->data['password'] . '", "' . $this->data['email'] . '", "' . $this->data['access'] . '", "' . $this->data['joined'] . '", "' . $this->data['lastVisit'] . '", "' . $this->data['ip'] . '", "' . $this->data['template'] . '", "' . $this->data['color'] . '", "' . $this->data['locale'] . '", "' . $this->data['data'] . '", "500")');
 						if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
 						$preferences = array();
 						foreach($this->d13->getGeneral('users', 'preferences') as $key => $preference) $preferences[] = '("' . $this->data['id'] . '", "' . $key . '", "' . $preference . '")';

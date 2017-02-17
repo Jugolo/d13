@@ -21,16 +21,18 @@ V020	--- NEXT SCHEDULED UPDATE ---
 
 		...
 		
-V019	* Implemented Dependency Injection
-		* Get rid of the dreaded global keyword and switch to constructor injection
+V019	* Refactored to project-wide Dependency Injection
+		* Got rid of the dreaded global keyword and switch to constructor injection
 		* Updated Framework 7
 		* Minor Bugfixes
 		* Gamestart: When there is only one faction available, it is chosen automatically
 		* Preperations for multi-data / multi-server integration
+		* Restructed Data organzition to enable multi-data and handle factions better
 		* Added left panel as resource/component overview
 		* Auto Craft / Auto Train
 		* Minor GUI Adjustment (multiply input/storage/output resources shown correctly)
 		* Modules can now be assigned components/units as well as input
+		* Different pages can now features varying backgrounds
 
 V018	* Shop Building (Blackmarket): Buy resources, components, buff's, shield's
 		* Buff System: Add temporary speed/efficiency buff's to the current node (town)
@@ -47,6 +49,7 @@ V016	* Fixed a few more bugs
 		* Added autoload to classes
 		* Added LINUX line breaks
 		* most object classes are now derived from one base class
+		* replaced <new> with factory classes to handle instantiation of objects
 		* Even more bugfixes, refactoring and streamlining of the code
 		* renamed hybrid building/unit class into "turret"
 		* Added Scout Checks to Combat System
@@ -87,7 +90,7 @@ V014	* Added CKEditor for messages
 	
 V013 	* Basic Combat System implemented, this covers:
 		* Different types of attacking an enemy:
-			- Basic Attack (Resource Raiding in progress)
+			- Basic Attack
 			- Raze
 			- Conquer
 		* Gain/Lose Trophies when attacking/defending / Gain Experience via Attacks
