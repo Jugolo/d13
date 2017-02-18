@@ -2718,8 +2718,7 @@ class d13_node
 
 	function checkCraft($time)
 	{
-		
-		
+				
 		$this->d13->dbQuery('start transaction');
 		$this->getResources();
 		$this->getComponents();
@@ -2731,10 +2730,28 @@ class d13_node
 			$entry['end'] = $entry['start'] + floor($entry['duration']);
 			
 			if ($entry['end'] <= $time) {
+			
 				if (!$entry['stage']) {
-					$this->components[$entry['obj_id']]['value']+= $entry['quantity'];
-					$this->d13->dbQuery('update components set value="' . $this->components[$entry['obj_id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $entry['obj_id'] . '"');
-					if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+				
+					// check gainResource
+					if ($this->d13->getComponent($this->data['faction'], $entry['obj_id'], 'gainResource') > -1) {
+					
+						$resId = $this->d13->getComponent($this->data['faction'], $entry['obj_id'], 'gainResource');
+						$this->resources[$resId]['value'] += $entry['quantity'];
+						$this->d13->dbQuery('update resources set value="' . $this->resources[$resId]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $resId . '"');
+						if ($this->d13->dbAffectedRows() == - 1) {
+							$ok = 0;
+						}
+					
+					} else {
+					// check gainComponent
+					
+						$this->components[$entry['obj_id']]['value'] += $entry['quantity'];
+						$this->d13->dbQuery('update components set value="' . $this->components[$entry['obj_id']]['value'] . '" where node="' . $this->data['id'] . '" and id="' . $entry['obj_id'] . '"');
+						if ($this->d13->dbAffectedRows() == - 1) $ok = 0;
+					
+					}
+
 				} else {
 				
 					foreach($this->d13->getComponent($this->data['faction'], $entry['obj_id'], 'cost') as $cost) {

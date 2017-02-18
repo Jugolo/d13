@@ -54,7 +54,6 @@
   	"all",
     "message",
     "outbox",
-    "alliance",
     "attack",
     "defense",
     "alliance"

@@ -254,12 +254,12 @@ class d13_gameobject_module extends d13_gameobject_base
 	// ----------------------------------------------------------------------------------------
 	private
 	
-	function getMinInput()
+	function getMinInput($type='inputType')
 	{
 		
 		$args = array();
-		$inputType 	= $this->data['inputType'][0]['object'];
-		$inputID 	= $this->data['inputType'][0]['id'];
+		$inputType 	= $this->data[$type][0]['object'];
+		$inputID 	= $this->data[$type][0]['id'];
 		
 		$current 	= 0;
 		$storage 	= 0;
@@ -270,18 +270,16 @@ class d13_gameobject_module extends d13_gameobject_base
 			$storage = $this->node->storage[$inputID];
 		} else if ($inputType == "component") {
 			$current = $this->node->components[$inputID]['value'];
-				
 			$args['supertype'] 	= 'component';
 			$args['id'] 		= $inputID;
-			$tmp_object = $this->d13->createGameObject($args, $this->node);
-			$storage = $tmp_object->getMaxProduction();
+			$tmp_object 		= $this->d13->createGameObject($args, $this->node);
+			$storage 			= $tmp_object->getMaxProduction();
 		} else if ($inputType == "unit") {
 			$current = $this->node->units[$inputID]['value'];
-			
 			$args['supertype'] 	= 'unit';
 			$args['id'] 		= $inputID;
-			$tmp_object = $this->d13->createGameObject($args, $this->node);
-			$storage = $tmp_object->getMaxProduction();
+			$tmp_object 		= $this->d13->createGameObject($args, $this->node);
+			$storage 			= $tmp_object->getMaxProduction();
 		}
 
 		if ($current < $storage) {
@@ -301,11 +299,11 @@ class d13_gameobject_module extends d13_gameobject_base
 	// ----------------------------------------------------------------------------------------
 	private
 	
-	function getMaxInput()
+	function getMaxInput($type='inputType')
 	{
 		$args = array();
-		$inputType 	= $this->data['inputType'][0]['object'];
-		$inputID 	= $this->data['inputType'][0]['id'];
+		$inputType 	= $this->data[$type][0]['object'];
+		$inputID 	= $this->data[$type][0]['id'];
 		
 		$current 	= 0;
 		$storage 	= 0;
@@ -315,9 +313,17 @@ class d13_gameobject_module extends d13_gameobject_base
 			$current = $this->node->resources[$inputID]['value'];
 			$storage = $this->node->storage[$inputID];
 		} else if ($inputType == "component") {
-					
+			$current = $this->node->components[$inputID]['value'];
+			$args['supertype'] 	= 'component';
+			$args['id'] 		= $inputID;
+			$tmp_object 		= $this->d13->createGameObject($args, $this->node);
+			$storage 			= $tmp_object->getMaxProduction();
 		} else if ($inputType == "unit") {
-					
+			$current = $this->node->units[$inputID]['value'];
+			$args['supertype'] 	= 'unit';
+			$args['id'] 		= $inputID;
+			$tmp_object 		= $this->d13->createGameObject($args, $this->node);
+			$storage 			= $tmp_object->getMaxProduction();
 		}
 
 		if ($current < $storage) {
@@ -408,13 +414,14 @@ class d13_gameobject_module extends d13_gameobject_base
 		if ($this->data['level'] > 0 && $this->data['maxLevel'] == 1) {
 			return $html;
 		} else {
-		
+			
+			$inputType = 'buildType';
 			$tvars = array();
 			$tvars = array_merge($tvars, $this->getTemplateInput());
 			$tvars = array_merge($tvars, $this->getTemplateCost());
 			
-			$max = $this->getMaxInput();
-			$min = $this->getMinInput();
+			$max = $this->getMaxInput($inputType);
+			$min = $this->getMinInput($inputType);
 		
 			if ($this->data['level'] <= 0) {
 		
@@ -422,7 +429,7 @@ class d13_gameobject_module extends d13_gameobject_base
 					
 					$tvars['tvar_title'] 			= $this->d13->getLangUI("addModule");
 					$tvars['tvar_moduleDuration'] 	= $this->data['duration'];
-					$tvars['tvar_costData'] = $this->getCostList();
+					$tvars['tvar_costData']			= $this->getCostList();
 					$tvars['tvar_requirementsData'] = $this->getRequirementsList();
 					$tvars['tvar_moduleAction'] 	= '?p=module&action=add&nodeId=' . $this->node->data['id'] . '&moduleId=' . $this->data['moduleId'] . '&slotId=' . $this->data['slotId'];
 					$tvars['tvar_id'] 				= $this->data['moduleId'];

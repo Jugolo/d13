@@ -30,7 +30,11 @@ class d13_resBarController extends d13_controller
 	
 		parent::__construct($d13);
 		
-		$this->user = $this->d13->createObject('user', $_SESSION[CONST_PREFIX . 'User']['id']);
+		$args = array();
+		$args['key'] = 'id';
+		$args['value'] = $_SESSION[CONST_PREFIX . 'User']['id'];
+		
+		$this->user = $this->d13->createObject('user', $args);
 		
 	}
 
@@ -55,6 +59,7 @@ class d13_resBarController extends d13_controller
 		
 		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Player Stats
 		if ($this->user->user_status == 'done') {
+			
 			foreach($this->d13->getGeneral("userstats") as $stat) {
 				if ($stat['active'] && $stat['visible']) {
 					$tvars['tvar_resImage'] 		= $stat['icon'];
@@ -71,7 +76,7 @@ class d13_resBarController extends d13_controller
 					} else {
 					$tvars['tvar_resTooltip'] 		.= ' '. floor($this->user->data[$stat['value']]) ;
 					}
-					$tvars['tvar_resEntry']			.= $this->d13->templateSubpage("sub.resource.entry", $tvars);
+					$resEntry						.= $this->d13->templateSubpage("sub.resource.entry", $tvars);
 				}
 			}
 		}
