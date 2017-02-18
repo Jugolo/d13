@@ -70,14 +70,7 @@ class d13_gameobject_turret extends d13_gameobject_base
 
 	function getTemplateVariables()
 	{
-	
-		
-		$tvars = array();
-		
-		$tvars = parent::getTemplateVariables();
-		
-		return $tvars;
-			
+	   return parent::getTemplateVariables();
 	}
 
 }
